@@ -1,0 +1,163 @@
+# =============================================================================
+# DENY BY DEFAULT.
+#
+# This working directory is ~425 GB and contains patient-derived genomic data
+# for Burkholderia pseudomallei, a US Tier 1 Select Agent. The metadata joins
+# accession -> isolation_location -> collection_date -> CDC exposure label,
+# which is re-identifiable for rare cases (61 USA rows, 681 rows with a
+# populated isolation_location, 16 with a validation label).
+#
+# This file therefore ignores EVERYTHING and re-admits only source code and
+# written documentation, by explicit name or extension, at the top level only.
+# There is no rule anywhere below that re-admits a data file. Adding one is a
+# decision, not an oversight -- and `git add -f` bypasses all of this, so do not
+# use it without checking what you are forcing.
+#
+# Verify before every push:
+#     git ls-files | xargs -r du -ch | tail -1     # total tracked size
+#     git ls-files                                  # read the whole list
+# =============================================================================
+
+# --- 1. everything, including all subdirectories and their contents ----------
+*
+!.gitignore
+
+# Subdirectories are NOT re-admitted. Every analysis output, work directory,
+# assembly set, bundle and archive lives in one, so excluding them wholesale is
+# the single most important rule here. Named for the record:
+#   L1v4c_work/ (232G) v4c_local/ (21G) L1v4c_out/ L1v4b_out/ L1v3_out/
+#   L1_out/ L1_clean_out/ L1v4b_partition/ null_sim/ fconst_sensitivity/
+#   a100_stage/ a100_v4c_partition/ refsens_cluster37/ additions/ spikein/
+#   pp2802_out/ cfml/ all35_out/ wfsnps-v4c-results/ prod_*/ fbL1_*/
+# To track code from one of them, add an explicit `!path/to/file.py` line and
+# say why in the commit message.
+
+# --- 2. re-admit source code (top level only) --------------------------------
+!*.py
+!*.sh
+!*.nf
+!*.config
+!*.R
+!*.pl
+
+# --- 3. re-admit written documentation (top level only) ----------------------
+!*.md
+
+# --- 4. re-admit build/CI metadata if it is ever added -----------------------
+!Makefile
+!environment.yml
+!requirements.txt
+!LICENSE
+
+# =============================================================================
+# 5. BELT AND BRACES.
+#
+# Everything below is already excluded by rule 1. It is restated so that a
+# future `!*.tsv`-style loosening of the allowlist cannot silently start
+# tracking isolate data. These rules come after the allowlist, so they win.
+# =============================================================================
+
+# --- isolate-level and epidemiological data — never commit -------------------
+*.tsv
+*.csv
+*.xlsx
+*.xls
+*.json
+*.jsonl
+*METADATA*
+*metadata*
+*PANEL_*
+*panel_*
+*cluster_membership*
+*clusters*.tsv
+*assignments*
+*samplesheet*
+rfile*.txt
+*_dates.csv
+*_genomes.tsv
+
+# --- sequence, alignment and tree data ---------------------------------------
+*.fasta
+*.fa
+*.fna
+*.fastq
+*.fastq.gz
+*.fq
+*.gz
+*.zst
+*.bz2
+*.tar
+*.aln
+*.phylip
+*.vcf
+*.gff
+*.bam
+*.sam
+*.bed
+*.nwk
+*.tre
+*.tree
+*.treefile
+*.iqtree
+*.skf
+*.msh
+
+# --- run logs and workflow state ---------------------------------------------
+*.log
+.nextflow*
+work/
+.command.*
+trace*.txt
+timeline*.html
+report*.html
+dag*.html
+pipeline_info/
+
+# --- session transcripts (contain full conversation history) -----------------
+claude-session/
+*.jsonl
+.claude/
+
+# --- editor, OS and Python noise ---------------------------------------------
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# --- credentials — nothing here today, and nothing here tomorrow -------------
+.env
+.env.*
+*.pem
+*.key
+*credentials*
+*secret*
+rclone.conf
+.netrc
+
+# --- backups and scratch ------------------------------------------------------
+*.bak
+*.pre-crlf-fix
+*.orig
+*.rej
+*.tmp
+tmp/
+scratch/
+
+# --- 6. documentation that embeds per-isolate tables --------------------------
+# These read as prose but contain per-isolate QC rows (accession + country +
+# species + read stats). That is isolate data regardless of the file extension,
+# so they are excluded by name. Docs that merely *cite* an accession while
+# making a methodological argument are kept -- e.g. METHODS_DRAFT and FINDINGS
+# each show the two ONT genomes' branch lengths, which is the argument itself.
+NEW200_QC_REPORT_2026-08-17.md
+PACBIO_CLR_DIAGNOSIS_2026-08-17.md
+THEIAPROK_SETTINGS.md
+READ_SCREEN_RESCUE.md
+INTERPRETATION_2026-08-16.md
