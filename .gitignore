@@ -161,3 +161,10 @@ PACBIO_CLR_DIAGNOSIS_2026-08-17.md
 THEIAPROK_SETTINGS.md
 READ_SCREEN_RESCUE.md
 INTERPRETATION_2026-08-16.md
+
+# --- 7. explicit exceptions from subdirectories -------------------------------
+# Rule 1 excludes all subdirectories. This is resource configuration, not data:
+# no isolate identifiers, and it carries the measured rationale for the tuning
+# (see the SNIPPY_SCATTER block). Worth versioning alongside the code it tunes.
+!a100_stage/
+!a100_stage/curated_L1_overrides_a100.config
