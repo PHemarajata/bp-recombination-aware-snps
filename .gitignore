@@ -166,5 +166,13 @@ INTERPRETATION_2026-08-16.md
 # Rule 1 excludes all subdirectories. This is resource configuration, not data:
 # no isolate identifiers, and it carries the measured rationale for the tuning
 # (see the SNIPPY_SCATTER block). Worth versioning alongside the code it tunes.
+# Un-ignoring the directory is required for git to descend into it at all, so
+# it is immediately re-denied and each admitted file is named. Without the
+# `a100_stage/*` line, a blanket `!a100_stage/` silently admits any future .md
+# or .sh dropped in there -- which is how three files appeared unnoticed.
 !a100_stage/
+a100_stage/*
 !a100_stage/curated_L1_overrides_a100.config
+!a100_stage/run_a100.sh
+!a100_stage/build_bundle.sh
+!a100_stage/README_A100.md
