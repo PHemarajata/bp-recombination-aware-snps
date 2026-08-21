@@ -2,7 +2,16 @@
 
 2026-08-21. Closes weak spot **W3** of `MANUSCRIPT_OUTLINE_2026-08-21.md`.
 
-**Headline: the r/m figure is 7.70, not 7.26.** The window's *structure* is
+> **Which number goes in the paper: 7.44.** `METHODS_DRAFT` §2.12 designates the
+> **88-unit A100 run as the production run**, and on that run the
+> alignment-derived Gate 1 gives **48 in-window units, median r/m 7.44**
+> (below floor 14 / 1.31, above ceiling 26 / 2.15). The **7.70 (n=47)** derived
+> below is the **86→85-unit workstation control run**. Both are computed the same
+> way; they differ only in which run's r/m table they score. **Do not mix them** —
+> that is the error this whole line of work exists to prevent. Their closeness
+> (7.44 vs 7.70, 3.5%) is a comparability result, not a discrepancy.
+
+**Headline on the control run: 7.70, not 7.26.** The window's *structure* is
 confirmed and is sharper than the Mash proxy showed. Its *floor* was in the wrong
 place — carried across unit systems without translation.
 
@@ -168,7 +177,12 @@ Per-unit output in `GATE1_ALIGNMENT_2026-08-21.tsv`.
 - **`METHODS_DRAFT` §2.6.1** should state the window in alignment units,
   **[700, 4,700]** with the floor bracketed **(588, 755]**, and record the
   ska-unit bounds as the original calibration.
-- **7.26 → 7.70** wherever the in-window median is quoted as the current figure.
+- **The production-run figure is 7.44 (n=48)**; 7.70 (n=47) is the control run.
+  `METHODS_DRAFT` was updated 2026-08-21: §2.6.1 now states the window in
+  alignment units, §2.12.7 reports 7.44/48, and §2.12.10 carries a flag —
+  under the alignment gate `strain_1_L1_26` (n=98) is **in-window**, not below
+  floor, so refinement *did* increase the measurable set by one and the
+  paragraph's earlier reading no longer holds.
 - **7.38 still must not be overwritten** — it is the A100/88-unit variant and is
   internally consistent with "88 units" and "5.70".
 - `generate_numbers.py` still emits `rm.median_gate1` from the Mash-based

@@ -6,8 +6,9 @@
 > 2026-08-19 and its 86-unit control, superseding the earlier 82-unit run.
 > The substantive changes are: the panel (2,976 assemblies), assembler selection
 > and the recalibrated assembly-QC gate (2.12.1–2.12.3); unit refinement and the
-> Gate 1 / Gate 2 order that governs it (2.12.5); **r/m reported only for the 47
-> in-window units, median 7.38** (2.12.7); and the control run (2.12.10).
+> Gate 1 / Gate 2 order that governs it (2.12.5); **r/m reported only for the 48
+> in-window units, median 7.44** (2.12.7), on an alignment-derived Gate 1
+> (2.6.1); and the control run (2.12.10).
 
 > **Status.** Sections 2.1–2.11 describe the exploratory and calibration work,
 > written while the production run was still pending. **Section 2.12 describes
@@ -308,8 +309,41 @@ Per unit, the headline union coverage, pooled r/m and median tract length are th
 
 ### 2.6.1 Gate 1 — diversity
 
-Units were required to fall in **≈1,270–4,671 mean pairwise core SNPs
-(`ska distance` units)**.
+Units were required to fall in **≈1,270–4,671 mean pairwise core SNPs**. The
+calibration below was performed in **`ska distance` units**; the window applied
+to this collection is its translation into **alignment-derived** mean pairwise
+core SNPs, **[700, 4,700]**, with the floor bracketed **(588, 755]**.
+
+**The two bounds translate very differently, and the reason the translation was
+necessary is instructive.** Membership had been decided from a Mash-to-SNP
+conversion (`mash × 3,805,619`) whose own documentation describes it as
+triage-grade, and which is in neither unit system. Against distances computed
+directly on each unit's core alignment it overstates diversity by a median
+1.28× and by up to 17.2×, misplacing 15 of 88 units.
+
+The **ceiling translates essentially unchanged** (4,671 → ≈4,700), located where
+median recombination tract length falls from 3.77 kb to 2.69 kb. The **floor does
+not**: it sits near 700, not 1,270. It was located on the same independent
+criteria used in the original calibration — union recombination coverage and
+median tract length, **not** r/m, which would be circular — and the lowest
+diversity band reproduces the original failure signature closely: **union
+coverage 4.3% and a 1.12 kb tract**, against the 0.7% and 1,002 bp recorded below
+for a cluster at 405. The relocated floor bracket is **1.28× wide**, against
+3.1× for the `ska`-unit floor.
+
+The window's structure is unaffected by the change of metric and is in fact
+sharper in alignment units: median r/m across equal-count diversity bands runs
+1.53 → 7.25 → 8.39 → **8.59** → 3.68 → 2.14. The in-window median is insensitive
+to floor placement across the whole bracket (7.70–7.78 on the control run).
+
+Two limitations are disclosed. Alignment SNP counts are not *provably* identical
+to `ska distance` — SKA counts split k-mers over whole assemblies, this counts
+SNPs on a reference-mapped core alignment — though the ceiling agreeing to within
+1% across the two systems is a point in favour. And **union coverage does not
+reproduce the calibrated 76–88% anywhere in this panel**: the highest band median
+is 68%, and coverage *rises* with diversity, peaking in bands the gate rejects.
+The floor does not depend on that criterion, but it does not reproduce
+quantitatively.
 
 Six consecutive clusters spanning 2,690–4,671 behaved consistently across 12
 replicon measurements: union coverage 76–88%, pooled r/m 3.4–12.1, and median
@@ -1352,20 +1386,27 @@ nothing is removed. The per-unit record of which branches were dropped is in
 ### r/m is reported only for units inside the diversity window
 
 This is the single most important qualification on the recombination results.
-Section 2.6.1 establishes that outside ≈1,270–4,671 mean pairwise core SNPs, r/m
-is **not a measurement**: below the floor Gubbins cannot detect recombination,
-and above the ceiling the estimate collapses (0.16–1.73 in calibration).
-Classifying all 88 production units against that window reproduces the
-calibration exactly:
+Section 2.6.1 establishes that outside the diversity window r/m is **not a
+measurement**: below the floor Gubbins cannot detect recombination, and above the
+ceiling the estimate collapses (0.16–1.73 in calibration). Classifying all 88
+production units on **alignment-derived distances** against the window as
+relocated into those units (**[700, 4,700]**, 2.6.1) reproduces the calibration:
 
 | Gate 1 class | units | median r/m |
 |---|---|---|
-| **in-window** | **47** | **7.38** |
-| below floor | 9 | 1.67 |
-| above ceiling | 32 | 2.48 |
+| **in-window** | **48** | **7.44** |
+| below floor | 14 | 1.31 |
+| above ceiling | 26 | 2.15 |
+
+Membership was previously taken from a Mash-to-SNP proxy in a different unit
+system from the calibration; that proxy overstates diversity by a median 1.28×
+and up to 17.2×, and misplaces 15 of these 88 units. It gave 47 units and a
+median of 7.38 — close in aggregate, but with a below-floor group whose
+composition did not hold up. The alignment-derived classification is the one
+reported.
 
 **The reported recombination result for this collection is therefore
-r/m = 7.38 (median of 47 in-window units).** The all-unit median (5.70) mixes
+r/m = 7.44 (median of 48 in-window units).** The all-unit median (5.70) mixes
 measurements with detection failures and is not reported. A **low r/m is a
 detection failure, not a clean unit** — a reading error that is easy to make in
 both directions, since the collapse is symmetric.
@@ -1465,8 +1506,25 @@ basis for treating the two partitions as comparable, rather than assuming it fro
 the configuration.
 
 **Effect of refinement.** The pre-split `strain_1_L1_26` measured r/m 3.10 and was
-**in-window**; its three children measured 1.07 (below floor), 6.68 (in-window)
-and 2.63 (below floor). The number of in-window units was **47 in both runs**.
+**in-window**; its three children measured 1.07, 6.68 and 2.63.
+
+⚠ **This paragraph's classification predates the alignment-derived Gate 1 (2.6.1)
+and changes under it.** On alignment distances the children fall at 1,310, 1,477
+and 123 mean pairwise core SNPs, so **two are in-window** — `strain_1_L1_26`
+(n=98, r/m 1.07) and `strain_1_L1_36` (n=47, r/m 6.68) — and only
+`strain_1_L1_37` is below the floor. Under the Mash proxy the n=98 child was
+placed below the floor at 955, which is what the earlier reading rested on. The
+in-window count is therefore **48 in the production run and 47 in the control**,
+not 47 in both.
+
+Two consequences follow and neither is settled here. First, the n=98 child at
+r/m 1.07 is the **lowest in-window value in the production run**, sitting just
+above the relocated floor; it is either a genuine low-recombination clonal
+expansion or evidence that the floor is still slightly too low. Second, the claim
+below that refinement "did not increase the measurable set" **is no longer
+supported as stated** — on the alignment-derived gate it increased it by one.
+The comparability argument above is unaffected, and is if anything strengthened:
+the two runs' in-window medians are **7.44 and 7.70**, agreeing to 3.5%.
 Refinement therefore did not increase the measurable set; its contribution is
 that it separates a genuine clonal expansion from the in-window population that
 surrounds it, and surfaces heterogeneity (1.07 to 6.68) that the combined unit
