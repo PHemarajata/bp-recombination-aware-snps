@@ -16,14 +16,25 @@ is the Slatkin-Maddison style test, and it is the right shape here because the
 marginal country distribution is wildly uneven and no parametric null would
 respect that.
 
-WHY BIOPROJECT IS RUN ALONGSIDE, and why the answer is not optional. In this
-collection **70.5% of genomes are Thailand and the top 3 BioProjects are 58.4%**
-of everything. A BioProject is typically one study, one lab, one country, often
-one outbreak or one hospital -- so "country" and "BioProject" are largely the
-same variable wearing different labels. A geographic signal that is no stronger
-than the BioProject signal is not evidence of phylogeography; it is evidence that
-related isolates get sequenced together. Both are tested on identical trees with
-identical machinery so the two scores are directly comparable.
+WHY BIOPROJECT IS RUN ALONGSIDE, and why the answer is not optional. In the v4c
+analysed set (2,352 genomes over 86 units) **66.4% of genomes are Thailand**, and
+the two largest BioProjects -- PRJEB25606 (543) and PRJEB35787 (468) -- are 43%
+of everything between them. A BioProject is typically one study, one lab, one
+country, often one outbreak or one hospital -- so "country" and "BioProject" are
+largely the same variable wearing different labels. A geographic signal that is no
+stronger than the BioProject signal is not evidence of phylogeography; it is
+evidence that related isolates get sequenced together. Both are tested on
+identical trees with identical machinery so the two scores are directly
+comparable.
+
+MISSING VALUES. The metadata encodes "no data" inconsistently: `country` uses an
+empty cell, but `bioproject` uses the literal string "unknown" for 274 of the
+2,352 v4c tips. Taken at face value those 274 would form a single spurious
+274-member "study", mis-measuring the very confounder this test exists to check
+-- and measurement error in a confounder understates it, biasing toward a false
+positive for geography. Every value in MISSING below is therefore normalised to
+None and treated as fully ambiguous, so absent metadata weakens signal rather
+than inventing it.
 
 WHAT A SIGNIFICANT RESULT DOES AND DOES NOT MEAN. It means tips sharing a label
 are closer on the tree than chance. It does NOT establish direction of spread,
@@ -45,6 +56,29 @@ import os
 import random
 import re
 import sys
+
+
+# Placeholders that mean "no data" and must not become a shared state.
+MISSING = {"", "unknown", "na", "n/a", "none", "null", "missing", "-", "."}
+
+
+def state_of_value(v):
+    v = (v or "").strip()
+    return None if v.lower() in MISSING else v
+
+
+def state_of_row(row, col):
+    """Country state for one genome, or None if it cannot be one country.
+
+    A genome whose origin resolves to more than one country ('Panama and Peru')
+    is not evidence for a country -- scoring it as its own state invents a
+    singleton label and adds a spurious Fitch change. Treat it as missing, the
+    same as an unknown. Keyed on origin_resolution rather than string-matching
+    the value, because 'Trinidad and Tobago' is one country.
+    """
+    if col == "country" and row.get("origin_resolution") == "multi_country":
+        return None
+    return state_of_value(row.get(col, ""))
 
 
 # ---------------------------------------------------------------- newick ----
@@ -115,6 +149,68 @@ def fitch_score(tree, state_of):
     return changes[0]
 
 
+def bh_qvalues(pvals):
+    """Benjamini-Hochberg step-up. -> q in the same order as the input."""
+    m = len(pvals)
+    order = sorted(range(m), key=lambda i: pvals[i])
+    q = [0.0] * m
+    prev = 1.0
+    for rank, i in enumerate(reversed(order), start=1):
+        k = m - rank + 1                       # 1-based rank of this p ascending
+        prev = min(prev, pvals[i] * m / k)
+        q[i] = prev
+    return q
+
+
+def annotate(rows, alpha, cov_min, distinct_min):
+    """Add q_value, control_status and interpretation.
+
+    Both of these were applied by hand and lived only as prose -- the BH step in
+    PHYLOGEOGRAPHY_ASSOCIATION_INTERPRETATION.md and the >=70% / >=3-project
+    control gate at its lines 155-157. Nothing in the repo reproduced either, so
+    the four-outcome taxonomy could not be regenerated from the outputs.
+
+    The correction family is the testable country rows of THIS run -- one scale,
+    country only. BioProject rows are the control, not hypotheses, so folding
+    them in would dilute the very comparison they exist to make.
+    """
+    bp = {r["unit"]: r for r in rows if r["variable"] == "bioproject"}
+    ctry = [r for r in rows if r["variable"] == "country" and r["p_value"]]
+
+    qs = bh_qvalues([float(r["p_value"]) for r in ctry])
+    for r, q in zip(ctry, qs):
+        r["q_value"] = f"{min(q, 1.0):.4f}"
+
+    for r in rows:
+        c = bp.get(r["unit"])
+        if not c:
+            status = "absent"
+        elif int(c["n_known"]) == 0:
+            status = "absent"
+        elif (int(c["n_known"]) / max(int(c["n_tips"]), 1) >= cov_min
+              and int(c["n_distinct"]) >= distinct_min):
+            status = "ok"
+        else:
+            status = "vacuous"
+        r["control_status"] = status
+        r.setdefault("q_value", "")
+
+        if r["variable"] != "country":
+            r["interpretation"] = ""
+            continue
+        if not r["p_value"]:
+            r["interpretation"] = "untestable: single-valued"
+        elif float(r["q_value"]) > alpha:
+            r["interpretation"] = "null"
+        elif status != "ok":
+            r["interpretation"] = f"{status} control"
+        elif c["p_value"] and float(c["p_value"]) <= alpha:
+            # country and study are clustered on the same tree at the same level
+            r["interpretation"] = "confounded"
+        else:
+            r["interpretation"] = "geographic (control passes)"
+
+
 def permutation_p(tree, labels, states, n_perm, rng):
     """
     p = P(shuffled score <= observed). Shuffling only the ASSIGNMENT of the
@@ -137,6 +233,9 @@ def main():
     ap.add_argument("--perms", type=int, default=1000)
     ap.add_argument("--seed", type=int, default=20260815)
     ap.add_argument("--out", default="PHYLOGEOGRAPHY_ASSOCIATION.tsv")
+    ap.add_argument("--fdr", type=float, default=0.05)
+    ap.add_argument("--control-coverage", type=float, default=0.70)
+    ap.add_argument("--control-distinct", type=int, default=3)
     a = ap.parse_args()
 
     rng = random.Random(a.seed)
@@ -166,7 +265,7 @@ def main():
             continue
 
         for var, col in (("country", "country"), ("bioproject", "bioproject")):
-            states = [meta.get(t, {}).get(col, "") or None for t in tips]
+            states = [state_of_row(meta.get(t, {}), col) for t in tips]
             known = [s for s in states if s]
             distinct = len(set(known))
             base_row = {
@@ -191,8 +290,11 @@ def main():
             })
             rows.append(base_row)
 
+    annotate(rows, a.fdr, a.control_coverage, a.control_distinct)
+
     cols = ["unit", "n_tips", "variable", "n_known", "n_distinct",
-            "parsimony_score", "top_share", "p_value", "verdict"]
+            "parsimony_score", "top_share", "p_value", "verdict",
+            "q_value", "control_status", "interpretation"]
     with open(a.out, "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=cols, delimiter="\t",
                            lineterminator="\n")
@@ -208,6 +310,15 @@ def main():
         print(f"{var}:")
         print(f"  testable units        : {len(g)}  (plus {len(uninf)} uninformative, single-valued)")
         print(f"  clustered (p <= 0.05) : {len(sig)}  ({100.0*len(sig)/max(len(g),1):.0f}% of testable)")
+        if var == "country":
+            surv = [r for r in g if float(r["q_value"]) <= a.fdr]
+            print(f"  surviving BH-FDR {a.fdr:.0%}  : {len(surv)}")
+
+    print("\ncountry interpretation:")
+    for k, n in collections.Counter(
+            r["interpretation"] for r in rows
+            if r["variable"] == "country" and r["interpretation"]).most_common():
+        print(f"  {k:<32}: {n}")
     print(f"\nwrote {a.out}")
 
 

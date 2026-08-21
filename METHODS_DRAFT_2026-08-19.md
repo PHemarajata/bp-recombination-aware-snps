@@ -1412,9 +1412,43 @@ missing metadata weakens signal rather than inventing it.
 BioProject is typically one study, one laboratory and one country, and a
 geographic signal no stronger than the BioProject signal is not evidence of
 phylogeography. Units in which every genome shares one country yield a parsimony
-score of zero that no permutation can better; they are reported separately and
-tested instead against the probability of drawing n genomes of one country at
-random from the collection's own country distribution.
+score of zero that no permutation can better; these carry no information and are
+reported as uninformative, with no p-value, rather than counted as significant.
+
+Missing metadata is encoded inconsistently in the source table — `country` uses
+an empty cell, but `bioproject` uses the literal string "unknown" for 274 of the
+2,352 analysed genomes — so both fields are normalised to a missing state before
+scoring. Left unnormalised, those 274 genomes would be scored as one shared
+274-member study, mis-measuring the confounder in the direction that favours a
+geographic result. A genome whose origin resolves to more than one country
+(one record, "Panama and Peru") is likewise treated as missing at country scale,
+keyed on its `multi_country` resolution rather than on string-matching, since
+"Trinidad and Tobago" is a single country.
+
+**Multiple testing and the control gate are applied in code**, not by hand:
+Benjamini–Hochberg FDR at 5% across the testable country tests of a single scale,
+and a BioProject control counted as informative only where it covers ≥70% of the
+unit's tips across ≥3 distinct projects. Each unit receives one of five
+interpretations — *untestable (single-valued)*, *null*, *vacuous control*,
+*confounded*, or *geographic (control passes)*. At national scale: 39, 25, 5, 13
+and 6 units respectively.
+
+**A draw-probability test was considered and deliberately not implemented.** An
+earlier draft proposed testing near-homogeneous units — for example the
+22-genome Mississippi unit, 21 of one country — against the hypergeometric
+probability of drawing that composition at random from the collection. We reject
+it. Its null is that the unit is a random draw from the collection, but units are
+clades, and clades are geographically concentrated by descent, so rejecting that
+null demonstrates only that the partitioner works. In this panel **56 of 88 units
+are ≥90% single-country and 39 are 100%**, so the test fires on almost all of
+them, at a magnitude set by how rare the country happens to be in the collection
+rather than by any property of the unit. The decisive comparison is internal:
+`strain_3_L1_8` (n=22, top share 0.955, 21 Thailand) and `strain_4_L1_1` (n=22,
+top share 0.955, 21 USA) are identical in every tested quantity and both return
+p = 1.0000 under the permutation test — correctly, since each is a clade plus one
+stray. A hypergeometric would separate them by many orders of magnitude solely
+because Thailand is 66% of the panel and the USA ~2%. Such units are reported as
+**descriptive composition, without a p-value**.
 
 ## 2.12.10 The control run, and what it establishes
 
@@ -1457,6 +1491,54 @@ dropped, so that per-unit denominators remain correct.
 with the mainland: of 21 genomes labelled "USA", 10 are Puerto Rico or the US
 Virgin Islands, leaving 11 from the mainland. Analyses of US origin must
 disaggregate these.
+
+## 2.12.11a Origin attribution, scored against known exposures
+
+Twenty-six genomes in the panel have a **known exposure country** rather than
+merely a country of deposit (`origin_basis = travel_reattributed`): sixteen CDC
+submissions carrying an explicit label, and ten older assemblies whose exposure
+country is recorded in the assembly name. These were used to score attribution
+directly.
+
+Three estimators were applied to each held-out genome using only the remaining
+members of its unit — the unit's **modal label**, its **nearest neighbour by
+recombination-filtered SNP distance**, and a **sampling-corrected enrichment**
+(over-representation in the unit relative to the whole panel, which prevents a
+label from winning merely by being 66% of the collection). Each was evaluated at
+country, sub-national and regional scale, under two holdout regimes.
+
+**The two regimes answer different questions and both are reported.**
+Leave-one-out removes only the target genome and asks whether attribution works
+*given that reference genomes for that country exist*. Leave-group-out removes
+every validation genome sharing the exposure country and asks whether a country
+with **no** reference representation can be attributed. Accuracy is reported
+beside the **majority-class baseline** on the same holdout, because East Asia &
+Pacific is 91.8% of the panel and an estimator that always answered "East Asia &
+Pacific" would score 58% at regional scale while knowing nothing.
+
+**Result.** At regional scale, modal and enrichment attribution were correct for
+**19 of 19** scorable genomes against a **58%** baseline, and did not degrade
+under leave-group-out. At country scale, every estimator scored **zero** under
+leave-group-out. Nearest-neighbour attribution appears to reach 37% at country
+scale under leave-one-out, but **all seven of those hits are other validation
+genomes of the same country predicting one another**, and all seven disappear
+under leave-group-out. Any country-level accuracy quoted with the validation
+genomes retained is therefore artefactual, not merely optimistic.
+
+The failure is not only one of panel composition. Three Mexican-exposure genomes
+retained genuine Mexican references under leave-group-out — three of a thirty-
+genome pool — and attribution still failed, which is consistent with their unit
+(`strain_4_L1_4`) being classified *confounded* by the association test.
+
+**Two limits follow.** Sub-national attribution is **untestable** on this
+validation set: all twenty-six genomes carry a blank sub-national label. And six
+of the twenty-six are unattributable because they fall in single-genome units
+below the analysis floor — **four are the only panel representative of their
+exposure country**, so the source countries most in need of attribution are the
+least likely to occupy an analysable unit.
+
+Accordingly we claim **regional origin attribution and not country-level
+attribution**, and report the analysability bias alongside it.
 
 ## 2.12.12 Reproducibility
 

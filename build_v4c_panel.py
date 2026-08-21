@@ -10,6 +10,8 @@ monolith.
   --reconcile DIR  undo PopPUNK's '.'->'_' rewrite; write a sample-id phylip
   --fasta-dir DIR  one flat symlink dir for the reference picker
   --resolve-refs   turn reference paths into real absolute paths
+  --relabel-units  repoint the unit columns at the v4c partition (run AFTER it)
+  --fix-exposure-flags  flag every genome with a known exposure country
   --bundle         build a100_stage_v4c/
 
 Panel composition, unchanged in principle from v4b:
@@ -104,6 +106,130 @@ def normalise_spades():
     return n
 
 
+ASSIGN = f"{B}/wfsnps-v4c-results/partition/curated_L1v4c_assignments_all.tsv"
+
+
+def fix_exposure_flags():
+    """Flag every genome whose EXPOSURE country is known, not just some of them.
+
+    `origin_basis = travel_reattributed` is what selects the attribution
+    validation set, and it was incomplete: 13 genomes carry the `_ex_` naming
+    convention but only 10 were flagged, and two CDC genomes recorded in ENA as
+    "USA: CA ex Vietnam" were folded into `country` with the flag left at
+    `as_isolated`. Five genomes with known exposure were therefore invisible to
+    the scorer -- a 19% undercount, and the only Vietnamese exposures we have.
+
+    Two sources, deliberately:
+      * the `_ex_` convention in the assembly name, applied as a rule;
+      * `EXPOSURE_OVERRIDES.tsv`, a register with evidence per genome, for cases
+        where the convention is absent and the label came from curation.
+
+    A register rather than hardcoded accessions, so adding newly obtained
+    genomes with known origin is a one-line edit rather than a code change.
+    """
+    meta = load(f"{B}/L1v4c_MERGED_METADATA.tsv")
+    over = {}
+    p = f"{B}/EXPOSURE_OVERRIDES.tsv"
+    if os.path.isfile(p):
+        over = {r["sample_id"]: r for r in load(p)}
+
+    n_rule = n_over = n_already = 0
+    for r in meta:
+        s = r["sample_id"]
+        exposure = ""
+        if s in over:
+            exposure = over[s]["exposure_country"]
+        elif "_ex_" in s:
+            # the name encodes it and `acquired_from` already holds the value
+            exposure = r.get("acquired_from") or r.get("country", "")
+        if not exposure:
+            continue
+        if r.get("origin_basis") == "travel_reattributed":
+            n_already += 1
+        else:
+            n_over += (s in over)
+            n_rule += (s not in over)
+            r["origin_basis"] = "travel_reattributed"
+        # acquired_from is the exposure country by definition for these
+        r["acquired_from"] = exposure
+        if not r.get("validation_label"):
+            r["validation_label"] = exposure
+
+    with open(f"{B}/L1v4c_MERGED_METADATA.tsv", "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(meta[0]), delimiter="\t",
+                           lineterminator="\n")
+        w.writeheader(); w.writerows(meta)
+
+    total = sum(1 for r in meta if r.get("origin_basis") == "travel_reattributed")
+    print(f"already flagged      : {n_already}")
+    print(f"newly flagged by _ex_: {n_rule}")
+    print(f"newly flagged by register: {n_over}")
+    print(f"validation set now    : {total}")
+    print("  by exposure country:",
+          dict(collections.Counter(r["acquired_from"] for r in meta
+                                   if r.get("origin_basis") == "travel_reattributed")))
+
+
+def relabel_units():
+    """Repoint the unit columns at the v4c partition.
+
+    panel_rows() copies every column from the v4b metadata verbatim, so the
+    seven unit-level columns are v3-era carryover that was never recomputed for
+    v4c: 694 rows are blank and 65.8% of the populated `subcluster` values
+    disagree with the v4c partition. The partition only exists after the panel
+    is built, so this cannot live inside --build.
+
+    reference comes from curated_L1v4c_refs.tsv. ref_source is derived -- a
+    reference that is itself a member of its own unit is 'own', otherwise
+    'borrowed'. ref_mean_mash is blanked: no v4c ref-provenance file exists, and
+    a stale v3 distance is worse than an empty cell.
+    """
+    meta = load(f"{B}/L1v4c_MERGED_METADATA.tsv")
+    assign = load(ASSIGN, key="sample_id")
+    rm = load(f"{B}/L1v4c_out/Summaries/recombination_rm.tsv", key="unit")
+    refs = {r["cluster_id"]: os.path.basename(r["reference_path"]).replace(".fasta", "")
+            for r in load(f"{B}/curated_L1v4c_refs.tsv")}
+
+    members = collections.defaultdict(set)
+    for s, r in assign.items():
+        members[r["cluster_id"]].add(s)
+
+    cols = list(meta[0])
+    if "role" not in cols:
+        cols.append("role")
+
+    n_set, n_cleared = 0, 0
+    for r in meta:
+        a = assign.get(r["sample_id"])
+        if not a:
+            # in the metadata but not the partition: clear rather than keep stale
+            for c in ("strain", "subcluster", "unit_n", "unit_rm",
+                      "reference", "ref_source", "ref_mean_mash"):
+                r[c] = ""
+            r["role"] = "unassigned"
+            n_cleared += 1
+            continue
+        unit = a["cluster_id"]
+        ref = refs.get(unit, "")
+        r["strain"] = a["strain"]
+        r["subcluster"] = unit
+        r["unit_n"] = a["unit_n"]
+        r["role"] = a["role"]
+        r["unit_rm"] = rm.get(unit, {}).get("rm_corrected", "")
+        r["reference"] = ref
+        r["ref_source"] = ("own" if ref and ref in members[unit] else
+                           "borrowed" if ref else "")
+        r["ref_mean_mash"] = ""
+        n_set += 1
+
+    with open(f"{B}/L1v4c_MERGED_METADATA.tsv", "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=cols, delimiter="\t", lineterminator="\n")
+        w.writeheader(); w.writerows(meta)
+    print(f"relabelled {n_set} rows from the v4c partition, cleared {n_cleared}")
+    print("  by role:", dict(collections.Counter(r["role"] for r in meta)))
+    print("  units with an r/m:", sum(1 for u in members if u in rm), "of", len(members))
+
+
 def panel_rows():
     e, _ = excl_over()
     v4b = load(f"{B}/L1v4b_MERGED_METADATA.tsv")
@@ -149,11 +275,21 @@ def main():
     ap.add_argument("--reconcile")
     ap.add_argument("--fasta-dir")
     ap.add_argument("--resolve-refs", action="store_true")
+    ap.add_argument("--relabel-units", action="store_true")
+    ap.add_argument("--fix-exposure-flags", action="store_true")
     ap.add_argument("--bundle", action="store_true")
     ap.add_argument("--check-only", action="store_true")
     a = ap.parse_args()
 
     if a.check_only:
+        return
+
+    if a.relabel_units:
+        relabel_units()
+        return
+
+    if a.fix_exposure_flags:
+        fix_exposure_flags()
         return
 
     if a.report_delta:

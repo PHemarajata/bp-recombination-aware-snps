@@ -162,6 +162,14 @@ THEIAPROK_SETTINGS.md
 READ_SCREEN_RESCUE.md
 INTERPRETATION_2026-08-16.md
 
+# ACQUISITION_TARGETS_US table 1 lists five 2021 aromatherapy-outbreak runs as
+# run + biosample + month-precision date + anatomical specimen (blood, lung),
+# and the prose immediately below names the four patients' US states. That is
+# the accession -> date -> location -> specimen join this file exists to
+# prevent, on exactly the rare-USA-case population called out at the top. The
+# accessions are individually public; the assembled join is the exposure.
+ACQUISITION_TARGETS_US_2026-08-21.md
+
 # --- 7. explicit exceptions from subdirectories -------------------------------
 # Rule 1 excludes all subdirectories. This is resource configuration, not data:
 # no isolate identifiers, and it carries the measured rationale for the tuning
