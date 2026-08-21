@@ -48,11 +48,17 @@ median shifted (5.34 → 5.51), and that one is marked do-not-quote anyway.
 
 ⚠ **Two corrections came out of this:**
 
-1. **The Gate 1 median is 7.26, not 7.38.** `generate_numbers.py` hardcoded 7.38
-   from `METHODS_DRAFT` §2.6.1. Recomputed from primary data it reproduces n=47
-   exactly but gives 7.26 — before the re-derivation as well as after. 7.38 was
-   an 88-unit figure; this table holds 85. **Fix 7.38 wherever it appears in
-   prose.** It is now generated, not restated.
+1. **The Gate 1 median is 7.26 here, against 7.38 in the 08-19 documents, and
+   the gap is UNRESOLVED.** Recomputed from primary data it reproduces n=47
+   exactly but gives 7.26, before the re-derivation as well as after. I first
+   assumed a denominator difference (88 vs 85 units); **that is wrong** — the
+   extra unit `strain_1_L1_36` is *inside* the window, so the in-window set is
+   the same 47 either way and the r/m **values** must differ. The 08-19 docs
+   also pair 7.38 with an all-unit median of 5.70 where the contemporaneous
+   table gives 5.34, so two r/m tables existed that day. **Do NOT mass-replace
+   7.38** — it sits inside a consistent 88/5.70 set. Quote 7.26 with its
+   85-unit denominator; someone who knows the 08-19 run history should settle
+   which table is authoritative.
 2. **`generate_numbers.py` was reading r/m from a denormalised copy** (the
    `unit_rm` column of `L1v4c_MERGED_METADATA.tsv`) and so still reported the
    pre-re-derivation values. It now reads the pipeline's authoritative table.

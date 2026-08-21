@@ -51,24 +51,48 @@ The two filtered sets are genuinely different (59 and 47 units, overlap 43) and
 land on the same median by coincidence — the same unit sits at the middle of
 both. Checked, not assumed.
 
-## 3. A correction to the Gate 1 figure
+## 3. The Gate 1 figure: 7.26 here, 7.38 in the 2026-08-19 documents — UNRESOLVED
 
 `generate_numbers.py` hardcoded **"quote 7.38, the median of the 47 in-window
-units"**, copied from `METHODS_DRAFT` §2.6.1.
+units"**, copied from `METHODS_DRAFT` §2.6.1. Recomputed from primary data the
+in-window count reproduces at **exactly 47**, but the median is **7.26** —
+before the re-derivation as well as after, so the re-derivation did not cause it.
 
-Recomputed from primary data, the in-window count reproduces at **exactly 47**
-but the median is **7.26, not 7.38** — before the re-derivation as well as
-after, so this is not something the re-derivation caused. **7.38 was computed on
-an 88-unit table; this one holds 85.** A denominator difference, not a
-disagreement.
+**My first explanation was that 7.38 came from an 88-unit table and this one
+holds 85, i.e. a denominator difference. That explanation is wrong, and it is
+recorded here rather than quietly dropped.** Checking it:
 
-It is now generated (`rm.gate1_units`, `rm.median_gate1`) rather than restated.
-**Anywhere 7.38 appears in prose, it should read 7.26** with the 85-unit
-denominator named.
+- The 88-unit table is the 86 local units plus `strain_1_L1_36` (n=47) and
+  `strain_1_L1_37` (n=8) — the two units computed on the A100 whose alignments
+  never came back.
+- `strain_1_L1_37` is outside the Gate 1 window (229 mean SNPs), but
+  **`strain_1_L1_36` is inside it** (3,374). So if it had carried an r/m value
+  the 88-unit in-window count would be 48, not the documented 47.
+- Both counts are 47, so **the in-window set is the same 47 units in both
+  cases.** The difference is therefore **in the r/m values themselves, not in
+  which units were included.**
+
+Corroborating this: the 2026-08-19 documents pair 7.38 with an **all-unit median
+of 5.70**, while the table those documents are contemporaneous with
+(`L1v4c_out/Summaries/recombination_rm.tsv`, written 2026-08-19 07:59) gives
+**5.34** pre-splice. Two different r/m tables existed on the same day.
+
+**What this means practically:**
+
+- The current, reproducible figure from the pipeline's own output is
+  **7.26 (n=47, 85-unit table)**, and it is now generated
+  (`rm.gate1_units`, `rm.median_gate1`) rather than restated.
+- **Do NOT mass-replace 7.38 with 7.26 in the corpus.** The 7.38 figures appear
+  alongside "88 units" and "5.70", an internally consistent set. Overwriting one
+  number inside a consistent set is how denominators get mixed — the error this
+  project keeps catching.
+- **Which table is authoritative is a call for whoever knows the 08-19 run
+  history.** Until then quote 7.26 with its 85-unit denominator named, and treat
+  the 0.12 gap as unexplained rather than as rounding.
 
 ⚠ Still open and now surfaced as `rm.gate1_caveat`: **Gate 1 diversity is still
 the Mash proxy, not alignment distances** (`HANDOFF_2026-08-21_EVENING.md` §5
-item 6). The window membership therefore inherits whatever the proxy gets wrong.
+item 6). Window membership inherits whatever the proxy gets wrong.
 
 ## 4. The mechanism fix
 
