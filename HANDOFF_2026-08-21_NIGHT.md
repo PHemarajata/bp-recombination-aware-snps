@@ -1,0 +1,254 @@
+# Handoff, 2026-08-21 night
+
+Read this first. Working directory
+`/home/phemarajata/Downloads/snp-mod-local-working`.
+
+Supersedes `HANDOFF_2026-08-21_EVENING.md`, which is still correct on framing and
+§3 findings but stale on §5 (five of its eight action items are now closed).
+
+---
+
+## 0. RUNNING RIGHT NOW — check this first
+
+| job | state | where |
+|---|---|---|
+| **Gubbins unit re-derivation** | **RUNNING**, started 21:22. 6 replicon-runs, strictly sequential | `rederive_2026-08-21/rederive.log` |
+
+Started on `strain_1_L1_8__GCF_027856475_2_1` (90 taxa). Expect several hours —
+`strain_1_L1_26` is 154 taxa on a 616 MB alignment and is the long pole.
+
+**Check it with:**
+
+```bash
+tail -20 /home/phemarajata/Downloads/snp-mod-local-working/rederive_2026-08-21/rederive.log
+```
+
+**It is resumable** — a unit with `per_branch_statistics.csv` is skipped, so if
+it died, just re-run `bash rederive_units_bp.sh`.
+
+**When it finishes:** recompute r/m with `consolidate_L1_rm_bp.py` over
+`rederive_2026-08-21/`, splice those three units into
+`RM_RESULTS_L1_CORRECTED.tsv`, and **drop `strain_1_L1_10` as a unit** (it falls
+7 → 4, below the n≥5 floor). Then re-run `generate_numbers.py`, because the
+unit-count and r/m figures move.
+
+---
+
+## 1. The headline: accessory attribution was tested and it fails
+
+Full result in **`ACCESSORY_ATTRIBUTION_RESULT_2026-08-21.md`**. This was the last
+experiment that could have changed the paper's headline. It did not.
+
+**It looked like it worked.** Country nearest-neighbour **13/43 (30%, kappa
+0.263)** against core's 9/43 (21%, kappa 0.188) and a 28% baseline — the first
+time country has cleared baseline in this project. `modal_k5` reached 35%.
+
+**Four pre-registered controls, committed in `bf93d09` before the result was
+computed.** Three fail:
+
+- **Control 4, decisive: 0/13 where a genuine close relative exists**, 11/22
+  where none does. Pure attractor signature, and **worse than core (1/13)** in
+  the only stratum where a correct answer means anything.
+- **Control 1:** country accuracy swings **26% / 23% / 5%** across contig-count
+  pool tertiles.
+- **Control 2:** contigs vs mean accessory distance rho **+0.156** (p=8.6e-18)
+  against **+0.038** for core — the 4× ratio the control predicted.
+- **Control 3 PASSES:** real accuracy sits far outside a permutation null
+  shuffled within contig strata (p=0.001 both scales). There *is* non-random
+  accessory structure. It is not country-attributive. Report this honestly —
+  and report its limitation, that shuffling cannot separate geography from
+  BioProject.
+
+**Post hoc and decisive: dropping ONE pair of genomes** (`GCF_006542565_1_Mexico_Huasabas`,
+`GCF_006542585_1_Mexico_Huasabas`) takes country from 13/43 to **8/43, below
+core**, and Mexico from **5/5 to 0/5**.
+
+Accessory is also **worse at region** (kappa 0.707 vs core's 0.761) — the scale
+that actually works.
+
+**Two things this buys the paper:**
+
+1. **The core result is strengthened.** Accessory was the best remaining
+   hypothesis for shallow geographic signal. Four representations now agree
+   (cgMLST alleles, PopPUNK core, PopPUNK accessory, SNP distances). PopPUNK
+   core independently reproduces the cgMLST core result (country 19% vs 21%,
+   region 93% at modal k=20 in both), so **the core failure is not an artifact
+   of the typing system.**
+2. **A methodological finding.** Without the controls this would have been
+   written up as "accessory lifts country attribution above baseline." See §3
+   for how to phrase the literature claim — it is narrower than we assumed.
+
+**Keep as a lead, labelled a hypothesis (§6 of the result doc):** those two
+Mexican references share accessory content with five cases across a core gap of
+d = 0.406–0.462. n=2 and n=5, so it is not a result. Cheap to test — acquire more
+Mexican genomes and see whether it scales with reference count or stays pinned to
+Huasabas.
+
+**Route B is not closed.** Pangenome/unitig presence-absence is uninstalled and
+untested, and it is what the Salmonella precedent actually used.
+
+---
+
+## 2. Also closed today
+
+**cgMLST scheme concordance** (`SCHEME_CONCORDANCE_2026-08-21.md`). On the 30
+validation genomes scored under both schemes: country 0/30 (PubMLST) vs 1/30
+(Lichtenegger); **region 28/30 (93%) under BOTH** at modal k=20; NN distances
+correlate at **r = +0.999**.
+
+⚠ **The correction this forces:** the full runs read 0/30 vs 9/43 at country,
+which invites "the published scheme recovered signal." **It did not.** The gain
+is entirely the **13 validation genomes added in the same batch**. Scheme and
+validation set changed together; always say which one moved a number.
+
+**Citation audit** — four defects fixed, all verified against fetched PubMed
+records:
+
+- **PMID 32149236, cited as "Pearson 2020" in six files, is a materials-chemistry
+  paper about formic acid adsorption onto ceramics.** Correct is **32134991**.
+  It was worst in `phylogeography_diagnostics_bp.py`, where it sat in a comment,
+  in a string **printed at runtime**, and in a `--help` default.
+- **"Ashcroft et al. 2021" is a phantom.** No such paper. It is Lichtenegger et
+  al. 2021, JCM **59(8)**:e00093-21, PMID 33980649. Stated definitively now:
+  PubMed returns zero Ashcroft Bp cgMLST records and the DOI we attached to
+  "Ashcroft" was Lichtenegger's.
+- "Chewapreecha 2024" → **Seng et al. 2024**, Nat Commun 15:5699, PMID 38972886.
+- "Ceará clade (Pearson 2021)" → **Gee et al. 2021**, mSphere 6(1):e01259-20,
+  PMID 33536328; author list retrieved.
+
+Verified correct, no change: Viberg 2017, Gee 2017, Sprenger/Gulvik 2026,
+Chewapreecha 2017, Pearson 2009 (*BMC Biology*).
+
+**Still unverified, abstract-only:** Gee 2017's n=26; McLaughlin's D=0.8512.
+Neither contradicted, neither confirmed.
+
+**The repo was committed** — 5 commits, working tree clean. See §5.
+
+---
+
+## 3. The literature find that reframes the whole result
+
+`ACCESSORY_ATTRIBUTION_RESULT_2026-08-21.md` §8. Two things:
+
+**(a) We were describing the Salmonella precedent wrongly.** Bayliss et al. 2023,
+*eLife* 12:e84167, PMID 37042517 — the paper we held as a bare URL. Macro-F1
+0.954/0.718/**0.661** confirmed, and the target *is* country. But:
+
+- **It does not use accessory genes.** Features are **unitigs called from reads**;
+  nothing assembled, nothing annotated.
+- Its labels are **patient-reported travel destination** — the same ground-truth
+  design as ours.
+- **It does control data quality** (coverage floor, downsampling, unitig-length
+  cap, 220 exclusions) and runs temporal + cross-institution external validation.
+
+So **do not write "they did not run controls."** Write: *assembly-quality
+confounding of gene-content features, and stratification by whether a genuine
+close relative exists, are not addressed in the source-attribution literature we
+could find.* Their only relatedness step is deduplication to one isolate per SNP5
+cluster per country — **no leave-clade-out, no close-relative stratification**,
+which is exactly our control 4.
+
+**(b) The B. pseudomallei literature already answered this in 2007.**
+**Tuanyok et al. 2007, PMID 17933898** partitions the species on a single
+accessory gene cluster — **YLF vs BTFC**, Australia versus Thailand-and-elsewhere,
+across 571 isolates. Duangsonk 2006 (PMID 16597858) and Chewapreecha 2017 find
+the same axis. **Every accessory-geography result in this organism resolves
+Australia vs Asia. None resolves country.**
+
+That is our divergence-depth mechanism, independently, nineteen years earlier. A
+reviewer asking "why didn't accessory work?" has a published answer. **Our
+contribution is that we tested it prospectively at country scale and measured
+where it fails.**
+
+**(c) Citable support for the control:** Panaroo (PMID 32698896) — on
+near-identical genomes where the true accessory genome is ≈0, tools reported
+2,584–3,670 accessory genes, **59% of the discrepancy from assembly
+fragmentation**; Panaroo's own QC flags outliers **by contig count**. Plus
+Klassen 2012 (PMID 22233127), Denton 2014 (PMID 25474019), GenAPI (PMID 32690023).
+
+⚠ **Gao et al. 2025, PMID 40644951** (*Cronobacter*, 748 assemblies, accessory
+gene profiles → continent) is the **closest published analogue to our
+experiment** and is **paywalled and unverified**. Get the PDF before writing
+about it. Do not characterise its controls.
+
+---
+
+## 4. Correction to the evening handoff's §5 item 2
+
+It lists four affected units under one heading. Verified against
+`curated_L1v4c_clusters.tsv`, they come from **two separate defects**:
+
+| cause | unit | change |
+|---|---|---|
+| duplicate BioSamples | `strain_1_L1_8` | 91 → 89 |
+| duplicate BioSamples | `strain_14_L1_4` | 14 → 12 |
+| duplicate BioSamples | `strain_1_L1_10` | 7 → 4 — **drop the unit** |
+| **register-excluded genome** | `strain_1_L1_26` | 154 → 153 (`SRR2896257`) |
+
+**No dropped duplicate is in `strain_1_L1_26`** — its shrinkage is the
+`broken_assembly` exclusion, a different list. The counts in the evening handoff
+are all correct; only the cause attribution was merged. The other 11 duplicate
+drops sit in no analysed unit. **82 of 86 units are untouched.**
+
+`rederive_units_bp.sh` pins parameters to the production run (same container
+digest, 5 iterations, RAxML, min-snps 3, `--invariant-site-correction`, filter
+25%) because r/m shifts 0.47–0.78× with settings and cannot be pooled across
+them. Two deliberate deviations, both documented in the script header: an
+explicit `--seed` (the pipeline passes none, and Gubbins' unseeded
+`randint(0,10000)` draws 0 about 1 run in 10,001), and strictly sequential runs
+in isolated working directories (Gubbins writes scratch to CWD, not `--prefix`).
+
+---
+
+## 5. Repo state
+
+**5 commits on `feat/core-shrinkage-and-itol`, working tree clean, NOT pushed.**
+Pushing is your call.
+
+`c39913b` corpus + code · `bf93d09` pre-registered controls · `4e3ba08` accessory
+result · `4194504` citations · `4bbb7e4` re-derivation driver
+(+ concordance, + literature).
+
+**`ACQUISITION_TARGETS_US_2026-08-21.md` was deliberately excluded** and added to
+`.gitignore` §6 with the reason recorded there: its table 1 joins run + biosample
++ month date + anatomical specimen for five 2021 outbreak isolates, and the prose
+below names the four patients' US states. The accessions are individually public;
+the assembled join is what this repo does not track. **Reverse it if you
+disagree** — it is one line in `.gitignore`.
+
+Nothing data-shaped is tracked: 716 KB staged, all `.md`/`.py`/`.sh` at top level.
+
+---
+
+## 6. Still open, re-ranked
+
+1. **Finish the re-derivation** (§0) — running. Then `generate_numbers.py`.
+2. **File the GAMBIT issue** (`THEIAGEN_GAMBIT_ISSUE.md`). **Not done — this
+   posts publicly to someone else's repo, so it needs you to say go.** The draft
+   is ready.
+3. **IRB approval number** from the epi team into Methods. Human action.
+4. **Get the Gao 2025 PDF** (§3) before the literature section is written.
+5. **Two method questions for Paper 2**: `+ASC` vs `-fconst` on one unit;
+   recompute Gate 1 diversity from alignment distances instead of the Mash proxy.
+6. **The Mexican accessory lead** (§1) — cheap, and it is the only route by which
+   accessory comes back.
+7. Numbered clade nomenclature; two-stage placement before any UShER index (MAT
+   on the **masked** alignment); implement and score the PBP dual-locus scheme.
+8. Systematic check of the BioProject-control novelty claim before writing
+   "first".
+
+**Deliberately not doing:** re-partitioning, re-running the SNP pipeline
+wholesale, rewriting the corpus (`REDO_DECISION_2026-08-21.md`).
+
+---
+
+## 7. Rules and traps — unchanged, plus two
+
+The evening handoff's §7 list all still stands. Two additions:
+
+9. **Verify every PMID against a fetched PubMed record before it goes in a
+   manuscript.** One in this corpus resolved to a paper about ceramics, and
+   another named an author who has never written on the subject.
+10. **When two things change at once, say which one moved the number.** The
+    scheme swap and the validation-set expansion happened together and the
+    scheme was getting the credit (§2).
