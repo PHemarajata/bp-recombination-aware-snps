@@ -537,7 +537,7 @@ LSD2 (To TH, Jung M, Lycett S, Gascuel O, *Syst Biol* 2016;65(1):82–97, and vi
 
 | Rate (subs/site/yr) | Interval | Basis | Source |
 |---|---|---|---|
-| **1.7 × 10⁻⁷** | **95% HPD 1.3–2.1 × 10⁻⁷** | median across a >16-year chronic within-host infection | **Pearson et al. 2020**, *PLoS Pathog* 16(3):e1008298, PMID 32149236 |
+| **1.7 × 10⁻⁷** | **95% HPD 1.3–2.1 × 10⁻⁷** | median across a >16-year chronic within-host infection | **Pearson et al. 2020**, *PLoS Pathog* 16(3):e1008298, PMID 32134991 |
 | 4.9 × 10⁻⁷ | no CI given | average within-patient rate | cited as ref [14] in Pearson 2020 |
 | 3.3 / 3.6 × 10⁻⁷ | — | *B. dolosa* / *B. multivorans*, for context | refs [80]/[82] in Pearson 2020 |
 | **6.26 × 10⁻⁷ – 1.81 × 10⁻⁶** | see per-cluster table below | **BEAST, per cluster, per replicon** | **Chewapreecha 2017, Supplementary Figure 6f — RETRIEVED 2026-08-09** |
@@ -1065,7 +1065,7 @@ Corrections to identifiers used in earlier passes are marked **⚠**.
 | Field-wide failure base rate (8/36) | Duchêne S, Holt KE, Weill F-X, et al. *Microb Genom* 2016;2(11):e000094 | 28348834 | [10.1099/mgen.0.000094](https://doi.org/10.1099/mgen.0.000094) |
 | **Negative-result template (13/31 failed)** | Menardo F, Duchêne S, Brites D, Gagneux S. *PLoS Pathog* 2019;15(9):e1008067 | — | [10.1371/journal.ppat.1008067](https://doi.org/10.1371/journal.ppat.1008067) |
 | Post-hoc dated-tree diagnostics | Didelot X, Carson J, Ribeca P, Volz E. DiagnoDating. *Mol Biol Evol* 2026;43(4):msag093 | — | [10.1093/molbev/msag093](https://doi.org/10.1093/molbev/msag093) |
-| **Rate prior (the one Seng used)** | Pearson T, Sahl JW, Hepp CM, et al. *PLoS Pathog* 2020;16(3):e1008298 | 32149236 | [10.1371/journal.ppat.1008298](https://doi.org/10.1371/journal.ppat.1008298) |
+| **Rate prior (the one Seng used)** | Pearson T, Sahl JW, Hepp CM, et al. *PLoS Pathog* 2020;16(3):e1008298 | 32134991 | [10.1371/journal.ppat.1008298](https://doi.org/10.1371/journal.ppat.1008298) |
 | Within-host rate ⚠ *first author Viberg, not Price* | Viberg LT, Sarovich DS, Kidd TJ, et al. *mBio* 2017;8(2):e00356-17 | 28400528 | [10.1128/mBio.00356-17](https://doi.org/10.1128/mBio.00356-17) |
 | Chewapreecha's rate benchmark — *B. dolosa*, not *B. pseudomallei* | Lieberman TD, et al. *Nat Genet* 2011;43(12):1275–80 | 22081229 | [10.1038/ng.997](https://doi.org/10.1038/ng.997) |
 | No temporal signal over 25 yr | Chapple SNJ, et al. *Microb Genom* 2016;2:e000067 | 28348862 | — |

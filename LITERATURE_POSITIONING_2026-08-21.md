@@ -16,8 +16,8 @@ choice rather than discover it under fire.
 | **A** | Seng, Chomkatekaew, Chewapreecha *et al.* 2024, *Nat Commun* — [10.1038/s41467-024-50067-9](https://doi.org/10.1038/s41467-024-50067-9) | **1,391** | 9 hospitals, NE Thailand, 2015–2018 + neighbours | The state of the art. Densest Bp collection published. Closest methodological sibling. |
 | **B** | Gee *et al.* 2017, *EID* 23(7) — [Western Hemisphere phylogeography](https://wwwnc.cdc.gov/eid/article/23/7/16-1978_article) | 26 | Western Hemisphere | Established the ST92 / "Western Hemisphere strain" framing our Mississippi result sits inside. |
 | **C** | Petras, Elrod, **Gulvik** *et al.* 2023, *NEJM* — [10.1056/NEJMoa2306448](https://doi.org/10.1056/NEJMoa2306448) | 3 clinical + 3 environmental | Mississippi Gulf Coast | The reference event for our tightest cluster. |
-| **D** | McLaughlin, **Gulvik**, Sue 2022, *PLoS NTD* — [10.1371/journal.pntd.0009882](https://doi.org/10.1371/journal.pntd.0009882) | 1,523 RefSeq | global, *in silico* | A rival typing scheme (PBP dual-locus) aimed at the same geographic-origin question. |
-| **E** | Ashcroft *et al.* 2021, *JCM* — [10.1128/jcm.00093-21](https://doi.org/10.1128/jcm.00093-21) | 469 | scheme development | The cgMLST scheme we used. |
+| **D** | McLaughlin, **Gulvik**, Sue 2022, *PLoS NTD* — PMID 35417451, [10.1371/journal.pntd.0009882](https://doi.org/10.1371/journal.pntd.0009882) | 1,523 RefSeq | global, *in silico* | A rival typing scheme (PBP dual-locus) aimed at the same geographic-origin question. |
+| **E** | Lichtenegger *et al.* 2021, *JCM* 59(8):e00093-21 — PMID 33980649, [10.1128/jcm.00093-21](https://doi.org/10.1128/jcm.00093-21) | 469 | scheme development | The cgMLST scheme we used. (Previously miscited here as "Ashcroft *et al.* 2021" — no such paper exists; PubMed returns zero Ashcroft *B. pseudomallei* cgMLST records and the DOI is Lichtenegger's.) |
 | **F** | Chomkatekaew, Chewapreecha *et al.* 2021, *Front Microbiol* — [10.3389/fmicb.2020.612568](https://doi.org/10.3389/fmicb.2020.612568) | review | host–pathogen evolution | Context for why Bp diversity is what it is. |
 | **★** | **This work** | **2,976** (2,352 analysed) | global, 43 countries | — |
 
@@ -31,7 +31,7 @@ footnote.
 
 ## 2. Method-by-method comparison
 
-| dimension | **A** — Chewapreecha 2024 | **B** — Gee 2017 | **★ Ours** | verdict |
+| dimension | **A** — Seng 2024 | **B** — Gee 2017 | **★ Ours** | verdict |
 |---|---|---|---|---|
 | **Population structure** | PopPUNK v2.6.0 → 3 dominant lineages; rhierbaps for sub-lineages | none (parsimony tree only) | PopPUNK → fastbaps → 88 units | **Same family.** Ours cuts finer because our diversity is global, not one region. |
 | **Recombination** | **Gubbins v3.1.3, per lineage** | **not addressed at all** | **Gubbins per unit** + ClonalFrameML second detector | **Same as A.** Independent convergence on partition-then-correct is reassuring. |
@@ -226,7 +226,7 @@ Read after the main comparison. Three of these materially change our position.
 
 | # | study | n | what it does |
 |---|---|---|---|
-| **D** | McLaughlin, **Gulvik**, Sue 2022, *PLoS NTD* — [10.1371/journal.pntd.0009882](https://doi.org/10.1371/journal.pntd.0009882) | 1,523 RefSeq | Dual-locus (PBP) typing scheme for geographic origin |
+| **D** | McLaughlin, **Gulvik**, Sue 2022, *PLoS NTD* — PMID 35417451, [10.1371/journal.pntd.0009882](https://doi.org/10.1371/journal.pntd.0009882) | 1,523 RefSeq | Dual-locus (PBP) typing scheme for geographic origin |
 | **G** | Brennan, Thompson, **Gulvik**, Paisie *et al.* 2025, *EID* — [10.3201/eid3109.250804](https://doi.org/10.3201/eid3109.250804) | 4 cases | **Melioidosis cases with unknown exposure source, Georgia USA, 1983–2024** |
 | **H** | Sprenger, Gee, Elrod, Weiner, **Gulvik** 2026, *Microbiol Spectr* — [10.1128/spectrum.02926-25](https://doi.org/10.1128/spectrum.02926-25) | 1 MAG | Metagenome-assembled genome from the contaminated aromatherapy spray |
 | **I** | Klimko *et al.* 2026, *EID* — [10.3201/eid3208.260069](https://doi.org/10.3201/eid3208.260069) | panel | Virulence of Western Hemisphere and Africa strains in mice |
