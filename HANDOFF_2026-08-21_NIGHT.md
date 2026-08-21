@@ -8,29 +8,41 @@ Supersedes `HANDOFF_2026-08-21_EVENING.md`, which is still correct on framing an
 
 ---
 
-## 0. RUNNING RIGHT NOW — check this first
+## 0. Nothing is running. The re-derivation finished.
 
-| job | state | where |
+All **6/6** replicon-runs completed, `rederive_2026-08-21/`, 21:22–22:02.
+
+| unit | n (excl. Reference) | replicons |
 |---|---|---|
-| **Gubbins unit re-derivation** | **RUNNING**, started 21:22. 6 replicon-runs, strictly sequential | `rederive_2026-08-21/rederive.log` |
+| `strain_1_L1_8` | 89 | 2/2 OK |
+| `strain_14_L1_4` | 12 | 2/2 OK |
+| `strain_1_L1_26` | 153 | 2/2 OK |
 
-Started on `strain_1_L1_8__GCF_027856475_2_1` (90 taxa). Expect several hours —
-`strain_1_L1_26` is 154 taxa on a 616 MB alignment and is the long pole.
+**One failure was hit and fixed, and it is worth knowing about.** Both
+`strain_1_L1_26` replicons first died at **rc=135, "Bus error (core dumped)"**,
+in **pyjar** (joint ancestral reconstruction) — *after* RAxML had already
+succeeded, so it is **not** the zero-seed bug and not a RAxML failure. Cause:
+`rederive_units_bp.sh` omitted **`--shm-size=2g`**. Docker defaults `/dev/shm`
+to 64 MB, pyjar allocates its reconstruction arrays in shared memory, and on a
+154-taxon unit it runs off the end of the segment. The 90- and 13-taxon units
+passed, which is the size threshold showing itself. `nextflow.config` sets the
+same 2g for the same documented reason, so the fix is production parity, not
+tuning. Fixed and both replicons then completed all 5 iterations.
 
-**Check it with:**
+**If you ever see rc=135 / SIGBUS from Gubbins after RAxML has succeeded, it is
+`/dev/shm`, not memory and not the seed.**
+
+### The one step left to close §5 item 2
+
+The Gubbins outputs exist; the r/m numbers have **not** been spliced in yet:
 
 ```bash
-tail -20 /home/phemarajata/Downloads/snp-mod-local-working/rederive_2026-08-21/rederive.log
+python3 consolidate_L1_rm_bp.py   # over rederive_2026-08-21/
 ```
 
-**It is resumable** — a unit with `per_branch_statistics.csv` is skipped, so if
-it died, just re-run `bash rederive_units_bp.sh`.
-
-**When it finishes:** recompute r/m with `consolidate_L1_rm_bp.py` over
-`rederive_2026-08-21/`, splice those three units into
-`RM_RESULTS_L1_CORRECTED.tsv`, and **drop `strain_1_L1_10` as a unit** (it falls
-7 → 4, below the n≥5 floor). Then re-run `generate_numbers.py`, because the
-unit-count and r/m figures move.
+Then splice those three units into `RM_RESULTS_L1_CORRECTED.tsv`, **drop
+`strain_1_L1_10`** as a unit (7 → 4, below the n≥5 floor), and re-run
+`generate_numbers.py` — the unit count and r/m figures move.
 
 ---
 

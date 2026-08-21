@@ -97,7 +97,15 @@ for unit in "${!DROPS[@]}"; do
     filter_aln "$aln" "$wd/${id}.reduced.aln" ${DROPS[$unit]}
 
     # isolated CWD: Gubbins scratch lands here, not in a shared directory
+    # --shm-size=2g is REQUIRED, not tuning. Docker defaults /dev/shm to 64 MB;
+    # Gubbins' pyjar allocates its ancestral-reconstruction arrays in shared
+    # memory, and on a large unit it runs off the end of the segment and dies
+    # with SIGBUS ("Bus error (core dumped)") *after* RAxML has already
+    # succeeded. strain_1_L1_26 (154 taxa) failed exactly this way at rc=135
+    # while the 90- and 13-taxon units passed. nextflow.config sets the same
+    # 2g for the same documented reason, so this is production parity.
     docker run --rm -u "$(id -u):$(id -g)" \
+      --shm-size=2g \
       -v "$wd":/wd -w /wd \
       -e NUMBA_CACHE_DIR=/wd/.numba_cache \
       "$IMG" bash -lc "
