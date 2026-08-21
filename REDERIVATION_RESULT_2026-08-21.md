@@ -51,48 +51,74 @@ The two filtered sets are genuinely different (59 and 47 units, overlap 43) and
 land on the same median by coincidence — the same unit sits at the middle of
 both. Checked, not assumed.
 
-## 3. The Gate 1 figure: 7.26 here, 7.38 in the 2026-08-19 documents — UNRESOLVED
+## 3. The Gate 1 figure: RESOLVED — 7.38 is the A100 run, 7.26 is the workstation run
 
 `generate_numbers.py` hardcoded **"quote 7.38, the median of the 47 in-window
-units"**, copied from `METHODS_DRAFT` §2.6.1. Recomputed from primary data the
-in-window count reproduces at **exactly 47**, but the median is **7.26** —
-before the re-derivation as well as after, so the re-derivation did not cause it.
+units"** from `METHODS_DRAFT` §2.6.1, but recomputing from primary data gave
+**7.26**. Two wrong explanations were tried and discarded before the right one;
+both are recorded here rather than quietly dropped.
 
-**My first explanation was that 7.38 came from an 88-unit table and this one
-holds 85, i.e. a denominator difference. That explanation is wrong, and it is
-recorded here rather than quietly dropped.** Checking it:
+- ✗ *"A denominator difference, 88 units vs 85."* Wrong — the extra unit
+  `strain_1_L1_36` is **inside** the window, so the in-window counts should have
+  differed. Both are 47.
+- ✗ *"The 88-unit partition swaps `strain_1_L1_26` for `strain_1_L1_36`."*
+  Directionally right, numerically wrong — the emulation gave 7.2551, not 7.38.
 
-- The 88-unit table is the 86 local units plus `strain_1_L1_36` (n=47) and
-  `strain_1_L1_37` (n=8) — the two units computed on the A100 whose alignments
-  never came back.
-- `strain_1_L1_37` is outside the Gate 1 window (229 mean SNPs), but
-  **`strain_1_L1_36` is inside it** (3,374). So if it had carried an r/m value
-  the 88-unit in-window count would be 48, not the documented 47.
-- Both counts are 47, so **the in-window set is the same 47 units in both
-  cases.** The difference is therefore **in the r/m values themselves, not in
-  which units were included.**
+**The answer was on Drive.** Two `recombination_rm.tsv` files exist under
+`wfsnps-v4c-results/`: `snp/Summaries/` (**88 units, the A100 run**) and
+`trackA_workstation/Summaries/` (**86 units**, identical to the local copy).
+Scoring each through Gate 1 reproduces the 2026-08-19 documents **exactly**:
 
-Corroborating this: the 2026-08-19 documents pair 7.38 with an **all-unit median
-of 5.70**, while the table those documents are contemporaneous with
-(`L1v4c_out/Summaries/recombination_rm.tsv`, written 2026-08-19 07:59) gives
-**5.34** pre-splice. Two different r/m tables existed on the same day.
+| | all-unit | in-window | below floor | above ceiling |
+|---|---|---|---|---|
+| **A100 run, 88 units** | **5.70** | **47 / 7.38** | **9 / 1.67** | **32 / 2.48** |
+| Track A workstation, 86 units | 5.34 | 47 / **7.26** | 7 / 1.68 | 32 / 2.48 |
+| *documented 2026-08-19* | *5.70* | *47 / 7.38* | *9 / 1.67* | *32 / 2.48* |
 
-**What this means practically:**
+**Every documented figure is the A100 run's, to the digit.** The 08-19 documents
+quote A100 numbers; the local table is the workstation run.
 
-- The current, reproducible figure from the pipeline's own output is
-  **7.26 (n=47, 85-unit table)**, and it is now generated
-  (`rm.gate1_units`, `rm.median_gate1`) rather than restated.
-- **Do NOT mass-replace 7.38 with 7.26 in the corpus.** The 7.38 figures appear
-  alongside "88 units" and "5.70", an internally consistent set. Overwriting one
-  number inside a consistent set is how denominators get mixed — the error this
-  project keeps catching.
-- **Which table is authoritative is a call for whoever knows the 08-19 run
-  history.** Until then quote 7.26 with its 85-unit denominator named, and treat
-  the 0.12 gap as unexplained rather than as rounding.
+### It is not a hardware disagreement — it is a partition difference
 
-⚠ Still open and now surfaced as `rm.gate1_caveat`: **Gate 1 diversity is still
-the Mash proxy, not alignment distances** (`HANDOFF_2026-08-21_EVENING.md` §5
-item 6). Window membership inherits whatever the proxy gets wrong.
+Across the **86 shared units the two runs agree to 0.46% median relative
+difference** in r/m, consistent with the recorded cross-hardware reproducibility.
+The single large outlier is `strain_1_L1_26` itself:
+
+    A100         strain_1_L1_26 n= 98  r/m 1.0716  + strain_1_L1_36 n=47 r/m 6.6803
+                                                   + strain_1_L1_37 n= 8 r/m 2.6281
+    workstation  strain_1_L1_26 n=154  r/m 3.1042  (kept whole)
+
+**The A100 run split `strain_1_L1_26` into three; the workstation run did not.**
+That is the entire 7.38-vs-7.26 gap.
+
+### Which is authoritative: the workstation / 86-unit figure
+
+Not a coin toss, on three grounds:
+
+1. **`curated_L1v4c_clusters.tsv`, the endorsed membership source, holds 86 units
+   and contains neither `strain_1_L1_36` nor `strain_1_L1_37`.** The unsplit
+   partition is the one the project actually uses.
+2. **The split was examined and set aside.** `TRACK_A_VS_A100_COMPARISON.md`
+   records that the pre-split parent "was a valid in-window measurement all
+   along"; splitting it converts one valid in-window unit into one valid
+   (`L1_36`) plus two that fall below the Gate 1 floor and are therefore not
+   measurements at all.
+3. Everything downstream — the re-derivation in §1, `NUMBERS.tsv`, the cgMLST
+   and attribution work — is built on the 86-unit partition.
+
+**So quote 7.26 (n=47, 85 units after tonight's re-derivation).** 7.38 is not
+wrong; it is the correct figure for a partition that was evaluated and not
+adopted. Anywhere it appears beside "88 units" and "5.70" it is internally
+consistent and should be **left alone or labelled as the A100 variant** — not
+overwritten.
+
+⚠ Still open, surfaced as `rm.gate1_caveat`: Gate 1 diversity is the Mash proxy,
+not alignment distances (`HANDOFF_2026-08-21_EVENING.md` §5 item 6). Window
+membership inherits whatever the proxy gets wrong — and note the window is what
+decides which of these units count at all.
+
+Both tables are preserved locally in `rm_provenance/` so this never has to be
+re-derived from Drive again.
 
 ## 4. The mechanism fix
 
