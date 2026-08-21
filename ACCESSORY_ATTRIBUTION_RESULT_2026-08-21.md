@@ -189,9 +189,8 @@ controls this experiment would have been written up as "accessory genome lifts
 country attribution from 21% to 30%, above baseline for the first time." That
 claim would have been wrong in three separate ways: 0/13 where it matters,
 5-fold sensitivity to assembly quality, and total dependence on two reference
-genomes. **The Salmonella precedent that motivated this experiment (country
-macro-F1 0.661 on accessory unitigs) did not run these controls.** That is worth
-reporting whether or not our own result had been positive.
+genomes. See §8 for what the literature does and does not already control — the
+claim has to be phrased more carefully than "nobody runs this control."
 
 **Reporting rules that apply** (`HANDOFF_2026-08-21_EVENING.md` §4.4): kappa is
 given beside every accuracy; the distance stratification is given beside every
@@ -224,6 +223,123 @@ A does not fully close Route B**, and Route B is what the Salmonella precedent
 actually used. Given §4, the honest expectation is that Route B would need the
 same four controls to mean anything, and would likely fail control 4 the same
 way — but that is an expectation, not a result.
+
+---
+
+## 8. Literature positioning — added 2026-08-21 after a full-text pass
+
+### 8.1 The Salmonella precedent is not what our notes said it was
+
+**Bayliss SC, Locke RK, Jenkins C, Chattaway MA, Dallman TJ, Cowley LA. Rapid
+geographical source attribution of *Salmonella enterica* serovar Enteritidis
+genomes using hierarchical machine learning. *eLife* 2023;12:e84167. PMID
+37042517.** This is the paper our notes held only as a bare URL. The macro-F1
+figures are confirmed: **0.954 region, 0.718 sub-region, 0.661 country**, over
+2,313 UKHSA genomes.
+
+**Three corrections to how we have been describing it:**
+
+1. **It does not use accessory genes.** Features are **unitigs called directly
+   from reads** (bcalm2 k=31 → unitig-caller → 426,647 unitigs → 25,000 after
+   selection). Nothing is assembled and nothing is annotated. Calling it
+   "accessory" is a loose gloss. Our Route A (PopPUNK accessory distance) is
+   two steps away from it, which sharpens §7: **Route B is not the same as
+   Bayliss either.**
+2. **Their labels are patient-reported travel destination**, not isolation
+   country — the same ground-truth design as ours. Worth stating, because it
+   makes the comparison fairer than it looks.
+3. **They report their signal as phylogeographic**, noting large clusters of
+   isolates from geographically related countries.
+
+**On controls, the honest statement is narrower than "they did not run them."**
+Bayliss *does* control data quality: a ≥28× coverage floor, downsampling to
+~100×, a minimum k-mer abundance, and a total-unitig-length cap; 220 samples
+were excluded. They also run prospective temporal validation and external
+validation on non-UKHSA reads (South Africa 25/25, Singapore 44/48, Poland 18/35
+at country), which is real evidence against a pure batch artifact.
+
+**What they do not do is the relatedness control.** Their only step in that
+direction is deduplication to one isolate per SNP5 single-linkage cluster per
+country — removing near-identical isolates, not removing close relatives from
+the training pool. There is no leave-clade-out and **no stratification by
+whether a close relative exists**, which is precisely the control (our control 4)
+that killed our result.
+
+So the claim to make in print is: **assembly-quality confounding of gene-content
+features, and stratification by whether a genuine close relative exists, are not
+addressed in the source-attribution literature we could find** — not "never
+controlled." Verified in full text for Bayliss 2023, Guillier 2020 (AB_SA,
+*Microb Genom* 6(7):mgen000366, PMID 32320376), Guzinski 2024 (*Front Microbiol*
+15:1393824, PMID 39611092) and Tagg 2026 (*Nat Commun* 17:1270, PMID 41578138):
+none regresses accessory distance on assembly quality, none stratifies accuracy
+by it, none tests robustness to removing reference genomes.
+
+### 8.2 The B. pseudomallei accessory-geography literature already says region, not country
+
+This is the strongest framing available and it was sitting unread:
+
+- **Tuanyok A, et al. A horizontal gene transfer event defines two distinct
+  groups within *Burkholderia pseudomallei* that have dissimilar geographic
+  distributions. *J Bacteriol* 2007;189(24):9044–9. PMID 17933898.** A single
+  accessory gene cluster (**YLF vs BTFC**) partitions the species across 571
+  isolates: BTFC dominant in Australia, YLF in Thailand and elsewhere.
+- **Duangsonk K, et al. *J Clin Microbiol* 2006;44(4):1323–34. PMID 16597858.**
+  14-amplicon accessory presence/absence on 48 Thai + 44 Australian isolates;
+  clusters "mainly or exclusively from one geographical origin"; genomic island
+  11 absent from every Australian isolate.
+- **Chewapreecha 2017** identifies genes and variants distinct to Australasian
+  *or* SE Asian isolates.
+
+**Every accessory-geography result in this organism resolves Australia versus
+Asia. None resolves country.** That is our §3.4 divergence-depth mechanism,
+independently and repeatedly, going back nineteen years — and it means a
+reviewer asking "why didn't accessory work?" already has a published answer.
+Our contribution is that we *tested* it prospectively at country scale and
+measured where it fails.
+
+Also useful: **Spring-Pearson 2015 (*PLoS One* 10(10):e0140274, PMID 26484663)**
+establishes the Bp pangenome is open (+136 genes per genome), i.e. the accessory
+genome is large enough to have carried the signal. It did not.
+
+### 8.3 Citable support for the fragmentation control
+
+- **Tonkin-Hill G, et al. Producing polished prokaryotic pangenomes with the
+  Panaroo pipeline. *Genome Biol* 2020;21:180. PMID 32698896.** The primary
+  citation. On 413 near-identical *M. tuberculosis* genomes (max 9 SNPs apart,
+  so the true accessory genome is ≈0), Roary/PanX/PIRATE/PPanGGoLiN/COGsoft
+  reported **2,584–3,670 accessory genes — a ~10-fold inflation — and 59% of the
+  difference was genes fragmented during assembly.** Panaroo's own QC flags
+  outlier samples **by contig count and gene count**, which is direct precedent
+  for our control 1 and control 2.
+- **Klassen JL, Currie CR. *BMC Genomics* 2012;13:14. PMID 22233127.** Bacterial
+  and quantitative: fragmented ORFs exceed 80% of predicted ORFs in some draft
+  genomes, and fragmentation correlates with assembly quality.
+- **Denton JF, et al. *PLoS Comput Biol* 2014;10(12):e1003998. PMID 25474019**
+  (mechanism) and **Gabrielaitė M, Marvig RL. *BMC Bioinformatics* 2020;21:320.
+  PMID 32690023** (a tool built specifically because presence/absence calling
+  degrades on fragmented assemblies).
+
+### 8.4 Nearest published analogue — unverified, get the PDF
+
+**Gao M, Pradhan AK, Blaustein RA. *Int J Food Microbiol* 2025;441:111335. PMID
+40644951.** *Cronobacter sakazakii*, 748 assemblies, accessory gene profiles
+associated with **continent** of origin, random forest "accurately predicted
+source attributions". This is the closest published work to our experiment —
+assemblies, gene presence/absence, geography. **Paywalled; its methods,
+validation design and controls are unverified. Do not characterise them.**
+
+Also flagged unverified: **Tanui et al. 2022** (*Listeria* food-source
+attribution, *Pathogens*) — metadata came from a secondary source, not PubMed.
+Confirm before citing.
+
+Contrast cases at host/source scale, not geography — do not let them be
+conflated: **Arning N, et al. *PLoS Genet* 2021;17(10):e1009436. PMID 34662334**
+(*C. jejuni* host source; note **cgMLST at 85% beat whole-genome k-mers at
+78%**), plus Guillier 2020 and Guzinski 2024 above.
+
+**Search scope, stated honestly:** PubMed, Consensus, PMC full text and general
+web. Not Scopus, not Web of Science, not non-English literature. "We found none"
+is a search result, not proof of absence.
 
 ---
 
