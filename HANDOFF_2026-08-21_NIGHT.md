@@ -48,17 +48,17 @@ median shifted (5.34 → 5.51), and that one is marked do-not-quote anyway.
 
 ⚠ **Two corrections came out of this:**
 
-1. **The Gate 1 median is 7.26 here, against 7.38 in the 08-19 documents, and
-   the gap is UNRESOLVED.** Recomputed from primary data it reproduces n=47
-   exactly but gives 7.26, before the re-derivation as well as after. I first
-   assumed a denominator difference (88 vs 85 units); **that is wrong** — the
-   extra unit `strain_1_L1_36` is *inside* the window, so the in-window set is
-   the same 47 either way and the r/m **values** must differ. The 08-19 docs
-   also pair 7.38 with an all-unit median of 5.70 where the contemporaneous
-   table gives 5.34, so two r/m tables existed that day. **Do NOT mass-replace
-   7.38** — it sits inside a consistent 88/5.70 set. Quote 7.26 with its
-   85-unit denominator; someone who knows the 08-19 run history should settle
-   which table is authoritative.
+1. **The Gate 1 median: RESOLVED. 7.38 is the A100 run, 7.26 is the
+   workstation run.** Both `recombination_rm.tsv` files were pulled from Drive
+   (now in `rm_provenance/`); the A100 table reproduces every 08-19 figure to
+   the digit (5.70 / 47:7.38 / 9:1.67 / 32:2.48). Not a hardware disagreement —
+   the two runs agree to **0.46%** across the 86 shared units. The whole gap is
+   that the A100 run **split `strain_1_L1_26`** into three units and the
+   workstation run kept it whole. **Quote 7.26**, the unsplit partition, which
+   is what `curated_L1v4c_clusters.tsv` and everything downstream uses. **Do not
+   overwrite 7.38** where it sits beside "88 units" and "5.70" — label it the
+   A100 variant. Full working in `REDERIVATION_RESULT_2026-08-21.md` §3.
+
 2. **`generate_numbers.py` was reading r/m from a denormalised copy** (the
    `unit_rm` column of `L1v4c_MERGED_METADATA.tsv`) and so still reported the
    pre-re-derivation values. It now reads the pipeline's authoritative table.
@@ -258,9 +258,13 @@ Nothing data-shaped is tracked: 716 KB staged, all `.md`/`.py`/`.sh` at top leve
 ## 6. Still open, re-ranked
 
 1. **Finish the re-derivation** (§0) — running. Then `generate_numbers.py`.
-2. **File the GAMBIT issue** (`THEIAGEN_GAMBIT_ISSUE.md`). **Not done — this
-   posts publicly to someone else's repo, so it needs you to say go.** The draft
-   is ready.
+2. ~~File the GAMBIT issue.~~ **CLOSED by decision 2026-08-21: stay on GAMBIT
+   DB 2.2.0, do not adopt 3.0.0, do not file the issue.**
+   `THEIAGEN_GAMBIT_ISSUE.md` stays drafted and unfiled. **kmerfinder is dropped
+   too — set `call_kmerfinder: false`**, superseding the `true` in the evening
+   handoff's TheiaProk block (that recommendation only existed to replace the
+   contamination signal GAMBIT 3.x had broken; on 2.2.0 GAMBIT works). Species
+   gating stays on **mash to K96243** either way.
 3. **IRB approval number** from the epi team into Methods. Human action.
 4. **Get the Gao 2025 PDF** (§3) before the literature section is written.
 5. **Two method questions for Paper 2**: `+ASC` vs `-fconst` on one unit;
