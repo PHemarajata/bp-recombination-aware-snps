@@ -204,35 +204,51 @@ if per:
         add("rm.median_no_divergent_member", f"{st.median(cl):.2f}", rm_src,
             f"n={len(cl)} units whose longest surviving branch is <1000 subs; "
             "the rest are depressed by a divergent member, not by biology")
-    # The Gate 1 median was previously a hardcoded "7.38" copied from
-    # METHODS_DRAFT. Generated here instead. It reproduces the documented n=47
-    # exactly but gives 7.26, because 7.38 was computed on an 88-unit table and
-    # this one holds 85 -- a denominator difference, not a disagreement.
-    DIV = f"{B}/trackA_diversity_86units.tsv"
-    if os.path.isfile(DIV) and os.path.isfile(RM_TSV):
-        div = {r["cluster_id"]: r for r in
-               csv.DictReader(open(DIV), delimiter="\t")}
-        g1 = []
-        for u, val in per.items():
-            d = div.get(u)
-            if not d:
-                continue
+    # Gate 1 membership from ALIGNMENT-derived distances, not the Mash proxy.
+    # Two prior versions of this block were wrong in instructive ways:
+    #   - it hardcoded "7.38" copied from METHODS_DRAFT (that is the A100 /
+    #     88-unit variant, not this 85-unit table);
+    #   - it then computed 7.26 from `mash x 3,805,619`, a triage-grade
+    #     conversion in a different unit system from the window's calibration.
+    # GATE1_ALIGNMENT_RESULT_2026-08-21.md shows the proxy is off by a median
+    # 1.30x and up to 17x, and misplaces 22 of 85 units. The window's structure
+    # is confirmed on alignment distances; its FLOOR was in the wrong place.
+    # Relocated on union coverage and tract length -- NOT on r/m, which would be
+    # circular -- to [700, 4700], floor bracketed (588, 755].
+    DIST = f"{B}/DISTANCES_v4c_SUMMARY.tsv"
+    G1_FLOOR, G1_CEIL = 700.0, 4700.0
+    if os.path.isfile(DIST) and os.path.isfile(RM_TSV):
+        aln = {}
+        for r in csv.DictReader(open(DIST), delimiter="\t"):
             try:
-                snps = float(d["approx_mean_snps"])
+                aln[r["unit"]] = aln.get(r["unit"], 0.0) + float(r["raw_mean"])
             except (KeyError, ValueError):
                 continue
-            if 1270 <= snps <= 4671:          # Gate 1 detection window
-                g1.append(val)
+        g1 = [v for u, v in per.items()
+              if u in aln and G1_FLOOR <= aln[u] <= G1_CEIL]
+        out = [v for u, v in per.items()
+               if u in aln and not (G1_FLOOR <= aln[u] <= G1_CEIL)]
         if g1:
-            add("rm.gate1_units", len(g1), "trackA_diversity + recombination_rm",
-                "units inside the Gate 1 window, ~1270-4671 mean pairwise core SNPs")
+            add("rm.gate1_units", len(g1),
+                "DISTANCES_v4c_SUMMARY + recombination_rm",
+                "units inside Gate 1, [700, 4700] mean pairwise core SNPs, "
+                "ALIGNMENT-derived (floor bracketed (588, 755])")
             add("rm.median_gate1", f"{st.median(sorted(g1)):.2f}",
-                "trackA_diversity + recombination_rm",
-                "QUOTE THIS, not the all-unit median. Outside this window a low "
-                "r/m is a detection failure, not a measurement")
+                "DISTANCES_v4c_SUMMARY + recombination_rm",
+                "QUOTE THIS. Was 7.26 on the Mash proxy; the proxy misplaced 22 "
+                "of 85 units. Outside the window a low r/m is a detection "
+                "failure, not a measurement")
+        if out:
+            add("rm.median_outside_gate1", f"{st.median(sorted(out)):.2f}",
+                "DISTANCES_v4c_SUMMARY + recombination_rm",
+                f"n={len(out)}; the contrast against rm.median_gate1 is what "
+                "makes the window a detection window rather than a filter")
     add("rm.gate1_caveat",
-        "Gate 1 diversity still uses the Mash proxy, not alignment distances",
-        "METHODS_DRAFT 2.6.1", "open item: recompute from alignment distances")
+        "union coverage does not reproduce the calibration's 76-88% "
+        "(max band median 68%) -- disclose",
+        "GATE1_ALIGNMENT_RESULT_2026-08-21.md §7",
+        "the floor does not depend on it, but the coverage criterion does not "
+        "reproduce quantitatively")
 
 # ------------------------------------------------------------------ write ---
 with open(OUT, "w", newline="") as fh:

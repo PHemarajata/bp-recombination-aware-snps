@@ -64,8 +64,23 @@ median shifted (5.34 → 5.51), and that one is marked do-not-quote anyway.
    pre-re-derivation values. It now reads the pipeline's authoritative table.
    The stale copies were repaired in place too.
 
-Still open: Gate 1 diversity uses the Mash proxy, not alignment distances
-(surfaced as `rm.gate1_caveat`).
+**W3 is now CLOSED too — and it moved the headline: r/m is 7.70, not 7.26.**
+See `GATE1_ALIGNMENT_RESULT_2026-08-21.md`. The Mash proxy overstates diversity
+by a median 1.30x (max 17x) and misplaces **22 of 85 units**. Gate 1's structure
+survives the change of metric and is *sharper* on alignment distances (median
+r/m 1.53 -> 8.59 -> 2.14 across bands); its **floor** was simply in the wrong
+place, carried across unit systems untranslated. Relocated on union coverage and
+tract length — **not** on r/m, which would be circular — to **[700, 4,700]**,
+floor bracketed **(588, 755]**. The **ceiling translates essentially unchanged**
+from 4,671, which is a real check since nothing forced the two systems to agree.
+In-window 47 units, median **7.70** (IQR 5.51–9.44); outside, 38 units, median
+**1.99**. Insensitive to floor placement across the whole bracket (7.70–7.78).
+
+⚠ Two disclosures carried forward: alignment SNP counts are not *provably*
+identical to `ska distance`, and **union coverage does not reproduce the
+calibration's 76–88%** (max band median 68%, and it rises with diversity). The
+floor does not depend on the coverage criterion, but a reviewer could press on
+it. Both are in §7 of the result doc and `rm.gate1_caveat`.
 
 ---
 
