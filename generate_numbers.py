@@ -167,23 +167,72 @@ add("attribution.NOTE_estimator",
     "NEVER compare an NN number to a modal one")
 
 # ------------------------------------------------------------------- r/m ----
-rm = [float(r["unit_rm"]) for r in meta
-      if r.get("unit_rm") and r["sample_id"] in corrected]
-if rm:
-    per = {}
+# r/m comes from the pipeline's own POOL_RECOMBINATION_STATS output, not from
+# the unit_rm column of the metadata. That column is a per-genome DENORMALISED
+# COPY of a per-unit quantity, and a copy is exactly what goes stale: after the
+# 2026-08-21 re-derivation it still read 3.1042 for strain_1_L1_26 (true value
+# 4.4713) and still carried a value for strain_1_L1_10, a unit that no longer
+# exists. Read the authoritative table; fall back only if it is absent.
+RM_TSV = f"{B}/L1v4c_out/Summaries/recombination_rm.tsv"
+per = {}
+rm_src = "L1v4c_out/Summaries/recombination_rm.tsv"
+if os.path.isfile(RM_TSV):
+    for r in csv.DictReader(open(RM_TSV), delimiter="\t"):
+        try:
+            per[r["unit"]] = float(r["rm_corrected"])
+        except (KeyError, ValueError):
+            pass
+else:
+    rm_src = "L1v4c_MERGED_METADATA.tsv (FALLBACK - authoritative table missing)"
     for r in meta:
         if r.get("subcluster") and r.get("unit_rm") and r["sample_id"] in corrected:
             try:
                 per[r["subcluster"]] = float(r["unit_rm"])
             except ValueError:
                 pass
+if per:
     v = sorted(per.values())
-    add("rm.units_with_value", len(v), "L1v4c_MERGED_METADATA.tsv")
-    add("rm.median_all_units", f"{st.median(v):.2f}", "L1v4c_MERGED_METADATA.tsv",
+    add("rm.units_with_value", len(v), rm_src)
+    add("rm.median_all_units", f"{st.median(v):.2f}", rm_src,
         "DO NOT QUOTE: mixes measurements with detection failures")
-    add("rm.gate1_note",
-        "quote 7.38, the median of the 47 in-window units, not the all-unit median",
-        "METHODS_DRAFT 2.6.1", "Gate 1 window ~1270-4671 mean pairwise core SNPs")
+    cl = sorted(float(r["rm_corrected"])
+                for r in csv.DictReader(open(RM_TSV), delimiter="\t")
+                if r.get("rm_corrected") not in (None, "", "NA")
+                and r.get("max_kept_branch_len")
+                and float(r["max_kept_branch_len"]) < 1000) if os.path.isfile(RM_TSV) else []
+    if cl:
+        add("rm.median_no_divergent_member", f"{st.median(cl):.2f}", rm_src,
+            f"n={len(cl)} units whose longest surviving branch is <1000 subs; "
+            "the rest are depressed by a divergent member, not by biology")
+    # The Gate 1 median was previously a hardcoded "7.38" copied from
+    # METHODS_DRAFT. Generated here instead. It reproduces the documented n=47
+    # exactly but gives 7.26, because 7.38 was computed on an 88-unit table and
+    # this one holds 85 -- a denominator difference, not a disagreement.
+    DIV = f"{B}/trackA_diversity_86units.tsv"
+    if os.path.isfile(DIV) and os.path.isfile(RM_TSV):
+        div = {r["cluster_id"]: r for r in
+               csv.DictReader(open(DIV), delimiter="\t")}
+        g1 = []
+        for u, val in per.items():
+            d = div.get(u)
+            if not d:
+                continue
+            try:
+                snps = float(d["approx_mean_snps"])
+            except (KeyError, ValueError):
+                continue
+            if 1270 <= snps <= 4671:          # Gate 1 detection window
+                g1.append(val)
+        if g1:
+            add("rm.gate1_units", len(g1), "trackA_diversity + recombination_rm",
+                "units inside the Gate 1 window, ~1270-4671 mean pairwise core SNPs")
+            add("rm.median_gate1", f"{st.median(sorted(g1)):.2f}",
+                "trackA_diversity + recombination_rm",
+                "QUOTE THIS, not the all-unit median. Outside this window a low "
+                "r/m is a detection failure, not a measurement")
+    add("rm.gate1_caveat",
+        "Gate 1 diversity still uses the Mash proxy, not alignment distances",
+        "METHODS_DRAFT 2.6.1", "open item: recompute from alignment distances")
 
 # ------------------------------------------------------------------ write ---
 with open(OUT, "w", newline="") as fh:

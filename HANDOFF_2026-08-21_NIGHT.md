@@ -32,17 +32,34 @@ tuning. Fixed and both replicons then completed all 5 iterations.
 **If you ever see rc=135 / SIGBUS from Gubbins after RAxML has succeeded, it is
 `/dev/shm`, not memory and not the seed.**
 
-### The one step left to close §5 item 2
+### §5 item 2 is CLOSED
 
-The Gubbins outputs exist; the r/m numbers have **not** been spliced in yet:
+r/m recomputed through the pipeline's own `pool_recombination_stats.py`, spliced
+into `L1v4c_out/Summaries/recombination_rm.tsv`, `strain_1_L1_10` dropped, and
+`NUMBERS.tsv` regenerated. Full result in **`REDERIVATION_RESULT_2026-08-21.md`**.
 
-```bash
-python3 consolidate_L1_rm_bp.py   # over rederive_2026-08-21/
-```
+**86 → 85 units, 2,352 → 2,340 genomes.** `strain_1_L1_26` moved r/m **3.10 →
+4.47 (+44%)** because the genome removed, `SRR2896257`, was that unit's longest
+surviving branch at 1,382 substitutions.
 
-Then splice those three units into `RM_RESULTS_L1_CORRECTED.tsv`, **drop
-`strain_1_L1_10`** as a unit (7 → 4, below the n≥5 floor), and re-run
-`generate_numbers.py` — the unit count and r/m figures move.
+**The quotable r/m did not move:** Gate 1 median **7.26 (n=47)** and
+no-divergent-member median **7.26 (n=59)**, both unchanged. Only the all-unit
+median shifted (5.34 → 5.51), and that one is marked do-not-quote anyway.
+
+⚠ **Two corrections came out of this:**
+
+1. **The Gate 1 median is 7.26, not 7.38.** `generate_numbers.py` hardcoded 7.38
+   from `METHODS_DRAFT` §2.6.1. Recomputed from primary data it reproduces n=47
+   exactly but gives 7.26 — before the re-derivation as well as after. 7.38 was
+   an 88-unit figure; this table holds 85. **Fix 7.38 wherever it appears in
+   prose.** It is now generated, not restated.
+2. **`generate_numbers.py` was reading r/m from a denormalised copy** (the
+   `unit_rm` column of `L1v4c_MERGED_METADATA.tsv`) and so still reported the
+   pre-re-derivation values. It now reads the pipeline's authoritative table.
+   The stale copies were repaired in place too.
+
+Still open: Gate 1 diversity uses the Mash proxy, not alignment distances
+(surfaced as `rm.gate1_caveat`).
 
 ---
 
