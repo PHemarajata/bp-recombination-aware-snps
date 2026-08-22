@@ -272,6 +272,22 @@ Nothing data-shaped is tracked: 716 KB staged, all `.md`/`.py`/`.sh` at top leve
 
 ## 6. Still open, re-ranked
 
+0. **REPRODUCIBILITY TEST — once Methods are frozen, before submission.**
+   Re-run the analysis end to end from primary data and diff every headline
+   against the documents. Not optional: the 2026-08-21/22 sessions edited many
+   intermediates **in place** rather than re-running — `recombination_rm.tsv`
+   spliced and one unit dropped, `unit_rm` rewritten on 259 metadata rows,
+   `generate_numbers.py`'s r/m source changed twice, §2.6.1/§2.12.7/§2.12.10
+   rewritten, panel and citation corrections. Every change was justified and
+   committed; the collection has **not** been re-derived since. This project's
+   recurring failure is a number that was right when computed and left behind by
+   a later correction. Budget it as real compute (Gubbins hours; `--shm-size=2g`
+   and the zero-seed trap both apply).
+
+   **Take membership from `curated_L1v4c_clusters.tsv` (86) or
+   `rm_provenance/A100_cluster_membership.tsv` (88) — never by globbing
+   `L1v4c_out/Clusters`** (see §9).
+
 1. **Finish the re-derivation** (§0) — running. Then `generate_numbers.py`.
 2. ~~File the GAMBIT issue.~~ **CLOSED by decision 2026-08-21: stay on GAMBIT
    DB 2.2.0, do not adopt 3.0.0, do not file the issue.**
@@ -306,3 +322,31 @@ The evening handoff's §7 list all still stands. Two additions:
 10. **When two things change at once, say which one moved the number.** The
     scheme swap and the validation-set expansion happened together and the
     scheme was getting the credit (§2).
+
+---
+
+## 9. ⚠ `L1v4c_out/Clusters` is a hybrid directory — found 2026-08-22
+
+It holds **88 unit directories** where `curated_L1v4c_clusters.tsv` has **86**.
+The extras are `strain_1_L1_36` and `strain_1_L1_37`, the A100 run's split
+children of `strain_1_L1_26`, sitting beside `cluster_strain_1_L1_26` which still
+contains the **unsplit 155-sequence parent**. **Those 153 genomes are present
+twice.**
+
+Any script enumerating units by globbing that directory inherits the defect. Two
+outputs are known to carry it:
+
+| file | pathology |
+|---|---|
+| `DISTANCES_v4c_SUMMARY.tsv` | `strain_1_L1_11` (24 vs 18), `strain_1_L1_22` (34 vs 32), `strain_1_L1_26` (154 vs 98) carry workstation membership; the rest match the A100 |
+| `CGMLST_CONCORDANCE.tsv` | same, plus `strain_27_L1_1` (11 vs 10). Median concordance **0.8459** as filed, **0.8552** excluding the six ambiguous units. The quoted **+0.846** is as-filed |
+
+Everything else audited is single-partition: `L1v4c_MERGED_METADATA`,
+`PANEL_v4d`, `cluster_membership`, `cluster_sizes`, `NU_HYPOTHESIS`,
+`PHYLOGEOGRAPHY_ASSOCIATION_v4c`, `trackA_diversity_*`, both `recombination_rm`
+tables and the `SCALE_*` set.
+
+**The r/m headline is unaffected** — 48 in-window, median **7.44** either way,
+because the two misplaced units swap across the window and both sit below it.
+**The control figure 7.70 is unaffected entirely**, since for those units the
+file's membership *is* the control run's.
