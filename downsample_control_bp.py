@@ -92,6 +92,11 @@ def main():
         d[idx_of[s]] = np.nan
         dist_cache[s] = d
 
+    # leave-outbreak-out: same explicit register the attribution scorer uses, so
+    # a cluster-derived genome does not leak to its same-source siblings here.
+    outbreak_groups = tmpl.load_outbreak_groups()
+    group_of = {s: g for g, mem in outbreak_groups.items() for s in mem}
+
     def score_pool(keep_set):
         """One leave-group-out pass restricted to keep_set. Returns
         {scale: {est: [(truth,pred), ...]}}."""
@@ -103,6 +108,8 @@ def main():
                 if not t or truth_c[s] in S.NOTC:
                     continue
                 held = {x for x in val if truth_c[x] == truth_c[s]}
+                if s in group_of:
+                    held = held | outbreak_groups[group_of[s]]
                 pool = [x for x in keep_set
                         if x != s and x not in held and lab.get(x)]
                 if not pool:

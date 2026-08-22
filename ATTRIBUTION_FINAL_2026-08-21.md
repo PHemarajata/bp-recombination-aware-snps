@@ -15,12 +15,19 @@ leak was still in the pool.
 
 | estimator | country | **region** |
 |---|---|---|
-| nearest neighbour | **9/43 (21%)** | 36/43 (84%) |
-| modal, k=5 | 6/43 (14%) | 38/43 (88%) |
-| modal, k=10 | 6/43 (14%) | 38/43 (88%) |
-| **modal, k=20** | 6/43 (14%) | **40/43 (93%)** |
-| enrichment, k=20 | 0/43 (0%) | 31/43 (72%) |
-| majority baseline | 12/43 (28%) | 20/43 (47%) |
+| nearest neighbour | **10/46 (22%)** | 37/46 (80%) |
+| modal, k=5 | 6/46 (13%) | 39/46 (85%) |
+| modal, k=10 | 6/46 (13%) | 39/46 (85%) |
+| **modal, k=20** | 7/46 (15%) | **41/46 (89%)** |
+| enrichment, k=20 | 0/46 (0%) | 31/46 (67%) |
+| majority baseline | 12/46 (26%) | 21/46 (46%) |
+
+> **Updated 2026-08-23, Track 0 integration** (was n=43: country NN 9/43, region
+> modal 40/43 = 93%). Validation set 43 → 46: +Portugal→Thailand (a correct
+> close-relative country hit) and +2 Mississippi autochthonous cases → **North
+> America, previously untested**. The Mississippi lineage misattributes to Latin
+> America, which is why region falls 93% → 89% — a gain, not a regression (see
+> `TRACK0_INTEGRATION_2026-08-23.md`).
 
 **Region is 93% on 43 genomes from 15 countries, against 92% on 24 genomes
 previously.** The result got slightly better on a set nearly twice the size and
@@ -32,9 +39,9 @@ nearest-neighbour, so 71% was never comparable to 92%. It was comparable to 67%,
 and it beat it.
 
 **Estimator choice is scale-dependent, and worth a sentence in the paper.**
-Country does best under nearest-neighbour (21% vs 14%): averaging over neighbours
+Country does best under nearest-neighbour (22% vs 15%): averaging over neighbours
 dilutes a signal that only the single closest genome carries. Region does best
-under modal k=20 (93% vs 84%): averaging suppresses noise in a coarse label.
+under modal k=20 (89% vs 80%): averaging suppresses noise in a coarse label.
 Enrichment is the worst at both, which is the opposite of what it did on the
 core-genome units.
 
@@ -56,13 +63,15 @@ was backed by an actual relative:
 
 | stratum | n | **country** | **region** |
 |---|---|---|---|
-| **d < 0.05**, a real relative exists | 13 | **1/13 (8%)** | 10/13 (77%) |
-| 0.05 to 0.30, distant | 8 | 2/8 (25%) | 6/8 (75%) |
+| **d < 0.05**, a real relative exists | 14 | **2/14 (14%)** | 11/14 (79%) |
+| 0.05 to 0.30, distant | 10 | 2/10 (20%) | 6/10 (60%) |
 | **d >= 0.30**, no real relative | 22 | **6/22 (27%)** | **20/22 (91%)** |
 
-**Country attribution is 1/13 where a genuine close relative exists, and 6/22
-where none does.** It scores *better* when there is nothing to match. That is not
-attribution; it is luck.
+**Country attribution is 2/14 where a genuine close relative exists, and 6/22
+where none does.** The one added success (Portugal, an imported case whose Thai
+strain has a real Thai relative at d=0.020) is a genuine country hit and softens
+the "1/13" to "2/14" — but the pattern stands: country scores no better, and
+often *better*, when there is nothing real to match. That is not attribution.
 
 The nine "correct" country calls, by distance:
 

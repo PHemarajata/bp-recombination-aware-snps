@@ -58,6 +58,13 @@ def main():
     mat = mat[keep]
     idx = {s: i for i, s in enumerate(samples)}
 
+    # leave-outbreak-out: same explicit register the attribution scorer uses, so
+    # the ladder is not inflated by a cluster-derived genome leaking to its
+    # same-source siblings (without it the Mississippi cases read region 93%
+    # instead of the honest 89%).
+    outbreak_groups = load_outbreak_groups()
+    group_of = {s: g for g, mem in outbreak_groups.items() for s in mem}
+
     meta = {r["sample_id"]: r for r in
             csv.DictReader(open(f"{B}/L1v4c_MERGED_METADATA.tsv"), delimiter="\t")}
     man = {r["sample_id"]: r for r in
@@ -128,6 +135,8 @@ def main():
                 if not t or not pooled.get(s):
                     continue
                 held = {x for x in val if truth_c.get(x) == t}
+                if s in group_of:
+                    held = held | outbreak_groups[group_of[s]]
                 cand = [x for x in samples
                         if x not in held and x != s and pooled.get(x)]
                 if not cand:

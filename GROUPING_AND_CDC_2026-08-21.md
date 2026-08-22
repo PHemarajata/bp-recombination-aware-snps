@@ -55,11 +55,19 @@ Thailand-overrepresentation worry.
 
 | grouping | classes | best estimator | accuracy | baseline | **kappa** |
 |---|---|---|---|---|---|
-| **Asia vs non-Asia** | 2 | modal k=20 | **100%** | 60% | **1.000** |
-| East vs West hemisphere | 2 | modal k=20 | 95% | 65% | **0.901** |
-| **region, 7-way** | 4 present | modal k=20 | 93% | 47% | **0.890** |
-| SEA vs non-SEA | 2 | modal k=20 | 74% | 58% | **0.425** |
-| country | 15 | nearest neighbour | 21% | 28% | **0.188** |
+| **Asia vs non-Asia** | 2 | modal k=20 | **100%** | 59% | **1.000** |
+| East vs West hemisphere | 2 | modal k=20 | 96% | 63% | **0.909** |
+| **region, 7-way** | 5 present | modal k=20 | 89% | 46% | **0.832** |
+| SEA vs non-SEA | 2 | modal k=20 | 76% | 59% | **0.461** |
+| country | 16 | nearest neighbour | 22% | 26% | **0.193** |
+
+> **Updated 2026-08-23, Track 0 integration (n=43→46).** Region 7-way fell
+> 0.890→0.832 and country 0.188→0.193 because North America is now testable: the
+> Mississippi autochthonous strain (US origin, certain) misattributes to Latin
+> America. Crucially **Asia vs non-Asia is still 1.000 and East vs West
+> hemisphere rose to 0.909** — the Mississippi genome is correct at the deep
+> splits and wrong only at the shallow ones, so the depth-ceiling thesis is now
+> visible within a single genome. Detail in `TRACK0_INTEGRATION_2026-08-23.md`.
 
 ### Coarser is not automatically better
 
