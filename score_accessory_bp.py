@@ -155,6 +155,10 @@ def score(samples, dist_row, labels, truth_c, val, panel_counts_of):
     Returns per-genome rows for every scale in `labels`.
     """
     idx_of = {s: i for i, s in enumerate(samples)}
+    # leave-outbreak-out: same explicit same-source register the cgMLST scorer
+    # uses, so the two stay equivalent (--validate). No-op with an empty register.
+    outbreak_groups = tmpl.load_outbreak_groups()
+    group_of = {s: g for g, mem in outbreak_groups.items() for s in mem}
     out = []
     for scale, lab in labels.items():
         panel_n = panel_counts_of[scale]
@@ -164,6 +168,8 @@ def score(samples, dist_row, labels, truth_c, val, panel_counts_of):
             if t in NOTC or not lab.get(s):
                 continue
             held = {x for x in val if truth_c[x] == t}
+            if s in group_of:
+                held = held | outbreak_groups[group_of[s]]
             pool = [idx_of[x] for x in samples
                     if x not in held and lab.get(x) and x != s]
             if not pool:

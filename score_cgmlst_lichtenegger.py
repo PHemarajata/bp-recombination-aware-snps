@@ -35,6 +35,34 @@ B = os.path.dirname(os.path.abspath(__file__))
 MISS = {"LNF", "PLOT3", "PLOT5", "NIPH", "NIPHEM", "ALM", "ASM", "LOTSC", "PAMA", "-"}
 
 
+def load_outbreak_groups():
+    """group_id -> {sample_id, ...} for leave-OUTBREAK-out.
+
+    An outbreak group is a set of isolates that are the SAME epidemiological
+    source -- one investigation, one strain, one place -- so they are not
+    independent observations of geography and must be held out together when any
+    member is scored as a validation genome.
+
+    This is an EXPLICIT register, not an automatic same-BioProject / near-clone
+    rule, and the reason is a measured counterexample. The two 'USA: CA ex
+    Vietnam' validation genomes (SRR31608433/435) sit ~0.01 from two 'USA: GA'
+    clinical cases (SRR31608437/438, 1983 and 2024) in the same BioProject. An
+    automatic rule holds those out and 'corrects' Viet Nam from 0/2 to 2/2 -- but
+    those Georgia cases are INDEPENDENT cases of a lineage that spans Vietnam and
+    the US (the 1983 Georgia case is very plausibly a Vietnam-war veteran), not
+    co-deposits. Removing them would fake a Viet Nam answer by hiding real
+    references, which is the opposite of what a leak control should do. Only
+    verified same-source clusters (e.g. the Mississippi environmental+clinical
+    isolates, one source on one property, Petras 2023 NEJM) belong here.
+    """
+    path = f"{B}/OUTBREAK_GROUPS.tsv"
+    groups = {}
+    if os.path.exists(path):
+        for r in csv.DictReader(open(path), delimiter="\t"):
+            groups.setdefault(r["group_id"], set()).add(r["sample_id"])
+    return groups
+
+
 def load_profiles(path):
     with open(path) as fh:
         rd = csv.reader(fh, delimiter="\t")
@@ -104,6 +132,10 @@ def main():
     meta = {r["sample_id"]: r for r in
             csv.DictReader(open(f"{B}/L1v4c_MERGED_METADATA.tsv"), delimiter="\t")}
 
+    # leave-outbreak-out: explicit same-source clusters, held out as a unit.
+    outbreak_groups = load_outbreak_groups()
+    group_of = {s: g for g, mem in outbreak_groups.items() for s in mem}
+
     # region map, built from the panel's own assignments then applied to new genomes
     reg_of_sample = {r["sample_id"]: r["country"] for r in
                      csv.DictReader(open(f"{B}/assign_region.tsv"), delimiter="\t")}
@@ -168,6 +200,15 @@ def main():
                 unatt += 1
                 continue
             held = {x for x in val if truth_c[x] == t}
+            # leave-OUTBREAK-out: also hold out the query's whole same-source
+            # cluster (verified co-deposits: the environmental + clinical isolates
+            # of one investigation), so a near-identical sibling cannot win
+            # nearest-neighbour at ~0 distance and leak the true label. Explicit
+            # register only -- see load_outbreak_groups for why an automatic
+            # same-BioProject/near-clone rule is wrong (the Vietnam/Georgia
+            # lineage-spanning counterexample). Empty register => exact no-op.
+            if s in group_of:
+                held = held | outbreak_groups[group_of[s]]
             pool = [idx_of[x] for x in samples
                     if x not in held and lab.get(x) and x != s]
             if not pool:
