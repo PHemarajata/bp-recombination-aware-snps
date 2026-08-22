@@ -1,7 +1,25 @@
-# Handoff, 2026-08-21 night
+# Handoff, 2026-08-21 night — updated 2026-08-22
 
 Read this first. Working directory
 `/home/phemarajata/Downloads/snp-mod-local-working`.
+
+> ## ⚑ THE BASIS IS FROZEN — 2026-08-22
+>
+> **`FINAL_BASIS_2026-08-22/` — 85 units, 2,340 genomes.** The corrected
+> workstation partition. **Run `python3 freeze_basis_bp.py` before quoting any
+> number** (12 checks, non-zero exit on drift).
+>
+> - **r/m headline is 7.70 (n=47)**, alignment-derived Gate 1. Not 7.44 (A100),
+>   7.38 (A100 + Mash proxy) or 7.26 (this basis + Mash proxy).
+> - The METHODS production/control designation is **flipped**: this is the
+>   reported partition, the A100 88-unit run is the reproducibility control.
+> - Join the panel on **`unit_membership`**, never `subcluster` — the latter
+>   labels 615 non-members.
+> - Never take membership by globbing `L1v4c_out/Clusters` (88 hybrid dirs) or
+>   `cfml/`.
+> - 66 off-basis files moved to `RETIRED_2026-08-22/` — see its README.
+> - Impact of the freeze on every downstream result:
+>   **`DOWNSTREAM_IMPACT_2026-08-22.md`**.
 
 Supersedes `HANDOFF_2026-08-21_EVENING.md`, which is still correct on framing and
 §3 findings but stale on §5 (five of its eight action items are now closed).

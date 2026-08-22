@@ -1,9 +1,11 @@
 # The nu hypothesis is refuted — and why it looked right
 
-**Final, on the complete set: 172 v4c replicon-units (chr1 n=86, chr2 n=86).**
+**Final, on the FROZEN BASIS: 170 replicon-units (chr1 n=85, chr2 n=85).**
 2026-08-21, after the ClonalFrameML job finished 172/172 with every unit
 `exit=0`. Both replicons agree throughout. Script: `nu_hypothesis_bp.py`.
-Data: `NU_HYPOTHESIS.tsv` (172 rows).
+Data: `NU_HYPOTHESIS.tsv` (170 rows), regenerated 2026-08-22 on
+`FINAL_BASIS_2026-08-22/` — 85 units, 2,340 genomes. The earlier 172-row
+version (86 units) is kept as `NU_HYPOTHESIS.tsv.pre-frozen-basis.bak`.
 
 > **This supersedes two earlier versions of this document** written mid-run at
 > n=81 and n≈148. The conclusion held, but **most of the supporting numbers
@@ -31,23 +33,29 @@ account for.
 
 **The relationship runs the other way.**
 
-| test | chr1 (n=86) | chr2 (n=86) |
+| test | chr1 (n=85) | chr2 (n=85) |
 |---|---|---|
-| nu vs Gubbins r/m *(predicted +)* | **rho −0.286**, p=0.008 | **rho −0.367**, p=0.0005 |
-| Gubbins-rejected units have lower nu? | p=0.214, **no** | p=0.039, *marginal, wrong direction* |
+| nu vs Gubbins r/m *(predicted +)* | **rho −0.274**, p=0.011 | **rho −0.346**, p=0.0012 |
+| Gubbins-rejected units have lower nu? | p=0.244, **no** | p=0.059, *not significant, and the wrong direction* |
 
 Units with *low* nu have *higher* Gubbins r/m. The hypothesis is refuted on its
 own clean test — the one where Gubbins never sees nu, so no shared arithmetic can
 manufacture a correlation.
 
-**One caveat that did not survive the full run.** At n=81 the rejected units had
-no distinctive nu on either replicon (p=0.22 / 0.17). On the complete set chr1
-still shows nothing (p=0.214) but **chr2 is now nominally significant at
-p=0.039** — with rejected units' nu *higher* (median 0.0041 vs 0.0039), not
-lower. The effect is tiny, one-replicon, and pointing away from the prediction,
-so it does not rescue the hypothesis. But **"rejected units have no distinctive
-nu" can no longer be stated flatly** — say it holds on chr1 and is marginal and
-oppositely-signed on chr2.
+**A caveat that appeared on the 86-unit set and has now gone away.** At n=81 the
+rejected units had no distinctive nu on either replicon (p=0.22 / 0.17). On the
+86-unit set chr2 crossed into nominal significance (p=0.039), which forced the
+qualification that *"rejected units have no distinctive nu"* could no longer be
+stated flatly. **On the frozen basis it does not reach significance on either
+replicon — chr1 p=0.244, chr2 p=0.059** — with rejected units' nu marginally
+*higher* (median 0.0040 vs 0.0039), i.e. pointing away from the prediction
+regardless.
+
+**So the flat statement is restored**, with the history recorded rather than
+erased: the effect was never more than one-replicon, marginal, and
+wrong-signed, and it moved back across p=0.05 when a single uninformative unit
+was dropped. That fragility is itself the reason not to lean on it in either
+direction.
 
 Distributions for reference:
 
@@ -56,13 +64,13 @@ Distributions for reference:
 | nu | median 0.0036 (0.0030–0.0908) | median 0.0039 (0.0032–0.0759) |
 | delta | median 2,551 bp (27–5,204) | median 2,540 bp (32–4,900) |
 | R/theta | median 1.351 (0.147–2.464) | median 1.300 (0.233–2.228) |
-| r/m Gubbins | median 5.34 | median 5.34 |
+| r/m Gubbins | median 5.51 | median 5.51 |
 | r/m CFML | median 14.09 | median 13.85 |
 
 ## Why it looked right at first
 
-**nu and delta are strongly anti-correlated: rho −0.791 (chr1), −0.785 (chr2)**
-— pooled −0.765, p=2e-34.
+**nu and delta are strongly anti-correlated: rho −0.786 (chr1), −0.778 (chr2)**
+— pooled −0.758, p=5e-33.
 
 ClonalFrameML trades the two off when fitting: a unit fitted with long tracts
 gets low per-site divergence, and one fitted with short tracts gets high
@@ -130,11 +138,11 @@ shared denominator:
 
 | | chr1 | chr2 |
 |---|---|---|
-| CFML r/m, Gubbins-rejected (n=33) | median **9.99** | median **9.85** |
+| CFML r/m, Gubbins-rejected (n=32) | median **9.98** | median **9.45** |
 | CFML r/m, Gubbins-accepted (n=53) | median **15.56** | median **15.59** |
 | Mann-Whitney | p = 3.6e-05 | p = 3.7e-06 |
 | rejected units' median percentile in the CFML distribution | **30th** | **26th** |
-| Gubbins vs CFML rank agreement | rho **+0.611** | rho **+0.598** |
+| Gubbins vs CFML rank agreement | rho **+0.612** | rho **+0.599** |
 
 **CFML agrees with Gubbins about which units are the low-recombination ones.**
 Rejected units keep significantly the lower CFML r/m and sit in the bottom third
@@ -154,11 +162,11 @@ does not re-rank.
 It makes it smaller and more precise. The earlier 46-unit result — 8 units
 flipping accept/reject between tools — is better read as **rank noise between two
 noisy estimators on a common scale** than as one tool systematically missing a
-class of unit. Rank agreement on the full v4c set is rho +0.611 (chr1) / +0.598
+class of unit. Rank agreement on the frozen basis is rho +0.612 (chr1) / +0.599
 (chr2), up from +0.30 on the old partition.
 
 The defensible statement becomes: *pooled r/m is estimator-dependent in absolute
-value (≈2.2–2.5×) and only moderately consistent in rank (rho ≈ 0.6), so a
+value (≈2.5–2.6×) and only moderately consistent in rank (rho ≈ 0.6), so a
 threshold calibrated on one tool does not transfer to the other* — rather than
 *the gate systematically rejects a recoverable class of unit*.
 
@@ -178,16 +186,17 @@ threshold calibrated on one tool does not transfer to the other* — rather than
 **Numbers withdrawn from the two earlier versions of this document,** all of
 which were computed on an unfinished run and every one of which moved:
 
-| quantity | n=81 | n≈148 | **final n=172** |
+| quantity | n=81 | n≈148 | n=172 (86u) | **frozen n=170 (85u)** |
 |---|---|---|---|
-| nu vs Gubbins r/m | −0.417 / −0.487 | −0.42 / −0.49 | **−0.286 / −0.367** |
-| nu vs delta | −0.809 / −0.864 | −0.86 | **−0.791 / −0.785** |
+| nu vs Gubbins r/m | −0.417 / −0.487 | −0.42 / −0.49 | −0.286 / −0.367 | **−0.274 / −0.346** |
+| nu vs delta | −0.809 / −0.864 | −0.86 | −0.791 / −0.785 | **−0.786 / −0.778** |
 | CFML/Gubbins offset | **≈4.9×** | ≈4.9× | **2.19× / 2.45×** |
 | delta vs Gubbins r/m | +0.529 / +0.578 | — | **+0.615 / +0.723** |
-| rank agreement (chr1) | +0.59 | — | **+0.611** |
-| rejected-unit nu, chr2 | p=0.17 | p=0.23 | **p=0.039** |
+| rank agreement (chr1) | +0.59 | — | +0.611 | **+0.612** |
+| rejected-unit nu, chr2 | p=0.17 | p=0.23 | p=0.039 | **p=0.059** |
 
-**The ≈4.9× offset figure is wrong wherever it appears.** It is 2.2–2.5×.
+**The ≈4.9× offset figure is wrong wherever it appears.** It is 2.5–2.6× on the
+frozen basis (2.2–2.5× as reported on the 86-unit set).
 
 **One argument withdrawn, not just a number:** the "uniform offset, p=0.23"
 reasoning in the rescue section is invalid as described above. The conclusion it
