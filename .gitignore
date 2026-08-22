@@ -184,3 +184,19 @@ a100_stage/*
 !a100_stage/run_a100.sh
 !a100_stage/build_bundle.sh
 !a100_stage/README_A100.md
+
+# --- 8. the frozen basis and the retirement record ---------------------------
+# Documentation, not data: no isolate identifiers in either file. These are the
+# two documents that record WHICH partition every reported number belongs to,
+# and WHY 200+ files were moved out of the workspace. Left untracked they are
+# lost on a fresh clone -- exactly when someone needs them most. Un-ignore each
+# directory so git can descend, then immediately re-deny it so that no data file
+# inside is ever admitted, and name the one admitted file. Same shape as the
+# a100_stage block above, and for the same reason: a blanket `!DIR/` would
+# silently start tracking whatever lands in there later.
+!FINAL_BASIS_2026-08-22/
+FINAL_BASIS_2026-08-22/*
+!FINAL_BASIS_2026-08-22/README.md
+!RETIRED_2026-08-22/
+RETIRED_2026-08-22/*
+!RETIRED_2026-08-22/README.md
