@@ -119,3 +119,58 @@ unchanged.
 every current write-up — `DOWNSTREAM_IMPACT_2026-08-22.md`,
 `HANDOFF_2026-08-21_NIGHT.md`, the result docs — is "unreachable" and must never
 be moved on that basis. Document triage is editorial and separate.
+
+---
+
+## `legacy_tables/` (92) — the stage-2 tidy
+
+Unreachable `.tsv`: outside the deliverable closure and cited by no document.
+Nine candidates were held back because a document cites them.
+
+### ⚠ A near-miss, recorded because the rule it produced matters
+
+Stage 2 initially moved **15 scripts** as well, and every one of them was
+**tracked by git**. Among them: `run_wf_curated_L1v4c.sh` — the production
+command line this very README says must be kept so the Methods can pin it — plus
+`core_shrinkage_test.sh` and `make_itol_annotations.py`, which are the named
+feature of the branch this work sits on. They were caught by reading `git status`
+before committing, and all 15 were restored.
+
+**The rule that follows, and it is not negotiable: never retire a git-tracked
+file on the strength of a reachability test.**
+
+The reasoning is that this repo's `.gitignore` is **deny-by-default** — a file is
+tracked only because someone explicitly admitted it. Tracked status *is* a
+recorded keep decision, made by a human, and it outranks any graph I can compute.
+The closure test answers "does the analysis chain read this?", which is simply a
+different question from "is this worth keeping": launcher scripts, run drivers
+and provenance are deliverables that no analysis script ever reads.
+
+`legacy_scripts/` is empty and left in place as a marker.
+
+**Verified by execution afterwards — every current analysis script re-run:**
+
+| script | result |
+|---|---|
+| `freeze_basis_bp.py` | BASIS IS CONSISTENT |
+| `generate_numbers.py` | `rm.median_gate1` 7.70 |
+| `score_accessory_bp.py --validate` | PASS — scorers like-for-like |
+| `concordance_frozen_bp.py` | +0.8614 |
+| `nu_hypothesis_bp.py` | 170 replicon-units |
+| `grouping_test_bp.py` | Asia vs non-Asia 100% |
+| `gate1_from_alignment_bp.py` | 85 units |
+
+Every headline number reproduces unchanged. **That, not the dependency graph, is
+the evidence the keep-set is sufficient** — the closure test matches literal
+filenames and would miss an input reached by glob, which is exactly how
+`DISTANCES_v4c_SUMMARY.tsv` came to be built from a hybrid directory.
+
+**Kept deliberately:** `GAP1`–`GAP4` stay at top level — still live input to the
+paper's positioning, and `GAP4` carries part of the citation-audit trail.
+
+## Not here: `collaborator/`
+
+The Yuyi / A100 materials were moved to **`collaborator/`**, not retired. They
+carry a **live recall condition** — Yuyi did not finish on 2026-08-21 and results
+may land next week. See `collaborator/README.md`. Nothing in the current analysis
+is blocked on them.
