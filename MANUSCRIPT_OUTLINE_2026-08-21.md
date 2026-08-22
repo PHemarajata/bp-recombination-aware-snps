@@ -429,6 +429,29 @@ novel lineage"* rather than a region. That rule would have correctly declined
 both African genomes instead of calling them Latin American. It turns the
 weakness into the paper's most useful methodological contribution.
 
+**⚠ Controlled 2026-08-22 — the concern is now precisely bounded, and it is
+narrower than "region may be luck."** `DOWNSAMPLING_CONTROL_RESULT_2026-08-22.md`
+rebalanced the panel and re-scored. Two distinct "attractor" mechanisms have to
+be separated:
+
+- **Majority-imbalance attractor** (genomes snap to the dominant East Asia &
+  Pacific cluster, 89% of references): **refuted.** Capping East Asia & Pacific
+  from 2,692 references to 30 — a 90× cut, 89% → ~15% of the pool — moves region
+  modal-k20 kappa only from **0.89 to 0.81**. An artifact would collapse toward
+  0. So the *bulk* of region accuracy reads the genome's regional cohort, not the
+  panel's shape, and the ~0.08 erosion bounds the total imbalance contribution at
+  roughly a tenth of the signal.
+- **Local-cluster attractor** (the d ≥ 0.30 stratum above: LatAm cases snapping
+  to one *small* Ecuadorian reference): **not addressed by rebalancing**, because
+  capping does not remove a small cluster, and it should not be claimed to be.
+  This is the residual W2 concern, and it is exactly the case the abstention rule
+  targets.
+
+Net: report region as a genuine capability (the majority-artifact control is the
+evidence) **with** the abstention rule for the no-relative stratum (the local
+attractor is the reason). Do not let the strong control be read as licensing the
+d ≥ 0.30 calls — it does the opposite of that.
+
 **Note the two methods differ here and the lineage method is sounder.** The
 SNP/unit-based region calls rest on genuine co-membership — `strain_4_L1_3` is
 Brazil 31 / Guatemala 2 / Aruba 2, `strain_4_L1_4` is USA 13 / Mexico 6 /
