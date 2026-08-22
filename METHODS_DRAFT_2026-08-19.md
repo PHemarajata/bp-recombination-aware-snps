@@ -1508,21 +1508,32 @@ the configuration.
 **Effect of refinement.** The pre-split `strain_1_L1_26` measured r/m 3.10 and was
 **in-window**; its three children measured 1.07, 6.68 and 2.63.
 
-⚠ **This paragraph's classification predates the alignment-derived Gate 1 (2.6.1)
-and changes under it.** On alignment distances the children fall at 1,310, 1,477
-and 123 mean pairwise core SNPs, so **two are in-window** — `strain_1_L1_26`
-(n=98, r/m 1.07) and `strain_1_L1_36` (n=47, r/m 6.68) — and only
-`strain_1_L1_37` is below the floor. Under the Mash proxy the n=98 child was
-placed below the floor at 955, which is what the earlier reading rested on. The
-in-window count is therefore **48 in the production run and 47 in the control**,
-not 47 in both.
+**The n=98 child is a clonal expansion, and the gate is right to exclude it.**
+Computed directly from its own `core.tab` sites over its 98 members, its mean
+pairwise distance is **72 SNPs** (median 72, max 235) and Gate 2 scores it
+**continuous** (gap/mean 0.014, 8/20 empty bins). Ninety-eight genomes within 235
+SNPs of one another, unimodally distributed, is a recent clonal expansion; at 72
+SNPs it sits an order of magnitude below the Gate 1 floor, which is precisely
+where r/m is not a measurement. Its r/m of 1.07 is a detection floor, not a
+biological estimate. `strain_1_L1_36` by contrast has mean pairwise distance
+1,126 and is in-window with r/m 6.68.
 
-Two consequences follow and neither is settled here. First, the n=98 child at
-r/m 1.07 is the **lowest in-window value in the production run**, sitting just
-above the relocated floor; it is either a genuine low-recombination clonal
-expansion or evidence that the floor is still slightly too low. Second, the claim
-below that refinement "did not increase the measurable set" **is no longer
-supported as stated** — on the alignment-derived gate it increased it by one.
+**So refinement did not increase the measurable set**, as stated below: the
+unsplit parent was one in-window unit and the split yields one in-window child.
+
+Two bookkeeping corrections apply to the counts, neither affecting that reading.
+Under the alignment-derived Gate 1 the in-window count is **48 in the production
+run and 47 in the control**, not 47 in both — but the additional unit is
+`strain_1_L1_11`, reclassified from above-ceiling, not a refinement child.
+And **`DISTANCES_v4c_SUMMARY.tsv` must not be joined to the production
+partition by unit name**: three of its rows (`strain_1_L1_11`,
+`strain_1_L1_22`, `strain_1_L1_26`) carry the *control* run's membership while
+the rest match production, so it reports the unsplit parent's diversity (1,310)
+against the production run's n=98 child (72). Diversity for those three must be
+recomputed on production membership, as it was here. The in-window median is
+unaffected either way — **7.44** — because the two units this misplaces both sit
+below it.
+
 The comparability argument above is unaffected, and is if anything strengthened:
 the two runs' in-window medians are **7.44 and 7.70**, agreeing to 3.5%.
 Refinement therefore did not increase the measurable set; its contribution is

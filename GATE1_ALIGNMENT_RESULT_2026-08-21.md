@@ -163,6 +163,36 @@ r/m, and it is confirmed *more* strongly than the proxy suggested. **Quote 7.70
 **The floor bracket (588, 755] is 1.28× wide**, against the ska-unit floor's
 (405, 1,268] at 3.1×. Tighter, on more units, in the units actually used.
 
+## 7b. ⚠ A defect in `DISTANCES_v4c_SUMMARY.tsv` found 2026-08-22
+
+The file is **keyed to two different partitions at once.** Eighty-five of its 88
+rows carry the production (A100) membership, but **`strain_1_L1_11` (24 vs 18),
+`strain_1_L1_22` (34 vs 32) and `strain_1_L1_26` (154 vs 98) carry the control
+run's**, and it simultaneously holds `strain_1_L1_36`/`strain_1_L1_37`, which are
+production-only children of `strain_1_L1_26`. Those 153 genomes are therefore
+counted twice.
+
+**Consequence.** Joining it to the production r/m table by unit name gives
+`strain_1_L1_26` the unsplit parent's diversity, **1,310**, when its own 98
+members sit at **72**. Recomputed on production membership from `core.tab`:
+
+| unit | production n | true diversity | as filed | effect |
+|---|---|---|---|---|
+| `strain_1_L1_11` | 18 | 3,424 | 5,819 | above ceiling → **in-window** |
+| `strain_1_L1_22` | 32 | 3,672 | 4,525 | no change |
+| `strain_1_L1_26` | 98 | **72** | 1,310 | in-window → **below floor** |
+
+**The headline is unaffected: 48 in-window, median r/m 7.44, either way** — the
+two misplaced units swap in and out and both sit below the median. The
+*composition* changes, and that is what matters for §2.12.10.
+
+**The control-run figure (7.70) is not affected at all**, because for those three
+units the file's membership *is* the control run's. `generate_numbers.py`, which
+joins to the control table, is correct as written.
+
+**Rule: do not join `DISTANCES_v4c_SUMMARY.tsv` to the production partition by
+unit name.** Recompute diversity on production membership first.
+
 ## 8. Reproduce
 
 ```bash
