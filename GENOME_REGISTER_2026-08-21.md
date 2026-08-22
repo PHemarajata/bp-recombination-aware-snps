@@ -281,7 +281,7 @@ the scheme*, not about *using* it, and it does not require us to avoid it.
 2. Our results are reproducible only against that snapshot. Say so.
 
 This is not a weakness in the analysis — the 4,089 loci behaved well (median
-call rate 95.5%, cgMLST-vs-SNP concordance r = +0.846). It is a provenance
+call rate 95.5%, cgMLST-vs-SNP concordance r = +0.861). It is a provenance
 statement a reviewer will want.
 
 ---

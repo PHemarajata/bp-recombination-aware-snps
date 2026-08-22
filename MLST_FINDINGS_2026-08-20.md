@@ -164,7 +164,11 @@ rather than an argument.
 ### Concordance is strong
 
 cgMLST allelic distance versus our recombination-filtered core SNP distance,
-per unit: **median Pearson r = +0.846** across 88 units, 69 of 88 at r ≥ 0.7.
+per unit: **median Pearson r = +0.861** across the 85 frozen-basis units, 66 of
+85 at r ≥ 0.7 (Lichtenegger scheme). The filed **+0.846** was the PubMLST scheme
+over 88 hybrid units; on the frozen basis PubMLST gives **+0.865**, so the move
+from 0.846 is the basis correction, not the scheme — the two schemes differ by a
+median of **0.0005** per unit.
 Two independently constructed views of the same population agreeing closely.
 This is the orthogonal-typing check both external reviews asked for, and it
 passes.

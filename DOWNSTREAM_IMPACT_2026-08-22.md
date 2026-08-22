@@ -17,7 +17,7 @@ restricted.**
 | Country attribution fails; region ~93% | **unaffected** — cgMLST-based, partition-independent |
 | Accessory attribution fails its controls | **unaffected** — same reason |
 | Phylogeography: 46 significant unit-variable tests | **unaffected** — see §3 |
-| cgMLST vs SNP concordance +0.846 | **unaffected once restricted** — see §4 |
+| cgMLST vs SNP concordance | **recomputed: +0.861** — see §4 |
 
 The entire attribution programme — the paper's spine — never used the partition.
 `CGMLST_LICHT_ATTRIBUTION.tsv` scores 43 validation genomes of which 19 are not
@@ -53,9 +53,26 @@ rows absent from the frozen basis — `strain_1_L1_36`, `strain_1_L1_37`,
 `strain_1_L1_10`. Restricted to the 85, every remaining row carries this basis's
 membership.
 
-**Action: restrict on read; do not rebuild.** For `CGMLST_CONCORDANCE`, the
-as-filed median is **0.8459** over 88 rows; the frozen-basis figure should be
-recomputed over the 85 and quoted with its denominator.
+**Action: restrict on read; do not rebuild.**
+
+`CGMLST_CONCORDANCE` has been **recomputed** on the frozen basis
+(`concordance_frozen_bp.py` → `CGMLST_CONCORDANCE_FROZEN.tsv`), restricting both
+the unit set *and* the taxa within each unit to frozen membership:
+
+| | units | median r | r ≥ 0.7 |
+|---|---|---|---|
+| **Lichtenegger v1.1 — the scheme now used** | **85** | **+0.861** | 66/85 |
+| PubMLST scheme 2 — what the filed figure used | 85 | +0.865 | 69/85 |
+| *filed value, PubMLST over 88 hybrid units* | *88* | *+0.846* | *69/88* |
+
+**Quote +0.861.** Two things had been conflated in the filed number: it was on
+the hybrid 88-unit set *and* on the superseded PubMLST scheme. Separating them,
+0.846 → 0.865 is the basis correction and 0.865 → 0.861 is the scheme. The two
+schemes differ by a median of **0.0005** per unit, which is a further
+scheme-robustness result in line with `SCHEME_CONCORDANCE_2026-08-21.md`.
+
+Three unit files were skipped as off-basis: `strain_1_L1_10`,
+`strain_1_L1_36`, `strain_1_L1_37`.
 
 ## 5. Superseded — A100-keyed, do not quote against the frozen basis
 

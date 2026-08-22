@@ -274,7 +274,7 @@ lookup, and our own panel contradicts it.**
 - ST homoplasy is systemic: **52 of 279 STs span more than one unit**; ST70
   spans eight.
 - cgMLST allelic distance vs recombination-filtered SNP distance: **median
-  Pearson r = +0.846**, 69 of 88 units at r ≥ 0.7. The orthogonal check both
+  Pearson r = +0.861**, 66 of 85 frozen-basis units at r ≥ 0.7. The orthogonal check both
   external reviews asked for.
 
 **Framing:** prior work already showed MLST lacks resolution to pin geographic
@@ -750,7 +750,7 @@ change".** So the Methods must record the exact snapshot — scheme 2, 4,090 loc
 1,154 profiles, retrieved 2026-06-18 — and state that results are reproducible
 only against it. Archive the allele FASTAs with the results. This is a provenance
 statement, not a weakness: the 4,089 called loci behaved well (median call rate
-95.5%, cgMLST-vs-SNP concordance r = +0.846).
+95.5%, cgMLST-vs-SNP concordance r = +0.861).
 
 ### 6.6 A real hole in the literature review
 

@@ -357,7 +357,7 @@ outputs are known to carry it:
 | file | pathology |
 |---|---|
 | `DISTANCES_v4c_SUMMARY.tsv` | `strain_1_L1_11` (24 vs 18), `strain_1_L1_22` (34 vs 32), `strain_1_L1_26` (154 vs 98) carry workstation membership; the rest match the A100 |
-| `CGMLST_CONCORDANCE.tsv` | same, plus `strain_27_L1_1` (11 vs 10). Median concordance **0.8459** as filed, **0.8552** excluding the six ambiguous units. The quoted **+0.846** is as-filed |
+| `CGMLST_CONCORDANCE.tsv` | same, plus `strain_27_L1_1` (11 vs 10). **RECOMPUTED 2026-08-22** on the frozen basis: **+0.861** (Lichtenegger, 85 units, 66/85 at r ≥ 0.7). The filed **+0.846** was PubMLST over 88 hybrid units. See `CGMLST_CONCORDANCE_FROZEN.tsv` |
 
 Everything else audited is single-partition: `L1v4c_MERGED_METADATA`,
 `PANEL_v4d`, `cluster_membership`, `cluster_sizes`, `NU_HYPOTHESIS`,
