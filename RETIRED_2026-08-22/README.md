@@ -9,7 +9,16 @@ the partition it was computed on. It is retired because quoting it against the
 frozen basis would mix partitions — the failure mode that caused the repeated
 corrections this freeze exists to stop.
 
-66 files. Read `DOWNSTREAM_IMPACT_2026-08-22.md` before resurrecting any of them.
+Read `DOWNSTREAM_IMPACT_2026-08-22.md` before resurrecting any of them.
+
+**Recovering a retired document:** it is on disk in `superseded_docs/`, and every
+tracked one is also in git history (`git log --all -- <name>`; `git show <rev>:<name>`).
+The tracked docs show as *deletions* in the commit that retired them — that is
+expected and matches how the rest of this directory works. Five docs
+(`INTERPRETATION_2026-08-16`, `NEW200_QC_REPORT_2026-08-17`,
+`PACBIO_CLR_DIAGNOSIS_2026-08-17`, `READ_SCREEN_RESCUE`, `THEIAPROK_SETTINGS`)
+were never in git — they are gitignored by name because they carry per-isolate
+data — so for those `superseded_docs/` is the only copy.
 
 ---
 
@@ -174,3 +183,43 @@ The Yuyi / A100 materials were moved to **`collaborator/`**, not retired. They
 carry a **live recall condition** — Yuyi did not finish on 2026-08-21 and results
 may land next week. See `collaborator/README.md`. Nothing in the current analysis
 is blocked on them.
+
+---
+
+## `superseded_docs/` (31) — the stage-3 document triage
+
+Documents, not data or scripts. Reachability could not be used here: **scripts
+never cite prose**, so every current write-up comes out "unreachable" from the
+analysis graph. The rule was editorial instead:
+
+> **Keep** anything dated 2026-08-20 or later, the pinned entry docs
+> (`README`, `METHODS_DRAFT_2026-08-19`, `PRIMER_HOW_TO_READ_THIS_WORK`,
+> `IDEAS_AND_OPEN_QUESTIONS`, `PANEL_EXCLUSIONS_README`), `GAP1`–`GAP4`, and
+> anything cited directly by a document in that keep set. **Retire** the rest —
+> older session handoffs, superseded partition/QC reports, the 08-11 methods
+> draft, stale strategy and status docs.
+
+**One kept by exception:** `GENOME_ADDITIONS_PROPOSAL.md` stayed at top level —
+it is tied to the still-open Phase-1 expansion decision, not to finished work.
+
+**Four pulled back after a citation check**, because a *current* document cites
+each for a live claim, not as history:
+
+| pulled back | cited by | for |
+|---|---|---|
+| `TRACK_A_VS_A100_COMPARISON.md` | `REDERIVATION_RESULT` | evidence the `strain_1_L1_26` split was examined and set aside — underpins the freeze |
+| `RECOMBINATION_HANDOFF_CRITIQUE_AND_REDESIGN.md` | `NU_HYPOTHESIS_RESULT` | §1.5 is the origin of the ν hypothesis that doc refutes |
+| `PHYLOGEOGRAPHY_ASSOCIATION_INTERPRETATION.md` | `ATTRIBUTION_AND_DISTANCES_FINDINGS` | the association-number interpretation |
+| `SNP_STRATEGY_REVIEW_2026-08.md` | `GAP1`–`GAP4`, `REVISED_STRATEGY` | named companion to the kept GAP docs |
+
+The pull-back rule is **one hop from the live keep set**, deliberately not
+transitive: full closure would resurrect the whole historical chain (e.g. the
+08-11 methods draft) and defeat the triage. As a result two second-order
+references remain dead from the workspace root —
+`FINDINGS_2026-08-19_workstation.md` (cited by the pulled-back TRACK_A_VS_A100)
+and `RECOMBINATION_AWARE_PHYLOGENOMICS_HANDOFF.md` (cited by the pulled-back
+critique). Both targets are definitively superseded and both resolve in
+`superseded_docs/`; following such a link is archaeology, which is what this
+directory is for.
+
+Result: top-level documents **71 → 40**.
