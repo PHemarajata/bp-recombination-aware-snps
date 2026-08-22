@@ -67,10 +67,21 @@ All carry `strain_1_L1_36` / `strain_1_L1_37` / `strain_1_L1_10`. They remain
 valid **as the A100 reproducibility control** and should be labelled that way,
 not deleted.
 
-⚠ The `SCALE_*` set is the granularity-ladder input. **If any ladder figure was
-computed from it, that figure is on the A100 basis and must be recomputed.**
-The published ladder (Asia/non-Asia κ=1.000, region κ=0.890, country κ=0.188) is
-cgMLST-based and therefore safe, but confirm before quoting.
+✅ **The `SCALE_*` caveat is resolved, not carried forward.** `grouping_test_bp.py`
+reads cgMLST profiles, the panel, `EXPOSURE_OVERRIDES` and `assign_region.tsv` —
+**no `SCALE_*` file**. Re-run after retirement it reproduces the ladder exactly:
+
+| grouping (modal k=20) | acc | baseline | kappa |
+|---|---|---|---|
+| Asia vs non-Asia | 100% | 60% | **1.000** |
+| East vs West hemisphere | 95% | 65% | **0.901** |
+| region, 7-way | 93% | 47% | **0.890** |
+| SEA vs non-SEA | 74% | 58% | 0.425 |
+| country | 14% | 28% | 0.122 |
+
+The granularity ladder is partition-independent and unaffected by the freeze.
+(Country is quoted at 21% / κ=0.188 in the results because country's best
+estimator is nearest neighbour, not modal k=20 — name the estimator.)
 
 ## 6. Must not be trusted for unit membership
 
