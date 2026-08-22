@@ -6,9 +6,9 @@
 > 2026-08-19 and its 86-unit control, superseding the earlier 82-unit run.
 > The substantive changes are: the panel (2,976 assemblies), assembler selection
 > and the recalibrated assembly-QC gate (2.12.1–2.12.3); unit refinement and the
-> Gate 1 / Gate 2 order that governs it (2.12.5); **r/m reported only for the 48
-> in-window units, median 7.44** (2.12.7), on an alignment-derived Gate 1
-> (2.6.1); and the control run (2.12.10).
+> Gate 1 / Gate 2 order that governs it (2.12.5); **r/m reported only for the 47
+> in-window units, median 7.70** (2.12.7), on an alignment-derived Gate 1
+> (2.6.1); and the reproducibility control (2.12.10).
 
 > **Status.** Sections 2.1–2.11 describe the exploratory and calibration work,
 > written while the production run was still pending. **Section 2.12 describes
@@ -334,7 +334,7 @@ for a cluster at 405. The relocated floor bracket is **1.28× wide**, against
 The window's structure is unaffected by the change of metric and is in fact
 sharper in alignment units: median r/m across equal-count diversity bands runs
 1.53 → 7.25 → 8.39 → **8.59** → 3.68 → 2.14. The in-window median is insensitive
-to floor placement across the whole bracket (7.70–7.78 on the control run).
+to floor placement across the whole bracket (7.70–7.78).
 
 Two limitations are disclosed. Alignment SNP counts are not *provably* identical
 to `ska distance` — SKA counts split k-mers over whole assemblies, this counts
@@ -1180,11 +1180,20 @@ partition and the per-unit mapping references were supplied rather than
 re-derived inside the run. Where this section conflicts with 2.1–2.11, this
 section is what was done.
 
-Two runs are reported. The **production run** (88 units) was executed on an
-NVIDIA DGX Station A100. A **control run** (86 units, the partition before
-refinement) was executed independently on a 22-core workstation; it is used in
-2.12.10 to establish that the two are comparable and to measure the effect of
+Two runs are reported. The **reported partition** is the 22-core workstation
+run, corrected: **85 units, 2,340 genomes** after the duplicate-BioSample and
+register exclusions of 2026-08-21 (`FINAL_BASIS_2026-08-22/`). A second run
+(88 units, which refines `strain_1_L1_26` into three) was executed on an NVIDIA
+DGX Station A100 and serves as the **cross-hardware reproducibility control**;
+2.12.10 uses it to establish comparability and to measure the effect of
 refinement. Both completed with zero task failures.
+
+**The reported partition is the corrected one.** Both runs carry the same seven
+duplicate BioSamples; only this one has had them removed, and correcting the
+A100 run would require re-deriving it, which was ruled out. Every alignment for
+this partition is also local, whereas the A100's two refinement children have no
+core alignment here and their r/m cannot be re-derived. The refinement is not
+lost by this choice: 2.12.10 reports what it showed.
 
 ## 2.12.1 Genome panel
 
@@ -1388,15 +1397,16 @@ nothing is removed. The per-unit record of which branches were dropped is in
 This is the single most important qualification on the recombination results.
 Section 2.6.1 establishes that outside the diversity window r/m is **not a
 measurement**: below the floor Gubbins cannot detect recombination, and above the
-ceiling the estimate collapses (0.16–1.73 in calibration). Classifying all 88
-production units on **alignment-derived distances** against the window as
-relocated into those units (**[700, 4,700]**, 2.6.1) reproduces the calibration:
+ceiling the estimate collapses (0.16–1.73 in calibration). Classifying the 85
+units of the reported partition on **alignment-derived distances** against the
+window as relocated into those units (**[700, 4,700]**, 2.6.1) reproduces the
+calibration:
 
 | Gate 1 class | units | median r/m |
 |---|---|---|
-| **in-window** | **48** | **7.44** |
-| below floor | 14 | 1.31 |
-| above ceiling | 26 | 2.15 |
+| **in-window** | **47** | **7.70** |
+| below floor | 12 | 1.32 |
+| above ceiling | 26 | 2.14 |
 
 Membership was previously taken from a Mash-to-SNP proxy in a different unit
 system from the calibration; that proxy overstates diversity by a median 1.28×
@@ -1406,7 +1416,7 @@ composition did not hold up. The alignment-derived classification is the one
 reported.
 
 **The reported recombination result for this collection is therefore
-r/m = 7.44 (median of 48 in-window units).** The all-unit median (5.70) mixes
+r/m = 7.70 (median of 47 in-window units).** The all-unit median (5.51) mixes
 measurements with detection failures and is not reported. A **low r/m is a
 detection failure, not a clean unit** — a reading error that is easy to make in
 both directions, since the collapse is symmetric.

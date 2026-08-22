@@ -1,0 +1,109 @@
+# Downstream impact of the basis freeze
+
+2026-08-22. Every partition-dependent artifact, checked against the frozen basis
+(`FINAL_BASIS_2026-08-22/`, 85 units, 2,340 genomes).
+
+**Nothing reverses. Two headline numbers move, one conclusion is unchanged but
+needs its numbers regenerated, and eight artifacts are superseded or must be
+restricted.**
+
+---
+
+## 1. Conclusions that survive unchanged
+
+| result | status |
+|---|---|
+| **ν hypothesis refuted** | **survives** — see §2 |
+| Country attribution fails; region ~93% | **unaffected** — cgMLST-based, partition-independent |
+| Accessory attribution fails its controls | **unaffected** — same reason |
+| Phylogeography: 46 significant unit-variable tests | **unaffected** — see §3 |
+| cgMLST vs SNP concordance +0.846 | **unaffected once restricted** — see §4 |
+
+The entire attribution programme — the paper's spine — never used the partition.
+`CGMLST_LICHT_ATTRIBUTION.tsv` scores 43 validation genomes of which 19 are not
+in the frozen partition at all, exactly as it should be.
+
+## 2. ν refutation — survives, numbers move in the third decimal
+
+Recomputed on the frozen basis (drops `strain_1_L1_10`, uses the re-derived r/m
+for `strain_1_L1_8`, `strain_1_L1_26`, `strain_14_L1_4`):
+
+| | as published (n=86) | frozen basis (n=85) |
+|---|---|---|
+| ν vs Gubbins r/m, chr1 | −0.286 (p=0.0077) | **−0.274 (p=0.0112)** |
+| ν vs Gubbins r/m, chr2 | −0.367 (p=0.0005) | **−0.346 (p=0.0012)** |
+| ν vs δ, chr1 / chr2 | −0.791 / −0.785 | **−0.786 / −0.778** |
+
+Still negative, still significant, still opposite to the prediction. **The
+refutation stands.** `NU_HYPOTHESIS.tsv` must be regenerated on the frozen basis
+and `NU_HYPOTHESIS_RESULT_2026-08-21.md` updated — the script rewrites the TSV
+but **not** the prose, so the .md goes stale unless edited by hand.
+
+## 3. Phylogeography — unaffected
+
+`strain_1_L1_10` carried `verdict = "uninformative: <2 distinct values"` with an
+empty p-value, so it never contributed. **46 of 172 unit-variable tests
+significant, on the full table and on the frozen basis alike.**
+
+## 4. Two tables become correct by restriction, not repair
+
+`DISTANCES_v4c_SUMMARY.tsv` and `CGMLST_CONCORDANCE.tsv` were built by globbing
+the hybrid `L1v4c_out/Clusters`. Their contamination is **exactly** the three
+rows absent from the frozen basis — `strain_1_L1_36`, `strain_1_L1_37`,
+`strain_1_L1_10`. Restricted to the 85, every remaining row carries this basis's
+membership.
+
+**Action: restrict on read; do not rebuild.** For `CGMLST_CONCORDANCE`, the
+as-filed median is **0.8459** over 88 rows; the frozen-basis figure should be
+recomputed over the 85 and quoted with its denominator.
+
+## 5. Superseded — A100-keyed, do not quote against the frozen basis
+
+`PHYLOGEOGRAPHY_ASSOCIATION_v4c_A100.tsv`, `SCALE_country_raw.tsv`,
+`SCALE_country_norm.tsv`, `SCALE_region.tsv`, `SCALE_subnational.tsv`,
+`trackA_diversity_88units.tsv`, `GATE1_ALIGNMENT_A100_2026-08-21.tsv`.
+
+All carry `strain_1_L1_36` / `strain_1_L1_37` / `strain_1_L1_10`. They remain
+valid **as the A100 reproducibility control** and should be labelled that way,
+not deleted.
+
+⚠ The `SCALE_*` set is the granularity-ladder input. **If any ladder figure was
+computed from it, that figure is on the A100 basis and must be recomputed.**
+The published ladder (Asia/non-Asia κ=1.000, region κ=0.890, country κ=0.188) is
+cgMLST-based and therefore safe, but confirm before quoting.
+
+## 6. Must not be trusted for unit membership
+
+`MLST_v4c.tsv` and `CGMLST_QC.tsv` each carry **179 distinct unit labels** —
+labels accumulated across partition generations, 94 of which are not in the
+frozen basis. Their per-genome content (ST, call rate) is fine; **their `unit`
+column is not.** Join to `FINAL_PANEL.tsv` on `unit_membership` instead.
+
+`cfml/` has the same problem: 95 v4c-shaped units across generations, plus an
+abbreviated `sN_L1_M` naming convention. `NU_HYPOTHESIS` is unaffected because
+`nu_hypothesis_bp.py` intersects with the r/m table, which is on-basis.
+
+## 7. Already on basis
+
+`GATE1_ALIGNMENT_2026-08-21.tsv` (85 units), `L1v4c_out/Summaries/recombination_rm.tsv`
+(85), `NUMBERS.tsv`, `FINAL_PARTITION.tsv`, `FINAL_PANEL.tsv`.
+
+## 8. The r/m headline: 7.70
+
+Freezing on this basis settles a number that has moved four times. For the
+record, every value and what it is:
+
+| value | what it is |
+|---|---|
+| **7.70 (n=47)** | **the reported figure** — frozen basis, alignment-derived Gate 1 |
+| 7.44 (n=48) | A100 run, alignment-derived Gate 1 — now the reproducibility control |
+| 7.38 (n=47) | A100 run under the Mash proxy — what the 08-19 documents quote |
+| 7.26 (n=47) | frozen basis under the Mash proxy — superseded by the unit-system fix |
+
+`generate_numbers.py` already emits **7.70**. `METHODS_DRAFT` §2.12.7 was set to
+7.44 on 2026-08-21 and **has been corrected back to 7.70**, with the
+production/control designation flipped to match.
+
+**None of these is a data change. All four are the same r/m values under
+different partitions and different diversity metrics.** That is precisely why
+the basis had to be frozen.
