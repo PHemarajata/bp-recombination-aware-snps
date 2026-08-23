@@ -429,7 +429,45 @@ BioProject p = 0.0010 at 31/33 coverage — a well-powered negative).
 A label like `Thailand :: Nakhon Phanom` is very nearly the name of a collection
 effort.
 
-### R7 — What is operationally usable: the Gulf Coast cluster
+### R7 — What is operationally usable: two US autochthonous foci
+
+> **Added 2026-08-23 — a second focus, and the sharpest attribution result in the
+> paper.** `VIETNAM_GEORGIA_RESULT_2026-08-23.md`.
+>
+> **Georgia, 1983–2024.** Five genomes in `strain_22_L1_1` are USA:GA clinical
+> cases — 1983, 1989, and **three in 2024** — with published epidemiology:
+> **no recent international travel**, geographically linked, 3 ill after a severe
+> weather event (Brennan 2025, PMID 40835221). The same unit holds two
+> Vietnam-**exposure** travel cases and three **in-country Vietnamese** isolates
+> from two independent BioProjects. **The lineage genuinely spans Vietnam and the
+> southeastern USA**, confirmed on both sides by independent studies.
+>
+> **The number to use in R2 or the Discussion:** the Georgia cluster's internal
+> maximum is **8.67 × 10⁻³** allelic and its nearest non-Georgia neighbour
+> anywhere in 3,033 genomes is a **Vietnam-exposure case at 8.91 × 10⁻³** — a
+> margin of **1.0 locus in 4,221**. Everywhere else the paper argues country
+> attribution fails because source countries lack references. **Here both
+> countries are well represented, with published epidemiology on both sides, and
+> attribution still fails — by one locus.** That is the harder case and it is
+> worth more than the absence-of-references argument.
+>
+> **Not a BioProject artifact — the control is internal.** `PRJNA908850` holds
+> both the Georgia cases and both Vietnam-exposure cases; within that one project
+> distances to the Georgia cluster span **8.91 to 16.47**. Same lab, same
+> pipeline, four-fold spread.
+>
+> ⚠ **Do not over-claim.** No direction of transmission (sampling far too sparse).
+> No date — the grafted backbone must not be dated and r/m ≈ 7.7 means most of
+> this distance is imported DNA. Not "the same strain" in the outbreak sense:
+> 8.67 × 10⁻³ is ~37 loci, far above the Gulf Coast cluster's ~5 filtered SNPs.
+> ⚠ **Unresolved:** the paper reports **4 cases**, the BioProject holds **5
+> Georgia genomes** — reconcile before quoting a case count.
+> Also: `SRR31608436` is **Ohio 1969**, not Georgia, and sits outside the cluster
+> (13.63+) — plausibly an independent war-era importation, do not fold it in.
+> `GCF_009768635_1` (Viet Nam 2015) is a **divergent member** at ~58 from
+> everything and inflates this unit's diversity.
+
+#### R7a — The Gulf Coast cluster
 
 **Figure 3.** Distance distribution, `strain_4_L1_1`, n=22.
 
@@ -1075,7 +1113,7 @@ literature it does not contradict.
 | **Sprenger H, … Gulvik CA. *Microbiol Spectr* 2026.** doi:10.1128/spectrum.02926-25 | attributes the aromatherapy MAG to **India** — a country-level call, from CDC | ⚠ **Must not appear to contradict.** Single-strain attribution **with supply-chain corroboration** vs blind systematic prediction. CDC's own *genomics* gave **South Asia**; the country came from product provenance. State our claim narrowly |
 | **Gee JE, et al. *EID* 2017;23(7)** | Western Hemisphere / ST92 framing, n=26, no recombination correction, no validation | **New ground.** ST92 spans **7 countries and 4 units** — the type is not one lineage |
 | **Petras JK, … *NEJM* 2023.** doi:10.1056/NEJMoa2306448 | Mississippi Gulf Coast, 3 clinical + 3 environmental | The reference event for R7. **Open: read the published ST off the paper** |
-| **Brennan T, … Gulvik CA. *EID* 2025.** doi:10.3201/eid3109.250804 | 4 Georgia cases, no travel, relatedness → shared exposure | **The published applied precedent for our ≤20-SNP rule.** Cite rather than describing the use case abstractly |
+| **Brennan S, Thompson JM, Gulvik CA, Paisie TK, Elrod MG, Gee JE, Schrodt CA, DeBord KM, Richardson BT, Drenzek C, Bower WA, Hoffmaster AR, Weiner ZP, Cossaboom CM, Gabel J. Related Melioidosis Cases with Unknown Exposure Source, Georgia, USA, 1983–2024. *Emerg Infect Dis* 2025;31(9):1802–1806.** PMID **40835221**, doi:10.3201/eid3109.250804 ✅ *verified against PubMed 2026-08-23; author list and title were both wrong in earlier drafts* | 4 presumptive **autochthonous** cases 1983–2024, **no recent international travel**, geographically linked, **3 ill after a severe weather event**; genomes highly related → shared exposure | **Load-bearing in two places now.** (a) the published applied precedent for our ≤20-SNP rule; (b) it supplies the independent epidemiology for R7's second focus and for the one-locus boundary in R2 — see `VIETNAM_GEORGIA_RESULT_2026-08-23.md` |
 | **De Smet B, et al. *JCM* 2015;53(1):323–6** | 4 isolates showing ST105/ST849 Cambodia–Australia sharing is homoplasy; eBURST *"unreliable for inferring the geographic origin of STs"* | **Same phenomenon, we supply the denominator:** 52 of 279 STs span >1 unit; ST70 spans eight |
 | **Nandi T, et al. *Genome Res* 2015;25:129–141.** PMID 25236617 | genome-wide **r/m 7.2**; **≥78% of K96243 ever recombined**; recombination higher on chr II | Consistent. The species-wide "7.2" anchor was used as a threshold and **withdrawn as a category error** — do not revive |
 | **Gee JE, Gulvik CA, Castelo-Branco DSCM, Sidrim JJC, Rocha MFG, Cordeiro RA, Brilhante RSN, Bandeira TJPG, Patrício I, Alencar LP, da Costa Ribeiro AK, Sheth M, Deka MA, Hoffmaster AR, Rolim D. Genomic Diversity of *Burkholderia pseudomallei* in Ceará, Brazil. *mSphere* 2021;6(1):e01259-20.** PMID 33536328 | **59% of 31,594 core SNPs recombinant** → r/m ≈ 1.44 | Same direction, ours larger (78.5% pooled). **Not like-for-like** — r/m scales with the divergence of the set; ours are within-strain subclusters, theirs a regional collection over 14 STs. |
