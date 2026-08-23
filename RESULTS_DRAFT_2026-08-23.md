@@ -6,9 +6,11 @@ the frozen basis. **Every figure is annotated with its `NUMBERS.tsv` key** in
 annotations before submission. Run `generate_numbers.py` and `freeze_basis_bp.py`
 before treating any number here as current.
 
-⚠ **Three figures are carried from the outline and are NOT yet regenerable**
-(marked **[unverified]**): the R6 association-test counts, the R7 Gulf Coast
-distances, and the R5 ST/homoplasy counts. Recompute before submission.
+⚠ **Verification status.** R6's *country* row and R7's Gulf Coast distances were
+**recomputed on the frozen basis 2026-08-23** and are now verified. Two sets
+remain **[unverified]**: the **R5 ST/homoplasy counts**, and R6's **sub-national
+and regional** rows, which were computed on the A100 88-unit control partition
+and need regenerating. Recompute both before submission.
 
 ---
 
@@ -230,28 +232,51 @@ ceiling we report.
 
 ## R6. Where geographic signal exists, and where it is indistinguishable from study of origin
 
-Fitch parsimony of geographic labels on each unit's recombination-corrected
+Fitch parsimony of country labels on each unit's recombination-corrected
 topology, against a null of 1,000 label permutations across the tips of the same
 tree, with **BioProject tested identically on the same trees** as a companion
-control. **[all counts in this section unverified — recompute]**
+control. **Re-run on the reported 85-unit basis, 2026-08-23**
+(`PHYLOGEOGRAPHY_ASSOCIATION_FROZEN_2026-08-23.tsv`, seed 20260823).
 
-| scale | testable units | raw p ≤ 0.05 | survives FDR | **passes the BioProject control** |
-|---|---|---|---|---|
-| sub-national | 83 | 17 | 11 | **0** |
-| national | 49 | 26 | 24 | **6** |
-| regional | 16 | 4 | 3 | **1** |
+| country scale | units |
+|---|---|
+| testable (≥2 distinct country values) | **48** (37 single-valued, untestable) |
+| clustered at p ≤ 0.05 | **26** |
+| surviving BH-FDR 5% | **23** |
+| **passing the BioProject control** | **6** |
+| confounded (BioProject equally significant) | 12 |
+| control vacuous (BioProject single-valued) | 5 |
 
-The control does substantial work: it removes roughly a third of apparent passes,
-and should be described in Methods as a result in its own right rather than as
-housekeeping.
+**Only 6 of 48 testable units carry country signal that is distinguishable from
+study of origin.** The control does substantial work — it removes 12 units that
+would otherwise have counted as geographic, plus 5 where it could not run — and
+should be reported as a result rather than as housekeeping.
 
-**All six surviving national-scale units are Southeast Asian. Every Americas unit
-fails**, including the Mississippi Gulf Coast unit (p = 1.0000) and a
-well-powered negative in which country and BioProject are equally significant.
+**The six are all dominated by Southeast and East Asian countries**:
+`strain_5_L1_3` (Thailand 35 / Laos 6), `strain_1_L1_5` (Singapore 10 / France 5
+/ Malaysia 2), `strain_11_L1_5` (Thailand 37 / Cambodia 3), `strain_2_L1_2`
+(Thailand 72 / Laos 2), `strain_1_L1_28` (Thailand 53 / China 2) and
+`strain_1_L1_11` (China 8 / Thailand 8 / Laos 3). *(Note `strain_1_L1_5` carries
+a substantial French component and should not be described as purely Southeast
+Asian.)*
 
-**Sub-national geography is indistinguishable from study of origin in every unit
-tested (0 of 83).** A label such as `Thailand :: Nakhon Phanom` is very nearly
-the name of a collection effort.
+**Every Americas-dominated unit fails**, by one of three routes: the Mississippi
+Gulf Coast unit `strain_4_L1_1` is **null at p = 1.0000**; `strain_4_L1_2` is null
+at p = 0.068; `strain_4_L1_3` has a vacuous control; and `strain_4_L1_4` and
+`strain_1_L1_7` are **confounded** — country and BioProject equally significant,
+which is a well-powered negative rather than an absence of power.
+
+**The Viet Nam/Georgia unit `strain_22_L1_1` is null (p = 0.0430, not surviving
+FDR)** — the country label carries no signal distinguishable from chance on that
+tree, exactly as the one-locus boundary in R7.2 predicts.
+
+⚠ **The sub-national and regional rows of this analysis have NOT been re-run on
+the reported basis.** The three-scale version (sub-national 83 testable / 0
+passing; regional 16 testable / 1 passing) was computed on the **A100 88-unit
+control partition** and must be regenerated before it appears in the paper. The
+headline sub-national claim — that geographic signal is indistinguishable from
+study of origin at every sub-national unit tested — is expected to survive, but
+is currently **[unverified on this basis]**.
 
 ## R7. What is operationally usable: two US autochthonous foci
 
@@ -261,12 +286,13 @@ questions should not be conflated.
 ### R7.1 The Gulf Coast cluster
 
 Unit `strain_4_L1_1` (n = 22) contains the Mississippi Gulf Coast lineage
-(Petras *et al.*, PMID 38118023). **[distances unverified]**
+(Petras *et al.*, PMID 38118023). Distances verified against
+`DISTANCES_v4c_SUMMARY.tsv` restricted to the frozen basis, 2026-08-23.
 
 | | chromosome 1 | chromosome 2 |
 |---|---|---|
 | internal median, raw / filtered | 8 / **5** | 5 / **4** |
-| maximum to the nearest outside genome, raw / filtered | 1,136 / **494** | 1,432 / **528** |
+| maximum to the nearest outside genome, raw / filtered | 1,136 / **492** | 1,432 / **528** |
 
 **A new US case within roughly 20 SNPs is this lineage; one 500 SNPs away is not.
 The call is never borderline.** The same data bound what cannot be said: because
