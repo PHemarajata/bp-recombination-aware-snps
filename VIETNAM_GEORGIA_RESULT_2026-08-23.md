@@ -5,16 +5,18 @@ was whether two USA:GA cases sharing a strain with two Vietnam-exposure cases ar
 *unrecorded Vietnam imports* (mislabelled references) or a *genuine trans-Pacific
 lineage*. It is the second, and the epidemiology is published.
 
-> **The Georgia cases are autochthonous, and the lineage genuinely spans Vietnam
-> and the southeastern USA. The boundary between "acquired in Georgia" and
-> "acquired in Vietnam" is ONE cgMLST locus in 4,221.** That is this paper's
-> central claim as a single worked example, with independent published
+> **The Georgia cases are locally acquired, from an environmental focus whose own
+> origin may be Vietnamese. The lineage is simultaneously established in the
+> southeastern USA and Asian in ancestry — and the boundary between "acquired in
+> Georgia" and "acquired in Vietnam" is ONE cgMLST locus in 4,221.** That is this
+> paper's central claim as a single worked example, with independent published
 > epidemiology on both sides of it.
 
-## 1. The premise was wrong in two ways, both in our favour
+## 1. The premise was wrong in three ways
 
-- **It is five Georgia cases, not two** — 1983, 1989, and **three in 2024**.
+- **It is five Georgia genomes from four patients**, 1983–2024, not two cases.
 - **A sixth US genome is Ohio, not Georgia** (1969), and it is a distance outlier.
+- **The two "independent" Viet Nam genomes are one patient** (§2.2).
 
 Authoritative ENA metadata, requested-vs-returned verified for all eight
 (`PRJNA908850`):
@@ -55,11 +57,73 @@ epidemiologic investigation, not by our inference.** Our
 `origin_basis = as_isolated`, `exposure_country = USA` on these five is
 independently confirmed correct.
 
-⚠ **One discrepancy to resolve before citing:** the paper reports **4 cases**;
-the BioProject carries **5 Georgia genomes** (1983, 1989, 2024 × 3). Either one
-case contributed two isolates, or one genome is a Georgia case outside the
-published series. Confirm against the paper's own accession list before writing a
-number.
+### 2.1 The 4-vs-5 discrepancy — RESOLVED from the full text
+
+According to PubMed (PMC12407204), the paper's own account accounts for all five
+Georgia genomes across four patients:
+
+| patient | year | genomes | note |
+|---|---|---|---|
+| 4 | 1983 | 1 | US Navy/Army veteran; WWII, Korea **and Vietnam**; worked 20 yr on a base <1 mile from the 2024 worksite |
+| 3 | 1989 | 1 | US Army/Air Force veteran, WWII, **no record of Vietnam service**; diabetes |
+| 1 | 2024 | 1 | no comorbidities, **no international travel, no military service**; muddy worksite after Hurricane Helene |
+| 2 | 2024 | **2** | **readmitted 9 Nov with blood *and* urine cultures positive** — the second isolate |
+
+**Five genomes, four patients: patient 2 contributed two isolates.** No genome
+lies outside the published series and no case is missing.
+
+### 2.2 ⚠ The two "independent" Viet Nam genomes are ONE PATIENT
+
+The same paragraph resolves something we had wrong. Of 7 CDC archive isolates
+sequenced, five were ST41 and clustered — and **"Two isolates were from 1 person
+who traveled to Vietnam."** Those two are `SRR31608433` (2017) and `SRR31608435`
+(2012), which this project has been scoring as **two independent Viet Nam
+validation genomes**.
+
+**They are one patient, sampled five years apart.**
+
+- **The scoring does not leak.** Leave-group-out already removes every validation
+  genome sharing the target's exposure country, so each was already excluded from
+  the other's pool. Verified: both carry `exposure_country = Viet Nam`. Nothing
+  needs recomputing and **no headline moves**.
+- **But the denominator is pseudoreplicated.** The validation set is **46 genomes
+  from 45 patients**. Report it that way — it belongs beside W1's existing
+  pseudoreplication disclosure, not hidden.
+- **`OUTBREAK_GROUPS.tsv` should record the pair** at the next deliberate batched
+  refresh. It is a frozen input, and since leave-group-out already covers this
+  case the change is a no-op for every current number — which is exactly why it
+  should be made deliberately rather than now.
+
+### 2.3 What the paper actually concludes — subtler than "not imports"
+
+Our earlier framing ("the Georgia cases are not Vietnam imports") is too blunt.
+The published position is:
+
+- The **cases** are presumptive **autochthonous**, locally acquired: all four
+  geographically clustered, three following severe weather, patients 1 and 2 with
+  no travel and no military service.
+- Reactivation is considered and argued against for patient 4 — latency two
+  decades after Vietnam-War exposure "is plausible, [but] it is rare", records
+  show no earlier consistent illness, "and reactivation would not explain the
+  epidemiologic and WGS links to the other cases."
+- **But the environmental focus itself may have a Vietnam origin.** The paper
+  states plainly: *"Introduction and persistence of B. pseudomallei in the
+  environment from repatriation of personnel or equipment associated with the
+  Vietnam War is possible, but other sources of environmental introduction or
+  local exposure cannot be ruled out."*
+
+**So the correct statement is: locally acquired cases from an environmental focus
+of uncertain, possibly Vietnam-derived, origin.** That is *better* for our
+argument than a clean "autochthonous" — it is a lineage that is simultaneously
+established in the southeastern USA and genuinely Asian in ancestry, which is
+precisely why a genome from it cannot be assigned to a country.
+
+Corroborating detail: the isolates are **ST41**, which the authors describe as
+associated with Eastern Hemisphere strains, and their phylogeny places the new
+genomes with East and Southeast Asian strains, **particularly Vietnam**. Their
+Figure 1 also notes these genomes are **distinct from the Mississippi
+environmental genomes** — so Georgia and the Gulf Coast are two separate US foci,
+not one.
 
 ## 3. The distance structure — and a one-locus boundary
 
@@ -83,6 +147,31 @@ A published, epidemiologically-investigated US autochthonous cluster is separate
 from a documented Vietnam-acquired case by **one locus** more than the cluster's
 own internal spread. No distance threshold can put those on opposite sides
 reliably.
+
+### 3.1 ⚠ The worked example that justifies the estimator choice
+
+These two genomes are the cleanest demonstration in the project of why region's
+estimator is modal k=20 and not nearest neighbour. For **both** Viet Nam-exposure
+genomes (one patient, 2012 and 2017):
+
+| scale | nearest neighbour | modal k = 20 |
+|---|---|---|
+| **Asia vs non-Asia** | **non-Asia — WRONG** | Asia ✅ (vote 0.70) |
+| **region, 7-way** | **North America — WRONG** | East Asia & Pacific ✅ (vote 0.65) |
+| country | USA — wrong | USA — wrong (vote 0.30) |
+
+Their single closest relative in 3,033 genomes is a Georgia autochthonous case,
+so nearest neighbour carries them across the Pacific. The wider neighbourhood is
+Asian, so modal k=20 brings them back.
+
+**They are 2 of the only 3 errors the deep split makes under nearest neighbour**
+(Asia/non-Asia: NN 43/46, κ 0.869; modal k=20 **46/46, κ 1.000**). In other
+words: **the only thing standing between the deep split and perfection under a
+nearest-neighbour rule is this one trans-Pacific lineage** — and one patient
+supplies two of the three failures.
+
+That is the depth-ceiling thesis, the estimator choice, and the trans-Pacific
+lineage in a single pair of genomes. It belongs in the Results.
 
 ### It is not a BioProject artifact — the control is internal
 
