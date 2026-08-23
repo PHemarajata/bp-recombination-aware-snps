@@ -168,56 +168,76 @@ structured, well-referenced sampling and so retains usable country signal;
 continent-spanning lineages and 7 of our 16 source countries at zero public
 genomes, and so does not.
 
-### 5.2.2 DeepSANet — what is and is not established
+### 5.2.2 ✅ DeepSANet's evaluation, read from the authors' own code
 
-**DeepSANet (PMID 41185308) is paywalled with no PMC record, and I could not read
-its methods.** What can be said:
+The PDF is paywalled, but the authors publish the official implementation at
+**`github.com/ShaanLiang/DeepSANet`**, and the evaluation design is legible
+there. **This is stronger evidence than the paper's prose would have been.**
 
-1. It evaluates on *"a public *Salmonella enterica* serovar Enteritidis genome
-   dataset"* — on the evidence above, almost certainly the Bayliss 2023 UKHSA set,
-   which is the standard public benchmark for this exact task. If so, **it
-   inherits that random stratified split.** ⚠ *Inference, not verified — say so.*
-2. ⚠ **A metric mismatch makes the headline comparison unsafe.** DeepSANet reports
-   **accuracy** (80.83% country); Bayliss reports **macro F1** (0.661 country). On
-   a 38-class imbalanced problem accuracy is dominated by well-sampled classes
-   while macro F1 weights every class equally, so **80.83% and 0.661 are not
-   necessarily in conflict at all** — and accuracy is the more flattering of the
-   two. **Do not write "DeepSANet reports 81% where Bayliss reports 66%"** without
-   establishing they are the same quantity.
-3. Its reported gain is therefore best treated as an *architecture* comparison on
-   a fixed benchmark, not as evidence that country attribution generalises.
+**First, the dataset link is now verified rather than inferred.**
+`utils/dataset.py` defines `UKHSADataSetInfo` with **4 regions, 11 subregions and
+38 countries**, and the country list is the UKHSA travel-associated set. That is
+**exactly Bayliss 2023's "four continents, 11 sub-regions, and 38 countries"**.
+DeepSANet is benchmarked on the Bayliss dataset.
 
-### 5.2.3 Attempt to obtain the DeepSANet full text — failed, and why
+**Second — and this is the finding — there is no held-out test set in the
+released configuration.**
 
-Tried 2026-08-23 so this is not repeated:
+`configs/deepsanet_ukhsa.yaml`:
+```yaml
+TRAIN_PATH: "data/ukhsa/train"
+VAL_PATH:   "data/ukhsa/val"
+TEST_PATH:  "data/ukhsa/val"      # ← identical to VAL_PATH
+MAX_EPOCH:  300
+```
+`configs/deepsanet_enterobase.yaml` does the same
+(`TEST_PATH: "data/enterobase/val_s10f_0.pt"` = `VAL_PATH`; the `s10f_0` naming
+indicates stratified 10-fold, fold 0).
 
-| route | result |
-|---|---|
-| PMC / PubMed Central | **no PMC record** (`convert_article_ids` returns pmid only) |
-| PubMed copyright API | **`"All rights reserved"`, `is_open_access: false`**, © Elsevier Ltd |
-| `doi.org` → `linkinghub.elsevier.com` | redirect only, no content |
-| `sciencedirect.com/…/abs/…` | **HTTP 403**; the `/abs/` path is abstract-only |
-| preprint search (bioRxiv/medRxiv/web) | **none found** — searches surface only the *Bayliss* preprint (medRxiv 2022.08.23.22279111), which is the eLife paper we already have in full |
-| ResearchGate | "Request PDF" only — author-mediated, not a free copy |
+And `trainval.py` selects the reported checkpoint **by maximising accuracy on
+that same val set**, over 300 epochs:
 
-**It is a subscription article and there is no lawful free copy.** Legitimate
-routes for a human: institutional library access, interlibrary loan, a
-ResearchGate request, or emailing the corresponding authors — listed in the
-PubMed record as **shaoting.li@gdut.edu.cn** and **hmzhang@gdut.edu.cn**.
-Co-author **Xiangyu Deng (University of Georgia, Center for Food Safety)** is
-US-based and may be the easier contact.
+```python
+if acc_mean_val > best_acc_mean_val:          # line 206
+    best_acc_mean_val = acc_mean_val
+    best_acc_h1_val, best_acc_h2_val, best_acc_h3_val = ...
+    torch.save(model.state_dict(), ".../best.pt")
+```
 
-> **This does not block the manuscript.** The Discussion can be written safely on
-> what is already verified: Bayliss 2023's split *is* documented and its depth
-> decay corroborates ours, and the accuracy-vs-macro-F1 mismatch means DeepSANet's
-> 80.83% cannot be set against Bayliss's 0.661 regardless of its holdout. Getting
-> the PDF would upgrade one sentence from "inferred" to "verified" — worth doing,
-> not blocking.
+then prints *"three-level acc when best val acc (mean)"* — the
+region/subregion/country triple at the arg-max epoch. `test.py` loads
+`best.pt` (line 81) and evaluates it on `TEST_PATH` — the same val set.
 
-**Action:** obtain the DeepSANet PDF and read (a) the data-splitting section and
-(b) whether any per-class or macro-averaged metric is reported. Until then, cite
-it as a claim whose evaluation design is unverified, and lead the rebuttal with
-Bayliss 2023, whose design *is* verified.
+> **So the headline 91.88 / 87.05 / 80.83 are, in the released configuration, the
+> maximum over 300 epochs of accuracy measured on the very set they are reported
+> on.** That is selection on the evaluation set, and it inflates the numbers
+> before any question of population structure arises.
+
+**Two biases therefore stack, and they are independent:**
+
+1. **Selection-on-test** (above) — optimistic for any dataset, any organism.
+2. **A random, class-stratified split** — inherited from the Bayliss benchmark
+   (75:25 stratified by country) and echoed by `s10f_0`. Not phylogeny-aware, so
+   near-identical genomes of one lineage or outbreak can fall on both sides.
+
+Plus the metric point from §5.2.1: these are **accuracies**, not macro F1.
+
+⚠ **Two fairness caveats, and state both.** The README says *"This repository
+currently includes the core components of our paper. Additional code will be
+released once the paper is accepted"*, so the released configs may not be exactly
+what produced the published numbers. And we have not read the paper's own methods
+text. **Write this as "in the released reference implementation", not as "the
+authors evaluated on their training set".** The claim is about verifiable code,
+and should be phrased so it stays true even if the manuscript describes something
+different.
+
+**Net effect on our Discussion: the DeepSANet comparison is no longer a threat
+that needs neutralising.** Lead with Bayliss — whose split is documented, whose
+depth decay reproduces ours, and whose own discussion blames reference
+availability. Cite DeepSANet as a subsequent architecture result on the same
+benchmark, note the metric difference, and note that its released implementation
+reports on the model-selection set. That is a factual, checkable, non-hostile
+sentence, and it is the strongest available.
 
 ### 5.3 What the search establishes for the novelty claim
 

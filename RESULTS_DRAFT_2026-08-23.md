@@ -415,6 +415,16 @@ leave-one-out design and falls below baseline only under leave-group-out (R2.2) 
 so the two results are not necessarily in conflict, and the comparison is best
 read as **the same curve sampled at two different points**.
 
+A subsequent deep-learning method reports higher figures on the same benchmark
+(91.9 / 87.1 / 80.8% at region, subregion and country; Liang *et al.*, PMID
+41185308). Two things make that number not directly comparable with either
+Bayliss's or ours: it is an **accuracy** rather than a macro-averaged F1, which on
+38 imbalanced classes weights the well-sampled classes heavily; and **in the
+released reference implementation the test path is set to the validation path,
+with the reported checkpoint chosen by maximising accuracy on that same set.**
+The hierarchical decay with geographic depth is nonetheless preserved in their
+results too.
+
 The deployable statement is therefore a ladder, not an answer: *Asia or not —
 certain. Region — where a relative exists, and the method says when one does not.
 Country — no.*
