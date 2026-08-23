@@ -180,14 +180,21 @@ def main():
                 # stratifier for this row and may differ slightly between
                 # groupings for the same genome.
                 dmin = float(np.nanmin(d))
+                # The 20 nearest pool members, computed ONCE and shared by every
+                # estimator that needs them. Two uses: the modal vote itself, and
+                # the CONFIDENCE signals below, which describe the neighbourhood
+                # rather than the call and are therefore defined for every
+                # estimator -- including nearest neighbour, where they say
+                # whether the neighbourhood corroborates the single closest hit.
+                order = np.argsort(np.where(np.isnan(d), np.inf, d))[:20]
+                top = [pooled[cand[int(x)]] for x in order]
+                topc = Counter(top)
                 if est == "hybrid":
                     # a close relative is the best evidence when one exists;
                     # when none does, the only signal left is whether this
                     # genome sits systematically nearer one group than another
                     if np.nanmin(d) < 0.30:
-                        o = np.argsort(np.where(np.isnan(d), np.inf, d))[:20]
-                        pred = Counter(pooled[cand[int(x)]]
-                                       for x in o).most_common(1)[0][0]
+                        pred = topc.most_common(1)[0][0]
                     else:
                         byg = defaultdict(list)
                         for k, x in enumerate(cand):
@@ -204,16 +211,26 @@ def main():
                             byg[pooled[x]].append(d[k])
                     pred = min(byg, key=lambda g: np.median(byg[g]))
                 elif est == "modal_k20":
-                    o = np.argsort(np.where(np.isnan(d), np.inf, d))[:20]
-                    pred = Counter(pooled[cand[int(x)]] for x in o).most_common(1)[0][0]
+                    pred = topc.most_common(1)[0][0]
                 else:
                     o = int(np.nanargmin(d))
                     pred = pooled[cand[o]]
+                # Confidence, for the abstention rule (ABSTENTION_RESULT).
+                #   vote_share  how much of the 20-neighbourhood backs the call
+                #   margin      how far the winning label leads the runner-up
+                # Distance says "is anything near me"; these say "do the things
+                # near me agree". They are different questions and, for region,
+                # the second one is the one that separates errors.
+                rk = topc.most_common(2)
+                vshare = topc.get(pred, 0) / len(top)
+                margin = (rk[0][1] - (rk[1][1] if len(rk) > 1 else 0)) / len(top)
                 T.append(pooled[s]); P.append(pred)
                 preds.append(dict(grouping=GKEY[gname], estimator=est,
                                   sample_id=s, truth=pooled[s], predicted=pred,
                                   correct=int(pooled[s] == pred),
-                                  nn_distance=f"{dmin:.5f}"))
+                                  nn_distance=f"{dmin:.5f}",
+                                  vote_share=f"{vshare:.4f}",
+                                  margin=f"{margin:.4f}"))
             if not T:
                 continue
             nok = sum(t == p for t, p in zip(T, P))
@@ -239,7 +256,8 @@ def main():
     dump(LADDER, ladder, ["grouping", "grouping_label", "estimator", "classes",
                           "n", "correct", "accuracy", "baseline", "kappa"])
     dump(PREDS, preds, ["grouping", "estimator", "sample_id", "truth",
-                        "predicted", "correct", "nn_distance"])
+                        "predicted", "correct", "nn_distance", "vote_share",
+                        "margin"])
 
 
 if __name__ == "__main__":

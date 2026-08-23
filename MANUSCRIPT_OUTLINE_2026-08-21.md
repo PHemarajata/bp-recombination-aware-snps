@@ -453,9 +453,29 @@ observations. This is the paper's most generalisable claim and it applies to any
 pathogen with an uneven reference panel.
 
 **D3 — Say "I don't know."** The nearest-neighbour distance is a natural
-abstention criterion and the data argue for it strongly — see §5, weak spot W2.
-This is how the paper converts a negative result into a deployable tool, and I
-think it is the strongest *new* idea available.
+abstention criterion and **the rule is now built and scored** (W2,
+`ABSTENTION_RESULT_2026-08-23.md`): declining region calls with no relative
+closer than d = 0.462 answers 78.3% of cases at **94.4% accuracy**, out-of-sample
+**94.3%**, and removes both Sub-Saharan African misattributions. This is how the
+paper converts a negative result into a deployable tool.
+
+**Write it with the two failure modes separated, because that is the honest
+version and it is also the more interesting one.**
+
+- **Attractor errors** — no real relative exists, the genome snaps to whatever
+  small cluster is least unlike it, and a catch-all region label turns that into
+  a confident answer. **Catchable**, and the rule catches them.
+- **Depth-ceiling errors** — real close relatives exist and are *geographically
+  uninformative*, because the lineage genuinely spans the geography. **Not
+  catchable by any confidence signal of this kind.** The two Mississippi genomes
+  are the worked example: ST92 is a real pan-Americas lineage, so they rank 26th
+  and 27th of 46 in abstainability while being wrong.
+
+The deployable product is therefore a **ladder of claims, not one answer**:
+*Asia vs not — certain (κ 1.000). Region — only where a relative exists, and the
+system says when it does not. Country — no, and abstaining does not rescue it.*
+That last clause is evidenced, not conceded: the country abstention rule's
+apparent +15.8pp gain is exactly cancelled by its own retained-subset baseline.
 
 **D4 — Sampling frame as a public-health finding.** Three nested facts, each
 independently evidenced: **7 of 16** validation source countries have zero public
@@ -552,9 +572,52 @@ a confidently wrong one for Africa.
 **How to strengthen.** This is W1's problem and D3's opportunity. Report region
 accuracy **stratified by nearest-neighbour distance**, and propose the
 **abstention rule**: above a distance threshold, return *"unattributable —
-novel lineage"* rather than a region. That rule would have correctly declined
-both African genomes instead of calling them Latin American. It turns the
-weakness into the paper's most useful methodological contribution.
+novel lineage"* rather than a region.
+
+> ### ✅ BUILT AND SCORED 2026-08-23 — `ABSTENTION_RESULT_2026-08-23.md`
+>
+> **The prediction above was right, and it is now measured.** Declining region
+> calls with no relative closer than **d = 0.462**:
+>
+> | | value | note |
+> |---|---|---|
+> | coverage | **78.3%** (36 of 46) | `abstention.region.coverage` |
+> | selective accuracy | **94.4%** | from 89.1% answering everything |
+> | **out-of-sample (LOO)** | **94.3%** at 76.1% coverage | threshold picked on the other 45 — **quote this one** |
+> | errors avoided | **3 of 5**, cost 7 correct | **both** Sub-Saharan African calls declined |
+>
+> **It declines exactly the errors it was designed to catch.** Ranked by
+> abstainability, the two African genomes sit at **9 and 10 of 46** and the East
+> Asian error at **2** — all declined. ✅
+>
+> ⚠ **But it cannot catch the two Mississippi errors (ranks 26 and 27), and the
+> paper must say so.** Those have *genuine* close relatives — ST92 is a real
+> pan-Americas lineage — and high neighbourhood consensus. **There are two
+> distinct failure modes and this rule addresses one:** attractor errors (no real
+> relative → catchable) and depth-ceiling errors (real relatives that are
+> geographically uninformative → not catchable, by any confidence signal of this
+> kind).
+>
+> ⚠ **Do not oversell the accuracy gain.** The retained-subset majority baseline
+> rises too (45.7% → 50.0%), so the lift over chance moves only +43.4pp → +44.4pp.
+> **The value is in which errors remain, not in the accuracy number.**
+>
+> ⚠ **A `margin ≥ 0.75` rule scores 100% and is close to vacuous** — it answers
+> half the cases and that half is 78.3% one class. Do not report it as the
+> headline.
+>
+> **And the rule FAILS for country — report that as a result.** Its best
+> operating point (`vote_share ≥ 0.30`) shows selective accuracy **37.5%** against
+> an answer-everything 21.7%, an apparent **+15.8pp**. The retained-subset
+> majority baseline is **also exactly 37.5%**: on the half it chooses to answer,
+> guessing the commonest country does just as well. The rule found an easier
+> subset, not a signal. This closes the obvious *"but what if you just decline the
+> hard ones"* objection with a number. See
+> [[never-split-a-ratio-on-its-own-denominator]] for the same shape of error.
+>
+> **Positive control:** on `asia_vs_not` (already 100%) abstention avoids **0**
+> errors at every threshold and only costs coverage — the rule does not fire
+> where the method already works.
 
 **⚠ Controlled 2026-08-22 — the concern is now precisely bounded, and it is
 narrower than "region may be luck."** `DOWNSAMPLING_CONTROL_RESULT_2026-08-22.md`
@@ -1049,11 +1112,15 @@ you:**
    the estimator is now part of every attribution key. W6's table above records
    what moved. Remaining: the `PRIMER` is still the most quotable and most stale
    document in the workspace — regenerate it or mark it.
-4. **Add the distance-stratified region table and the abstention rule** (W2/D3).
-   **The table now exists** (W2, estimator-matched: 14/14 · 8/10 · 19/22) — what
-   is still owed is the *abstention rule* itself: pick the threshold, score the
-   rule, and report what it declines. Still the most novel thing available to
-   the paper.
+4. ~~**Add the distance-stratified region table and the abstention rule**~~
+   (W2/D3) — **DONE 2026-08-23.** Table is estimator-matched (14/14 · 8/10 ·
+   19/22) and the rule is built, scored and out-of-sample validated:
+   **d ≤ 0.462, coverage 78.3%, selective accuracy 94.4% (LOO 94.3%)**, declining
+   both Sub-Saharan African attractor errors. **It fails for country**, and that
+   failure is itself a result — the +15.8pp apparent lift is exactly cancelled by
+   the retained-subset majority baseline. `ABSTENTION_RESULT_2026-08-23.md`.
+   Remaining: fold the two failure modes (attractor vs depth-ceiling) into D3 as
+   prose.
 5. ~~**Re-run R2 on the 44-genome validation set**~~ — **DONE 2026-08-23 (Track
    0), and it landed at 46, not 44.** Portugal→Thailand plus 2 Mississippi
    autochthonous→USA, requiring leave-*outbreak*-out via an explicit register

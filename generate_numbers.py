@@ -230,6 +230,50 @@ add("attribution.NOTE_estimator",
     "NEVER compare an NN number to a modal one -- the estimator is in every "
     "key above precisely so that comparison cannot be made by accident")
 
+# --------------------------------------------------------- abstention rule --
+# D3's "say I don't know". Every row carries TWO baselines because they disagree
+# and the disagreement is the finding: `random` (= answer-everything accuracy;
+# declining at random does not change the expected error rate) tests whether the
+# signal carries information, while `retained_majority` tests whether the rule
+# merely selected an easier class mix. For country the two are IDENTICAL at the
+# best operating point -- the apparent +15.8pp lift is entirely class mix.
+absn = {(r["grouping"], r["signal"], r["target_coverage"]): r
+        for r in maybe(f"{B}/ABSTENTION_OPERATING_POINTS.tsv")}
+r = absn.get(("region_7way", "nn_distance", "0.70"))
+if r:
+    add("abstention.region.threshold", f"{float(r['threshold']):.3f}",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        "cgMLST allelic distance, Lichtenegger scheme, THIS panel -- not a "
+        "species constant and will not transfer to another scheme")
+    add("abstention.region.coverage", f"{100*float(r['coverage']):.1f}%",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        f"answers {r['n_answered']} of 46; declines the rest as 'unattributable'")
+    add("abstention.region.selective_accuracy",
+        f"{100*float(r['selective_accuracy']):.1f}%",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        f"QUOTE WITH BOTH BASELINES: random {100*float(r['random_baseline']):.1f}%, "
+        f"retained-majority {100*float(r['retained_majority_baseline']):.1f}% "
+        "(which ROSE from 45.7%, so the lift over chance barely moves)")
+    add("abstention.region.loo_selective_accuracy",
+        f"{100*float(r['loo_selective_accuracy']):.1f}%",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        f"OUT-OF-SAMPLE (threshold picked on the other 45), coverage "
+        f"{100*float(r['loo_coverage']):.1f}% -- this is the defensible number")
+    add("abstention.region.errors_avoided",
+        f"{r['errors_avoided']} of 5 (cost {r['correct_lost']} correct)",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        "declines BOTH Sub-Saharan African attractor errors; CANNOT decline the "
+        "2 Mississippi errors, which have genuine close relatives")
+c = absn.get(("country", "vote_share", "0.50"))
+if c:
+    add("abstention.country.VERDICT",
+        f"fails: sel.acc {100*float(c['selective_accuracy']):.1f}% == "
+        f"retained-majority {100*float(c['retained_majority_baseline']):.1f}%",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        "DO NOT QUOTE THE +15.8pp LIFT. Against the retained-subset majority "
+        "baseline the gain is exactly zero -- the rule found an easier subset, "
+        "not a signal. Country is not rescued by abstaining")
+
 # ------------------------------------------------------------------- r/m ----
 # r/m comes from the pipeline's own POOL_RECOMBINATION_STATS output, not from
 # the unit_rm column of the metadata. That column is a per-genome DENORMALISED
