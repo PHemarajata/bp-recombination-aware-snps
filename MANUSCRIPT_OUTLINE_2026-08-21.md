@@ -1362,31 +1362,18 @@ assignment.
 
 ---
 
-## 8. One-paragraph abstract to write toward
+## 8. Abstract — superseded by `ABSTRACT_DRAFT_2026-08-23.md`
 
-> *Burkholderia pseudomallei* causes melioidosis across the tropics, and cases
-> increasingly present where exposure location is unknown. We assembled 2,959
-> genomes — 41% of all country-labelled public isolates — partitioned them into
-> recombination-aware lineages, and tested whether exposure country can be
-> recovered from the genome, using 46 isolates with independently documented
-> exposure country as ground truth. Under a leave-group-out and
-> leave-outbreak-out design that removes same-source references, **country-level
-> attribution did not exceed chance — 10/46 (22%) against a 26% majority
-> baseline, κ 0.19** — at every resolution tested, from 7 MLST loci to 4,221
-> cgMLST loci to whole-genome recombination-filtered SNPs, while **regional
-> attribution reached 41/46 (89%) against a 46% baseline, κ 0.83**. The contrast
-> is sharpest where it should be easiest: among the 14 cases with a close
-> relative in the panel, region was correct **14/14** and country **2/14**.
-> Randomly subsampling 2 to 4,089 loci held country accuracy flat while regional
-> accuracy rose from 50% to 82%, showing the failure is absence of signal rather
-> than insufficient resolution. The boundary instead tracks reference
-> availability: **for 7 of 16 exposure countries in our validation set, no public
-> genome exists in ENA** — all seven in Latin America and the Caribbean — and the
-> collection as a whole is inverted against disease burden: **South Asia carries
-> 44% of predicted global cases and 2.5% of the genomes, while East Asia and the
-> Pacific carries 39% and 92%**. We
-> conclude that country-level genomic attribution for melioidosis is currently
-> unachievable for most source countries by any method, that regional
-> attribution is achievable only where the reference panel reaches, and that
-> attribution systems should abstain rather than answer when no near relative
-> exists.
+⚠ **The draft that stood here is superseded and should not be used.** Two
+reasons, both substantive rather than cosmetic:
+
+1. It concluded that country attribution is *"currently unachievable for most
+   source countries **by any method**"*. We cannot support "by any method" — we
+   tested our estimators, not all possible ones — and the Discussion has been
+   softened accordingly. An abstract must not outrun its own Discussion.
+2. It predates the abstention rule, which is the paper's one *deployable*
+   contribution and belongs in the abstract.
+
+`ABSTRACT_DRAFT_2026-08-23.md` carries a **285-word** main version and a
+**146-word** short version, both regenerable against `NUMBERS.tsv`, plus a note
+recording what was deliberately left out and why.
