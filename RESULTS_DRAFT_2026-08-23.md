@@ -387,6 +387,34 @@ best operating point reaches 37.5% selective accuracy against an answer-everythi
 the half of cases it elects to answer, always guessing the commonest exposure
 country scores identically. **Country attribution is not rescued by abstaining.**
 
+### R8.1 The same shape of result in another organism
+
+An independent hierarchical machine-learning study of *Salmonella enterica*
+serovar Enteritidis (Bayliss *et al.*, PMID 37042517) attributed 2,313 genomes to
+four continents, eleven sub-regions and 38 countries using unitig features, and
+reports macro F1 of **0.954, 0.718 and 0.661** at those three levels. **The decay
+with geographic depth is the same shape we report** — near-perfect at the deepest
+split, degrading monotonically as the question narrows — and those authors
+attribute the country-level shortfall to the same mechanism, noting *"a
+correlation between a lack of training data and lower prediction accuracy"*.
+
+Two differences explain why they retain usable country signal where we do not,
+and both are consistent with our thesis rather than in tension with it. First,
+*S.* Enteritidis is comparatively clonal and geographically structured, whereas
+*B. pseudomallei* is environmentally acquired, recombinogenic (in-window r/m
+7.70) and carries lineages that span continents — ST92 across seven Americas
+countries, and the Viet Nam/Georgia lineage separated by a single locus (R7.2).
+Second, their classes are countries commonly visited by UK travellers and are
+correspondingly well referenced, whereas **7 of our 16 validation source
+countries have no public genome at all** (R4).
+
+Their evaluation also used a **country-stratified random 75:25 split**, which
+does not separate near-identical genomes of the same lineage between training and
+test. Our own country attribution reaches 29–37% under an equivalent
+leave-one-out design and falls below baseline only under leave-group-out (R2.2) —
+so the two results are not necessarily in conflict, and the comparison is best
+read as **the same curve sampled at two different points**.
+
 The deployable statement is therefore a ladder, not an answer: *Asia or not —
 certain. Region — where a relative exists, and the method says when one does not.
 Country — no.*

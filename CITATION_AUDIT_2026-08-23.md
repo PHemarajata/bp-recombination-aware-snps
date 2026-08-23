@@ -83,10 +83,9 @@ i.e. the depth-ceiling result, in another lab's data. Cite it for both halves.
   *B. pseudomallei* phylogeography paper returned **nothing**. **Do not cite
   "Pearson 2020" in any form until someone produces the actual reference.**
   (Pearson **2009**, *BMC Biology*, is a separate and correct citation.)
-- **The eLife Salmonella accessory-unitig paper** (the "macro F1 0.661" figure in
-  our notes) — **still not found.** Multiple searches failed. The 0.661 figure
-  should not be quoted until the source is identified. See §5 for what the search
-  *did* turn up in its place.
+- ~~The eLife Salmonella accessory-unitig paper~~ — ✅ **FOUND**: Bayliss *et al.*
+  *eLife* 2023;12:e84167, PMID **37042517**. The 0.661 figure is confirmed
+  verbatim. See §5.1.
 - **Sprenger 2026** (`doi:10.1128/spectrum.02926-25`) and the Mississippi ST in
   Petras 2023 — not resolvable from abstracts; need full text.
 
@@ -95,61 +94,103 @@ i.e. the depth-ceiling result, in another lab's data. Cite it for both halves.
 Accessory-genome and tree-free source attribution. Two directly relevant papers,
 both verified, neither previously in the corpus.
 
-### 5.1 ⚠ DeepSANet — a 2025 paper reporting 80.8% COUNTRY attribution
+### 5.1 ✅ The "bare URL" eLife paper is FOUND — and it is the 0.661 source
 
-> **Liang S, Mei S, Ji J, *et al.* "DeepSANet: A deep learning approach for
-> hierarchical geographical source attribution of *Salmonella*." *Food Res Int*
-> 2025;221(Pt 4):117554.** PMID **41185308**,
-> [doi:10.1016/j.foodres.2025.117554](https://doi.org/10.1016/j.foodres.2025.117554)
+> **Bayliss SC, Locke RK, Jenkins C, Chattaway MA, Dallman TJ, Cowley LA. "Rapid
+> geographical source attribution of *Salmonella enterica* serovar Enteritidis
+> genomes using hierarchical machine learning." *eLife* 2023;12:e84167.**
+> PMID **37042517**, PMC10147375,
+> [doi:10.7554/eLife.84167](https://doi.org/10.7554/eLife.84167)
 
-Reports hierarchical geographic attribution of *Salmonella* at **91.88% (region),
-87.05% (subregion) and 80.83% (country)**, and >90% at all levels on an
-EnteroBase-derived set — **using only 3,002 cgMLST loci as features**.
+**This is the paper our notes carried as a bare URL with no author, year or
+title, and it is the source of the "macro F1 0.661" figure** — confirmed verbatim
+in its abstract. It is open access, so its full methods are readable.
 
-**This is the single most dangerous paper for our manuscript and it must be
-addressed in the Discussion, not omitted.** It is the same feature type (cgMLST),
-a comparable locus count (3,002 vs our 4,221), and it claims success at exactly
-the scale we report as unreachable.
+- 2,313 *S.* Enteritidis genomes, UKHSA 2014–2019
+- 4 continents, 11 sub-regions, **38 countries (53 classes)**
+- features are **unitigs** (426,647 → 94,865 patterns → 25,000 selected), i.e.
+  accessory/pan-genome k-mers — so this *is* the accessory-attribution precedent
+  §6.6 was looking for
+- **macro F1: continental 0.954, sub-regional 0.718, country 0.661**
 
-**Three substantive distinctions, in order of strength — each testable, none
-rhetorical:**
+### 5.2 ⚠ The holdout design, checked — and it is a random split
 
-1. **Holdout design is the decisive question, and the abstract does not state
-   one.** Our country result depends entirely on it: under leave-**one**-out our
-   own estimator reaches 29–37% at country scale, and *every one of those hits is
-   a validation genome predicting another of the same country*. Under
-   leave-**group**-out it collapses. **Yu 2025 (PMID 41401143), already cited,
-   argues precisely this** — that biased sampling driven by population structure
-   confounds ML on bacterial genomes, and recommends phylogeny-aware
-   cross-validation on held-out clades. If DeepSANet uses random splits, its
-   country figure measures population structure plus sampling, not attribution.
-   **Read the methods before writing the rebuttal sentence.**
-2. **Organism.** *B. pseudomallei* is environmental, highly recombinogenic
-   (in-window r/m 7.70) and carries lineages that genuinely span continents — ST92
-   across seven Americas countries, and the Viet Nam/Georgia lineage where a US
-   autochthonous cluster and a Viet Nam-acquired case sit **one locus** apart.
-   *S. enterica* Enteritidis is comparatively clonal and geographically
-   structured. A method can succeed on one and fail on the other without either
-   result being wrong.
-3. **Reference density.** EnteroBase holds hundreds of thousands of *Salmonella*
-   genomes; the entire public *B. pseudomallei* record is 9,040 BioSamples, of
-   which **7 of our 16 validation source countries have zero**. Our central claim
-   is that attribution reaches exactly as far as the reference panel — which
-   predicts that a densely-referenced organism *should* attribute better.
-   **DeepSANet is therefore consistent with our thesis rather than a refutation
-   of it**, and framing it that way is stronger than treating it as a rival.
+**This was the load-bearing question, and it is now answered from the source.**
+The eLife methods state:
 
-### 5.2 Munck 2020 — cgMLST + ML source attribution, but to reservoirs
+> *"The dataset was split into **75–25% train-test ratio stratified by the
+> country** for downstream applications."*
 
-> **Munck N, Njage PMK, Leekitcharoenphon P, Litrup E, Hald T. "Application of
-> Whole-Genome Sequences and Machine Learning in Source Attribution of
-> *Salmonella* Typhimurium." *Risk Anal* 2020;40(9):1693–1705.** PMID
-> **32515055**, [doi:10.1111/risa.13510](https://doi.org/10.1111/risa.13510)
+and for model selection:
 
-cgMLST features, logit boost, **0.933 accuracy** — but attributing to **animal
-reservoir** (pigs, broilers, cattle, ducks, layers) within Denmark, a 5-class
-problem in one country. Cite as the methodological precedent for cgMLST-based
-attribution while noting the task is not geographic and the class count is small.
+> *"…**stratified threefold cross-validation** of the input database…"*
+
+**That is a random, class-stratified split. It is not phylogeny-aware, not
+leave-one-clade-out, and not leave-group-out.** Near-identical genomes from the
+same lineage, outbreak or submitting laboratory can therefore appear in both
+training and test sets.
+
+**This is exactly the design whose collapse we report.** Our own country
+attribution reaches **29–37% under leave-one-out** and every hit is a validation
+genome predicting another of the same country; under leave-group-out it falls
+below baseline. Yu *et al.* 2025 (PMID 41401143, already cited) argues precisely
+this for bacterial genomes and recommends phylogeny-aware cross-validation on
+held-out clades.
+
+The authors were partly alert to it — they state *"Sample redundancy between
+validation and training datasets was removed before comparison"* — but exact
+redundancy removal is not the same as removing same-source relatives, and they
+report of one outbreak validation that *"six samples … were present in the
+training dataset."*
+
+### 5.2.1 Their own results reproduce our depth ceiling
+
+The decisive point for the Discussion is not that they are wrong. It is that
+**their own numbers show the same monotonic decay with geographic depth that we
+report**:
+
+| level | eLife macro F1 | our κ (modal k=20) |
+|---|---|---|
+| continental / Asia-vs-not | **0.954** | **1.000** |
+| sub-regional / 7-way region | 0.718 | 0.832 |
+| **country** | **0.661** | **0.193** |
+
+And their discussion attributes the country-level shortfall to exactly the
+mechanism we identify: *"a correlation between a lack of training data and lower
+prediction accuracy"* — reference availability setting the ceiling. Their US
+samples were *"consistently misclassified"*, and France and Italy scored
+hF1 ≈ 0.3.
+
+**So the honest framing is: two organisms, the same shape of result, different
+positions on the same curve.** *S.* Enteritidis has dense, geographically
+structured, well-referenced sampling and so retains usable country signal;
+*B. pseudomallei* is recombinogenic, environmentally acquired, with
+continent-spanning lineages and 7 of our 16 source countries at zero public
+genomes, and so does not.
+
+### 5.2.2 DeepSANet — what is and is not established
+
+**DeepSANet (PMID 41185308) is paywalled with no PMC record, and I could not read
+its methods.** What can be said:
+
+1. It evaluates on *"a public *Salmonella enterica* serovar Enteritidis genome
+   dataset"* — on the evidence above, almost certainly the Bayliss 2023 UKHSA set,
+   which is the standard public benchmark for this exact task. If so, **it
+   inherits that random stratified split.** ⚠ *Inference, not verified — say so.*
+2. ⚠ **A metric mismatch makes the headline comparison unsafe.** DeepSANet reports
+   **accuracy** (80.83% country); Bayliss reports **macro F1** (0.661 country). On
+   a 38-class imbalanced problem accuracy is dominated by well-sampled classes
+   while macro F1 weights every class equally, so **80.83% and 0.661 are not
+   necessarily in conflict at all** — and accuracy is the more flattering of the
+   two. **Do not write "DeepSANet reports 81% where Bayliss reports 66%"** without
+   establishing they are the same quantity.
+3. Its reported gain is therefore best treated as an *architecture* comparison on
+   a fixed benchmark, not as evidence that country attribution generalises.
+
+**Action:** obtain the DeepSANet PDF and read (a) the data-splitting section and
+(b) whether any per-class or macro-averaged metric is reported. Until then, cite
+it as a claim whose evaluation design is unverified, and lead the rebuttal with
+Bayliss 2023, whose design *is* verified.
 
 ### 5.3 What the search establishes for the novelty claim
 
