@@ -153,3 +153,30 @@ partition would produce a diff nobody can interpret.
 - **The abstention threshold is calibrated on 46 genomes** and its signal was
   chosen after seeing which won. Disclosed in `ABSTENTION_RESULT` §7 — carry that
   caveat into the paper verbatim rather than softening it.
+
+---
+
+## 6. Status update — end of 2026-08-23 autonomous session
+
+**Methods §2.12 is now rewritten and §2.12.11a written from scratch**, so the
+main blocker in §2 is cleared. Remaining, in priority order:
+
+| item | state |
+|---|---|
+| §2.12 body on the frozen basis | ✅ done |
+| §2.12.11a attribution Methods | ✅ written from scratch |
+| §2.6.3 union self-contradiction | ✅ stale paragraph deleted |
+| §2.12.13 production/control designation | ✅ fixed |
+| branch support on the reported basis | ✅ 170/170, all trees now carry SH-aLRT/UFBoot |
+| **`+ASC` vs `-fconst`** | ⚠ **OPEN and now sharper** — config confirms production used `GTR+ASC` with `iqtree_fconst=null`, contradicting §2.5. Quantify on one unit before submission. |
+| Results R1–R8 draft | ✅ written, figures annotated with their keys |
+| R6 country scale | ✅ re-run on the frozen basis (48/26/23/6) |
+| **R6 sub-national + regional** | ⚠ **still on the A100 88-unit control run** — regenerate |
+| **R5 ST/homoplasy counts** | ⚠ **unverified** — no ST table located |
+| citations | ✅ 13 verified, 6 resolved, 2 added; "Pearson 2020" unciteable |
+| **DeepSANet rebuttal** | ⚠ **new blocker** — read PMID 41185308's holdout design before drafting the Discussion |
+
+**The verdict is unchanged in shape but the balance has shifted: Methods is no
+longer the blocker, and the two genuine remaining risks are the `+ASC` question
+and the DeepSANet comparison.** Both are answerable in a day and neither is a
+data problem.
