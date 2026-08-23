@@ -17,12 +17,37 @@ against the primary TSV or is cited to the document that owns it.
 > | **[MLST/17]** | 7-locus MLST | 17 | 0/17 | 13/15 = 87% | typing-resolution table (§4) |
 > | **[cg-Pub/29]** | cgMLST, PubMLST scheme (4,089 loci) | 29–30 | 0/30 | 23/29 = 79% | superseded by cg-Licht |
 > | **[REScurve]** | cgMLST subsampled k loci | travel-reattributed set | flat 0 | 49.5% → 82.1%; baseline 48% | `RESOLUTION_CURVE_RESULT` |
-> | **[cg-Licht/46]** ← **CURRENT HEADLINE** | cgMLST, Lichtenegger (4,221 loci) | **46** | **NN 10/46 = 22%; modal-k20 7/46 = 15%; close-relative 2/14** | **modal-k20 41/46 = 89%, κ 0.832; NN 37/46 = 80%; baseline 46%** | `NUMBERS.tsv`, `CGMLST_LICHT_ATTRIBUTION.tsv` |
+> | **[cg-Licht/46]** ← **CURRENT HEADLINE** | cgMLST, Lichtenegger (4,221 loci) | **46** | **NN 10/46 = 22%; modal-k20 7/46 = 15%; close-relative 2/14** | **modal-k20 41/46 = 89%, κ 0.832; NN 37/46 = 80%; baseline 46%** | `NUMBERS.tsv`, `CGMLST_LICHT_ATTRIBUTION.tsv` (NN), `GROUPING_LADDER.tsv` (modal + κ) |
 >
 > **Ladder (cg-Licht/46, κ):** Asia/non-Asia 1.000, East/West hemisphere 0.909,
 > region 7-way 0.832, SEA/non-SEA 0.461, country 0.132 (modal) / 0.193 (NN).
 > North America is now testable — the Mississippi autochthonous strain (US origin
 > certain) misattributes to Latin America. `TRACK0_INTEGRATION_2026-08-23.md`.
+>
+> ### ⚠ The estimator is part of the number — added 2026-08-23
+>
+> **Country's best estimator is nearest neighbour; region's is modal k=20.** They
+> are different analyses of the same data and must never be mixed within a row:
+>
+> - Region, **modal k=20 → 41/46 (89%)**. This is the headline.
+> - Region, **NN → 37/46 (80%)**. A *different estimator*, not a correction.
+> - Every stratification must use **its own headline's estimator.** The region
+>   strata under modal k=20 are **14/14 · 8/10 · 19/22**; under NN they are
+>   11/14 · 6/10 · 20/22. W2 below previously carried the NN strata beside the
+>   modal headline.
+>
+> `CGMLST_LICHT_ATTRIBUTION.tsv` stores **only nearest neighbour** — the scorer
+> persists one estimator per run. Modal and κ figures come from
+> `GROUPING_LADDER.tsv` / `GROUPING_PREDICTIONS.tsv`. All of it is surfaced in
+> `NUMBERS.tsv` with the estimator in the key
+> (`attribution.region.modal_k20`, `ladder.*.kappa`). **Cite the key, not the
+> file**, and run `generate_numbers.py` first.
+>
+> **The scheme citation, verified 2026-08-23:** the headline scheme is
+> **Lichtenegger S, et al. *J Clin Microbiol* 2021;59(8):e0009321, PMID 33980649,
+> doi:10.1128/JCM.00093-21** — abstract confirms **4,221 core targets**, matching
+> ours exactly. ⚠ **§6.5 below says to remove the Lichtenegger citation. That
+> instruction is now inverted** and applies only to the superseded cg-Pub run.
 >
 > **The paper must pick ONE cgMLST analysis as the headline** — cg-Licht/46 (it is
 > the published scheme, the largest validation set, and the only one with North
@@ -75,14 +100,14 @@ that, empirically. **The science did not drift. The deliverable did.**
 
 > Melioidosis is diagnosed in travellers and in newly-endemic areas where the
 > exposure location is unknown, and clinicians and public-health agencies ask
-> genomics to supply it. Across 2,976 *B. pseudomallei* genomes we show that
+> genomics to supply it. Across 2,955 *B. pseudomallei* genomes we show that
 > **exposure country cannot be recovered from the genome at any resolution**
-> — 7 loci, 4,089 loci, and whole-genome recombination-filtered SNPs all return
-> zero — while **region is recoverable**, and that the boundary between the two
-> is set not by genomic resolution but by **which countries have public
-> reference genomes at all**. For 7 of 15 source countries in our validation
-> set, no public genome exists in ENA at all. The limit is a surveillance gap,
-> not a technical one.
+> — 7 loci, 4,221 loci, and whole-genome recombination-filtered SNPs all return
+> at or below chance — while **region is recoverable**, and that the boundary
+> between the two is set not by genomic resolution but by **which countries have
+> public reference genomes at all**. For 7 of 16 source countries in our
+> validation set, no public genome exists in ENA at all. The limit is a
+> surveillance gap, not a technical one.
 
 The logic chain, each link independently evidenced. **This chain is written on
 the earlier [SNP/24] analysis; recast it on [cg-Licht/46] for the paper — country
@@ -94,8 +119,9 @@ only the numbers update.**
    relative exists [cg-Licht/46]** under leave-group-out.
 2. It is not our estimator: **region works, 22/24 = 92% [SNP/24]** / **89%
    [cg-Licht/46]**, same data, same estimator, same holdout.
-3. It is not resolution: across a **584-fold** span in locus count, country is
-   **0/17 [MLST/17], 0/30 [cg-Pub/29], 0/24 [SNP/24]**; a resolution curve over a
+3. It is not resolution: across a **584-fold** span in locus count, country never
+   exceeds chance — **0/17 [MLST/17], 0/24 [SNP/24], and 10/46 = 22% against a
+   26% baseline at 4,221 loci [cg-Licht/46]**; a resolution curve over a
    **2,000-fold** range holds country flat while region climbs **49.5% → 82.1%
    [REScurve]**.
 4. It is not the lineage partition: the same result appears under two
@@ -116,20 +142,25 @@ only the numbers update.**
 
 ### R1 — The panel, and the frame it is drawn from
 
-**Table 1.** Panel composition. 2,976 genomes, **50 countries**.
-Thailand **1,753 (58.9%)**, China **295 (9.9%)**, Australia **283 (9.5%)** —
-top three = **78.3%**. Three BioProjects = **46.4%** of the panel.
+**Table 1.** Panel composition, on the **corrected v4d panel of 2,955** (2,976
+less 17 duplicate BioSamples and 4 register exclusions — `panel.corrected_v4d`).
+**50 countries.** Thailand **1,753 (59.5%)**, China **295 (10.0%)**, Australia
+**282 (9.6%)** — top three = **79.1%**. Three BioProjects = **46.4%** of the panel.
+
+⚠ **Quote 2,955, not 2,976.** The uncorrected figure and every percentage
+computed on it (58.9 / 9.9 / 9.5 / 78.3%) are superseded.
 
 **Table 2.** Coverage of the public universe, **re-censused 2026-08-21 as a
 union of `read_run` and `assembly`** (`GENOME_REGISTER` §2). ENA holds 9,623 read
 runs and 3,546 assemblies over **9,040 unique BioSamples, 7,192 with a country**,
-across 56 countries. **Our panel is 41.4% of those.**
+across 56 countries. **Our panel is 41.1% of those** (`panel.coverage_of_ena`).
 
-⚠ **Quote 41.4%, not 44%.** The 44% figure used a reads-only denominator (6,707),
-which is blind to assembly-only depositions — the same error that produced the
-Mexico mistake in R4. Both are also slight over-statements, since 312 panel
-genomes (10.5%) are in-house and not public at all; against the public-derived
-2,664 the figure is 37.0%.
+⚠ **Quote 41.1%, not 44% and not 41.4%.** The 44% figure used a reads-only
+denominator (6,707), which is blind to assembly-only depositions — the same error
+that produced the Mexico mistake in R4; 41.4% was computed on the uncorrected
+2,976. Both remaining figures are also slight over-statements, since 312 panel
+genomes (10.6%) are in-house and not public at all; against the public-derived
+**2,643** the figure is **36.7%**.
 
 Not proportional: Australia under-represented **2.5×**, Cambodia **5×**, China
 over **3.5×**.
@@ -161,7 +192,7 @@ carry the largest share of disease contributes 2.5% of the genomes.
 > distribution the two are inverted.*
 
 This is the honesty anchor, and it costs nothing because the disproportion **is**
-the finding. It also generalises the validation-set result in R4 from our 15
+the finding. It also generalises the validation-set result in R4 from our 16
 source countries to the whole species.
 
 *Caveat to state:* roughly 15% of the global public collection is environmental
@@ -175,11 +206,21 @@ census and say which.
 
 ### R2 — Country attribution fails; region succeeds
 
-**Table 4 (headline). [SNP/24]** — core-genome SNP, leave-group-out. **For the
-paper, replace with [cg-Licht/46]:** country modal 15% / NN 22% (baseline 26%),
-region modal-k20 89% / NN 80% (baseline 46%), plus sub-national 0/5. The [SNP/24]
-version below is the original unit-based result and should be cited as the
-core-genome cross-check, not the headline.
+**Table 4 (headline). [cg-Licht/46]** — cgMLST nearest-neighbour and modal k=20,
+leave-group-out **and leave-outbreak-out**. This is the paper's headline table.
+
+| scale | scorable | modal k=20 | nearest-neighbour | majority baseline | κ (best est.) |
+|---|---|---|---|---|---|
+| **country** | 46 | 7/46 (15%) | **10/46 (22%)** | **26%** | **0.193** (NN) |
+| sub-national | 5 | **0%** | 0% | 0% | — |
+| **region (7-way)** | 46 | **41/46 (89%)** | 37/46 (80%) | **46%** | **0.832** (modal) |
+
+**Report the best estimator per scale and say which** — country NN, region modal.
+Country's 22% sits *below* its own 26% baseline; the honest sentence is "country
+attribution does not exceed chance," not "country attribution reaches 22%."
+
+**Table 4b (core-genome cross-check). [SNP/24]** — the original unit-based result,
+retained as an independent-typing-system confirmation, **not** as the headline:
 
 | scale | scorable | modal | nearest-neighbour | majority baseline |
 |---|---|---|---|---|
@@ -201,14 +242,22 @@ attribution performance is circularity.
 | layer | loci | country | region |
 |---|---|---|---|
 | MLST **[MLST/17]** | 7 | 0/17 | 13/15 (87%) |
-| cgMLST **[cg-Pub/29]** | 4,089 | 0/30 | 23/29 (79%) |
+| **cgMLST [cg-Licht/46]** ← **use this row** | **4,221** | **10/46 (22%), baseline 26%** | **41/46 (89%), baseline 46%** |
 | core-genome SNP **[SNP/24]** | whole genome | 0/24 | 22/24 (92%) |
 
+⚠ **The [cg-Pub/29] row (4,089 loci, country 0/30, region 23/29 = 79%) is
+superseded and comes out of the manuscript body.** Keep it only in the
+supplement as the scheme-swap robustness check — the two schemes agree (region
+93% under both at the time of the swap, cgMLST↔SNP r = 0.999), so it evidences
+*scheme-independence* and nothing else.
+
 *(Each row is a different validation set because each typing system covers
-different genomes — that is inherent, not an error. For the paper add a
-**[cg-Licht/46]** row: 4,221 loci, country 0/… at every-loci is the same story,
-region 89%. The MLST row also predates the 31-genome correction and is due a
-re-run — see §6.)*
+different genomes — that is inherent, not an error. The MLST row predates the
+31-genome correction and is due a re-run — see §6. Note the ladder is no longer
+"0 at every rung": at 4,221 loci country reaches 22% against a 26% baseline,
+which is still **at or below chance** — state it that way rather than as a bare
+zero, because the bare zero is now only true of the smaller [SNP/24] and
+[MLST/17] sets.)*
 
 **Figure 2. [REScurve].** The resolution curve. k loci sampled at random,
 k = 2 → 4,089, 10 replicates, on the travel-reattributed validation set (**not
@@ -233,12 +282,17 @@ The previously circulated *"9 of 16 source countries have zero public genomes"*
 was computed from a **read-run-only** ENA query, which is blind to
 assembly-only depositions. Re-run as a union of `read_run` and `assembly`:
 
-> **7 of 15 source countries have no public genome in ENA — Aruba, Costa Rica,
+> **7 of 16 source countries have no public genome in ENA — Aruba, Costa Rica,
 > El Salvador, Guatemala, Martinique, Nicaragua, and Trinidad and Tobago. All
 > seven are Latin America & Caribbean.**
 
 That is a **sharper** finding than the old one: the gap is not scattered across
 the tropics, it is one region.
+
+⚠ **Denominator updated 2026-08-23: 16, not 15.** Recomputed on the n=46
+validation set — Track 0 added USA as a source country. The seven zero-genome
+countries are **unchanged**, and so is the all-one-region finding; only the
+denominator moves. Do not quote "7 of 15" or the old "9 of 16 / 44%".
 
 **Two countries move out of the zero column, and this matters:**
 **Mexico has 21 public genomes** (all assembly-only, 16 from the recent
@@ -260,7 +314,7 @@ Mexico shows it is not the whole of it.
    single Czech genome. *"Region attribution works"* must be qualified to
    *"region attribution works where the panel has reference genomes for that
    region."*
-3. **Unattributable at all** — **6 of 31** validation genomes sit alone in
+3. **Unattributable at all** — **[SNP/31] 6 of 31** validation genomes sit alone in
    singleton units with no pool. Their exposure countries are Mexico, Ghana,
    Nigeria, El Salvador, Philippines, and one *ex Africa*. **Four are the sole
    panel representative of their exposure country.**
@@ -268,6 +322,17 @@ Mexico shows it is not the whole of it.
 That third level is worth its own paragraph in the Discussion: in operational
 use this is a **19% no-answer rate, concentrated in exactly the cases that
 prompt the question.**
+
+⚠ **Scope this claim to the SNP/unit analysis.** "Sits alone in a singleton unit
+with no pool" is a *partition* failure mode, and the headline [cg-Licht/46]
+analysis is **partition-free** — cgMLST nearest-neighbour always has a pool, so it
+returns an answer for 46 of 48, the 2 exclusions being non-country exposures
+rather than missing pools. The right framing is therefore **not** "19% get no
+answer" but the sharper W2 point: the partition-free method *always answers*, and
+above d ≥ 0.30 that answer is an attractor artifact. That is what motivates the
+abstention rule (D3) — a deliberate no-answer is better than a confident wrong
+one. Recompute the 6/31 on the current basis before quoting it, or drop it in
+favour of the distance stratification.
 
 **And the same gap, at species scale.** R1's Table 3 shows it by region; the
 country-level version closes the argument. Computed against the **current ENA
@@ -285,7 +350,7 @@ statement of where the remaining hole is.
 
 **Read Tables 3 and 6 together and the claim is complete:** country attribution
 fails for our validation cases because their source countries have no reference
-genomes, and that is not a peculiarity of our 15 countries — it is the shape of
+genomes, and that is not a peculiarity of our 16 countries — it is the shape of
 the entire public collection relative to where the disease actually is.
 
 ⚠ **The widely-cited internal figure is wrong. Do not quote it.**
@@ -393,7 +458,7 @@ This is how the paper converts a negative result into a deployable tool, and I
 think it is the strongest *new* idea available.
 
 **D4 — Sampling frame as a public-health finding.** Three nested facts, each
-independently evidenced: **7 of 15** validation source countries have zero public
+independently evidenced: **7 of 16** validation source countries have zero public
 genomes, all of them Latin American & Caribbean (R4); **21 countries** with ≥100
 predicted annual cases have none in ENA, ~5% of global burden, **19 of them
 sub-Saharan African** (R4); and, most robustly, **South Asia carries 44.2% of
@@ -450,21 +515,33 @@ is cheap.
 
 ### W2 — The Latin American region successes may be luck ⚠ **new finding**
 
-Stratifying the region result by nearest-neighbour distance. **The table below is
-[cg-Pub/29]; the current [cg-Licht/46] stratification is region d<0.05 11/14,
-0.05–0.30 6/10, d≥0.30 20/22 — same shape, the far stratum still the attractor
-concern.** Use the [cg-Licht/46] numbers in the paper:
+Stratifying the region result by nearest-neighbour distance. **Corrected
+2026-08-23 — the [cg-Licht/46] column previously shown here (11/14 · 6/10 ·
+20/22) was the NEAREST-NEIGHBOUR stratification printed beside a modal-k=20
+headline.** The estimator-matched figures are below; use the **modal k=20**
+column, because 89% is a modal number.
 
-| stratum | correct [cg-Pub/29] | correct [cg-Licht/46] |
-|---|---|---|
-| d < 0.05 (a real relative exists) | 8/10 | 11/14 |
-| 0.05 ≤ d < 0.30 | 4/6 | 6/10 |
-| **d ≥ 0.30 (no real relative)** | **11/13** | **20/22** |
+| stratum | [cg-Pub/29] | [cg-Licht/46] **NN** | [cg-Licht/46] **modal k=20** ← use |
+|---|---|---|---|
+| d < 0.05 (a real relative exists) | 8/10 | 11/14 | **14/14** |
+| 0.05 ≤ d < 0.30 | 4/6 | 6/10 | **8/10** |
+| **d ≥ 0.30 (no real relative)** | **11/13** | 20/22 | **19/22** |
 
-That bottom row looks like a success and is not. **Twelve of the fourteen
-genomes with d ≥ 0.30 snap to the same Ecuadorian reference.** Nine happen to
-be Latin American, so "Ecuador → Latin America & Caribbean" scores correct.
-**The two Sub-Saharan African genomes snap there too and are scored wrong.**
+**This strengthens the paper's central claim rather than weakening it.** Region
+attribution is **perfect where a close relative exists — 14/14** — against
+country's **2/14 on those same 14 genomes.** That is the depth-ceiling result in
+its cleanest form: same genomes, same pool, same holdout, opposite outcomes at
+two geographic scales.
+
+That bottom row still looks like a success and still is not, and the mechanism is
+now confirmed directly on the current data. Of the 22 genomes at d ≥ 0.30, **nine
+share a single Ecuadorian nearest neighbour** (`GCF_000959265_1_Ecuador`) and
+five share one Indian reference. Eleven of the 22 are genuinely Latin American,
+so "Ecuador → Latin America & Caribbean" scores correct. **Both Sub-Saharan
+African genomes in the stratum are called Latin America & Caribbean under modal
+k=20 and scored wrong** (`SRR35174254`, `SRR35239810`) — under NN only one of
+them misses, so the headline estimator is the *less* forgiving one here. Same
+mechanism, different luck.
 
 Same mechanism, different luck. At d = 0.46, 46% of cgMLST loci differ — that
 is not a relative in any meaningful sense. The method is not identifying
@@ -509,18 +586,26 @@ Puerto Rico 5 / Ecuador 2 / Colombia 2. Those are real pan-Americas lineages.
 The cgMLST nearest-neighbour result agrees with them **for a much weaker
 reason**. Say so rather than presenting the agreement as simple corroboration.
 
-### W3 — Gate 1's diversity window is calibrated in one unit system and applied in another ⚠ **for Paper 2**
+### W3 — ✅ **RESOLVED 2026-08-21.** Gate 1 recomputed in alignment units
 
-The r/m headline (**7.38, the median of the 47 of 88 units inside the window**)
-depends on a 47/88 split computed by converting Mash distance to approximate
-SNPs (`mash × 3,805,619 bp`), while the window itself was calibrated in
-`ska distance` units. The conversion's own docstring says it is triage-grade,
-and elsewhere the project records that sketching mis-scales against
-alignment-derived distances by **0.88×–91×** depending on the cluster.
+The challenge was that the r/m headline (then **7.38**, median of 47 of 88 units
+"inside the window") rested on a 47/88 split computed by converting Mash distance
+to approximate SNPs (`mash × 3,805,619 bp`), while the window itself was
+calibrated in `ska distance` units — a triage-grade conversion by its own
+docstring, and the project had recorded sketching mis-scaling by **0.88×–91×**.
 
-**How to strengthen.** Recompute unit diversity from the alignment-derived
-distances, which already exist, before quoting 7.38. Cheap, and it closes the
-challenge entirely.
+**Done, and the fix mattered.** Recomputed on alignment-derived distances the
+proxy proved to **misplace 22 of 85 units**; the window is **[700, 4700] mean
+pairwise core SNPs** (floor bracketed (588, 755]) and the headline is
+**r/m = 7.70 across 47 of 85 units** (`rm.median_gate1`), with 1.99 outside — the
+contrast that makes this a *detection* window rather than a filter.
+`GATE1_ALIGNMENT_RESULT_2026-08-21.md`.
+
+⚠ **Never quote 7.38, 7.44 or 7.26** — different partitions or the Mash proxy.
+**Residual, for Paper 2 only:** `trackA_diversity` still feeds the Mash proxy, and
+Gate 1's union-coverage criterion does not reproduce the calibration's 76–88%
+(max band median 68%) — disclose that, per `rm.gate1_caveat`. The floor does not
+depend on it.
 
 ### W4 — Gate 1's lower bound is disclosed as wide but not as inadmissible
 
@@ -565,11 +650,21 @@ The dangerous ones, because both versions sit in the *same* file:
 
 | quantity | stale | correct |
 |---|---|---|
-| validation set | 26 | **31** |
-| region accuracy | 100% on 19, baseline 58% | **92% on 24, baseline 54%** |
+| validation set | 26 → 31 → 43 | **48 registered / 46 scorable** |
+| panel | 2,976 | **2,955** (`panel.corrected_v4d`) |
+| ENA coverage | 44% → 41.4% | **41.1%** (`panel.coverage_of_ena`) |
+| analysed units / genomes | 88 / 2,342 | **85 / 2,340** (frozen basis) |
+| r/m headline | 7.38 / 7.44 / 7.26 | **7.70** (`rm.median_gate1`) |
+| zero-genome source countries | 9 of 16 → 7 of 15 | **7 of 16** |
+| region accuracy | 100% on 19, baseline 58% | **92% on 24 [SNP/24]; 89% on 46 [cg-Licht/46]** |
 | country LOO nearest-neighbour | 37% | **29%** (7/24) |
 | sub-national | *"untestable"* | **testable, and fails 0/5** |
 | CFML/Gubbins offset | ≈4.9× | **2.19× / 2.45×** |
+
+**48 vs 46 is not a discrepancy** — 48 genomes are registered, 2 carry a
+non-country exposure ('Africa', 'Panama and Peru') and are unattributable, so 46
+are scorable. Every `x/46` is over the scorable set (`validation.scorable`).
+Never use 48 as an attribution denominator.
 
 The sub-national one is the worst: `ATTRIBUTION_AND_DISTANCES_FINDINGS` states
 both, about thirty lines apart.
@@ -610,7 +705,39 @@ the same 24 observations are far more convincing than one inflated one — and
 the incoming 44-genome set adds Australia, Thailand and India, which is what
 would genuinely make it multi-class.
 
-### W8 — ⚠ **LIVE DEFECT: the exclusion register and the panel disagree**
+### W8 — ⚠ **HALF-RESOLVED 2026-08-23. Fixed in the frozen basis; still live in the cgMLST reference pool**
+
+**What is fixed.** The frozen basis carries the register cross-check as a
+first-class validation: `freeze_basis_bp.py` asserts *"no register-excluded
+genome in the partition"* and *"no duplicate BioSample in the partition"*, and
+both **PASS at 0**. Re-run directly against `FINAL_PARTITION.tsv` and
+`FINAL_PANEL.tsv`: **0 of the 46 register rows appear in either.** The scenario
+below — a `broken_assembly` genome inside `strain_1_L1_26` — **can no longer
+happen in the reported analysis**, and the check is now automated rather than
+documented.
+
+**What is still live, and it is a real reviewer target.** The exclusion register
+was never applied to the **cgMLST reference pool**. All four genomes below are
+present in `cgmlst_lichtenegger/MANIFEST.tsv` and therefore in the pool that
+every [cg-Licht/46] attribution call searches — including **`SRR2896271`, which
+fails the *species* gate outright** (`mash_K96243 = 0.0135` against a ≤0.008
+threshold; it may not be *B. pseudomallei*).
+
+**Measured consequence, so the scope is not guesswork:** one validation genome's
+nearest neighbour is an excluded assembly — `SRR33748081` → `SRR2896257`
+(3,315 contigs) at **d = 0.79048**. At that distance it is not a relative in any
+meaningful sense; it sits deep in the W2 attractor stratum. Its region call
+scores correct, its country call does not. **So the headline does not move on
+this genome — but "an excluded broken assembly is a nearest neighbour in our
+attribution analysis" is a sentence we do not want a reviewer writing.**
+
+**How to fix.** Drop the four from the cgMLST manifest and re-score. That
+changes a frozen headline, so do it as a **deliberate batched refresh** (register
+→ regenerate attribution → recompute strata → propagate n), never piecemeal —
+`TRACK0_INTEGRATION_2026-08-23.md` is the model. Then extend the register
+cross-check to cover the cgMLST manifest, not just the partition.
+
+<details><summary>The original W8 finding, retained for the record</summary>
 
 `PANEL_EXCLUSIONS_README` specifies its own cross-check: *"excluded samples
 present in the panel → must be 0."* **I ran it. It is 4**, and one is inside an
@@ -649,6 +776,16 @@ either formally rescind the exclusions with evidence or drop them and re-derive
 CI check. This is a few hours and it removes the single most concrete thing a
 reviewer could find by running your own documented check.
 
+</details>
+
+**The unpopulated-evidence problem above is still unresolved and still matters**,
+because it governs whether the four should be dropped from the cgMLST pool or
+formally re-included: all four register rows read `core=na%`, so the stated
+reason ("core coverage <85% **or** ratio >1.20") is evidenced by neither clause.
+Re-measure core coverage on the SPAdes assemblies before deciding either way.
+`SRR2896271` is separable — it fails the species gate on mash alone and should
+come out regardless.
+
 ### W9 — Submission blockers that are not science ⚠ **fix these first, they are cheap**
 
 None of these is a weakness in the work. All of them will stop a submission.
@@ -662,10 +799,13 @@ None of these is a weakness in the work. All of them will stop a submission.
   be deposited.** Needs: accession list, the new assemblies in ENA/GenBank, and
   the supporting tables (`PANEL_EXCLUSIONS.tsv`,
   `curated_L1v4c_clusters.final.tsv`, `EXPOSURE_OVERRIDES.tsv`).
-- **No flow diagram.** Every number exists but the figure does not:
-  8,500 ENA BioSamples → 2,976 panel → 2,352 partitioned → 2,342 in 88 units →
-  47 in-window for r/m. This should be **Figure 1**; it does more work than any
-  other single display item because it makes the attrition auditable.
+- **No flow diagram.** Every number exists but the figure does not. **Updated to
+  the frozen basis:** 9,040 ENA BioSamples (union of `read_run` + `assembly`;
+  7,192 with a country) → **2,955** corrected panel → **2,340 genomes in 85
+  analysed units** → **47 units in-window** for r/m. This should be **Figure 1**;
+  it does more work than any other single display item because it makes the
+  attrition auditable. ⚠ Do not reuse the old chain (8,500 → 2,976 → 2,352 →
+  2,342 in 88 units): three of its five numbers are superseded.
 - **The exact production command line is no longer pinned.** The 2026-08-11
   methods draft cited `branch reference-blocklist, commit f1a7d13`; the 08-19
   rewrite dropped the branch and commit and cites only the repo URL. Restore it.
@@ -814,6 +954,44 @@ our own documents**); De Smet 2015 PMID (missing); the Ceará 2021 author list
 Seng's rate-prior reference [53], which resolves to a pangenome paper with no
 clock analysis.
 
+⚠ **Which cgMLST scheme do we cite? SUPERSEDED — this section was written when
+cg-Pub was the headline, and the headline has since changed. Read the correction
+first.**
+
+> ### ✅ CORRECTED 2026-08-23 — the headline scheme is Lichtenegger, and it must be cited
+>
+> The paper's headline analysis is **[cg-Licht/46]**, run on the **Lichtenegger
+> 4,221-locus scheme**. Verified against a fetched PubMed record, not an internal
+> document:
+>
+> **Lichtenegger S, Trinh TT, Assig K, Prior K, Harmsen D, Pesl J, Zauner A, Lipp
+> M, Que TA, Mutsam B, Kleinhappl B, Steinmetz I, Wagner GE. Development and
+> Validation of a *Burkholderia pseudomallei* Core Genome Multilocus Sequence
+> Typing Scheme To Facilitate Molecular Surveillance. *J Clin Microbiol*
+> 2021;59(8):e0009321. PMID 33980649, doi:10.1128/JCM.00093-21.**
+>
+> The abstract states the scheme was built by challenging K96243 with 469 genomes
+> yielding **4,221 core and 1,351 accessory targets** — matching our 4,221 exactly,
+> and confirming the scheme is real, published and validated (320 WGS datasets).
+>
+> **So the instruction below — "remove the Ashcroft and Lichtenegger citations" —
+> is inverted for the current headline.** It applies only to the superseded
+> [cg-Pub/29] run. Concretely:
+>
+> - **[cg-Licht/46] (headline)** → cite **Lichtenegger 2021, PMID 33980649**.
+> - **[cg-Pub/29] (supplement, scheme-swap robustness only)** → cite the platform,
+>   **Jolley 2018, PMID 30345391**, and record the snapshot; it has no scheme
+>   publication.
+> - **"Ashcroft 2021" is a phantom** and must never be cited — it does not exist as
+>   a distinct scheme; the reference resolves to Lichtenegger.
+>
+> Because the headline scheme is published and versioned, the "experimental, subject
+> to change" caveat below **no longer attaches to the headline** — it attaches to the
+> supplementary cg-Pub run. Still record the Lichtenegger scheme version (v1.1,
+> 4,221 loci) and archive the allele FASTAs.
+
+<details><summary>The superseded 2026-08-21 determination, retained for the record</summary>
+
 ✅ **Which cgMLST scheme did we use? RESOLVED 2026-08-21.** It is **neither**
 Ashcroft 2021 nor Lichtenegger 2021 — both are 4,221-target schemes. We ran
 **PubMLST scheme 2, "cgMLST — *Burkholderia pseudomallei* typing", 4,090 loci,
@@ -830,6 +1008,8 @@ change".** So the Methods must record the exact snapshot — scheme 2, 4,090 loc
 only against it. Archive the allele FASTAs with the results. This is a provenance
 statement, not a weakness: the 4,089 called loci behaved well (median call rate
 95.5%, cgMLST-vs-SNP concordance r = +0.861).
+
+</details>
 
 ### 6.6 A real hole in the literature review
 
@@ -864,46 +1044,62 @@ you:**
    Highest concreteness-to-effort ratio on this list — a reviewer running your
    documented check currently finds a `broken_assembly` genome inside the
    largest analysed unit.
-3. **Numbers freeze.** Recompute every quotable figure from the TSVs; fix W6.
-   Half a day, and it is the difference between a clean submission and an
-   erratum. Note the `PRIMER` is currently the most quotable and most stale
+3. ~~**Numbers freeze**~~ — **DONE.** `generate_numbers.py` → `NUMBERS.tsv` is
+   the single source, `freeze_basis_bp.py` validates the basis (14 checks), and
+   the estimator is now part of every attribution key. W6's table above records
+   what moved. Remaining: the `PRIMER` is still the most quotable and most stale
    document in the workspace — regenerate it or mark it.
 4. **Add the distance-stratified region table and the abstention rule** (W2/D3).
-   A few hours on data already in hand, and it is the most novel thing available
-   to the paper.
-5. **Re-run R2 on the 44-genome validation set** when the Terra assemblies land.
-   Directly addresses W1 and adds Australia/Thailand/India — countries where the
-   panel *does* hold references, so country attribution finally gets a fair test
-   rather than one dominated by zero-reference countries.
-6. **Run the accessory-genome test.** PopPUNK accessory distances already exist;
-   the Salmonella precedent reached country-level macro F1 0.661 on accessory
-   unitigs where core SNPs give zero. If it works, the paper's headline becomes a
-   **contrast** (core fails, accessory works) rather than a negative. Blocker:
-   the PopPUNK DB covers only 10 of 31 validation genomes and needs extending.
+   **The table now exists** (W2, estimator-matched: 14/14 · 8/10 · 19/22) — what
+   is still owed is the *abstention rule* itself: pick the threshold, score the
+   rule, and report what it declines. Still the most novel thing available to
+   the paper.
+5. ~~**Re-run R2 on the 44-genome validation set**~~ — **DONE 2026-08-23 (Track
+   0), and it landed at 46, not 44.** Portugal→Thailand plus 2 Mississippi
+   autochthonous→USA, requiring leave-*outbreak*-out via an explicit register
+   (`OUTBREAK_GROUPS.tsv`). North America is now testable. Region fell 93%→89%
+   (κ 0.890→0.832) precisely *because* the harder case entered the set.
+   `TRACK0_INTEGRATION_2026-08-23.md`.
+6. ~~**Run the accessory-genome test**~~ — **DONE, and it FAILS its controls.**
+   It looked positive (country 30% vs core 21%) but scores **0/13 where a close
+   relative exists**, is 5× sensitive to assembly quality, and the entire margin
+   rests on two Mississippi reference genomes. **Do not present it as a
+   contrast**; the core result is strengthened by its failure.
+   (`ACCESSORY_ATTRIBUTION_RESULT`)
 7. **Score the PBP dual-locus scheme through the identical holdout.** The one
    published method that could undercut R3 — better to run it than caveat it.
 8. **Delete the stale union-coverage paragraph** in `METHODS_DRAFT` §2.6.3 and
    resolve the `+ASC` vs `-fconst` question on one unit (W10).
-9. **Re-run the MLST row** of Table 4 on the corrected 31-genome set.
+9. **Re-run the MLST row** of Table 4 on the corrected **46**-genome set (it
+   still predates the correction and is the last untagged row in R3).
 10. Fix the metadata defects (W11), read the Mississippi ST off NEJM, and
     convert every "first" to "we are not aware of".
 11. **Literature pass on accessory-genome / tree-free source attribution**
     (§6.6). It is unsearched, and it is the evidence base for item 6.
-12. ~~Settle which cgMLST scheme paper to cite~~ — **DONE.** PubMLST scheme 2,
-    no scheme publication; cite Jolley 2018 for the platform and record the
-    snapshot. Drop Ashcroft/Lichtenegger from the cgMLST methods (§6.5).
+12. ~~Settle which cgMLST scheme paper to cite~~ — **REOPENED then RESOLVED
+    2026-08-23.** The 08-21 answer (PubMLST scheme 2, drop Lichtenegger) applied
+    when cg-Pub was the headline. The headline is now **[cg-Licht/46]**, so
+    **cite Lichtenegger 2021, PMID 33980649** (verified against PubMed; 4,221
+    core targets, matches ours) for the headline, and Jolley 2018 only for the
+    supplementary cg-Pub robustness run. "Ashcroft 2021" is a phantom — never
+    cite it. See the correction box in §6.5.
 13. **Citation audit** (§6.5): resolve the two conflicting Pearson 2020 PMIDs,
     retrieve the Ceará 2021 and eLife Salmonella citations, and fix
     "Chewapreecha 2024" → **Seng et al. 2024** everywhere.
 14. ~~Regenerate the zero-genome country list~~ — **DONE 2026-08-21.** ENA
     union census re-run; final figures **21 countries / 5%**, and the validation
-    countries corrected to **7 of 15**. See `GENOME_REGISTER_2026-08-21.md`.
-15. **Re-run the country-scale scoring the moment the 40 assemblies land.**
-    Validation 31 → 44, adding **India, Thailand and Australia** — the three
-    best-represented countries in the collection (150 / 3,528 / 1,616 ENA
-    genomes). This is what turns the country test from one dominated by
-    zero-reference countries into a fair one, and it is the highest-value
-    pending experiment in the project.
+    countries corrected to **7 of 16** (recomputed 2026-08-23 on the n=46 set;
+    the seven countries are unchanged). See `GENOME_REGISTER_2026-08-21.md`.
+15. ~~**Re-run the country-scale scoring when the assemblies land**~~ — **DONE
+    2026-08-23; superseded by item 5.** Validation reached **46**. The fair test
+    it promised has now been run, and country still does not clear baseline
+    (10/46 = 22% vs 26%), including for well-referenced countries — which is the
+    result, not a shortfall.
+
+**New, added 2026-08-23 — apply the exclusion register to the cgMLST pool (W8).**
+All four register-excluded genomes are in `cgmlst_lichtenegger/MANIFEST.tsv`,
+one of them failing the species gate, and one serves as a validation genome's
+nearest neighbour. Fix as a deliberate batched refresh, not piecemeal.
 16. **Get the IRB approval number and approving body** from the epi team into
     the Methods (W9).
 
@@ -918,20 +1114,24 @@ assignment.
 ## 8. One-paragraph abstract to write toward
 
 > *Burkholderia pseudomallei* causes melioidosis across the tropics, and cases
-> increasingly present where exposure location is unknown. We assembled 2,976
+> increasingly present where exposure location is unknown. We assembled 2,955
 > genomes — 41% of all country-labelled public isolates — partitioned them into
 > recombination-aware lineages, and tested whether exposure country can be
-> recovered from the genome, using 31 isolates with independently documented
-> exposure country as ground truth. Under a leave-group-out design that removes
-> same-source references, country-level attribution was **0/24** at every
-> resolution tested, from 7 MLST loci to 4,089 cgMLST loci to whole-genome
-> recombination-filtered SNPs — a 584-fold range — while regional attribution
-> reached **8 of 9 source countries**. Randomly subsampling 2 to 4,089 loci held
-> country accuracy flat at zero while regional accuracy rose from 50% to 82%,
-> showing the failure is absence of signal rather than insufficient resolution.
-> The boundary instead tracks reference availability: **for 7 of 15 exposure
-> countries in our validation set, no public genome exists in ENA**, and the
-> collection as a whole is inverted against disease burden — **South Asia carries
+> recovered from the genome, using 46 isolates with independently documented
+> exposure country as ground truth. Under a leave-group-out and
+> leave-outbreak-out design that removes same-source references, **country-level
+> attribution did not exceed chance — 10/46 (22%) against a 26% majority
+> baseline, κ 0.19** — at every resolution tested, from 7 MLST loci to 4,221
+> cgMLST loci to whole-genome recombination-filtered SNPs, while **regional
+> attribution reached 41/46 (89%) against a 46% baseline, κ 0.83**. The contrast
+> is sharpest where it should be easiest: among the 14 cases with a close
+> relative in the panel, region was correct **14/14** and country **2/14**.
+> Randomly subsampling 2 to 4,089 loci held country accuracy flat while regional
+> accuracy rose from 50% to 82%, showing the failure is absence of signal rather
+> than insufficient resolution. The boundary instead tracks reference
+> availability: **for 7 of 16 exposure countries in our validation set, no public
+> genome exists in ENA** — all seven in Latin America and the Caribbean — and the
+> collection as a whole is inverted against disease burden: **South Asia carries
 > 44% of predicted global cases and 2.5% of the genomes, while East Asia and the
 > Pacific carries 39% and 92%**. We
 > conclude that country-level genomic attribution for melioidosis is currently
