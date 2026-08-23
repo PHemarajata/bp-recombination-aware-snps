@@ -2,13 +2,16 @@
 
 > **Revision note.** Sections 1–2.11 (method development, calibration and
 > validation) are unchanged from the 2026-08-11 draft. **Section 2.12 has been
-> replaced in full**: it now describes the 88-unit v4c production run of
-> 2026-08-19 and its 86-unit control, superseding the earlier 82-unit run.
-> The substantive changes are: the panel (2,976 assemblies), assembler selection
-> and the recalibrated assembly-QC gate (2.12.1–2.12.3); unit refinement and the
-> Gate 1 / Gate 2 order that governs it (2.12.5); **r/m reported only for the 47
-> in-window units, median 7.70** (2.12.7), on an alignment-derived Gate 1
-> (2.6.1); and the reproducibility control (2.12.10).
+> replaced in full** and rewritten onto the frozen analysis basis: it describes
+> the **reported run — 85 units, 2,340 genomes** on a 22-core workstation — with
+> the **88-unit A100 run as the cross-hardware control**, superseding both the
+> earlier 82-unit run and the drafts in which the A100 run was designated
+> production. The substantive changes are: the corrected panel (**2,959**
+> assemblies after deduplication on BioSample, from 2,976 considered), assembler
+> selection and the recalibrated assembly-QC gate (2.12.1–2.12.3); unit
+> refinement and the Gate 1 / Gate 2 order that governs it (2.12.5); **r/m
+> reported only for the 47 in-window units, median 7.70** (2.12.7), on an
+> alignment-derived Gate 1 (2.6.1); and the reproducibility control (2.12.10).
 
 > **Status.** Sections 2.1–2.11 describe the exploratory and calibration work,
 > written while the production run was still pending. **Section 2.12 describes
@@ -1494,11 +1497,20 @@ gave 47 units and a median of **7.26** — close in aggregate, but with a
 below-floor group whose composition did not hold up. The alignment-derived
 classification is the one reported.
 
-⚠ **Three r/m values are in circulation and only one is this analysis.** **7.70**
-is the reported figure (alignment-derived Gate 1, 85 units). **7.26** is the same
-partition scored through the Mash proxy. **7.38** is the A100 88-unit control.
-They differ by basis and by proxy, not by biology; none is a correction of
-another.
+⚠ **Four r/m values are in circulation and only one is this analysis.** They are
+the two partitions crossed with the two ways of measuring unit diversity, and
+they differ by basis and by partition, not by biology — none is a correction of
+another:
+
+| median r/m (n in-window) | Mash proxy | alignment-derived |
+|---|---|---|
+| **reported run** (workstation, 85 units) | 7.26 (47) | **7.70 (47)** |
+| control run (A100, 88 units) | 7.38 (47) | 7.44 (48) |
+
+**7.70 is the reported figure.** Read down a column to compare partitions and
+across a row to compare bases; a value taken from the wrong cell will look like a
+small discrepancy rather than a category error, which is why all four are
+tabulated here rather than mentioned in passing.
 
 **The reported recombination result for this collection is therefore
 r/m = 7.70 (median of 47 in-window units).** The all-unit median (5.51) mixes
@@ -1663,8 +1675,11 @@ configurations, agreeing to ~0.4% on the median unit — this is the empirical
 basis for treating the two partitions as comparable, rather than assuming it from
 the configuration.
 
-**Effect of refinement.** The pre-split `strain_1_L1_26` measured r/m 3.10 and was
-**in-window**; its three children measured 1.07, 6.68 and 2.63.
+**Effect of refinement.** The unsplit `strain_1_L1_26` — the unit as it stands in
+the reported partition, n = 153 — measures r/m **4.47** and is **in-window**, at a
+mean pairwise distance of 1,310. The control run refines it into three children,
+measuring r/m 1.07 (n = 98), 6.68 (`strain_1_L1_36`, n = 47) and 2.63
+(`strain_1_L1_37`, n = 8).
 
 **The n=98 child is a clonal expansion, and the gate is right to exclude it.**
 Computed directly from its own `core.tab` sites over its 98 members, its mean
@@ -1674,26 +1689,35 @@ SNPs of one another, unimodally distributed, is a recent clonal expansion; at 72
 SNPs it sits an order of magnitude below the Gate 1 floor, which is precisely
 where r/m is not a measurement. Its r/m of 1.07 is a detection floor, not a
 biological estimate. `strain_1_L1_36` by contrast has mean pairwise distance
-1,126 and is in-window with r/m 6.68.
+**1,477** and is in-window with r/m 6.68.
 
 **So refinement did not increase the measurable set**, as stated below: the
 unsplit parent was one in-window unit and the split yields one in-window child.
 
 Two bookkeeping corrections apply to the counts, neither affecting that reading.
-Under the alignment-derived Gate 1 the in-window count is **48 in the production
-run and 47 in the control**, not 47 in both — but the additional unit is
-`strain_1_L1_11`, reclassified from above-ceiling, not a refinement child.
-And **`DISTANCES_v4c_SUMMARY.tsv` must not be joined to the production
-partition by unit name**: three of its rows (`strain_1_L1_11`,
-`strain_1_L1_22`, `strain_1_L1_26`) carry the *control* run's membership while
-the rest match production, so it reports the unsplit parent's diversity (1,310)
-against the production run's n=98 child (72). Diversity for those three must be
-recomputed on production membership, as it was here. The in-window median is
-unaffected either way — **7.44** — because the two units this misplaces both sit
-below it.
+Under the alignment-derived Gate 1 the in-window count is **47 in the reported
+run and 48 in the control**, not 47 in both — the control's extra unit is
+`strain_1_L1_11`, which its smaller membership (n = 18) brings down from
+above-ceiling into the window, not a refinement child.
+
+And **`DISTANCES_v4c_SUMMARY.tsv` must not be joined to the *control* partition
+by unit name**, because the file is keyed to two partitions at once. Its rows for
+`strain_1_L1_11` (n = 24), `strain_1_L1_22` (n = 34) and `strain_1_L1_26`
+(n = 154) carry the **reported** run's membership, while it simultaneously holds
+`strain_1_L1_36` and `strain_1_L1_37`, which exist only in the control — so those
+genomes are counted twice, and the file's 88 unit names are not any one run's
+partition. Joined to the control by name it would hand the n = 98 child the
+unsplit parent's diversity, 1,310, in place of its own 72. Diversity for those
+units must be recomputed on control membership, as it was here; the control's
+in-window figures are **unaffected either way — 48 units, median r/m 7.44** —
+because the two units this misplaces swap in and out and both sit below the
+median. Joining the file to the *reported* partition is sound, and is what
+`generate_numbers.py` does: the reported r/m table carries only the 85 reported
+units, so the control-only rows drop out on the join.
 
 The comparability argument above is unaffected, and is if anything strengthened:
-the two runs' in-window medians are **7.44 and 7.70**, agreeing to 3.5%.
+the two runs' in-window medians are **7.70 (reported) and 7.44 (control)**,
+agreeing to 3.5%.
 Refinement therefore did not increase the measurable set; its contribution is
 that it separates a genuine clonal expansion from the in-window population that
 surrounds it, and surfaces heterogeneity (1.07 to 6.68) that the combined unit

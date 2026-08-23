@@ -83,10 +83,19 @@ Analysed subsets, which are **not** the panel and must never be conflated:
 
 | set | n | file |
 |---|---|---|
-| panel | 2,976 | `L1v4c_MERGED_METADATA.tsv` |
-| analysed, Track A (workstation) | 2,352 in 86 units | `curated_L1v4c_clusters.tsv` |
-| analysed, A100 (production) | 2,342 in 88 units | A100 `curated_L1v4c_refs.final.tsv` |
+| **analysed — REPORTED** | **2,340 in 85 units** | `FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv` |
+| panel, corrected | 2,959 | `PANEL_v4d_2026-08-21.tsv` |
+| panel, before deduplication | 2,976 | `L1v4c_MERGED_METADATA.tsv` |
+| analysed, A100 (**control**) | 2,342 in 88 units | A100 `curated_L1v4c_refs.final.tsv` |
+| intermediate, pre-correction | 2,352 in 86 units | `curated_L1v4c_clusters.tsv` — **not an analysed set** |
 | distance / ClonalFrameML tables | 86 of 88 units, 172 of 176 replicon-units | two units are A100-only |
+
+> **⚠ Corrected 2026-08-23.** This table previously labelled the A100 run
+> "production" and gave no row for the reported basis. The reported analysis is
+> the **85-unit / 2,340-genome workstation run**; the A100 88-unit run is the
+> cross-hardware control. `curated_L1v4c_clusters.tsv` (2,352) is a
+> pre-correction intermediate that still lists `SRR2896257` — never subtract your
+> way from it to the analysed set; read `FINAL_PARTITION.tsv`.
 
 ---
 

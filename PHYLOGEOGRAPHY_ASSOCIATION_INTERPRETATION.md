@@ -10,8 +10,24 @@ repeated at three geographic scales — sub-national, national, continental — 
 establish *which* geographic unit the signal actually attaches to, rather than
 assuming that a significant "country" result means the structure is national.
 
-All results below are from the **A100 88-unit v4c production partition**, 1,000
+All results below are from the **A100 88-unit v4c partition**, 1,000
 permutations, seed 20260815.
+
+> **⚠ SUPERSEDED FOR THE REPORTED NUMBERS (banner added 2026-08-23).** Two things
+> changed after this document was written.
+>
+> 1. **The A100 run is no longer the production run.** It is now the
+>    cross-hardware **control**; the reported run is the 22-core workstation,
+>    **85 units / 2,340 genomes**. Wherever this document says "production", read
+>    "control".
+> 2. **The association test was re-run on the frozen basis** at all three scales.
+>    Quote `PHYLOGEO_FROZEN_{subnational,national,regional}_2026-08-23.tsv`, not
+>    the figures below. **One claim did not survive**: sub-national is **1 of 81**
+>    units, not the 0 of 88 reported here. National is 6 of 48 and regional 1 of
+>    17.
+>
+> §1–§4 — what the test computes and how to read it — are unaffected and remain
+> the reference for that. §5–§7 are superseded in their numbers.
 
 ---
 

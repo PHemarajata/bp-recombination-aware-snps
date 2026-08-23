@@ -2,18 +2,28 @@
 
 2026-08-21. Closes weak spot **W3** of `MANUSCRIPT_OUTLINE_2026-08-21.md`.
 
-> **Which number goes in the paper: 7.44.** `METHODS_DRAFT` §2.12 designates the
-> **88-unit A100 run as the production run**, and on that run the
-> alignment-derived Gate 1 gives **48 in-window units, median r/m 7.44**
-> (below floor 14 / 1.31, above ceiling 26 / 2.15). The **7.70 (n=47)** derived
-> below is the **86→85-unit workstation control run**. Both are computed the same
-> way; they differ only in which run's r/m table they score. **Do not mix them** —
-> that is the error this whole line of work exists to prevent. Their closeness
-> (7.44 vs 7.70, 3.5%) is a comparability result, not a discrepancy.
+> **⚠ THIS BOX WAS REVERSED. Which number goes in the paper: 7.70 (n = 47).**
+>
+> As originally written this box said 7.44, because `METHODS_DRAFT` §2.12 then
+> designated the **88-unit A100 run** as production. **That designation has since
+> been reversed.** The reported run is the **22-core workstation, 85 units, 2,340
+> genomes**, and on it the alignment-derived Gate 1 gives **47 in-window units,
+> median r/m 7.70** (below floor 12 / 1.32, above ceiling 26 / 2.14). The
+> **7.44 (n = 48)** derived below is the **A100 cross-hardware control**.
+>
+> Both are computed the same way and differ only in which run's r/m table they
+> score. **Do not mix them** — that is the error this whole line of work exists to
+> prevent. Their closeness (7.70 vs 7.44, 3.5%) is a comparability result, not a
+> discrepancy. See §7c for all four circulating values tabulated.
 
-**Headline on the control run: 7.70, not 7.26.** The window's *structure* is
+**Headline on the reported run: 7.70, not 7.26.** The window's *structure* is
 confirmed and is sharper than the Mash proxy showed. Its *floor* was in the wrong
 place — carried across unit systems without translation.
+
+> **Reading note.** Below this point the body still says "control run" where it
+> means the workstation run that is now *reported*, and vice versa. The
+> derivations and every number are correct; only the two run labels were swapped
+> by the later redesignation. §7b and §7c are written in the current designation.
 
 ---
 
@@ -165,33 +175,59 @@ r/m, and it is confirmed *more* strongly than the proxy suggested. **Quote 7.70
 
 ## 7b. ⚠ A defect in `DISTANCES_v4c_SUMMARY.tsv` found 2026-08-22
 
+> **⚠ LABELS CORRECTED 2026-08-23.** This section was written when the **A100 /
+> 88-unit** run was designated *production* and the **workstation / 85-unit** run
+> was the *control*. **That designation has since been reversed**: the reported
+> run is the 22-core workstation (85 units, 2,340 genomes) and the A100 run is the
+> cross-hardware control. Every "production"/"control" below has been rewritten to
+> the current designation. **No number changed** — only which run each belongs to.
+> The inverted text had already propagated into `METHODS_DRAFT` §2.12.10, where it
+> was corrected the same day. If you are reading an older copy of this section,
+> distrust its run labels and trust the table.
+
 The file is **keyed to two different partitions at once.** Eighty-five of its 88
-rows carry the production (A100) membership, but **`strain_1_L1_11` (24 vs 18),
-`strain_1_L1_22` (34 vs 32) and `strain_1_L1_26` (154 vs 98) carry the control
-run's**, and it simultaneously holds `strain_1_L1_36`/`strain_1_L1_37`, which are
-production-only children of `strain_1_L1_26`. Those 153 genomes are therefore
-counted twice.
+rows carry membership the two runs agree on, but **`strain_1_L1_11` (24 vs 18),
+`strain_1_L1_22` (34 vs 32) and `strain_1_L1_26` (154 vs 98) carry the
+*reported* run's**, and it simultaneously holds
+`strain_1_L1_36`/`strain_1_L1_37`, which are **control-only** children of
+`strain_1_L1_26`. Those 153 genomes are therefore counted twice, and the file's
+88 unit names are not any one run's partition.
 
-**Consequence.** Joining it to the production r/m table by unit name gives
-`strain_1_L1_26` the unsplit parent's diversity, **1,310**, when its own 98
-members sit at **72**. Recomputed on production membership from `core.tab`:
+**Consequence.** Joining it to the **control** r/m table by unit name gives the
+n = 98 child the unsplit parent's diversity, **1,310**, when its own members sit
+at **72**. Recomputed on control membership from `core.tab`:
 
-| unit | production n | true diversity | as filed | effect |
+| unit | control n | true diversity | as filed | effect |
 |---|---|---|---|---|
 | `strain_1_L1_11` | 18 | 3,424 | 5,819 | above ceiling → **in-window** |
 | `strain_1_L1_22` | 32 | 3,672 | 4,525 | no change |
 | `strain_1_L1_26` | 98 | **72** | 1,310 | in-window → **below floor** |
 
-**The headline is unaffected: 48 in-window, median r/m 7.44, either way** — the
-two misplaced units swap in and out and both sit below the median. The
-*composition* changes, and that is what matters for §2.12.10.
+**The control's figures are unaffected: 48 in-window, median r/m 7.44, either
+way** — the two misplaced units swap in and out and both sit below the median.
+The *composition* changes, and that is what matters for §2.12.10.
 
-**The control-run figure (7.70) is not affected at all**, because for those three
-units the file's membership *is* the control run's. `generate_numbers.py`, which
-joins to the control table, is correct as written.
+**The reported figure (7.70, 47 units) is not affected at all**, because for
+those three units the file's membership *is* the reported run's.
+`generate_numbers.py`, which joins to the reported r/m table, is correct as
+written — and is doubly safe, because that table carries only the 85 reported
+units, so the control-only rows drop out on the join.
 
-**Rule: do not join `DISTANCES_v4c_SUMMARY.tsv` to the production partition by
-unit name.** Recompute diversity on production membership first.
+**Rule: do not join `DISTANCES_v4c_SUMMARY.tsv` to the *control* partition by
+unit name.** Recompute diversity on control membership first.
+
+### 7c. The four r/m values, tabulated
+
+Partition × basis. Verified 2026-08-23 by recomputing all four cells:
+
+| median r/m (n in-window) | Mash proxy | alignment-derived |
+|---|---|---|
+| **reported run** (workstation, 85 units) | 7.26 (47) | **7.70 (47)** |
+| control run (A100, 88 units) | 7.38 (47) | 7.44 (48) |
+
+Quote **7.70**. The other three are real measurements of something else, which is
+what makes them dangerous: a value from the wrong cell reads as a rounding
+discrepancy rather than a different analysis.
 
 ## 8. Reproduce
 
