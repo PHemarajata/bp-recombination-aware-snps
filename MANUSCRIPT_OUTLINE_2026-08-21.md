@@ -410,24 +410,41 @@ Fitch parsimony on the corrected tree, 1,000 permutations, with a **BioProject
 control on the identical tree** — the decisive question being *is country
 significant in a way study-of-origin is not?*
 
+✅ **Re-run at all three scales on the frozen 85-unit basis, 2026-08-23**
+(`PHYLOGEO_FROZEN_*_2026-08-23.tsv`, seed 20260823). The table below is the
+current one; the 88-unit version it replaces is in the note beneath.
+
 | scale | testable | raw p≤0.05 | survives FDR | **passes the control** |
 |---|---|---|---|---|
-| sub-national | 83 | 17 | 11 | **0** |
-| national | 49 | 26 | 24 | **6** |
-| regional | 16 | 4 | 3 | **1** |
+| sub-national | **81** | 16 | 10 | **1** |
+| national | **48** | 26 | 23 | **6** |
+| regional | **17** | 4 | 3 | **1** |
 
-I re-derived the **6** independently: 11 units are country-clustered with
-BioProject clean, but the **vacuous-control gate removes 4** (the control never
-ran) and q<0.05 removes 1. The gate does real work — it eliminates **36% of
-apparent passes** — and should be described in Methods as a result in itself.
+The control does the decisive work: at national scale it removes **12 units as
+confounded** plus 5 with a vacuous control, cutting 23 FDR survivors to 6. It
+should be described in Methods as a result in itself.
 
-**All six are Southeast Asian. Every Americas unit fails**, including the
-Mississippi unit (p = 1.0000) and `strain_4_L1_4` (country p = 0.0010 *and*
-BioProject p = 0.0010 at 31/33 coverage — a well-powered negative).
+**The six national passes are dominated by Southeast and East Asian countries** —
+⚠ *not* "all six are Southeast Asian": `strain_1_L1_5` is Singapore 10 / **France
+5** / Malaysia 2, and it is also the single regional-scale pass, where the
+Singapore/Malaysia-versus-France split is genuinely inter-regional.
 
-**Sub-national geography is indistinguishable from study of origin: 0 of 88.**
-A label like `Thailand :: Nakhon Phanom` is very nearly the name of a collection
-effort.
+**Every Americas unit fails**, by three routes: Mississippi `strain_4_L1_1` null
+at p = 1.0000, `strain_4_L1_2` null at 0.068, `strain_4_L1_3` vacuous control,
+and `strain_4_L1_4` / `strain_1_L1_7` **confounded** at p = 0.0010 — well-powered
+negatives. The Viet Nam/Georgia unit `strain_22_L1_1` is **null (p = 0.0430)**,
+consistent with R7.2's one-locus boundary.
+
+⚠ **CORRECTED: sub-national is 1 of 81, not 0 of 88.** The previous claim
+*"sub-national geography is indistinguishable from study of origin: 0 of 88"* was
+computed on the A100 control partition and **does not survive re-derivation**.
+The single exception, `strain_1_L1_33`, is **dominated by one Thai province**
+(Ubon Ratchathani, 16 of 24 labelled tips — among the most intensively sampled
+melioidosis sites anywhere), and its **q = 0.0486 barely clears** FDR at 5%.
+
+Write it as **80 of 81 testable units**, not zero. A label like
+`Thailand :: Nakhon Phanom` is *very nearly* the name of a collection effort —
+and "very nearly" is doing real work there.
 
 ### R7 — What is operationally usable: two US autochthonous foci
 

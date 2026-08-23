@@ -6,11 +6,10 @@ the frozen basis. **Every figure is annotated with its `NUMBERS.tsv` key** in
 annotations before submission. Run `generate_numbers.py` and `freeze_basis_bp.py`
 before treating any number here as current.
 
-⚠ **Verification status.** R6's *country* row and R7's Gulf Coast distances were
-**recomputed on the frozen basis 2026-08-23** and are now verified. Two sets
-remain **[unverified]**: the **R5 ST/homoplasy counts**, and R6's **sub-national
-and regional** rows, which were computed on the A100 88-unit control partition
-and need regenerating. Recompute both before submission.
+⚠ **Verification status.** R6 (all three scales) and R7's Gulf Coast distances
+were **recomputed on the frozen basis 2026-08-23** and are verified. One set
+remains **[unverified]**: the **R5 ST/homoplasy counts**. Recompute before
+submission.
 
 ---
 
@@ -232,51 +231,67 @@ ceiling we report.
 
 ## R6. Where geographic signal exists, and where it is indistinguishable from study of origin
 
-Fitch parsimony of country labels on each unit's recombination-corrected
-topology, against a null of 1,000 label permutations across the tips of the same
+Fitch parsimony of geographic labels on each unit's recombination-corrected
+topology against a null of 1,000 label permutations across the tips of the same
 tree, with **BioProject tested identically on the same trees** as a companion
-control. **Re-run on the reported 85-unit basis, 2026-08-23**
-(`PHYLOGEOGRAPHY_ASSOCIATION_FROZEN_2026-08-23.tsv`, seed 20260823).
+control. **Re-run at all three scales on the reported 85-unit basis, 2026-08-23**
+(`PHYLOGEO_FROZEN_{subnational,national,regional}_2026-08-23.tsv`, seed 20260823).
+Only the label column changes between scales.
 
-| country scale | units |
-|---|---|
-| testable (≥2 distinct country values) | **48** (37 single-valued, untestable) |
-| clustered at p ≤ 0.05 | **26** |
-| surviving BH-FDR 5% | **23** |
-| **passing the BioProject control** | **6** |
-| confounded (BioProject equally significant) | 12 |
-| control vacuous (BioProject single-valued) | 5 |
+| scale | labels | testable units | clustered p ≤ 0.05 | survives FDR | **passes the BioProject control** |
+|---|---|---|---|---|---|
+| sub-national | `country :: subregion` | 81 | 16 | 10 | **1** |
+| national | country | 48 | 26 | 23 | **6** |
+| regional | World Bank region | 17 | 4 | 3 | **1** |
 
-**Only 6 of 48 testable units carry country signal that is distinguishable from
-study of origin.** The control does substantial work — it removes 12 units that
-would otherwise have counted as geographic, plus 5 where it could not run — and
-should be reported as a result rather than as housekeeping.
+Populated-label fractions are 79.6%, 99.8% and 99.8% respectively.
 
-**The six are all dominated by Southeast and East Asian countries**:
-`strain_5_L1_3` (Thailand 35 / Laos 6), `strain_1_L1_5` (Singapore 10 / France 5
-/ Malaysia 2), `strain_11_L1_5` (Thailand 37 / Cambodia 3), `strain_2_L1_2`
-(Thailand 72 / Laos 2), `strain_1_L1_28` (Thailand 53 / China 2) and
-`strain_1_L1_11` (China 8 / Thailand 8 / Laos 3). *(Note `strain_1_L1_5` carries
-a substantial French component and should not be described as purely Southeast
-Asian.)*
+**How much can even be asked differs enormously by scale, and that is a sampling
+fact rather than a biological one.** At regional scale **68 of 85 units contain a
+single region** and no test can run on them, because 91.8% of the panel is East
+Asia & Pacific. At national scale 37 units are single-country.
 
-**Every Americas-dominated unit fails**, by one of three routes: the Mississippi
-Gulf Coast unit `strain_4_L1_1` is **null at p = 1.0000**; `strain_4_L1_2` is null
-at p = 0.068; `strain_4_L1_3` has a vacuous control; and `strain_4_L1_4` and
-`strain_1_L1_7` are **confounded** — country and BioProject equally significant,
-which is a well-powered negative rather than an absence of power.
+**The BioProject control does the decisive work.** At national scale it removes
+**12 units as confounded** — country and BioProject equally significant — plus 5
+where the control could not run, cutting 23 FDR survivors to 6.
 
-**The Viet Nam/Georgia unit `strain_22_L1_1` is null (p = 0.0430, not surviving
-FDR)** — the country label carries no signal distinguishable from chance on that
-tree, exactly as the one-locus boundary in R7.2 predicts.
+**The six national-scale passes are all dominated by Southeast and East Asian
+countries**: `strain_5_L1_3` (Thailand 35 / Laos 6), `strain_1_L1_5` (Singapore
+10 / France 5 / Malaysia 2), `strain_11_L1_5` (Thailand 37 / Cambodia 3),
+`strain_2_L1_2` (Thailand 72 / Laos 2), `strain_1_L1_28` (Thailand 53 / China 2)
+and `strain_1_L1_11` (China 8 / Thailand 8 / Laos 3). *(`strain_1_L1_5` carries a
+substantial French component and should not be described as purely Southeast
+Asian; it is also the single unit that passes at regional scale, where the
+Singapore/Malaysia-versus-France split is genuinely inter-regional.)*
 
-⚠ **The sub-national and regional rows of this analysis have NOT been re-run on
-the reported basis.** The three-scale version (sub-national 83 testable / 0
-passing; regional 16 testable / 1 passing) was computed on the **A100 88-unit
-control partition** and must be regenerated before it appears in the paper. The
-headline sub-national claim — that geographic signal is indistinguishable from
-study of origin at every sub-national unit tested — is expected to survive, but
-is currently **[unverified on this basis]**.
+**Every Americas-dominated unit fails**, by three distinct routes: the Mississippi
+Gulf Coast unit `strain_4_L1_1` is **null at p = 1.0000**, `strain_4_L1_2` is null
+at p = 0.068, `strain_4_L1_3` has a vacuous control, and `strain_4_L1_4` and
+`strain_1_L1_7` are **confounded** at p = 0.0010 — country and BioProject equally
+significant, which is a well-powered negative rather than absence of power. The
+Viet Nam/Georgia unit `strain_22_L1_1` is **null (p = 0.0430, not surviving
+FDR)**, consistent with the one-locus boundary in R7.2.
+
+### Sub-national signal is very nearly absent, but not quite zero
+
+⚠ **This corrects an earlier claim.** On the previous 88-unit basis the
+sub-national scale returned **0 of 83** units passing the control, and the
+generalisation "sub-national geography is indistinguishable from study of origin"
+was written on that. On the reported basis **1 of 81 passes**, and the claim must
+be stated as *very nearly* absent rather than absent.
+
+The single unit is `strain_1_L1_33` (n = 27, 24 labelled, 6 distinct sub-national
+labels, p = 0.0060). Three things should be said with it. It is **dominated by one
+Thai province** — Ubon Ratchathani, 16 of 24 — which is among the most intensively
+sampled melioidosis sites in the world. Its **q = 0.0486 only barely survives**
+FDR correction at 5%. And it is **1 unit in 81**.
+
+The honest statement is therefore: **sub-national geography is indistinguishable
+from study of origin in 80 of 81 testable units**, and the single exception is a
+marginal result in the most heavily sampled province in the collection. A label
+such as `Thailand :: Nakhon Phanom` is very nearly the name of a collection
+effort — but "very nearly" is doing real work in that sentence and we should not
+round it to zero.
 
 ## R7. What is operationally usable: two US autochthonous foci
 
