@@ -168,15 +168,35 @@ main blocker in §2 is cleared. Remaining, in priority order:
 | §2.6.3 union self-contradiction | ✅ stale paragraph deleted |
 | §2.12.13 production/control designation | ✅ fixed |
 | branch support on the reported basis | ✅ 170/170, all trees now carry SH-aLRT/UFBoot |
-| **`+ASC` vs `-fconst`** | ⚠ **OPEN and now sharper** — config confirms production used `GTR+ASC` with `iqtree_fconst=null`, contradicting §2.5. Quantify on one unit before submission. |
+| **`+ASC` vs `-fconst`** | ✅ **RESOLVED** — quantified on two units. §2.5 is right (`+ASC` estimates 41.9–72.1% GC, median 56.3%, against a true 68.1%; `-fconst` gives 67.6–68.7%, median 68.1%) but **it changes no reported number**, because every reported quantity derives from Gubbins outputs. `ASC_FCONST_RESULT_2026-08-23.md`. Support trees rebuilt with `-fconst`: `L1v4c_TREES_SUPPORTED_FCONST/`, 170/170 — **publish that set** |
 | Results R1–R8 draft | ✅ written, figures annotated with their keys |
 | R6 country scale | ✅ re-run on the frozen basis (48/26/23/6) |
 | R6 sub-national + regional | ✅ re-run on the frozen basis; **sub-national is 1 of 81, not 0 of 88** |
 | R5 ST/homoplasy counts | ✅ recomputed from `MLST_v4c.tsv`; ST92 is **3** lineages not 4, ST58 is **5** countries not 3 |
 | citations | ✅ 13 verified, 6 resolved, 2 added; "Pearson 2020" unciteable |
-| **DeepSANet rebuttal** | ⚠ **new blocker** — read PMID 41185308's holdout design before drafting the Discussion |
+| **DeepSANet rebuttal** | ✅ **answerable without the PDF** — the released code sets `TEST_PATH == VAL_PATH` and selects the checkpoint by max val accuracy. Phrase as *"in the released reference implementation"*, and note accuracy ≠ macro F1. Obtaining the paywalled PDF (open item 5) would sharpen the wording but does not gate the Discussion |
+| run designation (production/control) | ✅ **fixed 2026-08-23 evening** — the flip had reached 3 files of 6; `GATE1_ALIGNMENT_RESULT` was telling readers to publish **7.44**. `RUN_DESIGNATION_CORRECTION_2026-08-23.md` |
 
 **The verdict is unchanged in shape but the balance has shifted: Methods is no
-longer the blocker, and the two genuine remaining risks are the `+ASC` question
-and the DeepSANet comparison.** Both are answerable in a day and neither is a
-data problem.
+longer the blocker, and both of the risks flagged above — the `+ASC` question and
+the DeepSANet comparison — are now closed.** What remains is not analysis but
+assembly: the four small Results gaps in §1, Figure 1, and the non-science
+submission blockers.
+
+## 7. Status update — 2026-08-23 evening
+
+The remaining work is bounded and none of it is a data problem:
+
+| item | state |
+|---|---|
+| §1 gap: MLST row of Table 5 on n=46 | open, small |
+| §1 gap: accessory control sub-numbers still n=43 | open, small |
+| §1 gap: R7 needs Georgia as a second US focus | open, small |
+| §1 gap: Figure 1 flow diagram | ✅ **done** — `make_figure1_bp.py` → `FIGURE1_STUDY_FLOW.svg` (+ `_dark` variant). Reads `NUMBERS.tsv` and **exits non-zero on a missing key**, so it cannot ship with a hole in it. Regenerate with `python3 generate_numbers.py && python3 make_figure1_bp.py` |
+| IRB approval number in Methods | **needs the lab record** — cannot be resolved from artifacts |
+| data availability + deposit new assemblies | open |
+| pinned production command line (branch + commit) | open |
+| reproducibility test end-to-end | open — real compute, do before submission |
+
+**The one item nobody in this repository can close is the IRB number.** Every
+other open item is either mechanical or a compute run.
