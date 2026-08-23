@@ -4,6 +4,19 @@ Drafted 2026-08-21 from a full re-read of the 62-document corpus plus direct
 recomputation from the result tables. Every number below was either verified
 against the primary TSV or is cited to the document that owns it.
 
+> **⚠ Numbers span three analyses and two eras — do not read them as one series,
+> and do not find-replace across them.** The spine (§2) quotes the original
+> **core-genome SNP** result on **n=24** (0/24 country, 22/24 = 92% region); the
+> weak-spots (§5) quote intermediate **cgMLST** runs (n=24, n=29, n=43). The
+> **current cgMLST headline is the Track 0 integrated n=46 set (2026-08-23):
+> country NN 10/46 (22%), region modal-k20 41/46 (89%, κ 0.832), country
+> close-relative 2/14, and North America now testable (Mississippi → Latin
+> America, a certain-origin miss).** These live in `NUMBERS.tsv` and
+> `TRACK0_INTEGRATION_2026-08-23.md`. Before submission this outline needs a
+> reconciliation pass that states, per figure, *which* validation set and *which*
+> typing system it belongs to — a mechanical sweep would corrupt the distinct
+> core-genome and cgMLST results.
+
 **Read §1 first. It is the only part that is a decision rather than a finding.**
 
 ---

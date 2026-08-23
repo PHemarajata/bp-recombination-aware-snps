@@ -37,7 +37,7 @@ same answer, which is about as direct a robustness check as this project can run
 
 ## The correction this forces
 
-The full Lichtenegger run scores country **9/43 (21%, nearest neighbour)** while
+The full Lichtenegger run scores country **10/46 (22%, nearest neighbour)** while
 the PubMLST run scored **0/30**. That gap is easy to misread as the new scheme
 recovering signal. It does not.
 

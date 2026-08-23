@@ -3,6 +3,15 @@
 Read this first. Working directory
 `/home/phemarajata/Downloads/snp-mod-local-working`.
 
+> ## ⚑ SUPERSEDED NUMBERS BELOW — 2026-08-23 Track 0 integration
+>
+> The attribution figures in this handoff (country 9/43, region 93%, 1/13, etc.)
+> are the **n=43** set as of 08-22. The validation set is now **46**:
+> **country NN 10/46 (22%), region modal-k20 41/46 (89%, κ 0.832), close-relative
+> 2/14**, and **North America is testable** (Mississippi autochthonous → Latin
+> America). Current numbers: `NUMBERS.tsv` and `TRACK0_INTEGRATION_2026-08-23.md`.
+> Leave-outbreak-out is implemented (`LEAVE_OUTBREAK_OUT_2026-08-23.md`).
+
 > ## ⚑ THE BASIS IS FROZEN — 2026-08-22
 >
 > **`FINAL_BASIS_2026-08-22/` — 85 units, 2,340 genomes.** The corrected

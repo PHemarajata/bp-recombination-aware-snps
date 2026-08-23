@@ -37,7 +37,7 @@ where the paper's claims are sharpest.
 
 | stratum | n | current result |
 |---|---|---|
-| d < 0.05 (a close relative exists) | **13** | **1/13** — the strongest anti-country result |
+| d < 0.05 (a close relative exists) | **13→14** | **1/13 → 2/14** post-Track-0 — still the strongest anti-country result |
 | 0.05 ≤ d < 0.30 | 8 | 2/8 |
 | d ≥ 0.30 (no relative) | 22 | 6/22, all attractor hits |
 

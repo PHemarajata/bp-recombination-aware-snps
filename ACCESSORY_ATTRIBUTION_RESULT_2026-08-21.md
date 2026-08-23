@@ -8,6 +8,14 @@ have changed the paper's headline.
 result is strengthened.** This is outcome 3 of the three the handoff pre-declared
 as publishable. One fragile, testable positive lead survives (§6).
 
+> **All numbers below are the n=43 validation set of 2026-08-21 — the coherent
+> experiment as run.** The Track 0 integration (2026-08-23) grew the set to 46:
+> the headline shifts to **accessory country 14/46 (30%) vs core 10/46 (22%)**,
+> i.e. the accessory-over-core margin and the "fails its controls" conclusion are
+> unchanged. Exact n=46 control sub-numbers (contig strata, permutation null,
+> the 0/13 close-relative stratum) require re-running `accessory_control_bp.py`;
+> the story does not depend on them. See `TRACK0_INTEGRATION_2026-08-23.md`.
+
 ---
 
 ## 1. The headline number, and why it does not mean what it looks like

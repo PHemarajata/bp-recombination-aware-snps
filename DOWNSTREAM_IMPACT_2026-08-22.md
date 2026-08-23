@@ -14,13 +14,13 @@ restricted.**
 | result | status |
 |---|---|
 | **ν hypothesis refuted** | **survives** — see §2 |
-| Country attribution fails; region ~93% | **unaffected** — cgMLST-based, partition-independent |
+| Country attribution fails; region ~89% (was 93% pre-Track-0) | **unaffected by the freeze** — cgMLST-based; region moved only because Track 0 added testable North America |
 | Accessory attribution fails its controls | **unaffected** — same reason |
 | Phylogeography: 46 significant unit-variable tests | **unaffected** — see §3 |
 | cgMLST vs SNP concordance | **recomputed: +0.861** — see §4 |
 
 The entire attribution programme — the paper's spine — never used the partition.
-`CGMLST_LICHT_ATTRIBUTION.tsv` scores 43 validation genomes of which 19 are not
+`CGMLST_LICHT_ATTRIBUTION.tsv` scores 46 validation genomes of which 19 are not
 in the frozen partition at all, exactly as it should be.
 
 ## 2. ν refutation — survives, numbers move in the third decimal
@@ -90,15 +90,17 @@ reads cgMLST profiles, the panel, `EXPOSURE_OVERRIDES` and `assign_region.tsv` �
 
 | grouping (modal k=20) | acc | baseline | kappa |
 |---|---|---|---|
-| Asia vs non-Asia | 100% | 60% | **1.000** |
-| East vs West hemisphere | 95% | 65% | **0.901** |
-| region, 7-way | 93% | 47% | **0.890** |
-| SEA vs non-SEA | 74% | 58% | 0.425 |
-| country | 14% | 28% | 0.122 |
+| Asia vs non-Asia | 100% | 59% | **1.000** |
+| East vs West hemisphere | 96% | 63% | **0.909** |
+| region, 7-way | 89% | 46% | **0.832** |
+| SEA vs non-SEA | 76% | 59% | 0.461 |
+| country | 15% | 26% | 0.132 |
 
 The granularity ladder is partition-independent and unaffected by the freeze.
-(Country is quoted at 21% / κ=0.188 in the results because country's best
-estimator is nearest neighbour, not modal k=20 — name the estimator.)
+(Country is quoted at 22% / κ=0.193 in the results because country's best
+estimator is nearest neighbour, not modal k=20 — name the estimator.) **Numbers
+are the Track 0 integrated set, n=46 (2026-08-23); the pre-integration values
+were 93%/κ0.890 region, 21%/κ0.188 country — `TRACK0_INTEGRATION_2026-08-23.md`.**
 
 ## 6. Must not be trusted for unit membership
 

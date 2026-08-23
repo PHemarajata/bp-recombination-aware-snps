@@ -4,7 +4,7 @@
 settles the **Phase 1 expansion** question without any download.
 
 **Verdict: region attribution is real, not an attractor artifact. It survives a
-90× reduction of the dominant region with kappa falling only 0.89 → 0.81.
+90× reduction of the dominant region with kappa falling only 0.83 → 0.77.
 Country attribution stays at baseline under every panel configuration. A balanced
 reference panel neither rescues country nor breaks region — so Phase 1 would
 confirm what this free control already shows.**
@@ -15,7 +15,7 @@ confirm what this free control already shows.**
 
 The panel is imbalanced two ways: **58% Thailand** at the country level, and
 **89% East Asia & Pacific (2,692 of 3,015 references)** at the region level. The
-attractor hypothesis (HANDOFF 2026-08-21 §3.3): region scores 93% partly because
+attractor hypothesis (HANDOFF 2026-08-21 §3.3): region scores 89% partly because
 a genome with no close relative snaps to the dominant cluster, and coarse 7-way
 region labels make that "correct" often enough to look like a capability. If so,
 balancing the panel should collapse region accuracy toward chance.
@@ -35,14 +35,14 @@ the estimator most exposed to pool composition.
 
 | cap/country | Thai n | pool | region NN (κ) | region k20 (κ) | country NN (κ) |
 |---|---|---|---|---|---|
-| full | 1,754 | 3,004 | +0.76 | **+0.89** | +0.19 |
-| 500 | 500 | 1,750 | +0.74 | +0.89 | +0.17 |
-| 200 | 200 | 1,273 | +0.74 | +0.89 | +0.16 |
-| 100 | 100 | 973 | +0.73 | +0.89 | +0.14 |
-| 50 | 50 | 730 | +0.75 | +0.89 | +0.14 |
-| 25 | 25 | 481 | +0.77 | **+0.89** | +0.13 |
+| full | 1,754 | 3,004 | +0.72 | **+0.83** | +0.19 |
+| 500 | 500 | 1,750 | +0.69 | +0.83 | +0.16 |
+| 200 | 200 | 1,273 | +0.69 | +0.83 | +0.15 |
+| 100 | 100 | 973 | +0.69 | +0.83 | +0.13 |
+| 50 | 50 | 732 | +0.70 | +0.83 | +0.13 |
+| 25 | 25 | 483 | +0.72 | **+0.83** | +0.11 |
 
-Region modal-k20 kappa is **flat at +0.89 (±0.00)** across a 70× cut of the
+Region modal-k20 kappa is **flat at +0.83 (±0.00)** across a 70× cut of the
 dominant country. But per-country capping leaves East Asia & Pacific dominant as
 a *region* (it is many countries), so this is not yet the decisive test.
 
@@ -50,20 +50,20 @@ a *region* (it is many countries), so this is not yet the decisive test.
 
 | cap/region | EAP n | pool | region NN (κ) | region k20 (κ) |
 |---|---|---|---|---|
-| 200 | 200 | 512 | +0.73 ±0.01 | +0.88 ±0.02 |
-| 100 | 100 | 412 | +0.72 ±0.02 | +0.82 ±0.03 |
-| 50 | 50 | 288 | +0.68 ±0.07 | +0.83 ±0.03 |
-| 30 | 30 | 208 | +0.67 ±0.07 | **+0.81 ±0.08** |
+| 200 | 200 | 512 | +0.67 ±0.02 | +0.82 ±0.01 |
+| 100 | 100 | 412 | +0.65 ±0.02 | +0.76 ±0.03 |
+| 50 | 50 | 290 | +0.64 ±0.04 | +0.76 ±0.04 |
+| 30 | 30 | 210 | +0.64 ±0.04 | **+0.77 ±0.06** |
 
 **EAP drops from 89% of the pool to ~15% — a 90× cut — and region modal-k20 kappa
-falls only from 0.89 to 0.81.** An attractor artifact would collapse toward 0;
+falls only from 0.83 to 0.77.** An attractor artifact would collapse toward 0;
 this does not. Region attribution genuinely reads the genome's regional cohort,
 not the panel's shape.
 
-The **modest, honest** decline (0.89 → 0.81, and NN 0.76 → 0.67) says a small
+The **modest, honest** decline (0.83 → 0.77, and NN 0.72 → 0.64) says a small
 part of the headline accuracy — on the order of 10% of the kappa — was
 imbalance-assisted. At the most extreme balancing the pool is only 208 genomes,
-so the ±0.08 spread means 0.81 is within sampling noise of the full-panel value.
+so the ±0.06 spread means 0.77 is within sampling noise of the full-panel value.
 Either way it is a slight erosion, not a collapse.
 
 ## 5. Country: not rescued by balance
@@ -83,7 +83,7 @@ free:**
 
 - **Country: no.** Balancing cannot rescue it; the ceiling is divergence depth,
   not reference count.
-- **Region: barely.** Balancing erodes region kappa by ~0.08 at the extreme, well
+- **Region: barely.** Balancing erodes region kappa by ~0.06 at the extreme, well
   within noise — the signal is not a panel artifact.
 
 So a blanket Phase 1 expansion — download, assemble and QC ~2,000 genomes to
