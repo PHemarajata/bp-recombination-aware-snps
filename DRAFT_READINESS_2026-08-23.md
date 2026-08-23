@@ -35,12 +35,17 @@ summaries.
 
 **Remaining Results gaps, all small:**
 
-| gap | effort | blocking? |
-|---|---|---|
-| MLST row of Table 5 predates the correction — re-run on n=46 | small | no, tag it |
-| Accessory control sub-numbers still n=43 (headline already corrected) | small | no |
-| R7 needs Georgia added as a second autochthonous focus (below) | small | no |
-| Flow diagram (Figure 1) does not exist; all five numbers now do | small | no |
+> **✅ ALL FOUR CLOSED as of 2026-08-24 — see §7.** Retained as written because
+> the estimate ("three are re-run a script and update a row") turned out to be
+> wrong about one of them in an instructive way: the MLST re-run did not update a
+> row, it invalidated the cell. Left here as a calibration note.
+
+| gap | effort | blocking? | outcome |
+|---|---|---|---|
+| MLST row of Table 5 predates the correction — re-run on n=46 | small | no, tag it | ✅ **changed the claim** — the cell is now a bound, not an accuracy |
+| Accessory control sub-numbers still n=43 (headline already corrected) | small | no | ✅ all sub-numbers at n=46; conclusions unchanged |
+| R7 needs Georgia added as a second autochthonous focus (below) | small | no | ✅ was already drafted; figures re-verified |
+| Flow diagram (Figure 1) does not exist; all five numbers now do | small | no | ✅ `make_figure1_bp.py` |
 
 None of these blocks writing. Three are "re-run a script and update a row".
 
@@ -191,7 +196,7 @@ The remaining work is bounded and none of it is a data problem:
 |---|---|
 | §1 gap: MLST row of Table 5 | ✅ **done, and it changed the claim** — at 7 loci NN is not unique for 30 of 33; the cell is now a bound (≤ 8/33) below its own baseline. `MLST_TABLE5_RERUN_2026-08-23.md` |
 | §1 gap: accessory sub-numbers at n=43 | ✅ **done** — all four controls, the headline table, the Mexico leave-two-out and the permutation null re-run at n=46; conclusions unchanged. One figure (contiguity-matched pool) flagged in place as still n=43 |
-| §1 gap: R7 needs Georgia as a second US focus | open, small |
+| §1 gap: R7 Georgia | ✅ **done, and it was already written** — R7.2 is drafted in `RESULTS_DRAFT` and the outline; all its figures re-verified 2026-08-24 (Asia/non-Asia NN 43/46 κ 0.869 vs modal k=20 46/46 κ 1.000; filtered/raw median 0.090 over exactly 170 replicon-units). The outline's ⚠ 4-vs-5 case-count warning was stale and is now closed |
 | §1 gap: Figure 1 flow diagram | ✅ **done** — `make_figure1_bp.py` → `FIGURE1_STUDY_FLOW.svg` (+ `_dark` variant). Reads `NUMBERS.tsv` and **exits non-zero on a missing key**, so it cannot ship with a hole in it. Regenerate with `python3 generate_numbers.py && python3 make_figure1_bp.py` |
 | IRB approval number in Methods | **needs the lab record** — cannot be resolved from artifacts |
 | data availability + deposit new assemblies | open |

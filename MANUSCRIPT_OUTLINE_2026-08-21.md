@@ -503,8 +503,16 @@ and "very nearly" is doing real work there.
 > No date — the grafted backbone must not be dated and r/m ≈ 7.7 means most of
 > this distance is imported DNA. Not "the same strain" in the outbreak sense:
 > 8.67 × 10⁻³ is ~37 loci, far above the Gulf Coast cluster's ~5 filtered SNPs.
-> ⚠ **Unresolved:** the paper reports **4 cases**, the BioProject holds **5
-> Georgia genomes** — reconcile before quoting a case count.
+> ✅ **The 4-vs-5 discrepancy is RESOLVED** (was flagged unresolved here; closed
+> from the paper's full text, PMC12407204 — see
+> `VIETNAM_GEORGIA_RESULT_2026-08-23.md` §2.1). **Five genomes, four patients:
+> patient 2 was readmitted on 9 Nov 2024 with both blood and urine cultures
+> positive and contributed two isolates.** No genome lies outside the published
+> series and no case is missing. **Quote "five genomes from four patients."**
+> The same-patient pair does **not** touch any attribution denominator: none of
+> the five Georgia genomes is in the 46-genome validation set (verified against
+> `CGMLST_LICHT_ATTRIBUTION.tsv` and `EXPOSURE_OVERRIDES.tsv`), so unlike the
+> Viet Nam pair it needs no `OUTBREAK_GROUPS.tsv` entry.
 > Also: `SRR31608436` is **Ohio 1969**, not Georgia, and sits outside the cluster
 > (13.63+) — plausibly an independent war-era importation, do not fold it in.
 > `GCF_009768635_1` (Viet Nam 2015) is a **divergent member** at ~58 from
