@@ -6,10 +6,10 @@ the frozen basis. **Every figure is annotated with its `NUMBERS.tsv` key** in
 annotations before submission. Run `generate_numbers.py` and `freeze_basis_bp.py`
 before treating any number here as current.
 
-⚠ **Verification status.** R6 (all three scales) and R7's Gulf Coast distances
-were **recomputed on the frozen basis 2026-08-23** and are verified. One set
-remains **[unverified]**: the **R5 ST/homoplasy counts**. Recompute before
-submission.
+✅ **Verification status: every figure in this draft is now regenerable on the
+frozen basis.** R5, R6 (all three scales) and R7's distances were recomputed
+2026-08-23; the rest cite `NUMBERS.tsv` keys. Re-run `generate_numbers.py` and
+`freeze_basis_bp.py` before treating any of it as current.
 
 ---
 
@@ -208,26 +208,36 @@ relative to where the disease is.
 
 ## R5. Independent typing systems fail in the same places
 
-- **ST92 spans seven countries** — USA, Brazil, Mexico, Colombia, Nicaragua,
-  Guadeloupe and Martinique — and **four distinct lineages**. **[unverified]**
-  Two known-exposure validation genomes are ST92, so this is not an artefact of
-  deposit country.
-- **ST58** is China 25 / Thailand 20 / Philippines 9 — one sequence type, three
-  countries — and is the type of most Philippine validation genomes.
-  **[unverified]**
-- Homoplasy is systemic: **52 of 279 STs span more than one analysis unit**, and
-  ST70 spans eight. **[unverified]**
+Seven-locus sequence types were called for all analysed genomes and compared with
+the recombination-aware partition. **All counts below are over the 2,340 analysed
+genomes and were recomputed on the frozen basis 2026-08-23**, taking unit
+membership from `FINAL_PARTITION.tsv`.
+
+- **ST92 spans seven countries and three distinct lineages.** Thirty-five
+  analysed genomes carry ST92 — USA 25, Brazil 3, Mexico 3, Colombia 1,
+  Nicaragua 1, Guadeloupe 1, Martinique 1 — distributed across **three separate
+  analysis units** (`strain_4_L1_1` n=22, `strain_4_L1_4` n=9, `strain_4_L1_3`
+  n=4). A single sequence type therefore covers the entire region of applied
+  interest while resolving into three lineages that the whole-genome partition
+  keeps apart. *(Across the full 2,959-genome panel the ST92 count is 36, with
+  USA 26; the seven countries are unchanged.)*
+- **ST58 spans five countries** — China 25, Thailand 20, Philippines 9, Cambodia
+  1, Taiwan 1 (n = 56) — and is the sequence type of most Philippine validation
+  genomes.
+- **Homoplasy is systemic.** Of the **278** sequence types present in the
+  analysed set, **52 (19%) span more than one analysis unit**, and **ST70 spans
+  eight**.
 - cgMLST allelic distance and recombination-filtered SNP distance agree closely:
   **median Pearson r = +0.861** across the 85 frozen units, with **66 of 85** at
-  r ≥ 0.7 `[CGMLST_CONCORDANCE_FROZEN.tsv, restricted to Lichtenegger]`.
+  r ≥ 0.7 (`CGMLST_CONCORDANCE_FROZEN.tsv`, restricted to the Lichtenegger
+  scheme).
 
-Prior work already established that 7-locus MLST lacks the resolution to pin
-geographic origin, and that shared sequence types between continents are
-homoplasy rather than descent (De Smet *et al.*, PMID 25392354). **The novel half
-is that whole-genome, recombination-corrected clustering does not rescue it.**
-Notably, the same study found that whole-genome analysis *did* correctly identify
-Asian versus Australian origin — an independent instance of the same depth
-ceiling we report.
+Prior work established that 7-locus MLST lacks the resolution to pin geographic
+origin, and that sequence types shared between continents reflect homoplasy
+rather than descent (De Smet *et al.*, PMID 25392354). **The novel half is that
+whole-genome, recombination-corrected clustering does not rescue it.** Notably,
+that same study found whole-genome analysis *did* correctly identify Asian versus
+Australian origin — an independent instance of the depth ceiling we report.
 
 ## R6. Where geographic signal exists, and where it is indistinguishable from study of origin
 

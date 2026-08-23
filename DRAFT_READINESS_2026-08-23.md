@@ -171,8 +171,8 @@ main blocker in §2 is cleared. Remaining, in priority order:
 | **`+ASC` vs `-fconst`** | ⚠ **OPEN and now sharper** — config confirms production used `GTR+ASC` with `iqtree_fconst=null`, contradicting §2.5. Quantify on one unit before submission. |
 | Results R1–R8 draft | ✅ written, figures annotated with their keys |
 | R6 country scale | ✅ re-run on the frozen basis (48/26/23/6) |
-| **R6 sub-national + regional** | ⚠ **still on the A100 88-unit control run** — regenerate |
-| **R5 ST/homoplasy counts** | ⚠ **unverified** — no ST table located |
+| R6 sub-national + regional | ✅ re-run on the frozen basis; **sub-national is 1 of 81, not 0 of 88** |
+| R5 ST/homoplasy counts | ✅ recomputed from `MLST_v4c.tsv`; ST92 is **3** lineages not 4, ST58 is **5** countries not 3 |
 | citations | ✅ 13 verified, 6 resolved, 2 added; "Pearson 2020" unciteable |
 | **DeepSANet rebuttal** | ⚠ **new blocker** — read PMID 41185308's holdout design before drafting the Discussion |
 

@@ -388,14 +388,25 @@ lookup, and our own panel contradicts it.**
 
 ### R5 — Two typing systems fail in the same places (orthogonal confirmation)
 
-- **ST92 spans seven countries** — USA 26, Brazil 3, Mexico 3, Colombia 1,
-  Nicaragua 1, Guadeloupe 1, Martinique 1 — and **four distinct lineages**. Two
+✅ **All ST counts recomputed on the frozen basis 2026-08-23** from `MLST_v4c.tsv`
+joined to `FINAL_PARTITION.tsv` (100% ST coverage of the 2,340 analysed genomes).
+
+- **ST92 spans seven countries and THREE distinct lineages** — USA 25, Brazil 3,
+  Mexico 3, Colombia 1, Nicaragua 1, Guadeloupe 1, Martinique 1 (n=35 analysed),
+  across `strain_4_L1_1` (22), `strain_4_L1_4` (9) and `strain_4_L1_3` (4). Two
   known-exposure validation genomes are ST92, so this is not a deposit-country
   artefact.
-- **ST58** is China 25 / Thailand 20 / Philippines 9 — one ST, three countries,
-  and it is the ST of most Philippine validation genomes.
-- ST homoplasy is systemic: **52 of 279 STs span more than one unit**; ST70
-  spans eight.
+  ⚠ **Two corrections.** "**Four** distinct lineages" was the 88-unit figure; on
+  the reported partition it is **three**. And "USA 26" is the **whole-panel**
+  count (n=36) — in the analysed set it is **25**. Pick one denominator and say
+  which; the seven countries hold either way.
+- **ST58** — ⚠ it is **five** countries, not three: China 25 / Thailand 20 /
+  Philippines 9 / **Cambodia 1 / Taiwan 1** (n=56). It is the ST of most
+  Philippine validation genomes.
+- ST homoplasy is systemic: **52 of 278 STs span more than one unit** (19%);
+  ST70 spans **eight**. ⚠ The denominator was quoted as 279; on the frozen basis
+  278 STs are present in the analysed set. The 52 and the ST70 figure both
+  reproduce exactly.
 - cgMLST allelic distance vs recombination-filtered SNP distance: **median
   Pearson r = +0.861**, 66 of 85 frozen-basis units at r ≥ 0.7. The orthogonal check both
   external reviews asked for.
