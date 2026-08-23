@@ -1429,9 +1429,12 @@ distinct references** served the 85 reported units
 run id, and RAxML v8 **segfaults at a run id of ≥ 128 characters**. In the run
 where this was diagnosed, **42 of 172 replicon-units (24.4%) would have exceeded
 the limit** (longest 161 characters); after normalisation the longest was **70**.
-⚠ *That count is from the control run's replicon set and has not been recomputed
-on the 170 reported replicon-units; the failure mode and the fix are independent
-of which partition is used, but recompute the count before quoting it.* Sequence
+The **post-normalisation state has been verified on the reported basis**: across
+all **170** replicon-units the longest run id is **70 characters and none reaches
+128** (recomputed 2026-08-23). The "42 of 172" figure describes the
+**pre-normalisation** state in the run where the failure was diagnosed and is not
+reconstructible here, because the original deflines no longer exist — quote it as
+historical, or drop it and quote only the verified post-fix state. Sequence
 content was verified byte-identical — only `>` lines were rewritten. This failure
 mode is silent in the sense that matters: Gubbins reports it as "Unable to fit
 model to data", which is indistinguishable from a genuinely bad reference.
@@ -1534,17 +1537,23 @@ trees are retained alongside as a second estimator.
 > submission — either the production choice is defended or the trees are
 > recomputed. Do not describe the two as equivalent.
 >
-> **2. Branch support was NOT enabled in the production run.**
-> `iqtree_support = false`, which the config itself flags as altering scientific
-> output (no UFBoot or SH-aLRT values on the tree). Support values were added
-> **post-hoc** by `add_branch_support_bp.sh`, which re-runs IQ-TREE on the
-> published alignments adding `-bb 1000 -alrt 1000`
-> (`L1_TREES_SUPPORTED/`, `SUPPORT_TREES.log`, 2026-08-15). ⚠ That run covered
-> **164 replicon-units** and predates the current partition, so it does not
-> correspond one-to-one with the 170 reported here. **Re-run it on the reported
-> partition, or state plainly which trees carry support and which do not.**
-> The earlier claim that all trees were "at the highest confidence tier" is not
-> supported and has been removed.
+> **2. Branch support was NOT enabled in the production run, and has since been
+> computed separately.** `iqtree_support = false` in the pipeline configuration,
+> which the config itself flags as altering scientific output (no UFBoot or
+> SH-aLRT values on the tree). The earlier claim that all trees were "at the
+> highest confidence tier" was therefore unsupported and has been removed.
+>
+> ✅ **Resolved 2026-08-23.** `add_branch_support_v4c_bp.sh` recomputed each tree
+> from the **published** filtered alignment, reusing the unit's own ASC preflight
+> decision so the topology is computed identically and only support values are
+> new, adding `-bb 1000 -alrt 1000`. **All 170 reported replicon-units completed:
+> 170 OK, 0 skipped, 0 failed** (`L1v4c_TREES_SUPPORTED/`,
+> `SUPPORT_TREES_V4C.log`). Every tree now carries SH-aLRT and UFBoot values, and
+> every unit ran under `GTR+ASC` — independently confirming point 1 above.
+>
+> ⚠ The **earlier** support run (`add_branch_support_bp.sh`, 2026-08-15,
+> `L1_TREES_SUPPORTED/`) read a different output directory and covered **164**
+> replicon-units of an older partition. It is superseded; do not mix the two.
 
 **Across units.** One **medoid per unit** — the member minimising mean SNP
 distance to the rest of its unit, computed on the recombination-filtered

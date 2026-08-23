@@ -1,0 +1,366 @@
+# Results — draft prose, 2026-08-23
+
+First prose draft of R1–R7, written from `MANUSCRIPT_OUTLINE_2026-08-21.md` on
+the frozen basis. **Every figure is annotated with its `NUMBERS.tsv` key** in
+`[brackets]` so it can be re-verified without re-reading the code; strip the
+annotations before submission. Run `generate_numbers.py` and `freeze_basis_bp.py`
+before treating any number here as current.
+
+⚠ **Three figures are carried from the outline and are NOT yet regenerable**
+(marked **[unverified]**): the R6 association-test counts, the R7 Gulf Coast
+distances, and the R5 ST/homoplasy counts. Recompute before submission.
+
+---
+
+## R1. The collection, and the frame it is drawn from
+
+We assembled **2,959** *Burkholderia pseudomallei* genomes `[panel.corrected_v4d]`
+spanning **50** countries `[panel.countries]`. The collection is dominated by
+three countries: Thailand contributes **1,753 (59.5%)**
+`[panel.top_country.Thailand]`, China **295 (10.0%)** and Australia **282
+(9.6%)`[panel.top_country.*]`, together **79.0%** of the panel
+`[panel.top3_share]`.
+
+To place this in the context of the public record, we re-censused the European
+Nucleotide Archive as a union of read-run and assembly depositions — a union
+being necessary because a read-run-only query is blind to assembly-only
+submissions. ENA holds **9,040** unique *B. pseudomallei* BioSamples
+`[ena.biosamples_union]`, of which **7,192** carry a country label
+`[ena.biosamples_with_country]` across **56** countries `[ena.countries]`. Our
+panel is therefore **41.1%** of the country-labelled public record
+`[panel.coverage_of_ena]`. Because **312** of our genomes are in-house isolates
+not represented in public archives `[panel.in_house]`, the strictly comparable
+figure — public-derived genomes against the public record — is **36.8%**
+`[panel.public_derived]`.
+
+**The collection is inverted against the distribution of disease.** Assigning
+each of the **2,946** region-labelled genomes `[panel.region_labelled]` to a
+World Bank region and comparing with predicted melioidosis burden:
+
+| region | predicted cases/yr | % of burden | genomes | % of labelled | genomes per 1,000 cases |
+|---|---|---|---|---|---|
+| **South Asia** | 73,000 | **44.2%** | **75** | **2.5%** | **1.0** |
+| **East Asia & Pacific** | 65,000 | 39.4% | **2,705** | **91.8%** | **41.6** |
+| **Sub-Saharan Africa** | 24,000 | **14.5%** | **30** | **1.0%** | **1.2** |
+| Latin America & Caribbean | 2,000 | 1.2% | 79 | 2.7% | 39.5 |
+| Middle East & North Africa | <1,000 | 0.3% | 3 | 0.1% | 6.0 |
+| Europe & Central Asia | <1,000 | 0.0% | 12 | 0.4% | — |
+| North America | <1,000 | 0.0% | 42 | 1.4% | — |
+| **Global** | **165,000** | 100% | **2,946** | 100% | 17.9 |
+
+Burden estimates from Limmathurotsakul *et al.* (PMID 26877885). East Asia and
+the Pacific is sampled **41× more heavily per predicted case than South Asia**
+and **33× more heavily than sub-Saharan Africa**. The region predicted to carry
+the largest share of disease contributes 2.5% of the genomes.
+
+> The country label attached to a genome in this collection is not primarily
+> measuring where the organism lives. It is measuring where sequencing happened —
+> and across the top of the burden distribution the two are inverted.
+
+*Caveat:* roughly 15% of the global public collection is environmental isolates
+from a single Thai case–control study, so this compares a clinical-plus-
+environmental mixture rather than clinical isolates alone.
+
+After partitioning (Methods §2.12.4–5), **2,340** genomes fall in **85**
+recombination-aware analysis units `[genomes.analysed, units.analysed]`, of unit
+size 7 to 159 (median 18), spanning 170 replicon-units.
+
+## R2. Exposure country cannot be recovered; region can
+
+We assembled a validation set of **48** genomes with an independently documented
+country of *exposure* rather than merely of deposit `[validation.total]`. Two
+carry a non-country exposure and are unattributable by construction, leaving
+**46 scorable genomes** `[validation.scorable]` drawn from **16 exposure
+countries** `[validation.source_countries]`. **Two of the 46 are isolates from a
+single patient** sampled five years apart (Brennan *et al.*, PMID 40835221), so
+the set represents **45 individuals**; we report this alongside the other
+non-independence in the set (§R2.4).
+
+Attribution was scored on core-genome MLST (Lichtenegger scheme, 4,221 loci;
+PMID 33980649) so that the result does not depend on the lineage partition, under
+a holdout that removes both same-country validation genomes and same-source
+outbreak members (Methods §2.12.11a.4).
+
+**Table 1. Attribution accuracy by geographic scale.**
+
+| scale | estimator | correct | accuracy | majority baseline | **κ** |
+|---|---|---|---|---|---|
+| **country** | nearest neighbour | **10/46** | **21.7%** | **26.1%** | **0.193** |
+| country | modal k = 20 | 7/46 | 15.2% | 26.1% | 0.132 |
+| sub-national | either | 0/5 | 0% | — | — |
+| region (7-way) | nearest neighbour | 37/46 | 80.4% | 45.7% | 0.715 |
+| **region (7-way)** | **modal k = 20** | **41/46** | **89.1%** | 45.7% | **0.832** |
+
+`[attribution.country.nearest_neighbour, attribution.region.modal_k20, ladder.*.kappa]`
+
+**Country-level attribution does not exceed chance.** At 21.7% against a 26.1%
+majority baseline it is, if anything, below it. Sub-national attribution fails
+outright. **Regional attribution succeeds**, reaching 89.1% against a 45.7%
+baseline (κ 0.832).
+
+Because the best estimator differs by scale, both are reported with the estimator
+named; a nearest-neighbour figure and a modal figure are different analyses and
+are never compared with one another.
+
+### R2.1 The failure is not an estimator artefact
+
+Region and country were scored on the same genomes, the same pool and the same
+holdout, and differ by three-quarters of a κ unit. Whatever prevents country
+attribution is not a property of the estimator.
+
+### R2.2 The apparent country signal under a weaker holdout is entirely circular
+
+Under leave-*one*-out, nearest-neighbour country attribution appears to reach
+**29%**. Every one of those hits is a validation genome predicting another
+validation genome of the same country, and all of them disappear under
+leave-group-out. **Country accuracy quoted with same-country validation genomes
+retained is artefactual, not merely optimistic** — and we report the collapse
+itself as the result, because it quantifies how much apparent attribution
+performance is circularity.
+
+### R2.3 Accuracy depends on whether a relative exists — in opposite directions
+
+| stratum | country (NN) | region (modal k=20) |
+|---|---|---|
+| d < 0.05 — **a close relative exists** | **2/14** | **14/14** |
+| 0.05 ≤ d < 0.30 | 2/10 | 8/10 |
+| d ≥ 0.30 — no real relative | 6/22 | 19/22 |
+
+`[attribution.*.d_lt_0.05 etc.]`
+
+**Where a close relative exists — the condition under which attribution should be
+easiest — region is perfect (14/14) and country is 2/14.** The same 14 genomes,
+the same pool, opposite outcomes at two geographic scales. This is the clearest
+statement of the limit: the signal is present at depth and absent at the
+shallow end.
+
+The d ≥ 0.30 row should not be read as success. At that distance 30–79% of loci
+differ and no meaningful relative exists; nine of those 22 genomes share a single
+Ecuadorian nearest neighbour, and because most are Latin American the catch-all
+region label scores them correct — while **both sub-Saharan African genomes in
+the stratum are confidently assigned to Latin America and scored wrong**. The
+estimator is reporting *"unlike the Asian majority of the panel"*.
+
+We tested the obvious alternative explanation, that genomes with fewer callable
+loci have inflated distances. It does not hold: across the 46, loci compared
+against nearest-neighbour distance gives Spearman ρ = **−0.247** (n.s.), and the
+median loci compared is flat across the three strata (4,042 / 4,040 / 4,024).
+
+### R2.4 Non-independence in the validation set, stated three ways
+
+The set is small and structured, and we report this rather than leaving it to be
+discovered. (i) The Philippines contributes 12 of 46. (ii) Two of the 46 are one
+patient. (iii) 16 of 46 come from a single assembly batch that is 5.9% of the
+panel and has the weakest call-rate tail (p05 87.1% vs 95.8%) — though this does
+**not** bias the distance strata, as shown above.
+
+## R3. Resolution is not the limiting factor
+
+| layer | loci | country | region |
+|---|---|---|---|
+| MLST **[MLST/17]** | 7 | 0/17 | 13/15 (87%) |
+| **cgMLST** | **4,221** | **10/46 (22%), baseline 26%** | **41/46 (89%), baseline 46%** |
+| core-genome SNP **[SNP/24]** | whole genome | 0/24 | 22/24 (92%) |
+
+Across a **584-fold** span in locus count, country attribution never clears its
+baseline. Each row is a different validation set because each typing system
+covers different genomes; that is inherent, not an error.
+
+**Randomly subsampling loci provides the positive control.** Sampling *k* loci at
+random for *k* = 2 to 4,089, with 10 replicates, country accuracy stays flat at
+0–7.3% across the whole range and is **0.0% at the full locus set**, while
+regional accuracy rises from **49.5% to 82.1%** against a 48% baseline and
+plateaus by roughly 100 loci. The estimator demonstrably converts resolution into
+accuracy when the signal is there; the country failure is therefore absence of
+signal, not bluntness of instrument.
+
+*Caveat that must travel with this figure:* randomly chosen loci are a lower
+bound for a curated scheme. The permitted claim is *"resolution alone does not
+buy country-level attribution"*, not *"no targeted scheme can work"*.
+
+## R4. Why: the panel does not contain the source countries
+
+**For 7 of the 16 exposure countries in our validation set, no public genome
+exists in ENA at all** — Aruba, Costa Rica, El Salvador, Guatemala, Martinique,
+Nicaragua and Trinidad and Tobago. **All seven are in Latin America and the
+Caribbean.** The gap is not scattered across the tropics; it is one region.
+
+Two countries that might be assumed absent are not. **Mexico has 21 public
+genomes** and the **Philippines has 1** — so the claim that we hold the only
+genomes in existence is false for Mexico and marginal for the Philippines.
+
+**Mexico is also the case that proves absence is not the whole mechanism.** Three
+Mexican-exposure genomes retained genuine same-country references under
+leave-group-out — three in a thirty-genome pool — and attribution still failed.
+Absence of references explains most of the failure; Mexico shows it is not all
+of it.
+
+**The same gap at species scale.** Against the ENA union census, **21 countries
+with ≥100 predicted cases per year have zero public genomes**, together
+**8,939 cases/year, about 5% of the global estimate**. **Nineteen of the 21 are
+sub-Saharan African** (the exceptions are Nepal and El Salvador). Read with R1's
+burden table — sub-Saharan Africa at 14.5% of predicted burden and 1.0% of the
+panel — the argument closes: country attribution fails for our validation cases
+because their source countries have no reference genomes, and that is not a
+peculiarity of our 16 countries but the shape of the entire public collection
+relative to where the disease is.
+
+## R5. Independent typing systems fail in the same places
+
+- **ST92 spans seven countries** — USA, Brazil, Mexico, Colombia, Nicaragua,
+  Guadeloupe and Martinique — and **four distinct lineages**. **[unverified]**
+  Two known-exposure validation genomes are ST92, so this is not an artefact of
+  deposit country.
+- **ST58** is China 25 / Thailand 20 / Philippines 9 — one sequence type, three
+  countries — and is the type of most Philippine validation genomes.
+  **[unverified]**
+- Homoplasy is systemic: **52 of 279 STs span more than one analysis unit**, and
+  ST70 spans eight. **[unverified]**
+- cgMLST allelic distance and recombination-filtered SNP distance agree closely:
+  **median Pearson r = +0.861** across the 85 frozen units, with **66 of 85** at
+  r ≥ 0.7 `[CGMLST_CONCORDANCE_FROZEN.tsv, restricted to Lichtenegger]`.
+
+Prior work already established that 7-locus MLST lacks the resolution to pin
+geographic origin, and that shared sequence types between continents are
+homoplasy rather than descent (De Smet *et al.*, PMID 25392354). **The novel half
+is that whole-genome, recombination-corrected clustering does not rescue it.**
+Notably, the same study found that whole-genome analysis *did* correctly identify
+Asian versus Australian origin — an independent instance of the same depth
+ceiling we report.
+
+## R6. Where geographic signal exists, and where it is indistinguishable from study of origin
+
+Fitch parsimony of geographic labels on each unit's recombination-corrected
+topology, against a null of 1,000 label permutations across the tips of the same
+tree, with **BioProject tested identically on the same trees** as a companion
+control. **[all counts in this section unverified — recompute]**
+
+| scale | testable units | raw p ≤ 0.05 | survives FDR | **passes the BioProject control** |
+|---|---|---|---|---|
+| sub-national | 83 | 17 | 11 | **0** |
+| national | 49 | 26 | 24 | **6** |
+| regional | 16 | 4 | 3 | **1** |
+
+The control does substantial work: it removes roughly a third of apparent passes,
+and should be described in Methods as a result in its own right rather than as
+housekeeping.
+
+**All six surviving national-scale units are Southeast Asian. Every Americas unit
+fails**, including the Mississippi Gulf Coast unit (p = 1.0000) and a
+well-powered negative in which country and BioProject are equally significant.
+
+**Sub-national geography is indistinguishable from study of origin in every unit
+tested (0 of 83).** A label such as `Thailand :: Nakhon Phanom` is very nearly
+the name of a collection effort.
+
+## R7. What is operationally usable: two US autochthonous foci
+
+Attribution of *origin* fails, but *cluster membership* is callable, and the two
+questions should not be conflated.
+
+### R7.1 The Gulf Coast cluster
+
+Unit `strain_4_L1_1` (n = 22) contains the Mississippi Gulf Coast lineage
+(Petras *et al.*, PMID 38118023). **[distances unverified]**
+
+| | chromosome 1 | chromosome 2 |
+|---|---|---|
+| internal median, raw / filtered | 8 / **5** | 5 / **4** |
+| maximum to the nearest outside genome, raw / filtered | 1,136 / **494** | 1,432 / **528** |
+
+**A new US case within roughly 20 SNPs is this lineage; one 500 SNPs away is not.
+The call is never borderline.** The same data bound what cannot be said: because
+the nearest genome outside the cluster is ~490 filtered SNPs away, **the origin
+of the lineage cannot be stated**. The Colombian genome is *the nearest relative
+in this panel*, not *a near relative*.
+
+### R7.2 A second focus, in Georgia — and the sharpest limit in the study
+
+A second unit contains five genomes from four patients in Georgia, USA, spanning
+**1983–2024**, reported as presumptive autochthonous cases with no recent
+international travel (Brennan *et al.*, PMID 40835221). The same unit holds two
+isolates from one Viet Nam-exposure patient and three isolates collected in Viet
+Nam from two independent studies. **The lineage is genuinely present on both
+sides of the Pacific**, and the published investigation leaves open that the
+Georgia environmental focus itself may derive from Vietnam-War-era introduction.
+
+**This is the condition under which attribution should work — both countries
+represented, by independent studies, with published epidemiology on both sides —
+and it still fails.**
+
+| | cgMLST allelic distance |
+|---|---|
+| Georgia cluster, internal maximum | **8.67 × 10⁻³** |
+| nearest non-Georgia genome in all 3,033 (a Viet Nam-exposure case) | **8.91 × 10⁻³** |
+| **separation** | **0.25 × 10⁻³ = 1.0 locus of 4,221** |
+
+A published US autochthonous cluster and a documented Viet Nam-acquired infection
+are separated by **one locus** more than the cluster's own internal spread. No
+distance threshold places them on opposite sides reliably.
+
+The estimator behaves accordingly, and instructively. For both Viet Nam-exposure
+isolates, **nearest neighbour is wrong at every scale** — including the deep
+Asia/non-Asia split — because their closest relative in 3,033 genomes is a
+Georgia case; **modal k = 20 recovers both**. They are **2 of only 3 errors the
+deep split makes under nearest neighbour** (43/46, κ 0.869), and modal k = 20 is
+**46/46, κ 1.000**.
+
+This is not a BioProject artefact: the Georgia and Viet Nam-exposure genomes
+share a BioProject, and within that single project distances to the Georgia
+cluster span 8.91 to 16.47 × 10⁻³.
+
+*Context for every distance in this paper:* across the 170 replicon-units the
+median filtered-to-raw distance ratio is **0.090** — roughly **91% of raw
+pairwise distance is imported DNA rather than inherited mutation**. A distance
+quoted without saying which kind it is means very little.
+
+## R8. What does work: a ladder of claims, and knowing when to abstain
+
+Coarsening the geographic question until it becomes answerable locates the
+ceiling precisely (modal k = 20 throughout):
+
+| grouping | classes | accuracy | baseline | **κ** |
+|---|---|---|---|---|
+| **Asia vs non-Asia** | 2 | **100%** | 58.7% | **1.000** |
+| Eastern vs Western hemisphere | 2 | 95.7% | 63.0% | **0.909** |
+| region, 7-way | 5 present | 89.1% | 45.7% | **0.832** |
+| SEA vs non-SEA | 2 | 76.1% | 58.7% | 0.461 |
+| country | 16 | 21.7% | 26.1% | **0.193** |
+
+`[ladder.*.kappa]`
+
+**The deep splits are recovered without error and the shallow ones are not** — on
+the same genomes, the same pool and the same holdout. The limit is depth of
+signal, not volume of data.
+
+Because the estimator answers confidently even when no relative exists, we pair
+it with an **abstention rule**: where no genome lies closer than **0.462**
+allelic distance, return *unattributable* rather than a region. Reported
+out-of-sample, with the threshold selected on the other 45 genomes and applied to
+the held-out one:
+
+| | coverage | selective accuracy |
+|---|---|---|
+| in-sample | 78.3% | 94.4% |
+| **leave-one-out** | **76.1%** | **94.3%** |
+
+`[abstention.region.*]`
+
+The rule declines **3 of the 5 region errors, including both sub-Saharan African
+misassignments**, at a cost of 7 correct answers. Two caveats belong with it.
+First, **the retained-subset majority baseline also rises** (45.7% → 50.0%), so
+lift over chance improves only from +43.4 to +44.4 points: **the value is in
+which errors remain, not in the accuracy number.** Second, the rule **cannot**
+decline errors of the Georgia type, which have genuine close relatives and high
+neighbourhood agreement — **two distinct failure modes, of which this addresses
+one.**
+
+**The same rule fails at country scale, and we report that as a result.** Its
+best operating point reaches 37.5% selective accuracy against an answer-everything
+21.7% — but the **retained-subset majority baseline is also exactly 37.5%**. On
+the half of cases it elects to answer, always guessing the commonest exposure
+country scores identically. **Country attribution is not rescued by abstaining.**
+
+The deployable statement is therefore a ladder, not an answer: *Asia or not —
+certain. Region — where a relative exists, and the method says when one does not.
+Country — no.*
