@@ -187,6 +187,33 @@ its methods.** What can be said:
 3. Its reported gain is therefore best treated as an *architecture* comparison on
    a fixed benchmark, not as evidence that country attribution generalises.
 
+### 5.2.3 Attempt to obtain the DeepSANet full text — failed, and why
+
+Tried 2026-08-23 so this is not repeated:
+
+| route | result |
+|---|---|
+| PMC / PubMed Central | **no PMC record** (`convert_article_ids` returns pmid only) |
+| PubMed copyright API | **`"All rights reserved"`, `is_open_access: false`**, © Elsevier Ltd |
+| `doi.org` → `linkinghub.elsevier.com` | redirect only, no content |
+| `sciencedirect.com/…/abs/…` | **HTTP 403**; the `/abs/` path is abstract-only |
+| preprint search (bioRxiv/medRxiv/web) | **none found** — searches surface only the *Bayliss* preprint (medRxiv 2022.08.23.22279111), which is the eLife paper we already have in full |
+| ResearchGate | "Request PDF" only — author-mediated, not a free copy |
+
+**It is a subscription article and there is no lawful free copy.** Legitimate
+routes for a human: institutional library access, interlibrary loan, a
+ResearchGate request, or emailing the corresponding authors — listed in the
+PubMed record as **shaoting.li@gdut.edu.cn** and **hmzhang@gdut.edu.cn**.
+Co-author **Xiangyu Deng (University of Georgia, Center for Food Safety)** is
+US-based and may be the easier contact.
+
+> **This does not block the manuscript.** The Discussion can be written safely on
+> what is already verified: Bayliss 2023's split *is* documented and its depth
+> decay corroborates ours, and the accuracy-vs-macro-F1 mismatch means DeepSANet's
+> 80.83% cannot be set against Bayliss's 0.661 regardless of its holdout. Getting
+> the PDF would upgrade one sentence from "inferred" to "verified" — worth doing,
+> not blocking.
+
 **Action:** obtain the DeepSANet PDF and read (a) the data-splitting section and
 (b) whether any per-class or macro-averaged metric is reported. Until then, cite
 it as a claim whose evaluation design is unverified, and lead the rebuttal with
