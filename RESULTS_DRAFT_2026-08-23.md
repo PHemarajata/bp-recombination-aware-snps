@@ -159,13 +159,27 @@ panel and has the weakest call-rate tail (p05 87.1% vs 95.8%) — though this do
 
 | layer | loci | country | region |
 |---|---|---|---|
-| MLST **[MLST/17]** | 7 | 0/17 | 13/15 (87%) |
+| MLST **[MLST/33]** | 7 | **≤ 8/33 (24%)**, baseline 36% | 19/33 (58%), baseline 46% |
 | **cgMLST** | **4,221** | **10/46 (22%), baseline 26%** | **41/46 (89%), baseline 46%** |
 | core-genome SNP **[SNP/24]** | whole genome | 0/24 | 22/24 (92%) |
 
 Across a **584-fold** span in locus count, country attribution never clears its
 baseline. Each row is a different validation set because each typing system
 covers different genomes; that is inherent, not an error.
+
+**The MLST country cell is an upper bound, not an accuracy, and the reason is
+itself a resolution result.** At seven loci the nearest neighbour is *not unique*
+for 30 of the 33 validation genomes — the median tied set is 21 genomes and the
+largest is 52 — so the call is settled by an arbitrary tie-break rather than by
+the data. The true country appears anywhere in that tied set for only 8 of 33, so
+no tie-breaking rule whatever can score above 24%, and an adversarial one scores
+zero. **Even an oracle tie-break therefore fails to reach the 36% majority
+baseline.** At 4,221 loci the nearest neighbour is unique for every genome. The
+MLST bound and the cgMLST point estimate must not be read as like-for-like.
+
+Region, by contrast, is **monotonic in locus count — 58%, 89%, 92%** — over the
+same span in which country stays at or below chance. That contrast is the result:
+the instrument sharpens, and only one of the two questions responds.
 
 **Randomly subsampling loci provides the positive control.** Sampling *k* loci at
 random for *k* = 2 to 4,089, with 10 replicates, country accuracy stays flat at

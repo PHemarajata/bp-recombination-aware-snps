@@ -34,8 +34,12 @@ resolution into accuracy whenever resolution helps.
 
 **Second, the failure is invariant to resolution.** Across a 584-fold span in
 locus count — 7 MLST loci, 4,221 cgMLST loci, and whole-genome
-recombination-filtered SNPs — country attribution never clears its baseline. A
-finer instrument does not help because the quantity being measured is not there.
+recombination-filtered SNPs — country attribution never clears its baseline,
+while regional accuracy over the same span rises monotonically from 58% to 92%.
+A finer instrument does not help because the quantity being measured is not
+there. At the coarse end the statement is stronger than a point estimate: with
+seven loci the nearest neighbour is not even unique for 30 of 33 genomes, and
+*no* tie-breaking rule can lift country accuracy to its own majority baseline.
 
 **Third, the failure is invariant to the analytical framework.** The result holds
 under a lineage partition and under two partition-free typing systems, so it is
