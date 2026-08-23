@@ -249,20 +249,43 @@ respectively.
 control; the two agree closely, but unit labels are not comparable between them
 and must never be quoted across partitions.
 
-**Finally, this is a study of the public record as it stands.** Its central claim
-is explicitly contingent: country attribution fails *because* the source
-countries are unsequenced, which is a statement about the archive and not about
-the organism. That contingency is testable, and the obvious test — sequencing in
-the countries currently at zero — is also the intervention we recommend.
+**Finally, this is a study of the public record as it stands, and we cannot
+separate the two causes of failure quantitatively.** Most of the country-level
+failure we observe is associated with absent references, which is a statement
+about the archive; but the Georgia and Mississippi cases show that some of it
+arises from lineages that genuinely span continents, which is a statement about
+the organism. **We can demonstrate that both contribute. We cannot say in what
+proportion**, because the cases where references exist are too few — 14 of 46 —
+to estimate it. Sequencing the countries currently at zero is a testable
+intervention, and it would also be the experiment that separates the two.
 
 ## Conclusion
 
 Exposure country cannot presently be recovered from the *B. pseudomallei* genome
-for most source countries, and this is a limitation of the reference panel rather
-than of resolution or method. Region can be recovered where the panel reaches,
-and the deepest geographic split — Asia versus elsewhere — is recovered without
-error. A system reporting these results should therefore return a graded claim
-and should decline to answer when no comparable genome exists, while
-acknowledging that declining cannot detect the errors that arise from genuinely
-intercontinental lineages. The route to country-level attribution, if it exists,
-runs through sequencing the places that are currently absent from the record.
+for most source countries, and this is not a limitation of resolution or of
+method: the same data, estimator and holdout recover region at κ 0.832 and the
+Asia-versus-elsewhere split without error.
+
+Two things stand between a genome and a country, and they differ in kind rather
+than in size. **Sparse reference sampling is the tractable one**: seven of our
+sixteen source countries have no public genome at all, and for those cases no
+method can succeed. Sequencing where the record is empty would address this
+directly, and we recommend it on public-health grounds regardless of what it does
+for attribution. **Shared ancestry across continents is the stubborn one**: where
+a lineage is established on two continents — as the Georgia and Viet Nam isolates
+are, one locus apart — there may be no country-level answer to recover, and more
+sequencing would sharpen the description of that lineage without making the
+question answerable.
+
+We resist calling either the dominant cause. It is tempting to treat sparse
+sampling as the main effect because it is the more visible, but **country
+attribution failed for 12 of the 14 cases that did have a close relative
+available** — the regime in which sampling is not the limitation. On these data
+the stubborn mode is not a small residue.
+
+We therefore do not claim that sequencing alone would deliver country-level
+attribution, and our data cannot say how much of the gap it would close. What
+they do support is narrower and, we think, more useful: **report a graded claim
+rather than a single answer, decline when no comparable genome exists, and treat
+a confident country call on a continent-spanning lineage as the failure mode that
+no confidence measure will catch.**
