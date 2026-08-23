@@ -8,13 +8,36 @@ have changed the paper's headline.
 result is strengthened.** This is outcome 3 of the three the handoff pre-declared
 as publishable. One fragile, testable positive lead survives (§6).
 
-> **All numbers below are the n=43 validation set of 2026-08-21 — the coherent
-> experiment as run.** The Track 0 integration (2026-08-23) grew the set to 46:
-> the headline shifts to **accessory country 14/46 (30%) vs core 10/46 (22%)**,
-> i.e. the accessory-over-core margin and the "fails its controls" conclusion are
-> unchanged. Exact n=46 control sub-numbers (contig strata, permutation null,
-> the 0/13 close-relative stratum) require re-running `accessory_control_bp.py`;
-> the story does not depend on them. See `TRACK0_INTEGRATION_2026-08-23.md`.
+> **The headline numbers below are the n=43 validation set of 2026-08-21 — the
+> coherent experiment as run.** The Track 0 integration grew the set to 46:
+> **accessory country 14/46 (30%) vs core 10/46 (22%)**.
+>
+> ✅ **The control sub-numbers were re-run at n=46 on 2026-08-23
+> (`accessory_control_bp.py`). The conclusion is unchanged and Control 4 is
+> sharper than it was at n=43.**
+>
+> | Control 4 — accuracy by whether a genuine close relative exists (n=46) | accessory | core |
+> |---|---|---|
+> | d_core < 0.05 — **a close relative exists** | **1/14 (7%)** | 2/14 (14%) |
+> | d_core 0.05–0.30 | 2/10 | 2/10 |
+> | d_core ≥ 0.30 — **no real relative** | **11/22 (50%)** | 6/22 (27%) |
+>
+> **The inversion is the whole finding, and it is stronger at n=46 than at n=43
+> (where the close-relative stratum was 0/13).** Accessory country attribution is
+> **7% where a real relative exists and 50% where none does.** A method that
+> works only when there is nothing to match is not attributing; the 30% headline
+> is carried almost entirely by the no-relative stratum.
+>
+> The other controls also hold at n=46. **Control 1**: country accuracy by pool
+> assembly quality 24% / 24% / **7%** (best → most fragmented), and validation
+> genomes split by their own quality give country 5/12 (low-contig) vs 8/33
+> (high-contig). **Control 2**: contig count correlates with mean *accessory*
+> distance at ρ = +0.156 (p = 8.6 × 10⁻¹⁸) against only ρ = +0.038 for *core* —
+> accessory distance is roughly four times more contaminated by fragmentation
+> than core is, which is the mechanism. **Control 3**: the within-stratum
+> permutation null is beaten (country 30.4% vs null mean 7.7%, p = 0.001) — but
+> that null tests only "better than shuffled labels", not "better than the
+> attractor", so it does not rescue the result.
 
 ---
 
