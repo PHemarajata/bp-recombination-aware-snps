@@ -1528,14 +1528,37 @@ trees are retained alongside as a second estimator.
 > the config notes that `+ASC` and `-fconst` are mutually exclusive and that the
 > two alternative fallbacks alter branch lengths.
 >
-> **This contradicts §2.5**, which argues `-fconst` with true counts is
+> **This differs from §2.5**, which argues `-fconst` with true counts is
 > preferable here because it reproduces full-alignment base composition exactly
 > whereas `+ASC` collapses composition toward 25/25/25/25 in a 68% GC genome.
-> **The contradiction is real and is not resolved by this draft.** The
-> calibration track used `-fconst`; the production run used `+ASC`. Quantifying
-> the difference on one unit is an open method question and must be done before
-> submission — either the production choice is defended or the trees are
-> recomputed. Do not describe the two as equivalent.
+>
+> ✅ **RESOLVED 2026-08-23 by direct comparison on two units**
+> (`ASC_FCONST_RESULT_2026-08-23.md`). Both models were run on the identical
+> variant-site alignment, same build, same seed.
+>
+> **§2.5's argument is correct and the effect is large.** `+ASC` estimated GC at
+> **54.5%** and **58.9%** against a true **68.1%**; `-fconst` returned **67.8%**
+> and **68.0%**. Topologies also differ, in a signal-dependent way: on the clonal
+> `strain_4_L1_1` 65% of bipartitions move, but on the Gate 1 unit
+> `strain_1_L1_28` (15,139 variant sites) **89% are identical**. Branch lengths
+> are **not interconvertible** — naive rescaling by the variant-site fraction
+> misses the observed `-fconst` length five-fold, so no correction factor is
+> offered.
+>
+> **It changes no reported quantity.** Every number in this paper derives from
+> **Gubbins** outputs — r/m and its reference correction from
+> `per_branch_statistics.csv`, and the phylogeography test and global backbone
+> from `node_labelled.final_tree.tre`. The IQ-TREE `+ASC` tree is read only by
+> `archive_L1_stats.sh` and `export_deliverables_bp.sh`; it is a deliverable, not
+> an input. The phylogeography test is moreover Fitch parsimony, which reads
+> topology alone.
+>
+> ⚠ **One consequence does stand.** If per-unit trees are published as
+> supplementary files they should be rebuilt with `-fconst`, because a published
+> tree estimating 54–59% GC in a 68% GC organism is hard to defend and its branch
+> lengths are per-variable-site. That includes `L1v4c_TREES_SUPPORTED/`, which
+> inherited `GTR+ASC` from the preflight — the support values are topology-based
+> and largely unaffected, the branch lengths and composition are not.
 >
 > **2. Branch support was NOT enabled in the production run, and has since been
 > computed separately.** `iqtree_support = false` in the pipeline configuration,
