@@ -96,7 +96,11 @@ val = {r["sample_id"] for r in meta
        if r.get("origin_basis") == "travel_reattributed"} | set(ovr)
 newgt = {r["sample_id"] for r in man if r.get("role") == "ground_truth"}
 val = (val | newgt) - removed
-add("validation.total", len(val), "origin_basis + EXPOSURE_OVERRIDES + MANIFEST")
+add("validation.total", len(val), "origin_basis + EXPOSURE_OVERRIDES + MANIFEST",
+    "REGISTERED genomes. This is NOT the denominator of any attribution "
+    "number: 2 carry a non-country exposure ('Africa', 'Panama and Peru') and "
+    "are unattributable, leaving 46 SCORABLE. The frozen validation set is "
+    "quoted as 46 -- see validation.scorable")
 truth = {}
 for r in meta:
     if r["sample_id"] in val:
@@ -106,6 +110,9 @@ for r in man:
         truth[r["sample_id"]] = r["exposure_country"]
 truth.update({k: v for k, v in ovr.items() if k in val})
 NOTC = {"Africa", "Panama and Peru", ""}
+add("validation.scorable", sum(1 for v in truth.values() if v not in NOTC),
+    "exposure country",
+    "THE ATTRIBUTION DENOMINATOR. Every x/46 in this file is over this set")
 add("validation.source_countries",
     len({v for v in truth.values() if v not in NOTC}),
     "exposure country", "excludes 'Africa' and 'Panama and Peru'")
@@ -143,6 +150,31 @@ if stats:
         f"{100*sum(1 for x in rates if x >= 90)/len(rates):.1f}%",
         "results_statistics.tsv")
 
+# Attribution is reported PER ESTIMATOR, with the estimator IN THE KEY.
+#
+# Why the keys changed (2026-08-23). CGMLST_LICHT_ATTRIBUTION.tsv holds exactly
+# one estimator's calls -- whichever was passed to --estimator -- and the frozen
+# copy is NEAREST NEIGHBOUR. Country's best estimator is NN, so that row was
+# right. Region's best estimator is modal k=20, so the old
+# `attribution.region.correct` row published 37/46 (80%) while every document
+# quoted the modal 41/46 (89%), and the region strata printed beside it were
+# NN-derived. A modal headline over NN strata is precisely the comparison this
+# project forbids, and it was latent in the one file everyone is told to quote.
+# The modal figures now come from GROUPING_LADDER.tsv / GROUPING_PREDICTIONS.tsv,
+# which grouping_test_bp.py persists as of the same date; before that they
+# existed only as terminal output and prose.
+STRATA = ((0, .05, "d_lt_0.05"), (.05, .30, "d_0.05_0.30"), (.30, 9, "d_ge_0.30"))
+
+
+def strata_rows(prefix, rows, src):
+    for lo, hi, nm in STRATA:
+        s = [r for r in rows if lo <= float(r["nn_distance"]) < hi]
+        if s:
+            add(f"{prefix}.{nm}", f"{sum(int(r['correct']) for r in s)}/{len(s)}",
+                src, "ALWAYS report the stratification with its headline, and "
+                     "ONLY against the same estimator")
+
+
 att = maybe(f"{B}/CGMLST_LICHT_ATTRIBUTION.tsv")
 if att:
     for sc in ("country", "region"):
@@ -150,21 +182,53 @@ if att:
         if not rs:
             continue
         ok = sum(int(r["correct"]) for r in rs)
-        add(f"attribution.{sc}.correct", f"{ok}/{len(rs)} ({100*ok/len(rs):.0f}%)",
-            "CGMLST_LICHT_ATTRIBUTION.tsv", "estimator as run; see NOTE below")
-        for lo, hi, nm in ((0, .05, "d_lt_0.05"), (.05, .30, "d_0.05_0.30"),
-                           (.30, 9, "d_ge_0.30")):
-            s = [r for r in rs if lo <= float(r["nn_distance"]) < hi]
-            if s:
-                add(f"attribution.{sc}.{nm}",
-                    f"{sum(int(r['correct']) for r in s)}/{len(s)}",
-                    "CGMLST_LICHT_ATTRIBUTION.tsv",
-                    "ALWAYS report the stratification with the headline")
+        add(f"attribution.{sc}.nearest_neighbour",
+            f"{ok}/{len(rs)} ({100*ok/len(rs):.0f}%)",
+            "CGMLST_LICHT_ATTRIBUTION.tsv",
+            "QUOTE THIS as the country headline: NN is country's best estimator"
+            if sc == "country" else
+            "NOT the region headline -- region's best estimator is modal k=20; "
+            "quote attribution.region.modal_k20 (41/46) instead")
+        strata_rows(f"attribution.{sc}.nearest_neighbour", rs,
+                    "CGMLST_LICHT_ATTRIBUTION.tsv")
+
+lad = maybe(f"{B}/GROUPING_LADDER.tsv")
+prd = maybe(f"{B}/GROUPING_PREDICTIONS.tsv")
+if lad:
+    L = {(r["grouping"], r["estimator"]): r for r in lad}
+    hr = L.get(("region_7way", "modal_k20"))
+    if hr:
+        add("attribution.region.modal_k20",
+            f"{hr['correct']}/{hr['n']} "
+            f"({100*int(hr['correct'])/int(hr['n']):.0f}%)",
+            "GROUPING_LADDER.tsv",
+            "QUOTE THIS as the region headline. The NN region figure is 37/46 "
+            "(80%) and is a DIFFERENT estimator, not a correction")
+        if prd:
+            strata_rows("attribution.region.modal_k20",
+                        [x for x in prd if x["grouping"] == "region_7way"
+                         and x["estimator"] == "modal_k20"],
+                        "GROUPING_PREDICTIONS.tsv")
+    # Cohen's kappa is the only statistic comparable ACROSS groupings: raw
+    # accuracy rewards a binary split with a lopsided majority class for saying
+    # nothing. The ladder is the depth-ceiling result -- deep splits are
+    # recovered perfectly, shallow ones are not.
+    for g, est in (("country", "nearest_nb"), ("region_7way", "modal_k20"),
+                   ("sea_vs_not", "modal_k20"), ("asia_vs_not", "modal_k20"),
+                   ("east_vs_west", "modal_k20")):
+        r = L.get((g, est))
+        if r:
+            add(f"ladder.{g}.kappa", f"{float(r['kappa']):.3f}",
+                "GROUPING_LADDER.tsv",
+                f"{est}, n={r['n']}, {r['classes']} classes; accuracy "
+                f"{100*float(r['accuracy']):.0f}% vs baseline "
+                f"{100*float(r['baseline']):.0f}%")
 
 add("attribution.NOTE_estimator",
     "country best under nearest_neighbour; region best under modal_k20",
-    "score_cgmlst_lichtenegger.py",
-    "NEVER compare an NN number to a modal one")
+    "score_cgmlst_lichtenegger.py + grouping_test_bp.py",
+    "NEVER compare an NN number to a modal one -- the estimator is in every "
+    "key above precisely so that comparison cannot be made by accident")
 
 # ------------------------------------------------------------------- r/m ----
 # r/m comes from the pipeline's own POOL_RECOMBINATION_STATS output, not from

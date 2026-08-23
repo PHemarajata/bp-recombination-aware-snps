@@ -21,6 +21,23 @@ its own baseline.
 
 Leave-group-out throughout: every validation genome sharing the target's
 exposure country is removed from the pool.
+
+OUTPUTS (added 2026-08-23). This script used to print and persist NOTHING, so
+the region headline (modal k=20, 41/46, kappa 0.832) and the whole kappa ladder
+lived only in terminal output and in prose. They were therefore outside
+generate_numbers.py and outside freeze_basis_bp.py -- nothing would have caught
+drift in them, and a reader following the project rule "quote NUMBERS.tsv" would
+have published the NEAREST-NEIGHBOUR region figure (37/46, 80%) instead. Two
+tables are now written:
+
+  GROUPING_LADDER.tsv       one row per (grouping, estimator): n, correct,
+                            accuracy, baseline, kappa.
+  GROUPING_PREDICTIONS.tsv  per-genome calls for every (grouping, estimator),
+                            with the within-pool nearest-neighbour distance, so
+                            a stratification can be computed against the SAME
+                            estimator as the headline it accompanies. Pairing
+                            NN strata with a modal headline is the specific
+                            error this file exists to prevent.
 """
 import csv
 import os
@@ -36,6 +53,17 @@ SEA = {"Thailand", "Viet Nam", "Vietnam", "Cambodia", "Laos", "Malaysia",
        "Timor-Leste"}
 ASIA_REG = {"East Asia & Pacific", "South Asia"}
 WEST_REG = {"Latin America & Caribbean", "North America"}
+
+LADDER = f"{B}/GROUPING_LADDER.tsv"
+PREDS = f"{B}/GROUPING_PREDICTIONS.tsv"
+
+# Stable machine keys for the display names. generate_numbers.py joins on these,
+# so it never depends on a display string that someone might reword.
+GKEY = {"country": "country",
+        "region (7-way)": "region_7way",
+        "SEA vs not": "sea_vs_not",
+        "Asia vs not": "asia_vs_not",
+        "East vs West hemi": "east_vs_west"}
 
 
 def kappa(truth, pred):
@@ -126,6 +154,7 @@ def main():
            f"{'acc':>8}{'baseline':>10}{'kappa':>8}")
     print(hdr); print("-" * len(hdr))
 
+    ladder, preds = [], []
     for gname, gf in GROUPINGS.items():
         pooled = {s: gf(s) for s in samples}
         for est in ("nearest_nb", "modal_k20", "group_test", "hybrid"):
@@ -145,6 +174,12 @@ def main():
                 d, _ = dist_one_vs_all(mat, idx[s], ii)
                 if not (~np.isnan(d)).any():
                     continue
+                # distance to the closest usable relative IN THIS POOL. The pool
+                # is grouping-specific (a genome with no region label is not a
+                # candidate for the region groupings), so this is the honest
+                # stratifier for this row and may differ slightly between
+                # groupings for the same genome.
+                dmin = float(np.nanmin(d))
                 if est == "hybrid":
                     # a close relative is the best evidence when one exists;
                     # when none does, the only signal left is whether this
@@ -175,13 +210,36 @@ def main():
                     o = int(np.nanargmin(d))
                     pred = pooled[cand[o]]
                 T.append(pooled[s]); P.append(pred)
+                preds.append(dict(grouping=GKEY[gname], estimator=est,
+                                  sample_id=s, truth=pooled[s], predicted=pred,
+                                  correct=int(pooled[s] == pred),
+                                  nn_distance=f"{dmin:.5f}"))
             if not T:
                 continue
-            acc = sum(t == p for t, p in zip(T, P)) / len(T)
+            nok = sum(t == p for t, p in zip(T, P))
+            acc = nok / len(T)
             bl = Counter(T).most_common(1)[0][1] / len(T)
+            k = kappa(T, P)
+            ladder.append(dict(grouping=GKEY[gname], grouping_label=gname,
+                               estimator=est, classes=len(set(T)), n=len(T),
+                               correct=nok, accuracy=f"{acc:.4f}",
+                               baseline=f"{bl:.4f}", kappa=f"{k:.4f}"))
             print(f"{gname:<20}{est:<14}{len(set(T)):>8}{len(T):>5}"
-                  f"{acc:>7.0%}{bl:>10.0%}{kappa(T, P):>8.3f}")
+                  f"{acc:>7.0%}{bl:>10.0%}{k:>8.3f}")
         print()
+
+    def dump(path, rows, cols):
+        with open(path, "w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=cols, delimiter="\t",
+                               lineterminator="\n")
+            w.writeheader()
+            w.writerows(rows)
+        print(f"wrote {os.path.basename(path)}  ({len(rows)} rows)")
+
+    dump(LADDER, ladder, ["grouping", "grouping_label", "estimator", "classes",
+                          "n", "correct", "accuracy", "baseline", "kappa"])
+    dump(PREDS, preds, ["grouping", "estimator", "sample_id", "truth",
+                        "predicted", "correct", "nn_distance"])
 
 
 if __name__ == "__main__":

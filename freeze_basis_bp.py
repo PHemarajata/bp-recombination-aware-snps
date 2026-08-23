@@ -41,6 +41,10 @@ WHAT THIS SCRIPT DOES
   --build     writes FINAL_BASIS_2026-08-22/ (partition, panel, manifest)
   (default)   VALIDATES the frozen basis and exits non-zero on any drift
 
+The validator also pins the ATTRIBUTION artifacts to each other (added
+2026-08-23), for the same reason it pins the panel to the partition: the two
+attribution scorers were free to disagree and did, silently.
+
 Run the validator before quoting any number. It is cheap and it is the only
 thing standing between this collection and the next silent partition mismatch.
 """
@@ -189,6 +193,32 @@ def validate():
             if r.get("unit_membership") and s not in members]
     ok &= check("no unit_membership set for a non-member", not leak,
                 f"{len(leak)} leaked")
+
+    # The attribution artifacts must agree WITH EACH OTHER. Two scorers build
+    # their pools independently -- score_cgmlst_lichtenegger.py writes
+    # CGMLST_LICHT_ATTRIBUTION.tsv (one estimator per run) and grouping_test_bp.py
+    # writes GROUPING_LADDER.tsv (all four) -- so agreement is a real
+    # cross-check, not a tautology. It is checked here because the failure it
+    # catches already happened: the region headline (modal k=20, 41/46) was
+    # cited to the attribution table, which is nearest-neighbour and says 37/46.
+    # Nothing was watching the two, because the ladder persisted no file at all.
+    ATT, LAD = f"{B}/CGMLST_LICHT_ATTRIBUTION.tsv", f"{B}/GROUPING_LADDER.tsv"
+    if os.path.exists(ATT) and os.path.exists(LAD):
+        att = list(csv.DictReader(open(ATT), delimiter="\t"))
+        lad = list(csv.DictReader(open(LAD), delimiter="\t"))
+        ns = ({len([r for r in att if r["scale"] == sc])
+               for sc in ("country", "region")} | {int(r["n"]) for r in lad})
+        ok &= check("attribution artifacts agree on the scorable denominator",
+                    len(ns) == 1, f"saw {sorted(ns)}")
+        lnn = {r["grouping"]: int(r["correct"]) for r in lad
+               if r["estimator"] == "nearest_nb"}
+        dis = []
+        for sc, g in (("country", "country"), ("region", "region_7way")):
+            a = sum(int(r["correct"]) for r in att if r["scale"] == sc)
+            if g in lnn and a != lnn[g]:
+                dis.append(f"{sc}: table {a} vs ladder {lnn[g]}")
+        ok &= check("both scorers agree on the nearest-neighbour calls",
+                    not dis, "; ".join(dis) or "country + region match")
 
     if os.path.exists(RM):
         rm = {r["unit"] for r in csv.DictReader(open(RM), delimiter="\t")}

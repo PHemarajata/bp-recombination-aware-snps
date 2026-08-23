@@ -61,6 +61,12 @@ Thailand-overrepresentation worry.
 | SEA vs non-SEA | 2 | modal k=20 | 76% | 59% | **0.461** |
 | country | 16 | nearest neighbour | 22% | 26% | **0.193** |
 
+Source: `GROUPING_LADDER.tsv` (all four estimators per grouping, not just the
+best), surfaced in `NUMBERS.tsv` as `ladder.*.kappa`. Until 2026-08-23 this table
+was the *only* record of these numbers — `grouping_test_bp.py` printed them and
+persisted nothing, so they sat outside `generate_numbers.py` and outside
+`freeze_basis_bp.py`. Do not restate them; cite the keys.
+
 > **Updated 2026-08-23, Track 0 integration (n=43→46).** Region 7-way fell
 > 0.890→0.832 and country 0.188→0.193 because North America is now testable: the
 > Mississippi autochthonous strain (US origin, certain) misattributes to Latin
