@@ -120,8 +120,11 @@ touched it, and on high-signal units the topology is 89% shared.
    `-fconst` and §2.12.8 reports `+ASC`; both are now accurate descriptions of
    two different tracks, and the draft should say so explicitly rather than
    leaving a reader to find the contradiction.
-3. ⚠ **If per-unit trees are published as supplementary files, rebuild them with
-   `-fconst`.** A published tree whose estimated base composition is 54–59% GC in
+3. ✅ **DONE — per-unit trees rebuilt with `-fconst`** (`rebuild_support_fconst_bp.py`
+   → `L1v4c_TREES_SUPPORTED_FCONST/`, 170/170, 0 failures). Across all 170
+   replicon-units estimated GC moves from a `+ASC` median of **56.3%
+   (range 41.9–72.1%)** to an `-fconst` median of **68.1% (range 67.6–68.7%)**
+   against a true ~68.1%. Publish these, not the `+ASC` set. Original rationale: A published tree whose estimated base composition is 54–59% GC in
    a 68% GC organism is hard to defend, and its branch lengths are per-variable-
    site rather than per-site. That includes the branch-support trees generated on
    2026-08-23 (`L1v4c_TREES_SUPPORTED/`), which inherited `GTR+ASC` from the
