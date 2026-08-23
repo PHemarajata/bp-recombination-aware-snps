@@ -319,7 +319,9 @@ necessary is instructive.** Membership had been decided from a Mash-to-SNP
 conversion (`mash × 3,805,619`) whose own documentation describes it as
 triage-grade, and which is in neither unit system. Against distances computed
 directly on each unit's core alignment it overstates diversity by a median
-1.28× and by up to 17.2×, misplacing 15 of 88 units.
+**1.30×**, by up to **17.20×**, and is more than 2× off for **17 of 85 units**.
+Applying the unchanged bounds to alignment distances **reclassifies 22 of 85
+units** — a quarter of the panel.
 
 The **ceiling translates essentially unchanged** (4,671 → ≈4,700), located where
 median recombination tract length falls from 3.77 kb to 2.69 kb. The **floor does
@@ -477,11 +479,16 @@ by 20 points — with correspondingly high pooled r/m (9.99) and per-branch
 recombination burden (5.4–6.2 versus 2.0–2.7 elsewhere) and entirely normal block
 sizes, i.e. genuinely recombination-rich rather than over-called. The 78% figure
 is therefore cited as context only, not as a value the data should reproduce.
-Union coverage was checked and found **not** to scale with unit size
+⚠ **A stale paragraph stood here and has been deleted (2026-08-23).** It read:
+*"Union coverage was checked and found **not** to scale with unit size
 (r = 0.142 against n) or with branch count (r = −0.059), so a single cutoff is
-applicable across the 20-fold size range spanned by the units. Note that union
-has little dynamic range at the top of its scale and becomes uninformative
-there.
+applicable across the 20-fold size range spanned by the units."* **That directly
+contradicts this same section**, which establishes above that union coverage
+**is** size-confounded — `r(log n, union) = +0.80` (p = 4 × 10⁻¹¹), partial +0.84
+— and it is the earlier, superseded measurement. A single union cutoff is
+therefore **not** applicable across the size range, which is why union is used as
+a disclosed post-hoc screen rather than as a gate. Note also that union has
+little dynamic range at the top of its scale and becomes uninformative there.
 
 Independent corroboration comes from tract length —
 every unit above 18% union has a median tract of 4.3–7.1 kb, and the single unit
@@ -1197,19 +1204,39 @@ lost by this choice: 2.12.10 reports what it showed.
 
 ## 2.12.1 Genome panel
 
-The panel comprised **2,976** *B. pseudomallei* assemblies: **2,802** from the
-established curated collection and **174** newly added isolates. Of the
+**2,976** *B. pseudomallei* assemblies were assembled and considered: **2,802**
+from the established curated collection and **174** newly added isolates. Of the
 additions, **169** are on SPAdes paths — **165 assembler swaps plus 4 isolates
 rescued into the panel by re-assembly** — and 5 were retained from other
-assemblers (2.12.2). Panel membership, exclusions and per-isolate assembler
-overrides are recorded in `PANEL_EXCLUSIONS.tsv`, `PANEL_ASSEMBLY_OVERRIDES.tsv`
-and `PANEL_RESCUES_2026-08-18.tsv`.
+assemblers (2.12.2).
+
+**Seventeen assemblies were then removed as duplicate BioSamples**, leaving an
+analysed panel of **2,959**. Deduplication is on BioSample, not run accession: a
+BioSample re-sequenced or re-deposited under several run accessions is one
+isolate and would otherwise contribute repeated observations of the same
+geography. Panel membership, exclusions and per-isolate assembler overrides are
+recorded in `PANEL_EXCLUSIONS.tsv`, `PANEL_ASSEMBLY_OVERRIDES.tsv` and
+`PANEL_RESCUES_2026-08-18.tsv`.
 
 Of 188 SPAdes assemblies produced, 19 were not admitted: 13 duplicates of runs
 already in the collection, 5 not *B. pseudomallei* or grossly divergent, and 1
 mixed sample (`SRR30648681`, which SPAdes revealed as 12.00 Mb of foreign content
 and which SKESA did not rescue). Every exclusion carries a recorded reason and
 evidence.
+
+**The exclusion register is versioned, and four rows were rescinded.** Rows carry
+a `status` field; `status = retired` marks a decision that was withdrawn on
+evidence and is retained for the record rather than deleted. Four rows
+(`SRR2896257`, `SRR2896259`, `ERR9980356`, `SRR2896271`) were retired on
+2026-08-23: each had been excluded for core-genome coverage below 85%, measured
+on the SKESA assemblies, but the panel uses the SPAdes re-assemblies and on those
+all four pass every gate (core 86.2–93.3%, gene-count ratio 0.89–0.97, mash to
+K96243 0.0065–0.0093). The register's `core = na%` on those rows was a
+transcription error rather than an unmeasured field — the value is in
+`core_cov_unfiltered_pct` and the adjacent `core_cov_filtered_pct`, which was
+read instead, is empty for every row in that QC table. **There are consequently
+no active register exclusions in the analysed panel**, and the four are panel
+members that fall in no analysis unit (2.12.5).
 
 ## 2.12.2 Assembly and assembler selection
 
@@ -1272,10 +1299,11 @@ The analysis unit is a **fastbaps level-1 sub-cluster within a PopPUNK strain**,
 retained at **n ≥ 7**. The rule was applied uniformly: no lineage was subdivided
 because it was large, and none was left whole because it was small.
 
-**Strains.** PopPUNK v2.7.6. A sketch database was built over all 2,976
-assemblies (k = 15–31, step 2) and fitted with a Gaussian mixture (`bgmm`, K = 5)
-followed by boundary refinement, yielding **310 clusters of which the largest held
-901 genomes**.
+**Strains.** PopPUNK v2.7.6. A sketch database was built over all **2,976**
+assemblies as sequenced (k = 15–31, step 2) — the partition was derived before
+BioSample deduplication, so the sketch covers the pre-deduplication set — and
+fitted with a Gaussian mixture (`bgmm`, K = 5) followed by boundary refinement,
+yielding **310 clusters of which the largest held 901 genomes**.
 
 **Sub-clusters.** Within each strain, PopPIPE built a split-k-mer alignment
 (SKA v0.4.0), a neighbour-joining guide tree and a fastbaps hierarchical
@@ -1283,8 +1311,10 @@ partition (`levels = 3`), analysed at **level 1**. Levels 2 and 3 were computed
 but not used, so unit size was determined by one stated rule rather than chosen
 per lineage.
 
-**Result before refinement: 86 units, 2,352 genomes (79.0% of the panel)**,
-largest n = 159, median n = 18.
+**Result before refinement: 86 units, 2,352 genomes**, largest n = 159,
+median n = 18. That is **79.0%** of the 2,976 assemblies the partition was
+derived over, or **79.5%** of the 2,959-genome deduplicated panel; quote whichever
+denominator is in use and say which.
 
 > **PopPUNK `bgmm` at fixed K is deterministic per input and exposes no seed**, so
 > cluster boundaries are a property of the panel, not of the run. It follows that
@@ -1307,12 +1337,54 @@ prior-partition unit were ~4× more internally diverse (median-of-medians 0.0022
 vs 0.00054), but the most diverse single-provenance unit (max 0.00538) exceeded
 every one of them. **Modality was diagnostic.** `strain_1_L1_26` (n = 154, median
 pairwise distance 0.00060 — among the tightest units in the panel) held three
-clonal groups at 0.00007 internal against 0.00088 and 0.00134 separation, and was
-split into 98, 47 and 8. `strain_1_L1_11` (24 → 18) and `strain_1_L1_22` (34 → 32)
-had divergent members removed. Units that were diverse but unimodal were left
-intact.
+clonal groups at 0.00007 internal against 0.00088 and 0.00134 separation, and
+this screen proposed splitting it into 98, 47 and 8; the screen also proposed
+removing divergent members from `strain_1_L1_11` (24 → 18) and `strain_1_L1_22`
+(34 → 32). Units that were diverse but unimodal were left intact.
 
-**Final partition: 88 units, 2,342 genomes, 176 replicon-units.**
+### The refinement was applied in the control run, not the reported one
+
+**This is the single point at which the two runs differ, and it must not be read
+past.** The refinement above was executed in the A100 run, giving **88 units,
+2,342 genomes, 176 replicon-units**. **The reported partition is the
+workstation run, which is unrefined**: `strain_1_L1_26` is retained whole,
+`strain_1_L1_11` and `strain_1_L1_22` keep their divergent members, and the
+largest unit is `strain_2_L1_6` (n = 159) rather than a child of
+`strain_1_L1_26`.
+
+The reported partition was then **corrected**, which the A100 partition was not
+and could not be without re-deriving it:
+
+| step | units | genomes |
+|---|---|---|
+| after the n ≥ 7 rule | 86 | 2,352 |
+| − `strain_1_L1_10`: 3 of its 7 members are duplicate BioSamples, leaving 4, below the floor, so the whole unit is dropped | **85** | 2,345 |
+| − 4 further duplicate BioSamples in other units | 85 | 2,341 |
+| − `SRR2896257`, then a register exclusion | **85** | **2,340** |
+
+**Reported partition: 85 units, 2,340 genomes, 170 replicon-units**
+(`FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv`), unit size min 7, median 18,
+max 159, drawn from 28 distinct PopPUNK strains.
+
+⚠ **One genome is a known, deliberate inconsistency, and it is disclosed rather
+than repaired.** `SRR2896257` was removed from `strain_1_L1_26` (154 → 153)
+under a register exclusion that was **subsequently retired as unevidenced**
+(2.12.1). It was not re-added: doing so would require re-deriving that unit's
+alignment, recombination inference and r/m, changing a frozen analysis basis for
+a single genome. It is retained as a panel member assigned to no unit. **The
+reported `strain_1_L1_26` is therefore n = 153 where the current registers would
+support 154.**
+
+Why the unrefined partition is the reported one, in order of weight:
+
+1. **It is the only one that is corrected.** Both runs carry the same duplicate
+   BioSamples; only this one has had them removed.
+2. **Every alignment is local.** The A100's two refinement children of
+   `strain_1_L1_26` have no core alignment in this workspace, so their r/m cannot
+   be re-derived here.
+3. **The refinement buys nothing measurable.** Its n = 98 child is a clonal
+   expansion at 72 mean pairwise SNPs — an order of magnitude below the Gate 1
+   floor — and refinement did not increase the in-window set (2.12.10).
 
 ### The gate order is load-bearing, and refinement must be read through it
 
@@ -1348,14 +1420,18 @@ epidemiological interest, with no r/m** (2.12.7).
 
 Per-unit references were chosen by a completeness gate (≤ 2 contigs) and
 centrality ranking within the unit, with empirically poor references blocklisted;
-units containing no complete genome borrow the nearest one from outside. **35
-distinct references** served the 88 units.
+units containing no complete genome borrow the nearest one from outside. **34
+distinct references** served the 85 reported units
+(`curated_L1v4c_refs.tsv`, restricted to `FINAL_PARTITION.tsv`).
 
 **Reference deflines were normalised before analysis.** Gubbins passes
 `<unit>__<replicon>.core.full.iteration_N_reconstruction` to RAxML as its `-n`
-run id, and RAxML v8 **segfaults at a run id of ≥ 128 characters**. On this
-partition **42 of 172 replicon-units (24.4%) would have exceeded the limit**
-(longest 161 characters); after normalisation the longest was **70**. Sequence
+run id, and RAxML v8 **segfaults at a run id of ≥ 128 characters**. In the run
+where this was diagnosed, **42 of 172 replicon-units (24.4%) would have exceeded
+the limit** (longest 161 characters); after normalisation the longest was **70**.
+⚠ *That count is from the control run's replicon set and has not been recomputed
+on the 170 reported replicon-units; the failure mode and the fix are independent
+of which partition is used, but recompute the count before quoting it.* Sequence
 content was verified byte-identical — only `>` lines were rewritten. This failure
 mode is silent in the sense that matters: Gubbins reports it as "Unable to fit
 model to data", which is indistinguishable from a genuinely bad reference.
@@ -1409,11 +1485,17 @@ calibration:
 | above ceiling | 26 | 2.14 |
 
 Membership was previously taken from a Mash-to-SNP proxy in a different unit
-system from the calibration; that proxy overstates diversity by a median 1.28×
-and up to 17.2×, and misplaces 15 of these 88 units. It gave 47 units and a
-median of 7.38 — close in aggregate, but with a below-floor group whose
-composition did not hold up. The alignment-derived classification is the one
-reported.
+system from the calibration; that proxy overstates diversity by a median
+**1.30×**, by up to **17.20×**, and **reclassifies 22 of these 85 units**. It
+gave 47 units and a median of **7.26** — close in aggregate, but with a
+below-floor group whose composition did not hold up. The alignment-derived
+classification is the one reported.
+
+⚠ **Three r/m values are in circulation and only one is this analysis.** **7.70**
+is the reported figure (alignment-derived Gate 1, 85 units). **7.26** is the same
+partition scored through the Mash proxy. **7.38** is the A100 88-unit control.
+They differ by basis and by proxy, not by biology; none is a correction of
+another.
 
 **The reported recombination result for this collection is therefore
 r/m = 7.70 (median of 47 in-window units).** The all-unit median (5.51) mixes
@@ -1428,19 +1510,50 @@ is withheld.
 ## 2.12.8 Phylogenies
 
 **Per unit.** After recombination removal, a maximum-likelihood tree from the
-filtered polymorphic sites: IQ-TREE, GTR with ascertainment-bias correction
-(model and constant-site counts from a per-unit preflight), with branch support
-enabled. **176 replicon-unit trees**, all at the highest confidence tier.
-Gubbins' own node-labelled trees are retained alongside as a second estimator.
+filtered polymorphic sites: IQ-TREE under **`GTR+ASC`**, one tree per
+replicon-unit (**170** on the reported partition). Gubbins' own node-labelled
+trees are retained alongside as a second estimator.
+
+> ⚠ **Two corrections to what this section previously claimed, both verified
+> against the pipeline configuration (`conf/params.config`) rather than against
+> prose.**
+>
+> **1. Production used `+ASC`, not `-fconst`.** `iqtree_model` and
+> `iqtree_asc_model` are both `GTR+ASC` and **`iqtree_fconst = null`**. Where the
+> filtered alignment contains constant columns — which makes `+ASC` abort —
+> `iqtree_asc_fallback = "varsites"` strips those columns and **keeps `+ASC`**;
+> the config notes that `+ASC` and `-fconst` are mutually exclusive and that the
+> two alternative fallbacks alter branch lengths.
+>
+> **This contradicts §2.5**, which argues `-fconst` with true counts is
+> preferable here because it reproduces full-alignment base composition exactly
+> whereas `+ASC` collapses composition toward 25/25/25/25 in a 68% GC genome.
+> **The contradiction is real and is not resolved by this draft.** The
+> calibration track used `-fconst`; the production run used `+ASC`. Quantifying
+> the difference on one unit is an open method question and must be done before
+> submission — either the production choice is defended or the trees are
+> recomputed. Do not describe the two as equivalent.
+>
+> **2. Branch support was NOT enabled in the production run.**
+> `iqtree_support = false`, which the config itself flags as altering scientific
+> output (no UFBoot or SH-aLRT values on the tree). Support values were added
+> **post-hoc** by `add_branch_support_bp.sh`, which re-runs IQ-TREE on the
+> published alignments adding `-bb 1000 -alrt 1000`
+> (`L1_TREES_SUPPORTED/`, `SUPPORT_TREES.log`, 2026-08-15). ⚠ That run covered
+> **164 replicon-units** and predates the current partition, so it does not
+> correspond one-to-one with the 170 reported here. **Re-run it on the reported
+> partition, or state plainly which trees carry support and which do not.**
+> The earlier claim that all trees were "at the highest confidence tier" is not
+> supported and has been removed.
 
 **Across units.** One **medoid per unit** — the member minimising mean SNP
 distance to the rest of its unit, computed on the recombination-filtered
 alignment and excluding the reference taxon — then a parsnp core-genome alignment
-over those 88 medoids and IQ-TREE under GTR+ASC. Tips are unit identifiers.
+over those **85** medoids and IQ-TREE under `GTR+ASC`. Tips are unit identifiers.
 
 **This global tree is not recombination-corrected, and must not be.** Gubbins
 identifies recombination as regions of unusually dense SNPs against a clonal
-background; across 88 divergent lineages no shared clonal background exists, so
+background; across **85** divergent lineages no shared clonal background exists, so
 it would call most of the alignment recombinant — precisely the failure the
 partition exists to prevent. The global tree shows how units relate, its branch
 lengths include recombination, and **no r/m may be derived from it**.
@@ -1468,7 +1581,7 @@ reported as uninformative, with no p-value, rather than counted as significant.
 
 Missing metadata is encoded inconsistently in the source table — `country` uses
 an empty cell, but `bioproject` uses the literal string "unknown" for 274 of the
-2,352 analysed genomes — so both fields are normalised to a missing state before
+**2,340** analysed genomes — so both fields are normalised to a missing state before
 scoring. Left unnormalised, those 274 genomes would be scored as one shared
 274-member study, mis-measuring the confounder in the direction that favours a
 geographic result. A genome whose origin resolves to more than one country
@@ -1490,15 +1603,18 @@ earlier draft proposed testing near-homogeneous units — for example the
 probability of drawing that composition at random from the collection. We reject
 it. Its null is that the unit is a random draw from the collection, but units are
 clades, and clades are geographically concentrated by descent, so rejecting that
-null demonstrates only that the partitioner works. In this panel **56 of 88 units
-are ≥90% single-country and 39 are 100%**, so the test fires on almost all of
+null demonstrates only that the partitioner works. In the analysed set **54 of 85
+units are ≥90% single-country and 37 are 100%**, so the test fires on almost all of
 them, at a magnitude set by how rare the country happens to be in the collection
 rather than by any property of the unit. The decisive comparison is internal:
 `strain_3_L1_8` (n=22, top share 0.955, 21 Thailand) and `strain_4_L1_1` (n=22,
 top share 0.955, 21 USA) are identical in every tested quantity and both return
 p = 1.0000 under the permutation test — correctly, since each is a clade plus one
 stray. A hypergeometric would separate them by many orders of magnitude solely
-because Thailand is 66% of the panel and the USA ~2%. Such units are reported as
+because Thailand is **66.8% of the analysed set** and the USA ~2%. ⚠ *Quote that
+denominator explicitly: Thailand is 66.8% of the 2,340 analysed genomes but
+**59.5% of the 2,959-genome panel**. Both figures are correct and they are not
+interchangeable.* Such units are reported as
 **descriptive composition, without a p-value**.
 
 ## 2.12.10 The control run, and what it establishes
@@ -1573,51 +1689,213 @@ disaggregate these.
 
 ## 2.12.11a Origin attribution, scored against known exposures
 
-Twenty-six genomes in the panel have a **known exposure country** rather than
-merely a country of deposit (`origin_basis = travel_reattributed`): sixteen CDC
-submissions carrying an explicit label, and ten older assemblies whose exposure
-country is recorded in the assembly name. These were used to score attribution
-directly.
+**Rewritten 2026-08-23.** The previous version of this section described an
+earlier analysis — 26 genomes, unit-modal labels over recombination-filtered SNP
+distances — that has been superseded twice. It is retained in the project archive
+as `[SNP/24]`, where it serves as an independent-typing-system cross-check on a
+different validation set. The analysis below is the reported one.
 
-Three estimators were applied to each held-out genome using only the remaining
-members of its unit — the unit's **modal label**, its **nearest neighbour by
-recombination-filtered SNP distance**, and a **sampling-corrected enrichment**
-(over-representation in the unit relative to the whole panel, which prevents a
-label from winning merely by being 66% of the collection). Each was evaluated at
-country, sub-national and regional scale, under two holdout regimes.
+### 2.12.11a.1 Typing scheme
 
-**The two regimes answer different questions and both are reported.**
-Leave-one-out removes only the target genome and asks whether attribution works
-*given that reference genomes for that country exist*. Leave-group-out removes
-every validation genome sharing the exposure country and asks whether a country
-with **no** reference representation can be attributed. Accuracy is reported
-beside the **majority-class baseline** on the same holdout, because East Asia &
-Pacific is 91.8% of the panel and an estimator that always answered "East Asia &
-Pacific" would score 58% at regional scale while knowing nothing.
+Attribution is scored on **core-genome MLST**, not on the SNP units, so that the
+result does not depend on the partition. The scheme is **Lichtenegger *et al.*,
+4,221 core targets** (Lichtenegger S, Trinh TT, Assig K, *et al.* *J Clin
+Microbiol* 2021;59(8):e0009321; PMID 33980649; doi:10.1128/JCM.00093-21), built by
+challenging K96243 with 469 genomes and validated on 320 WGS datasets. Alleles
+were called with chewBBACA (`PrepExternalSchema` then `AlleleCall`) over
+**3,033** genomes; median call rate **96.9%** of 4,221 loci, with **99.2%** of
+genomes above 90%.
 
-**Result.** At regional scale, modal and enrichment attribution were correct for
-**19 of 19** scorable genomes against a **58%** baseline, and did not degrade
-under leave-group-out. At country scale, every estimator scored **zero** under
-leave-group-out. Nearest-neighbour attribution appears to reach 37% at country
-scale under leave-one-out, but **all seven of those hits are other validation
-genomes of the same country predicting one another**, and all seven disappear
-under leave-group-out. Any country-level accuracy quoted with the validation
-genomes retained is therefore artefactual, not merely optimistic.
+Distance between two genomes is the **fraction of commonly-called loci at which
+their alleles differ**, computed pairwise on the loci called in both; loci
+missing in either genome are excluded from that pair rather than imputed. This
+makes the denominator pair-specific, and it is reported alongside every
+attribution call (`n_loci_compared`, median 4,039 of 4,221, range 2,520–4,083).
 
-The failure is not only one of panel composition. Three Mexican-exposure genomes
-retained genuine Mexican references under leave-group-out — three of a thirty-
-genome pool — and attribution still failed, which is consistent with their unit
-(`strain_4_L1_4`) being classified *confounded* by the association test.
+> A second scheme (PubMLST scheme 2, 4,089 loci) was run in full as a
+> scheme-swap robustness check and is reported in the supplement. The two agree:
+> region accuracy was identical and cgMLST-vs-SNP concordance correlated at
+> r = 0.999 between schemes. **The scheme is not what determines the result.**
 
-**Two limits follow.** Sub-national attribution is **untestable** on this
-validation set: all twenty-six genomes carry a blank sub-national label. And six
-of the twenty-six are unattributable because they fall in single-genome units
-below the analysis floor — **four are the only panel representative of their
-exposure country**, so the source countries most in need of attribution are the
-least likely to occupy an analysable unit.
+### 2.12.11a.2 Validation set
 
-Accordingly we claim **regional origin attribution and not country-level
-attribution**, and report the analysability bias alongside it.
+**48 genomes carry an independently documented exposure country** rather than
+merely a country of deposit — CDC submissions with an explicit `ex <country>`
+label, older assemblies whose exposure country is recorded in the assembly name,
+and cases whose exposure is documented in the published literature. The register
+of exposure assignments is `EXPOSURE_OVERRIDES.tsv`; it is a **frozen input**,
+changed only by a deliberate batched refresh, never edited mid-analysis.
+
+**Two of the 48 carry a non-country exposure** ("Africa"; "Panama and Peru") and
+are unattributable at country scale by construction. **The scorable set is
+therefore 46**, drawn from **16 exposure countries**. Every `x/46` in this paper
+is over that set. ⚠ **48 is not an attribution denominator.**
+
+### 2.12.11a.3 Estimators, and why the choice is reported per scale
+
+Four estimators were computed for every held-out genome against the same pool:
+
+| estimator | rule |
+|---|---|
+| **nearest neighbour** | the label of the single closest genome |
+| **modal k = 20** | the commonest label among the 20 closest |
+| group test | the group whose *median* distance to the target is lowest |
+| hybrid | modal k=20 when a relative closer than 0.30 exists, else the group test |
+
+**The best estimator differs by scale, and both are reported with the estimator
+named.** Country is best under **nearest neighbour**; region is best under
+**modal k = 20**:
+
+| scale | estimator | correct | accuracy | majority baseline | **κ** |
+|---|---|---|---|---|---|
+| country | **nearest neighbour** | 10/46 | 21.7% | **26.1%** | **0.193** |
+| country | modal k = 20 | 7/46 | 15.2% | 26.1% | 0.132 |
+| region (7-way) | nearest neighbour | 37/46 | 80.4% | 45.7% | 0.715 |
+| region (7-way) | **modal k = 20** | **41/46** | **89.1%** | **45.7%** | **0.832** |
+
+⚠ **A nearest-neighbour number and a modal number are different analyses and must
+never be compared with each other.** Region under nearest neighbour is 37/46
+(80%); that is not a correction to 89% and must not be reported as one. The
+per-estimator results are written to `GROUPING_LADDER.tsv` and surfaced with the
+estimator in the key (`attribution.region.modal_k20`,
+`attribution.country.nearest_neighbour`).
+
+**Cohen's κ is the headline statistic, not accuracy.** Accuracy is not comparable
+across groupings: a binary split with a 90% majority class scores 90% by saying
+nothing, and East Asia & Pacific is 66.8% of the analysed set. κ corrects for
+chance agreement and therefore also neutralises the Thailand over-representation.
+
+**Country attribution does not exceed chance.** 21.7% against a 26.1% majority
+baseline. It is reported as a failure to clear baseline, not as "22% accuracy".
+
+### 2.12.11a.4 Holdout: leave-group-out AND leave-outbreak-out
+
+Two holdout rules are applied together.
+
+**Leave-group-out.** Every *other validation genome sharing the target's exposure
+country* is removed from the pool. Without it, validation genomes predict one
+another and country accuracy is inflated by circularity rather than by signal:
+under leave-*one*-out the same estimator reaches 37% at country scale and **all
+of those hits are validation genomes of the same country predicting each other**.
+The collapse under leave-group-out is reported as a result in its own right,
+because it quantifies how much apparent attribution performance is circular.
+
+**Leave-outbreak-out.** Isolates that are the *same epidemiological source* —
+one investigation, one strain, one place — are not independent observations of
+geography and are held out together whenever any member is scored. The register
+is `OUTBREAK_GROUPS.tsv`, also a frozen input.
+
+> **This register is explicit, not automatic, and the reason is a measured
+> counterexample that has since been externally confirmed.** An automatic
+> same-BioProject or near-clone rule would hold out the Georgia, USA cases that
+> sit ~0.01 from two Viet Nam-exposure cases in the same BioProject, "correcting"
+> Viet Nam from 0/2 to 2/2. Those Georgia cases are **not** co-deposits: a CDC
+> and state epidemiologic investigation found no recent international travel and
+> reported them as presumptive autochthonous cases spanning 1983–2024 (Brennan S,
+> *et al.* *Emerg Infect Dis* 2025;31(9):1802–1806; PMID 40835221). They are
+> independent cases of a lineage that genuinely spans Viet Nam and the
+> southeastern United States, and removing them would hide real references and
+> manufacture an answer. **An automatic rule would have produced a false positive
+> here; only an explicit register avoids it.**
+
+### 2.12.11a.5 Stratification by nearest-neighbour distance
+
+Every accuracy is reported stratified by the distance to the closest available
+relative, because the two regimes are different problems:
+
+| stratum | country (NN) | region (modal k = 20) |
+|---|---|---|
+| d < 0.05 — a close relative exists | **2/14** | **14/14** |
+| 0.05 ≤ d < 0.30 | 2/10 | 8/10 |
+| d ≥ 0.30 — no real relative | 6/22 | 19/22 |
+
+⚠ **A stratification must use the same estimator as the headline it accompanies.**
+The region strata above are modal k=20 because 89% is a modal number; the
+nearest-neighbour region strata (11/14 · 6/10 · 20/22) belong with the 80% figure.
+
+**The d ≥ 0.30 row is not the success it appears to be.** At that distance ~30–79%
+of loci differ and there is no relative in any meaningful sense. Nine of those 22
+genomes share a single Ecuadorian nearest neighbour; because most are Latin
+American, "Ecuador → Latin America & Caribbean" scores correct, while **both
+Sub-Saharan African genomes in the stratum are confidently assigned to Latin
+America and scored wrong**. The estimator is reporting *"unlike the Asian
+majority of the panel"*, and a catch-all region label converts that into a
+correct answer for one continent and a wrong one for another.
+
+**A control for the obvious alternative explanation.** Genomes with fewer
+commonly-called loci could have inflated distances, which would make the far
+stratum an assembly-quality artefact. It is not: across the 46, `n_loci_compared`
+against nearest-neighbour distance gives Spearman ρ = **−0.247** (n = 46, not
+significant), and median loci compared is flat across the three strata
+(**4,042 / 4,040 / 4,024**).
+
+### 2.12.11a.6 The abstention rule
+
+Because the d ≥ 0.30 stratum answers confidently without evidence, the estimator
+is paired with an **abstention rule**: where no relative closer than a threshold
+exists, return *"unattributable — novel lineage"* rather than a region.
+
+The threshold is **nearest-neighbour distance ≤ 0.462**, and it is reported
+**out-of-sample**: the threshold is selected on the other 45 genomes and applied
+to the held-out one, so the figure is not the circular result of tuning and
+scoring on the same set.
+
+| | in-sample | leave-one-out |
+|---|---|---|
+| coverage | 78.3% (36/46) | **76.1%** |
+| selective accuracy | 94.4% | **94.3%** |
+
+**Both baselines are required and they disagree**, which is the point. Declining
+cases *at random* leaves the expected error rate unchanged, so the
+random-abstention baseline is simply the answer-everything accuracy (89.1%). But
+abstention also changes the class mix, so the **majority share of the retained
+subset** must be reported too: it rises from 45.7% to 50.0%. The rule therefore
+improves lift over chance only from +43.4 to +44.4 points. **Its value is in
+*which* errors remain, not in the accuracy number**, and the paper states it that
+way.
+
+The rule declines **3 of the 5 region errors**, including **both** Sub-Saharan
+African misassignments, at a cost of 7 correct answers. It **cannot** decline the
+two Georgia/Mississippi-type errors, which have genuine close relatives and high
+neighbourhood agreement — **two distinct failure modes, and this rule addresses
+one of them.**
+
+⚠ **The same rule fails at country scale, and that is reported as a result.** Its
+best operating point reaches 37.5% selective accuracy against an answer-everything
+21.7% — an apparent +15.8 points, reproduced exactly under leave-one-out. But the
+**retained-subset majority baseline is also exactly 37.5%**: on the half of cases
+the rule elects to answer, always guessing the commonest exposure country scores
+identically. **Country attribution is not rescued by abstaining.**
+
+### 2.12.11a.7 Scales not claimed
+
+**Sub-national attribution fails and is reported as failing**: 0 of 5 scorable
+genomes, under every estimator.
+
+**The granularity ladder shows where the ceiling lies.** The same data, the same
+holdout, coarser groupings (modal k = 20):
+
+| grouping | classes | accuracy | baseline | **κ** |
+|---|---|---|---|---|
+| Asia vs non-Asia | 2 | **100%** | 58.7% | **1.000** |
+| Eastern vs Western hemisphere | 2 | 95.7% | 63.0% | **0.909** |
+| region, 7-way | 5 present | 89.1% | 45.7% | **0.832** |
+| SEA vs non-SEA | 2 | 76.1% | 58.7% | 0.461 |
+| country | 16 | 21.7% | 26.1% | **0.193** (NN) |
+
+**We therefore claim regional attribution and an essentially perfect deep split,
+and we do not claim country-level attribution.** The limit is depth of signal,
+not volume of data: the deep splits are recovered without error while the
+shallow ones are not, on the same genomes and the same pool.
+
+### 2.12.11a.8 Software
+
+Attribution is scored by `score_cgmlst_lichtenegger.py` (per-genome calls) and
+`grouping_test_bp.py` (the estimator × grouping ladder and κ), the abstention
+rule by `abstention_rule_bp.py`. The two scorers construct their candidate pools
+independently and are cross-checked against each other for agreement on the
+nearest-neighbour calls and on the scorable denominator, as part of the frozen
+basis validator (2.12.12).
 
 ## 2.12.12 Reproducibility
 
@@ -1655,8 +1933,10 @@ confidence tier, zero task failures in either execution trace.**
 The Mash sketch size is **50,000**, not the 10,000 named in the repository's
 `params.config`; the sketch header is authoritative.
 
-**Compute.** The production run used an NVIDIA DGX Station A100 (128 cores,
-503 GB RAM); the control run a 22-core, 62 GB workstation. **No stage is
+**Compute.** ⚠ **Note the designation, which was inverted in an earlier draft.**
+The **reported** run is the 22-core, 62 GB workstation (85 units, 2,340 genomes);
+the NVIDIA DGX Station A100 (128 cores, 503 GB RAM) executed the **control** run
+(88 units), per the §2.12 preamble. **No stage is
 GPU-accelerated** — Gubbins, Snippy, IQ-TREE and RAxML are all CPU-bound. The
 hardware requirement is memory, and it falls on partitioning rather than on the
 SNP analysis: `ska build` on the 901-genome strain requires ~500–600 GB when
