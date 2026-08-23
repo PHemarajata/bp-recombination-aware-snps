@@ -8,19 +8,29 @@ have changed the paper's headline.
 result is strengthened.** This is outcome 3 of the three the handoff pre-declared
 as publishable. One fragile, testable positive lead survives (§6).
 
-> **The headline numbers below are the n=43 validation set of 2026-08-21 — the
-> coherent experiment as run.** The Track 0 integration grew the set to 46:
-> **accessory country 14/46 (30%) vs core 10/46 (22%)**.
+> ✅ **FULLY RE-RUN AT n = 46 (2026-08-24).** The body tables below are now the
+> n = 46 figures, with the superseded n = 43 values retained in brackets or in
+> §1a. **Every conclusion is unchanged.** One figure was *not* refreshed and is
+> flagged in place: the contiguity-matched pool in §4.
 >
-> ✅ **The control sub-numbers were re-run at n=46 on 2026-08-23
-> (`accessory_control_bp.py`). The conclusion is unchanged and Control 4 is
-> sharper than it was at n=43.**
+> Headline: **accessory country 14/46 (30%, κ 0.264) vs cgMLST core 10/46
+> (22%, κ 0.193)**, against a 26% majority baseline.
 >
-> | Control 4 — accuracy by whether a genuine close relative exists (n=46) | accessory | core |
+> | Control 4 — country accuracy by whether a genuine close relative exists (n=46) | accessory | core |
 > |---|---|---|
 > | d_core < 0.05 — **a close relative exists** | **1/14 (7%)** | 2/14 (14%) |
 > | d_core 0.05–0.30 | 2/10 | 2/10 |
 > | d_core ≥ 0.30 — **no real relative** | **11/22 (50%)** | 6/22 (27%) |
+>
+> **Region under the same strata does NOT run the other way**, and saying so
+> would be wrong: accessory region is 9/14 · 6/10 · **20/22**, so it too is best
+> where no close relative exists. That is the known attractor artifact, which
+> affects both scales. What separates country is the *magnitude and the
+> baseline*: accessory country swings **7% → 50%** across the strata and sits
+> below its 26% baseline in the close-relative stratum, whereas region is 64% →
+> 91% and clears its 46% baseline in every stratum. Core region NN over the same
+> cuts is 11/14 · 6/10 · 20/22 — accessory is indistinguishable from core on
+> region and only differs on country.
 >
 > **The inversion is the whole finding, and it is stronger at n=46 than at n=43
 > (where the close-relative stratum was 0/13).** Accessory country attribution is
@@ -43,26 +53,55 @@ as publishable. One fragile, testable positive lead survives (§6).
 
 ## 1. The headline number, and why it does not mean what it looks like
 
+**Re-run at n = 46 on 2026-08-23.** The n = 43 table it replaces is preserved in
+§1a for comparison; every conclusion below is unchanged.
+
 | axis | scale | best estimator | accuracy | kappa |
 |---|---|---|---|---|
-| **accessory** | country | NN 13/43 | **30%** | **0.263** |
+| **accessory** | country | NN **14/46** | **30%** | **0.264** |
+| cgMLST core | country | NN 10/46 | 22% | 0.193 |
+| PopPUNK core | country | NN 8/46 | 17% | 0.148 |
+| majority baseline | country | — | 26% (12/46) | 0 |
+| **accessory** | region | NN **35/46** | **76%** | **0.665** |
+| cgMLST core | region | NN 37/46 | 80% | 0.715 |
+| cgMLST core | region | modal k=20 **41/46** | **89%** | 0.832 |
+| PopPUNK core | region | NN 35/46 | 76% | 0.653 |
+| majority baseline | region | — | 46% (21/46) | 0 |
+
+κ is computed with the same function as `grouping_test_bp.py`, so these values
+are comparable with `GROUPING_LADDER.tsv` rather than merely similar to it.
+
+Taken alone, the first row is the result the experiment was hoping for: country
+attribution above its majority baseline for the first time in this project, and
+8 points above the cgMLST core genome. Under `modal_k5` accessory reaches
+**15/46 (33%)**.
+
+**Four independent checks say the number is not attribution.** Estimator choice
+is reported as required: accessory country peaks at NN and `modal_k5` and
+*falls* to **4/46 (9%, κ 0.063)** by `modal_k20` — the opposite of the core
+genome's behaviour, which is itself a warning that the signal is carried by one
+or two neighbours rather than by a neighbourhood.
+
+### 1a. The superseded n = 43 table
+
+Kept because the §2 like-for-like argument and the §6 lead were both written
+against it. **Do not quote from here.**
+
+| axis | scale | best estimator | accuracy | kappa |
+|---|---|---|---|---|
+| accessory | country | NN 13/43 | 30% | 0.263 |
 | cgMLST core | country | NN 9/43 | 21% | 0.188 |
 | PopPUNK core | country | NN 8/43 | 19% | 0.161 |
 | majority baseline | country | — | 28% | 0 |
-| **accessory** | region | NN 34/43 | **79%** | **0.707** |
+| accessory | region | NN 34/43 | 79% | 0.707 |
 | cgMLST core | region | NN 36/43 | 84% | 0.761 |
 | cgMLST core | region | modal k=20 40/43 | 93% | — |
 | majority baseline | region | — | 47% | 0 |
 
-Taken alone, the first row is the result the experiment was hoping for: country
-attribution above its majority baseline for the first time in this project, and
-9 points above the core genome. Under `modal_k5` accessory reaches 15/43 (35%).
-
-**Four independent checks say the number is not attribution.** Estimator choice
-is reported as required: accessory country peaks at NN and `modal_k5` and
-*falls* to 4/43 by `modal_k20`, the opposite of the core genome's behaviour,
-which is itself a warning that the signal is carried by one or two neighbours
-rather than by a neighbourhood.
+The three genomes added by the Track 0 integration move accessory country from
+13/43 to 14/46 — the *rate* is flat at 30% — while every region figure falls a
+few points because North America became testable. The ordering that carries the
+argument (accessory > cgMLST core > PopPUNK core on country) is unchanged.
 
 ---
 
@@ -71,8 +110,9 @@ rather than by a neighbourhood.
 PopPUNK 2.7.6 sketch database built over the **same 3,033 genomes** the
 Lichtenegger cgMLST run used (`cgmlst_lichtenegger/genomes/`), k = 15–31 step 2,
 sketch size 10,000 — matching the parameters of the existing `poppunk_bp` db.
-4,598,028 pairs; 3,015 genomes after the 18 duplicate-BioSample drops; 45
-validation genomes, 43 scorable.
+4,598,028 pairs; 3,015 genomes after the 18 duplicate-BioSample drops; **48
+validation genomes, 46 scorable** (45 / 43 as originally run, before the Track 0
+integration).
 
 Accessory distance is PopPUNK's *a*, the intercept of the regression of
 log(Jaccard) on k; core *pi* is the slope. Both come from the same sketches, so
@@ -107,16 +147,21 @@ the date so the null cannot be shopped.
 Restricting the matchable pool to one contig-count tertile at a time (cuts at
 114 and 173 contigs):
 
+Re-run at n = 46 (2026-08-23); the n = 43 values are in brackets.
+
 | pool restricted to | n_pool | country | region |
 |---|---|---|---|
-| low (best assemblies) | 1,001 | 11/43 (26%) | 30/43 (70%) |
-| mid | 1,011 | 10/43 (23%) | 41/43 (95%) |
-| **high (most fragmented)** | 986 | **2/43 (5%)** | 31/43 (72%) |
+| low (best assemblies) | 1,001 | 11/46 (24%) *[11/43, 26%]* | 31/46 (67%) *[30/43]* |
+| mid | 1,011 | 11/46 (24%) *[10/43, 23%]* | 42/46 (91%) *[41/43]* |
+| **high (most fragmented)** | 986 | **3/46 (7%)** *[2/43, 5%]* | 32/46 (70%) *[31/43]* |
+
+Validation genomes split by **their own** assembly quality: country 5/12
+(low-contig) vs 8/33 (high-contig), region 9/12 vs 25/33.
 
 When only fragmented genomes are available to match against, country accuracy
-collapses to 5% — well below both the 28% baseline and the core genome. The
+collapses to 7% — well below both the 26% baseline and the core genome. The
 geographic composition of the pool changes across tertiles too, so this is not
-proof of a batch effect on its own, but a 5-fold swing driven by assembly
+proof of a batch effect on its own, but a 3.5-fold swing driven by assembly
 quality is exactly the failure signature the control was written to detect.
 
 ### Control 2 — accessory distance is measurably a function of fragmentation. FAIL.
@@ -142,10 +187,12 @@ fragmented genome is systematically far from everything.
 Country labels shuffled **within** contig-count strata, so assembly quality is
 held fixed:
 
+Re-run at n = 46 with 1,000 permutations (2026-08-23); n = 43 in brackets.
+
 | scale | real | null mean | null 95th pct | p |
 |---|---|---|---|---|
-| country | 30.2% | 6.4% | 11.6% | 0.0010 |
-| region | 79.1% | 43.9% | 51.2% | 0.0010 |
+| country | 30.4% *[30.2%]* | 7.7% *[6.4%]* | 13.2% *[11.6%]* | 0.0010 |
+| region | 76.1% *[79.1%]* | 43.5% *[43.9%]* | 50.0% *[51.2%]* | 0.0010 |
 
 Both sit far outside the null. **There is genuine non-random structure in
 accessory content that assembly quality alone does not explain.** This is the
@@ -187,18 +234,34 @@ All five Mexican validation genomes are 2–3 contig closed assemblies, and each
 matched a 2-contig Mexican reference from a single locality (Huasabas). Dropping
 **that one pair of genomes**:
 
+Re-run at n = 46 (2026-08-23); n = 43 in brackets.
+
 | | with | without |
 |---|---|---|
-| country | 13/43 | **8/43** |
-| region | 34/43 | 33/43 |
+| country | 14/46 (30%) *[13/43]* | **9/46 (20%)** *[8/43]* |
+| region | 35/46 (76%) *[34/43]* | 34/46 (74%) *[33/43]* |
 | Mexico specifically | **5/5** | **0/5** |
 
 Two genomes out of 3,015 carry the entire accessory advantage. Remove them and
-accessory country (8/43) falls **below the core genome** (9/43). The Mexican
-cases' next choices become Costa Rica, Czech Republic and El Salvador.
+accessory country (**9/46, 20%**) falls **below the cgMLST core genome**
+(10/46, 22%) *and* below the 26% majority baseline. The Mexican cases' next
+choices become Brazil, Costa Rica, Czech Republic and El Salvador.
+
+**This is now a reproducible command rather than an ad-hoc edit.**
+`score_accessory_bp.py` gained an `--exclude` flag that removes genomes from the
+panel on top of the duplicate register, so the frozen `PANEL_DUPLICATES`
+register is never touched:
+
+```bash
+python3 score_accessory_bp.py --distance accessory --out-prefix accessory_bp/ATTR_ACC_NOHUASABAS --exclude GCF_006542565_1_Mexico_Huasabas,GCF_006542585_1_Mexico_Huasabas
+```
 
 A contiguity-matched pool (nearest neighbour restricted to genomes within ±50%
 of the query's contig count) reduces country 30% → 23% and region 79% → 74%.
+**⚠ These two figures are still the n = 43 run** — the contiguity-matched pool
+is not one of the four controls `accessory_control_bp.py` re-runs, so it was not
+refreshed with the rest. It is directional support, not a headline; re-run it
+before it appears in the manuscript.
 
 For context, the core genome places those same Mexican cases nearest to Ecuador
 and Colombia at d = 0.002 — a coherent Americas lineage signal — and scored them

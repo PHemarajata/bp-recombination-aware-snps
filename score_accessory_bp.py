@@ -235,11 +235,22 @@ def main():
                     default=f"{B}/cgmlst_lichtenegger/MANIFEST.tsv")
     ap.add_argument("--estimator", default="nearest_neighbour")
     ap.add_argument("--out-prefix", default=None)
+    ap.add_argument("--exclude", default="",
+                    help="comma-separated sample_ids to remove from the panel "
+                         "entirely, on top of the duplicate register. Exists so "
+                         "the section-4 leave-two-out (the Huasabas pair) is a "
+                         "reproducible command rather than an ad-hoc edit; the "
+                         "frozen PANEL_DUPLICATES register is never touched.")
     ap.add_argument("--validate", action="store_true",
                     help="check --distance cgmlst against CGMLST_LICHT_ATTRIBUTION.tsv")
     a = ap.parse_args()
 
     drop = load_drops()
+    extra = {x.strip() for x in a.exclude.split(",") if x.strip()}
+    if extra:
+        drop = drop | extra
+        print(f"--exclude: also removing {len(extra)} genome(s): "
+              f"{', '.join(sorted(extra))}")
 
     if a.distance == "cgmlst":
         samples, loci, mat = tmpl.load_profiles(a.profiles)
