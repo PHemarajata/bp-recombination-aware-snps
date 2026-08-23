@@ -4,18 +4,32 @@ Drafted 2026-08-21 from a full re-read of the 62-document corpus plus direct
 recomputation from the result tables. Every number below was either verified
 against the primary TSV or is cited to the document that owns it.
 
-> **⚠ Numbers span three analyses and two eras — do not read them as one series,
-> and do not find-replace across them.** The spine (§2) quotes the original
-> **core-genome SNP** result on **n=24** (0/24 country, 22/24 = 92% region); the
-> weak-spots (§5) quote intermediate **cgMLST** runs (n=24, n=29, n=43). The
-> **current cgMLST headline is the Track 0 integrated n=46 set (2026-08-23):
-> country NN 10/46 (22%), region modal-k20 41/46 (89%, κ 0.832), country
-> close-relative 2/14, and North America now testable (Mississippi → Latin
-> America, a certain-origin miss).** These live in `NUMBERS.tsv` and
-> `TRACK0_INTEGRATION_2026-08-23.md`. Before submission this outline needs a
-> reconciliation pass that states, per figure, *which* validation set and *which*
-> typing system it belongs to — a mechanical sweep would corrupt the distinct
-> core-genome and cgMLST results.
+> ## ⚑ FIGURE PROVENANCE KEY — read before quoting any attribution number
+>
+> **Reconciled 2026-08-23.** The outline reports **five distinct attribution
+> analyses**, each on its own validation set and typing system. They are NOT one
+> number at different times; do not find-replace across them. Every attribution
+> figure below is tagged with one of these codes:
+>
+> | code | typing system | validation n | country | region | source |
+> |---|---|---|---|---|---|
+> | **[SNP/24]** | core-genome SNP, unit-based | 24 | 0/24 (LGO) | 22/24 = 92% (modal), 67% (NN); baseline 54% | `ATTRIBUTION_SCORES.tsv` |
+> | **[MLST/17]** | 7-locus MLST | 17 | 0/17 | 13/15 = 87% | typing-resolution table (§4) |
+> | **[cg-Pub/29]** | cgMLST, PubMLST scheme (4,089 loci) | 29–30 | 0/30 | 23/29 = 79% | superseded by cg-Licht |
+> | **[REScurve]** | cgMLST subsampled k loci | travel-reattributed set | flat 0 | 49.5% → 82.1%; baseline 48% | `RESOLUTION_CURVE_RESULT` |
+> | **[cg-Licht/46]** ← **CURRENT HEADLINE** | cgMLST, Lichtenegger (4,221 loci) | **46** | **NN 10/46 = 22%; modal-k20 7/46 = 15%; close-relative 2/14** | **modal-k20 41/46 = 89%, κ 0.832; NN 37/46 = 80%; baseline 46%** | `NUMBERS.tsv`, `CGMLST_LICHT_ATTRIBUTION.tsv` |
+>
+> **Ladder (cg-Licht/46, κ):** Asia/non-Asia 1.000, East/West hemisphere 0.909,
+> region 7-way 0.832, SEA/non-SEA 0.461, country 0.132 (modal) / 0.193 (NN).
+> North America is now testable — the Mississippi autochthonous strain (US origin
+> certain) misattributes to Latin America. `TRACK0_INTEGRATION_2026-08-23.md`.
+>
+> **The paper must pick ONE cgMLST analysis as the headline** — cg-Licht/46 (it is
+> the published scheme, the largest validation set, and the only one with North
+> America). cg-Pub/29 and the intermediate n=24/43 cgMLST runs are superseded and
+> should be dropped from the manuscript, kept only as robustness/scheme-swap
+> support. [SNP/24], [MLST/17] and [REScurve] are genuinely separate analyses and
+> stay, each tagged.
 
 **Read §1 first. It is the only part that is a decision rather than a finding.**
 
@@ -70,16 +84,23 @@ that, empirically. **The science did not drift. The deliverable did.**
 > set, no public genome exists in ENA at all. The limit is a surveillance gap,
 > not a technical one.
 
-The logic chain, each link independently evidenced:
+The logic chain, each link independently evidenced. **This chain is written on
+the earlier [SNP/24] analysis; recast it on [cg-Licht/46] for the paper — country
+10/46 = 22% (a hair above a 26% baseline, and 2/14 where a close relative exists),
+region 89%. The conclusion is identical and stronger (North America now included);
+only the numbers update.**
 
-1. Country attribution fails. **0/24** under leave-group-out.
-2. It is not our estimator: **region works, 22/24 (92%) vs 54% baseline**, same
-   data, same estimator, same holdout.
+1. Country attribution fails. **0/24 [SNP/24]** / **10/46, and 2/14 where a close
+   relative exists [cg-Licht/46]** under leave-group-out.
+2. It is not our estimator: **region works, 22/24 = 92% [SNP/24]** / **89%
+   [cg-Licht/46]**, same data, same estimator, same holdout.
 3. It is not resolution: across a **584-fold** span in locus count, country is
-   **0/17, 0/30, 0/24**; a resolution curve over a **2,000-fold** range holds
-   country flat while region climbs **49.5% → 82.1%**.
+   **0/17 [MLST/17], 0/30 [cg-Pub/29], 0/24 [SNP/24]**; a resolution curve over a
+   **2,000-fold** range holds country flat while region climbs **49.5% → 82.1%
+   [REScurve]**.
 4. It is not the lineage partition: the same result appears under two
-   **partition-free** methods (7-locus MLST, cgMLST nearest-neighbour).
+   **partition-free** methods (7-locus MLST [MLST/17], cgMLST nearest-neighbour
+   [cg-Licht/46]).
 5. It is not fixable by sequencing more of what we already have: the failure
    tracks **absence of reference genomes for the source country**.
 6. Independent confirmation from the organism itself: **ST92 spans seven
@@ -154,13 +175,17 @@ census and say which.
 
 ### R2 — Country attribution fails; region succeeds
 
-**Table 4 (headline).** Leave-group-out, 31-genome validation set:
+**Table 4 (headline). [SNP/24]** — core-genome SNP, leave-group-out. **For the
+paper, replace with [cg-Licht/46]:** country modal 15% / NN 22% (baseline 26%),
+region modal-k20 89% / NN 80% (baseline 46%), plus sub-national 0/5. The [SNP/24]
+version below is the original unit-based result and should be cited as the
+core-genome cross-check, not the headline.
 
 | scale | scorable | modal | nearest-neighbour | majority baseline |
 |---|---|---|---|---|
-| country | 24 | **0%** | **0%** | 0% |
+| country [SNP/24] | 24 | **0%** | **0%** | 0% |
 | sub-national | 5 | **0%** | 0% | 0% |
-| region | 24 | **92%** | 67% | **54%** |
+| region [SNP/24] | 24 | **92%** | 67% | **54%** |
 
 **The single most important methodological point in the paper.** Under
 leave-*one*-out, country nearest-neighbour scores **29% (7/24)**. Under
@@ -175,14 +200,20 @@ attribution performance is circularity.
 
 | layer | loci | country | region |
 |---|---|---|---|
-| MLST | 7 | 0/17 | 13/15 (87%) |
-| cgMLST | 4,089 | 0/30 | 23/29 (79%) |
-| core-genome SNP | whole genome | 0/24 | 22/24 (92%) |
+| MLST **[MLST/17]** | 7 | 0/17 | 13/15 (87%) |
+| cgMLST **[cg-Pub/29]** | 4,089 | 0/30 | 23/29 (79%) |
+| core-genome SNP **[SNP/24]** | whole genome | 0/24 | 22/24 (92%) |
 
-*(The MLST row predates the 31-genome correction and is due a re-run — see §6.)*
+*(Each row is a different validation set because each typing system covers
+different genomes — that is inherent, not an error. For the paper add a
+**[cg-Licht/46]** row: 4,221 loci, country 0/… at every-loci is the same story,
+region 89%. The MLST row also predates the 31-genome correction and is due a
+re-run — see §6.)*
 
-**Figure 2.** The resolution curve. k loci sampled at random, k = 2 → 4,089, 10
-replicates. Country flat at 0–7.3% across the whole range and **0.0% at the
+**Figure 2. [REScurve].** The resolution curve. k loci sampled at random,
+k = 2 → 4,089, 10 replicates, on the travel-reattributed validation set (**not
+the cg-Licht/46 set** — the Track 0 additions are not in it, so this figure is
+unchanged). Country flat at 0–7.3% across the whole range and **0.0% at the
 full 4,089**; region rises **49.5% → 82.1%** against a 48% baseline and
 plateaus by ~100 loci.
 
@@ -392,10 +423,13 @@ sequenced it" gets over-promised to an incident team.
 
 ### W1 — The validation set is far smaller than n=24 suggests ⚠ **most serious**
 
-I computed this directly and it is not stated anywhere in the corpus:
+I computed this directly and it is not stated anywhere in the corpus. **[SNP/24]
+— the pseudoreplication point holds and hardens on [cg-Licht/46], where the
+Philippines is 12 of 46:**
 
 - 24 scorable rows come from **9 exposure countries** and **3 BioProjects**.
-- **The Philippines alone contributes 11 of 24 (46%)**, all correct.
+- **The Philippines alone contributes 11 of 24 (46%)**, all correct. *(On
+  [cg-Licht/46]: 12 of 46, still all correct at region — same concern, larger n.)*
 - Excluding the Philippines: **11/13 (85%)** — still above baseline, but on 13
   observations.
 - Five countries contribute exactly one genome each.
@@ -416,13 +450,16 @@ is cheap.
 
 ### W2 — The Latin American region successes may be luck ⚠ **new finding**
 
-Stratifying the cgMLST region result by nearest-neighbour distance:
+Stratifying the region result by nearest-neighbour distance. **The table below is
+[cg-Pub/29]; the current [cg-Licht/46] stratification is region d<0.05 11/14,
+0.05–0.30 6/10, d≥0.30 20/22 — same shape, the far stratum still the attractor
+concern.** Use the [cg-Licht/46] numbers in the paper:
 
-| stratum | correct |
-|---|---|
-| d < 0.05 (a real relative exists) | 8/10 |
-| 0.05 ≤ d < 0.30 | 4/6 |
-| **d ≥ 0.30 (no real relative)** | **11/13** |
+| stratum | correct [cg-Pub/29] | correct [cg-Licht/46] |
+|---|---|---|
+| d < 0.05 (a real relative exists) | 8/10 | 11/14 |
+| 0.05 ≤ d < 0.30 | 4/6 | 6/10 |
+| **d ≥ 0.30 (no real relative)** | **11/13** | **20/22** |
 
 That bottom row looks like a success and is not. **Twelve of the fourteen
 genomes with d ≥ 0.30 snap to the same Ecuadorian reference.** Nine happen to
@@ -517,6 +554,12 @@ in the Results, not the rebuttal letter.
 
 ### W6 — Stale numbers inside current documents
 
+**Partly addressed 2026-08-23:** the attribution figures are now reconciled — see
+the **Figure Provenance Key** at the top. Every attribution number carries an
+analysis tag ([SNP/24], [cg-Licht/46], …) so the "same quantity, two values"
+cases are now distinguishable as *different analyses*, not contradictions. The
+r/m and census stale-number cases below still stand.
+
 The corpus contains at least 15 places where the same quantity has two values.
 The dangerous ones, because both versions sit in the *same* file:
 
@@ -552,7 +595,7 @@ at all** — they are among the six that fall in singleton units (R4), so the on
 region category that would have made this a three-way problem is precisely the
 one the method cannot place.
 
-So the headline is: **92% on a two-class problem, n=24, from 9 countries and 3
+So the headline is: **[SNP/24] 92% on a two-class problem, n=24, from 9 countries and 3
 BioProjects, with 46% of rows from a single country.**
 
 This is still the operationally right question — *did this person acquire it in
