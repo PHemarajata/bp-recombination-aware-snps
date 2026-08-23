@@ -662,10 +662,18 @@ be separated:
 - **Majority-imbalance attractor** (genomes snap to the dominant East Asia &
   Pacific cluster, 89% of references): **refuted.** Capping East Asia & Pacific
   from 2,692 references to 30 — a 90× cut, 89% → ~15% of the pool — moves region
-  modal-k20 kappa only from **0.89 to 0.81**. An artifact would collapse toward
+  modal-k20 kappa only from **0.83 to 0.77**. An artifact would collapse toward
   0. So the *bulk* of region accuracy reads the genome's regional cohort, not the
-  panel's shape, and the ~0.08 erosion bounds the total imbalance contribution at
-  roughly a tenth of the signal.
+  panel's shape, and the ~0.06 erosion bounds the total imbalance contribution at
+  roughly a fourteenth of the signal. Kappa is also **flat at +0.83 (±0.00)**
+  across the first 70× of the cut, and the ±0.06 spread at the deepest cap means
+  0.77 is within sampling noise of the full-panel value.
+
+  ⚠ **Corrected 2026-08-23: this previously read 0.89 → 0.81, which is the
+  pre-Track-0 (n=43) pair.** Track 0 moved the full-panel value 0.89 → 0.83 and
+  the most-rebalanced 0.81 → 0.77, so quoting the old pair beside a current
+  headline κ of 0.832 is a visible contradiction.
+  `DOWNSAMPLING_CONTROL_RESULT_2026-08-22.md` (re-run 2026-08-23) is authoritative.
 - **Local-cluster attractor** (the d ≥ 0.30 stratum above: LatAm cases snapping
   to one *small* Ecuadorian reference): **not addressed by rebalancing**, because
   capping does not remove a small cluster, and it should not be claimed to be.
