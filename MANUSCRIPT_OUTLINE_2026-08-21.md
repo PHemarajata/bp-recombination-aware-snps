@@ -100,7 +100,7 @@ that, empirically. **The science did not drift. The deliverable did.**
 
 > Melioidosis is diagnosed in travellers and in newly-endemic areas where the
 > exposure location is unknown, and clinicians and public-health agencies ask
-> genomics to supply it. Across 2,955 *B. pseudomallei* genomes we show that
+> genomics to supply it. Across 2,959 *B. pseudomallei* genomes we show that
 > **exposure country cannot be recovered from the genome at any resolution**
 > — 7 loci, 4,221 loci, and whole-genome recombination-filtered SNPs all return
 > at or below chance — while **region is recoverable**, and that the boundary
@@ -142,13 +142,19 @@ only the numbers update.**
 
 ### R1 — The panel, and the frame it is drawn from
 
-**Table 1.** Panel composition, on the **corrected v4d panel of 2,955** (2,976
-less 17 duplicate BioSamples and 4 register exclusions — `panel.corrected_v4d`).
-**50 countries.** Thailand **1,753 (59.5%)**, China **295 (10.0%)**, Australia
-**282 (9.6%)** — top three = **79.1%**. Three BioProjects = **46.4%** of the panel.
+**Table 1.** Panel composition, on the **corrected panel of 2,959** (2,976 less
+17 duplicate BioSamples; `panel.corrected_v4d`). **50 countries.** Thailand
+**1,753 (59.5%)**, China **295 (10.0%)**, Australia **282 (9.6%)** — top three =
+**79.0%**. Three BioProjects = **46.4%** of the panel.
 
-⚠ **Quote 2,955, not 2,976.** The uncorrected figure and every percentage
-computed on it (58.9 / 9.9 / 9.5 / 78.3%) are superseded.
+⚠ **Quote 2,959.** Two superseded figures: 2,976 (uncorrected, and every
+percentage on it — 58.9 / 9.9 / 9.5 / 78.3%), and **2,955**, which was correct
+only between 2026-08-21 and 2026-08-23. On 2026-08-23 four exclusions were
+retired as unevidenced — decided on superseded SKESA assemblies plus a
+mis-transcribed core column, while all four pass every gate on the SPAdes
+assemblies actually in use (`EXCLUSION_RECHECK_2026-08-23.md`). The register now
+carries them as `status=retired` rather than deleting them. **No attribution
+number moved**, because the cgMLST reference pool already contained all four.
 
 **Table 2.** Coverage of the public universe, **re-censused 2026-08-21 as a
 union of `read_run` and `assembly`** (`GENOME_REGISTER` §2). ENA holds 9,623 read
@@ -160,7 +166,7 @@ denominator (6,707), which is blind to assembly-only depositions — the same er
 that produced the Mexico mistake in R4; 41.4% was computed on the uncorrected
 2,976. Both remaining figures are also slight over-statements, since 312 panel
 genomes (10.6%) are in-house and not public at all; against the public-derived
-**2,643** the figure is **36.7%**.
+**2,647** the figure is **36.8%**.
 
 Not proportional: Australia under-represented **2.5×**, Cambodia **5×**, China
 over **3.5×**.
@@ -170,7 +176,14 @@ version of the sampling argument and it needs no model.**
 
 Burden from Limmathurotsakul et al. 2016 (*Nat Microbiol* 1:15008, PMID
 26877885), Table 1; genome counts are our 2,959 region-labelled panel members.
-**Recomputed 2026-08-21 against the current panel — see the warning below.**
+**Recomputed 2026-08-21 against the then-current panel — see the warnings below.**
+
+⚠ **NUMBER COLLISION, added 2026-08-23.** This table's **2,959** means
+*region-labelled members of the 2026-08-21 panel*. The corrected panel total is
+**also 2,959** as of 2026-08-23, for an unrelated reason (four exclusions
+retired). They are different quantities that now coincide. **Recompute the
+region-labelled count against the current panel before using this table**, and
+say which 2,959 is meant wherever it appears.
 
 | region | cases/yr | % burden | genomes | % of panel | genomes per 1k cases |
 |---|---|---|---|---|---|
@@ -714,7 +727,7 @@ The dangerous ones, because both versions sit in the *same* file:
 | quantity | stale | correct |
 |---|---|---|
 | validation set | 26 → 31 → 43 | **48 registered / 46 scorable** |
-| panel | 2,976 | **2,955** (`panel.corrected_v4d`) |
+| panel | 2,976 → 2,955 | **2,959** (`panel.corrected_v4d`) |
 | ENA coverage | 44% → 41.4% | **41.1%** (`panel.coverage_of_ena`) |
 | analysed units / genomes | 88 / 2,342 | **85 / 2,340** (frozen basis) |
 | r/m headline | 7.38 / 7.44 / 7.26 | **7.70** (`rm.median_gate1`) |
@@ -767,6 +780,61 @@ score (8/9, W1) and the distance stratification (W2). Three honest framings of
 the same 24 observations are far more convincing than one inflated one — and
 the incoming 44-genome set adds Australia, Thailand and India, which is what
 would genuinely make it multi-class.
+
+### W8 — ✅ **RESOLVED 2026-08-23 — and the exclusions, not the pool, were the defect**
+
+> **The finding inverted under measurement, which is why this is worth reading
+> rather than skimming.** W8 assumed four genomes were wrongly *present* and
+> should be removed. Re-measurement showed they were wrongly *excluded*.
+>
+> `verify_exclusions_bp.py` re-measured all four on the SPAdes assemblies the
+> panel and the cgMLST pool actually use. **All four pass every operative gate**
+> — core 86.2–93.3%, gene ratio 0.89–0.97, mash 0.0065–0.0093. The exclusions
+> were decided on the superseded **SKESA** batch, and the register's `core=na%`
+> was a **transcription error**, not an unmeasured field: the value sits in
+> `core_cov_unfiltered_pct` and the register read the adjacent, always-empty
+> `core_cov_filtered_pct`. The SPAdes re-QC had already marked all four `pass`;
+> that result was never reconciled against the register, which was written after
+> it.
+>
+> ⚠ **My earlier claim that `SRR2896271` fails the species gate is REFUTED.**
+> The 0.0135 is the SKESA figure; the assembly in use measures **0.0087**, inside
+> the operative **≤0.012** code gate (the 0.008 in `PANEL_EXCLUSIONS_README` is
+> prose and is enforced nowhere). Confirmed wrong-species genomes in this
+> register sit at core 18–50% / mash 0.022–0.064; this one is core 89.1%.
+> **Divergent, not wrong-species.**
+>
+> **Action taken.** All four rows retired — `status = retired`, kept in the
+> register rather than deleted, because a register exists to record that
+> something was decided *and was wrong*. Every reader now honours `status`
+> (`freeze_basis_bp.py` ×2, `generate_numbers.py`, `build_v4c_panel.py`,
+> `reqc_spades_batch.py`). `retire_exclusions_bp.py` is the replayable record,
+> since `*.tsv` is gitignored.
+>
+> **Consequence: no attribution number moved.** The cgMLST pool already contained
+> all four, so region stays **41/46** and country **10/46**; `GROUPING_LADDER.tsv`
+> and `ABSTENTION_OPERATING_POINTS.tsv` both regenerate byte-identical. The panel
+> goes **2,955 → 2,959**, all four `assign_only`, and the frozen partition is
+> untouched at **2,340 genomes in 85 units**.
+>
+> **Two structural fixes, both independent of the decision:**
+> 1. `freeze_basis_bp.py` now checks **the cgMLST reference pool** for active
+>    exclusions, not just the partition — 15 checks. Its absence is precisely
+>    why this sat undetected at 14/14: a genome can be excluded from the analysis
+>    and still decide a call *as a reference*.
+> 2. `generate_numbers.py` now takes `units.analysed` / `genomes.analysed` from
+>    **`FINAL_PARTITION.tsv`**, not from the stale `curated_L1v4c_clusters.tsv`
+>    minus the registers. That old derivation reached 2,340 by coincidence of two
+>    independent files, and retiring these rows would have silently reported
+>    **2,341** against a frozen basis of 2,340, because `SRR2896257` is still
+>    listed in the stale file under `strain_1_L1_26`.
+>
+> **One row deliberately left alone.** `SRR28096031` shares the same
+> mis-transcribed `core=na%`, but its exclusion is genuinely supported by
+> `ratio = 1.35` (> 1.20) and it is not in the cgMLST pool. Only its *reason
+> string* is imprecise.
+
+<details><summary>The original W8 finding and its half-resolved state, retained for the record</summary>
 
 ### W8 — ⚠ **HALF-RESOLVED 2026-08-23. Fixed in the frozen basis; still live in the cgMLST reference pool**
 
@@ -849,6 +917,13 @@ Re-measure core coverage on the SPAdes assemblies before deciding either way.
 `SRR2896271` is separable — it fails the species gate on mash alone and should
 come out regardless.
 
+*(Both paragraphs above are superseded. The re-measurement was done on
+2026-08-23: `core=na%` was a transcription error rather than a missing
+measurement, all four pass on the assemblies in use, and `SRR2896271` is **not**
+separable on the species gate — see the resolution box at the top of W8.)*
+
+</details>
+
 ### W9 — Submission blockers that are not science ⚠ **fix these first, they are cheap**
 
 None of these is a weakness in the work. All of them will stop a submission.
@@ -864,7 +939,7 @@ None of these is a weakness in the work. All of them will stop a submission.
   `curated_L1v4c_clusters.final.tsv`, `EXPOSURE_OVERRIDES.tsv`).
 - **No flow diagram.** Every number exists but the figure does not. **Updated to
   the frozen basis:** 9,040 ENA BioSamples (union of `read_run` + `assembly`;
-  7,192 with a country) → **2,955** corrected panel → **2,340 genomes in 85
+  7,192 with a country) → **2,959** corrected panel → **2,340 genomes in 85
   analysed units** → **47 units in-window** for r/m. This should be **Figure 1**;
   it does more work than any other single display item because it makes the
   attrition auditable. ⚠ Do not reuse the old chain (8,500 → 2,976 → 2,352 →
@@ -1181,7 +1256,7 @@ assignment.
 ## 8. One-paragraph abstract to write toward
 
 > *Burkholderia pseudomallei* causes melioidosis across the tropics, and cases
-> increasingly present where exposure location is unknown. We assembled 2,955
+> increasingly present where exposure location is unknown. We assembled 2,959
 > genomes — 41% of all country-labelled public isolates — partitioned them into
 > recombination-aware lineages, and tested whether exposure country can be
 > recovered from the genome, using 46 isolates with independently documented

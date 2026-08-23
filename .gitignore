@@ -206,3 +206,19 @@ RETIRED_2026-08-22/*
 !collaborator/
 collaborator/*
 !collaborator/README.md
+
+# --- 9. the exclusion register's SPEC (added 2026-08-23) ----------------------
+# PANEL_EXCLUSIONS_README.md is caught by the `*PANEL_*` guard in section 1.
+# That guard is aimed at isolate-level DATA -- the register TSV itself stays
+# ignored, as does every PANEL_*.tsv. This file is the normative spec: it defines
+# the cross-check that must be run before a panel build, and (since 2026-08-23)
+# the `status=retired` mechanism and the `core=na%` transcription trap.
+#
+# Untracked, it is lost on a fresh clone -- and losing it is precisely how four
+# exclusions that were retired on evidence would get silently re-applied.
+#
+# It does name four accessions in prose. That is the same thing tracked
+# documents already do (MANUSCRIPT_OUTLINE names them too); the line this repo
+# draws is between a per-genome data table and a document explaining a decision.
+# One file, named explicitly -- no directory is opened up.
+!PANEL_EXCLUSIONS_README.md

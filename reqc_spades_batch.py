@@ -117,8 +117,13 @@ def genes(path, tmpdir):
 
 
 def main():
+    # Honour `status`: a row with status=retired is a RESCINDED decision
+    # kept for the record, not an active exclusion. Four rows were retired
+    # 2026-08-23 (EXCLUSION_RECHECK_2026-08-23.md) after re-measurement on
+    # the assemblies actually in use. Deleting them would erase the finding.
     excl = {r["sample_id"]: r for r in
-            csv.DictReader(open(f"{BASE}/PANEL_EXCLUSIONS.tsv"), delimiter="\t")}
+            csv.DictReader(open(f"{BASE}/PANEL_EXCLUSIONS.tsv"), delimiter="\t")
+            if r.get("status") != "retired"}
     over = {r["sample_id"]: r for r in
             csv.DictReader(open(f"{BASE}/PANEL_ASSEMBLY_OVERRIDES.tsv"), delimiter="\t")}
     terra = {r["entity:bp_2b_assembled_id"]: r for r in

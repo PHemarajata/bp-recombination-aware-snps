@@ -62,8 +62,16 @@ PANEL = f"{OUT}/FINAL_PANEL.tsv"
 MANIFEST = f"{OUT}/MANIFEST.sha256"
 
 SRC_PARTITION = f"{B}/rederive_2026-08-21/curated_L1v4c_clusters_corrected.tsv"
-SRC_PANEL = f"{B}/PANEL_v4d_2026-08-21.tsv"
+# The panel is DERIVED from the metadata and the two registers, not read from a
+# static snapshot. It used to be PANEL_v4d_2026-08-21.tsv, which was exactly
+# `metadata - duplicates - active exclusions` at the moment it was written -- and
+# therefore could not track a later register change. On 2026-08-23 four exclusion
+# rows were retired and the snapshot would have silently ignored all four. Same
+# content, one fewer thing that can drift. The old file is kept as history.
+SRC_META = f"{B}/L1v4c_MERGED_METADATA.tsv"
+SRC_PANEL_LEGACY = f"{B}/PANEL_v4d_2026-08-21.tsv"
 RM = f"{B}/L1v4c_out/Summaries/recombination_rm.tsv"
+CGMLST_MANIFEST = f"{B}/cgmlst_lichtenegger/MANIFEST.tsv"
 
 EXPECT_UNITS = 85
 EXPECT_GENOMES = 2340
@@ -91,8 +99,13 @@ def build():
     drops = {r["sample_id"] for r in
              csv.DictReader(open(f"{B}/PANEL_DUPLICATES_2026-08-21.tsv"),
                             delimiter="\t") if r["action"] == "drop"}
+    # Honour `status`: a row with status=retired is a RESCINDED decision
+    # kept for the record, not an active exclusion. Four rows were retired
+    # 2026-08-23 (EXCLUSION_RECHECK_2026-08-23.md) after re-measurement on
+    # the assemblies actually in use. Deleting them would erase the finding.
     excl = {r["sample_id"] for r in
-            csv.DictReader(open(f"{B}/PANEL_EXCLUSIONS.tsv"), delimiter="\t")}
+            csv.DictReader(open(f"{B}/PANEL_EXCLUSIONS.tsv"), delimiter="\t")
+            if r.get("status") != "retired"}
 
     with open(PARTITION, "w", newline="") as fh:
         w = csv.writer(fh, delimiter="\t", lineterminator="\n")
@@ -106,7 +119,8 @@ def build():
     # The old `subcluster` column carried a unit label for 615 genomes that are
     # NOT members -- for assign_only genomes it is a nearest-unit label. Any
     # join on it silently picks up non-members. Split the two meanings.
-    rows = list(csv.DictReader(open(SRC_PANEL), delimiter="\t"))
+    rows = [r for r in csv.DictReader(open(SRC_META), delimiter="\t")
+            if r["sample_id"] not in drops and r["sample_id"] not in excl]
     cols = list(rows[0])
     for c in ("unit_membership", "nearest_unit", "basis_role"):
         if c not in cols:
@@ -163,7 +177,8 @@ def validate():
              csv.DictReader(open(f"{B}/PANEL_DUPLICATES_2026-08-21.tsv"),
                             delimiter="\t") if r["action"] == "drop"}
     excl = {r["sample_id"] for r in
-            csv.DictReader(open(f"{B}/PANEL_EXCLUSIONS.tsv"), delimiter="\t")}
+            csv.DictReader(open(f"{B}/PANEL_EXCLUSIONS.tsv"), delimiter="\t")
+            if r.get("status") != "retired"}
 
     ok = True
     ok &= check("manifest intact (no edit since freeze)",
@@ -193,6 +208,20 @@ def validate():
             if r.get("unit_membership") and s not in members]
     ok &= check("no unit_membership set for a non-member", not leak,
                 f"{len(leak)} leaked")
+
+    # The register must reach the cgMLST REFERENCE POOL, not just the partition.
+    # This check exists because its absence hid a real defect: on 2026-08-23 all
+    # four then-active exclusions were sitting in cgmlst_lichtenegger/MANIFEST.tsv
+    # -- the pool every attribution call searches -- while the partition was
+    # clean, so the validator passed 14/14 and saw nothing. A genome excluded
+    # from the analysis but retained as a REFERENCE can still decide a call: one
+    # of the four was the nearest neighbour of a validation genome.
+    if os.path.exists(CGMLST_MANIFEST):
+        pool = {r["sample_id"] for r in
+                csv.DictReader(open(CGMLST_MANIFEST), delimiter="\t")}
+        leak = sorted(pool & excl)
+        ok &= check("no ACTIVE register exclusion in the cgMLST reference pool",
+                    not leak, f"{len(leak)} present: {leak[:4]}")
 
     # The attribution artifacts must agree WITH EACH OTHER. Two scorers build
     # their pools independently -- score_cgmlst_lichtenegger.py writes

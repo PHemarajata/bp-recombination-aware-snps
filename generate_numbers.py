@@ -45,14 +45,25 @@ def maybe(p):
 # ---------------------------------------------------------------- panel -----
 meta = tsv(f"{B}/L1v4c_MERGED_METADATA.tsv")
 dup = {r["sample_id"] for r in maybe(f"{B}/PANEL_DUPLICATES_2026-08-21.tsv")}
-exc = {r["sample_id"] for r in maybe(f"{B}/PANEL_EXCLUSIONS.tsv")}
+# Honour `status`: status=retired is a RESCINDED decision kept for the record,
+# not an active exclusion. Four rows were retired 2026-08-23 after re-measurement
+# on the assemblies actually in use (EXCLUSION_RECHECK_2026-08-23.md).
+exc = {r["sample_id"] for r in maybe(f"{B}/PANEL_EXCLUSIONS.tsv")
+       if r.get("status") != "retired"}
+retired = {r["sample_id"] for r in maybe(f"{B}/PANEL_EXCLUSIONS.tsv")
+           if r.get("status") == "retired"}
 panel = {r["sample_id"] for r in meta}
 removed = (dup | exc) & panel
 corrected = panel - removed
 
 add("panel.v4c", len(panel), "L1v4c_MERGED_METADATA.tsv")
 add("panel.removed_duplicate", len(dup & panel), "PANEL_DUPLICATES_2026-08-21.tsv")
-add("panel.removed_excluded", len(exc & panel), "PANEL_EXCLUSIONS.tsv")
+add("panel.removed_excluded", len(exc & panel), "PANEL_EXCLUSIONS.tsv",
+    "ACTIVE exclusions only")
+add("panel.exclusions_retired", len(retired & panel), "PANEL_EXCLUSIONS.tsv",
+    "rescinded 2026-08-23 as unevidenced -- decided on superseded SKESA "
+    "assemblies plus a mis-transcribed core column; all four pass every gate "
+    "on the SPAdes assemblies in use. EXCLUSION_RECHECK_2026-08-23.md")
 add("panel.corrected_v4d", len(corrected), "PANEL_v4d_2026-08-21.tsv",
     "quote this, not 2976")
 add("panel.countries", len({r["country"] for r in meta
@@ -76,17 +87,26 @@ add("panel.in_house", prov["in_house"], "sample_id prefix")
 add("panel.public_derived", prov["public_derived"], "sample_id prefix")
 
 # ------------------------------------------------------------- clusters -----
-clus = maybe(f"{B}/curated_L1v4c_clusters.tsv")
-if clus:
-    size = Counter(r["cluster_id"] for r in clus
-                   if r["sample_id"] not in removed)
-    add("units.analysed", len([u for u, n in size.items() if n >= 7]),
-        "curated_L1v4c_clusters.tsv", "after removals, n>=7")
+# READ THE FROZEN PARTITION, not curated_L1v4c_clusters.tsv minus the registers.
+#
+# The old derivation took the PRE-correction cluster file (2,352 rows) and
+# subtracted duplicates + exclusions, which happened to give 2,340 in 85 units.
+# That agreement was a coincidence of two independent files, not a guarantee, and
+# it broke the moment the register changed: SRR2896257 is still listed in the
+# stale file under strain_1_L1_26, so retiring its exclusion on 2026-08-23 would
+# have silently reported 2,341 analysed genomes against a frozen basis of 2,340.
+# The partition is the authority on what was analysed; the register is not.
+part = maybe(f"{B}/FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv")
+if part:
+    size = Counter(r["unit"] for r in part)
+    add("units.analysed", len(size), "FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv",
+        "the frozen partition IS the analysed set -- not derived from the "
+        "registers, which cannot subtract their way to it reliably")
     add("units.below_floor_after_removal",
         ";".join(f"{u}(n={n})" for u, n in sorted(size.items()) if n < 7) or "none",
-        "curated_L1v4c_clusters.tsv", "must be dropped as units")
-    add("genomes.analysed", sum(n for n in size.values() if n >= 7),
-        "curated_L1v4c_clusters.tsv")
+        "FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv", "must be dropped as units")
+    add("genomes.analysed", sum(size.values()),
+        "FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv")
 
 # ----------------------------------------------------------- validation -----
 ovr = {r["sample_id"]: r["exposure_country"] for r in

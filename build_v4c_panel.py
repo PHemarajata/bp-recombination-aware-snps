@@ -45,7 +45,12 @@ def load(path, key=None, delim="\t"):
 
 
 def excl_over():
-    e = {r["sample_id"]: r for r in load(f"{B}/PANEL_EXCLUSIONS.tsv")}
+    # Honour `status`: a row with status=retired is a RESCINDED decision
+    # kept for the record, not an active exclusion. Four rows were retired
+    # 2026-08-23 (EXCLUSION_RECHECK_2026-08-23.md) after re-measurement on
+    # the assemblies actually in use. Deleting them would erase the finding.
+    e = {r["sample_id"]: r for r in load(f"{B}/PANEL_EXCLUSIONS.tsv")
+         if r.get("status") != "retired"}
     o = {r["sample_id"]: r for r in load(f"{B}/PANEL_ASSEMBLY_OVERRIDES.tsv")}
     return e, o
 
