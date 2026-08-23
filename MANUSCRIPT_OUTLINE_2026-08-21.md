@@ -175,26 +175,27 @@ over **3.5×**.
 version of the sampling argument and it needs no model.**
 
 Burden from Limmathurotsakul et al. 2016 (*Nat Microbiol* 1:15008, PMID
-26877885), Table 1; genome counts are our 2,959 region-labelled panel members.
-**Recomputed 2026-08-21 against the then-current panel — see the warnings below.**
+26877885), Table 1. **Recomputed 2026-08-23 against the current panel.**
 
-⚠ **NUMBER COLLISION, added 2026-08-23.** This table's **2,959** means
-*region-labelled members of the 2026-08-21 panel*. The corrected panel total is
-**also 2,959** as of 2026-08-23, for an unrelated reason (four exclusions
-retired). They are different quantities that now coincide. **Recompute the
-region-labelled count against the current panel before using this table**, and
-say which 2,959 is meant wherever it appears.
+**The denominator here is 2,946 — the region-labelled members of the 2,959-genome
+panel.** 13 panel genomes carry no region label and are excluded from this table
+only. ⚠ Do **not** write 2,959 in this table: that is the panel total, a
+different quantity, and until 2026-08-23 the two were confusingly equal.
 
-| region | cases/yr | % burden | genomes | % of panel | genomes per 1k cases |
+| region | cases/yr | % burden | genomes | % of labelled | genomes per 1k cases |
 |---|---|---|---|---|---|
 | **South Asia** | 73k | **44.2%** | **75** | **2.5%** | **1.0** |
-| **East Asia & Pacific** | 65k | 39.4% | **2,717** | **91.8%** | **41.8** |
+| **East Asia & Pacific** | 65k | 39.4% | **2,705** | **91.8%** | **41.6** |
 | **Sub-Saharan Africa** | 24k | **14.5%** | **30** | **1.0%** | **1.2** |
 | Latin America & Caribbean | 2k | 1.2% | 79 | 2.7% | 39.5 |
 | Middle East & North Africa | <1k | 0.3% | 3 | 0.1% | 6.0 |
 | Europe & Central Asia | <1k | 0.0% | 12 | 0.4% | — |
-| North America | <1k | 0.0% | 43 | 1.5% | — |
-| **Global** | **165k** | 100% | **2,959** | 100% | 17.9 |
+| North America | <1k | 0.0% | 42 | 1.4% | — |
+| **Global** | **165k** | 100% | **2,946** | 100% | 17.9 |
+
+*(Changes from the 2026-08-21 version, all small: East Asia & Pacific 2,717 →
+**2,705**, North America 43 → **42**, denominator 2,959 → **2,946**. Every other
+row is unchanged, and so is **both** headline ratio.)*
 
 **East Asia & Pacific is sampled 41× more heavily per predicted case than South
 Asia, and 33× more heavily than Sub-Saharan Africa.** The region predicted to
@@ -534,6 +535,27 @@ Philippines is 12 of 46:**
 
 The 24 observations are **not independent**; pseudoreplication operates at the
 study level, and the project already owns `pseudoreplication_bp.py`.
+
+> **A second, unrelated asymmetry — found 2026-08-23, disclose it.** The
+> validation set is **6× enriched for one assembly batch.** 16 of the 46
+> validation genomes come from `new200_2026-08-17`, which is only **174 of 2,959
+> panel genomes (5.9%)**. That batch also has by far the worst cgMLST call-rate
+> tail — p05 **87.1%** against 95.8% for `v3_panel`, medians nearly equal
+> (96.0 vs 96.9), so it is a tail effect rather than a shift.
+>
+> ✅ **Checked, and it does NOT bias the result** — which is the point of
+> reporting it. Across the 46, `n_loci_compared` versus nearest-neighbour
+> distance gives Spearman **ρ = −0.247** (n=46, not significant), and the median
+> loci compared is **flat across the distance strata: 4,042 / 4,040 / 4,024**.
+> So the d ≥ 0.30 stratum is **not** an artifact of having fewer callable loci,
+> and neither is the abstention threshold that sits on it.
+>
+> **One genome is the exception and should be named rather than buried:**
+> `SRR33748081` has the fewest comparable loci (**2,520**, the next lowest is
+> 3,315) *and* the largest nearest-neighbour distance (**0.79048**). It alone
+> drives the weak correlation, and it is also the genome whose nearest neighbour
+> was one of the four retired assemblies (W8). Treat it as a single-genome
+> caveat, not a pattern.
 
 **How to strengthen.** (a) Report the by-country score as the headline —
 **8 of 9 exposure countries correctly placed at region scale** — which is more
@@ -923,6 +945,41 @@ measurement, all four pass on the assemblies in use, and `SRR2896271` is **not**
 separable on the species gate — see the resolution box at the top of W8.)*
 
 </details>
+
+### W8b — The assembler shifts core coverage and mash materially, and the panel mixes assemblers ⚠ **disclose in Methods**
+
+Quantified as a by-product of the W8 re-check, from **four same-isolate paired
+measurements** — the only controlled assembler comparison this project has:
+
+| | SKESA → SPAdes, median |
+|---|---|
+| core completeness | **+10.8 pp** |
+| mash to K96243 | **−27%** |
+| assembly length | **+1.07 Mb** |
+
+All four isolates move the same way, and the largest single shift is
+`SRR2896271` at **0.0135 → 0.0087 mash** and **71.9% → 89.1% core**. That one
+genome is the whole reason its `wrong_species_or_divergent` classification was
+wrong.
+
+**Two consequences the Methods should state plainly:**
+
+1. **A mash threshold calibrated on one assembler does not transfer to the
+   other.** A −27% median shift is larger than the gap between the advisory
+   0.008 line and the enforced 0.012 gate. This is the same lesson as
+   [[caller-effects-are-not-directional]], one layer earlier in the pipeline.
+2. **The panel mixes assembly provenance** — 2,271 `v3_panel`, 514
+   `v3_collection_assign_only`, 174 `new200_2026-08-17` — so mash-derived
+   quantities are not strictly comparable *across* the panel. This is a
+   disclosure, not a correction: Gate 1 already stopped using the Mash proxy in
+   favour of alignment distances (W3), which is exactly the right response to
+   this class of problem, and the cgMLST attribution never used mash at all.
+
+⚠ **It is not "SPAdes is better".** The re-check's own control shows the
+opposite case: `SRR30648682` is a clean pass under SKESA (mash 0.0072, core
+92.2%) and an **11.88 Mb, mash 0.0205 failure** under SPAdes. The effect is
+per-genome, which is why a single global correction factor would be wrong here
+too.
 
 ### W9 — Submission blockers that are not science ⚠ **fix these first, they are cheap**
 

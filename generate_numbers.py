@@ -86,6 +86,21 @@ for r in meta:
 add("panel.in_house", prov["in_house"], "sample_id prefix")
 add("panel.public_derived", prov["public_derived"], "sample_id prefix")
 
+# The burden table (R1 Table 3) is per REGION, so its denominator is the
+# region-LABELLED panel, not the panel. The two were briefly equal at 2,959 --
+# for unrelated reasons -- which is exactly the kind of coincidence that gets
+# copied into prose as one number meaning two things.
+regof = {r["sample_id"]: r["country"] for r in maybe(f"{B}/assign_region.tsv")}
+labelled = {s for s in corrected if regof.get(s)}
+if labelled:
+    add("panel.region_labelled", len(labelled), "assign_region.tsv",
+        f"DENOMINATOR OF THE BURDEN TABLE (R1 Table 3) -- not the panel total; "
+        f"{len(corrected)-len(labelled)} panel genomes carry no region label")
+    rc = Counter(regof[s] for s in labelled)
+    for rg, k in rc.most_common():
+        add(f"panel.region.{rg.replace(' ', '_').replace('&', 'and')}",
+            f"{k} ({100*k/len(labelled):.1f}%)", "assign_region.tsv")
+
 # ------------------------------------------------------------- clusters -----
 # READ THE FROZEN PARTITION, not curated_L1v4c_clusters.tsv minus the registers.
 #
