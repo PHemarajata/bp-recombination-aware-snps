@@ -255,9 +255,24 @@ attribution performance is circularity.
 
 | layer | loci | country | region |
 |---|---|---|---|
-| MLST **[MLST/17]** | 7 | 0/17 | 13/15 (87%) |
-| **cgMLST [cg-Licht/46]** ← **use this row** | **4,221** | **10/46 (22%), baseline 26%** | **41/46 (89%), baseline 46%** |
+| MLST **[MLST/33]** | 7 | **≤ 8/33 (24%)**, baseline 36% | 19/33 (58%), baseline 46%, κ 0.343 |
+| **cgMLST [cg-Licht/46]** ← **use this row** | **4,221** | **10/46 (22%), baseline 26%**, κ 0.193 | **41/46 (89%), baseline 46%**, κ 0.832 |
 | core-genome SNP **[SNP/24]** | whole genome | 0/24 | 22/24 (92%) |
+
+⚠ **The MLST country cell is a bound, not an accuracy, and must be written that
+way.** At 7 loci the nearest neighbour is **not unique for 30 of 33** validation
+genomes (median tied set **21**, max 52), so the call is decided by an arbitrary
+tie-break — two faithful implementations of the same estimator disagreed on 21
+of 33 calls. The true country appears anywhere in the tied set for **8 of 33**,
+so no tie-breaking rule can exceed 24% and an adversarial one scores 0. **Even
+an oracle tie-break fails to reach the 36% majority baseline.** At 4,221 loci
+the nearest neighbour is unique for every genome. Never present the MLST bound
+and the cgMLST point estimate as like-for-like.
+`MLST_TABLE5_RERUN_2026-08-23.md`
+
+**Region is now monotonic in loci — 58% → 89% → 92%** — which the superseded
+MLST row (13/15 = 87%) concealed by sitting a hair under cgMLST's 89%. The
+ladder and the resolution curve (Figure 2) now tell the same story.
 
 ⚠ **The [cg-Pub/29] row (4,089 loci, country 0/30, region 23/29 = 79%) is
 superseded and comes out of the manuscript body.** Keep it only in the
@@ -266,8 +281,8 @@ supplement as the scheme-swap robustness check — the two schemes agree (region
 *scheme-independence* and nothing else.
 
 *(Each row is a different validation set because each typing system covers
-different genomes — that is inherent, not an error. The MLST row predates the
-31-genome correction and is due a re-run — see §6. Note the ladder is no longer
+different genomes — that is inherent, not an error. The MLST row was re-run on
+the current validation set on 2026-08-23. Note the ladder is no longer
 "0 at every rung": at 4,221 loci country reaches 22% against a 26% baseline,
 which is still **at or below chance** — state it that way rather than as a bare
 zero, because the bare zero is now only true of the smaller [SNP/24] and

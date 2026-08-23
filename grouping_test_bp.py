@@ -39,6 +39,7 @@ tables are now written:
                             NN strata with a modal headline is the specific
                             error this file exists to prevent.
 """
+import argparse
 import csv
 import os
 from collections import Counter, defaultdict
@@ -54,8 +55,12 @@ SEA = {"Thailand", "Viet Nam", "Vietnam", "Cambodia", "Laos", "Malaysia",
 ASIA_REG = {"East Asia & Pacific", "South Asia"}
 WEST_REG = {"Latin America & Caribbean", "North America"}
 
-LADDER = f"{B}/GROUPING_LADDER.tsv"
-PREDS = f"{B}/GROUPING_PREDICTIONS.tsv"
+# Defaults reproduce the frozen cgMLST ladder exactly. --profiles/--out-prefix
+# exist so the MLST row of Table 5 can be produced by THIS code path rather than
+# by a second implementation of kappa, leave-outbreak-out and the reference pool
+# (see mlst_to_allele_table_bp.py). Running with no arguments must stay
+# byte-identical -- that is checked by md5 after any edit here.
+CGMLST_PROFILES = f"{B}/cgmlst_lichtenegger/results/results_alleles.tsv"
 
 # Stable machine keys for the display names. generate_numbers.py joins on these,
 # so it never depends on a display string that someone might reword.
@@ -76,8 +81,14 @@ def kappa(truth, pred):
 
 
 def main():
-    samples, loci, mat = load_profiles(
-        f"{B}/cgmlst_lichtenegger/results/results_alleles.tsv")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--profiles", default=CGMLST_PROFILES)
+    ap.add_argument("--out-prefix", default=f"{B}/GROUPING")
+    a = ap.parse_args()
+    LADDER = f"{a.out_prefix}_LADDER.tsv"
+    PREDS = f"{a.out_prefix}_PREDICTIONS.tsv"
+
+    samples, loci, mat = load_profiles(a.profiles)
     drop = {r["sample_id"] for r in
             csv.DictReader(open(f"{B}/PANEL_DUPLICATES_2026-08-21.tsv"),
                            delimiter="\t") if r["action"] == "drop"}

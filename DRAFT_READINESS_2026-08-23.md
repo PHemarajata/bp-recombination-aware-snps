@@ -189,7 +189,7 @@ The remaining work is bounded and none of it is a data problem:
 
 | item | state |
 |---|---|
-| §1 gap: MLST row of Table 5 on n=46 | open, small |
+| §1 gap: MLST row of Table 5 | ✅ **done, and it changed the claim** — at 7 loci NN is not unique for 30 of 33; the cell is now a bound (≤ 8/33) below its own baseline. `MLST_TABLE5_RERUN_2026-08-23.md` |
 | §1 gap: accessory control sub-numbers still n=43 | open, small |
 | §1 gap: R7 needs Georgia as a second US focus | open, small |
 | §1 gap: Figure 1 flow diagram | ✅ **done** — `make_figure1_bp.py` → `FIGURE1_STUDY_FLOW.svg` (+ `_dark` variant). Reads `NUMBERS.tsv` and **exits non-zero on a missing key**, so it cannot ship with a hole in it. Regenerate with `python3 generate_numbers.py && python3 make_figure1_bp.py` |
