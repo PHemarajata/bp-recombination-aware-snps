@@ -49,6 +49,7 @@ deposition, archiving, administration, or verification of work already done.
 
 | # | item |
 |---|---|
+| E0 | `phylogeography_association_bp.py` defaults `--trees` to `L1_out/Clusters`, which was archived to TB1 on 2026-08-24 — it now fails loudly rather than silently scoring v1 trees. Repoint the default or drop it. `TB1_ARCHIVE_REGISTER.md` |
 | E1 | `gate1_from_alignment_bp.py` still defaults `--mash` to `trackA_diversity_86units.tsv` — note **86**, an older partition |
 | E2 | Four scorers each rebuild their own pool and each re-implement leave-outbreak-out. `abstention_rule_bp.py` is the precedent for not adding a fifth (it consumes `GROUPING_PREDICTIONS.tsv`); the MLST re-run followed it by reshaping input instead |
 | E3 | "Pearson 2020" remains **unciteable** — two conflicting PMIDs, one a materials-chemistry paper. Remove it or replace it |
