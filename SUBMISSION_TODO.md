@@ -42,6 +42,7 @@ deposition, archiving, administration, or verification of work already done.
 |---|---|---|
 | D1 | **The end-to-end reproducibility run** | Real compute (Gubbins hours; `--shm-size=2g`, the zero-seed trap). Reproduce at **`79ab645`**, not at `main` — see `PRODUCTION_RUN_PIN_2026-08-24.md` §4. **It will land on 86 units / 2,352 genomes / 172 replicon-units** and must then be put through §2.12.5 to reach 85 / 2,340 / 170. Budget for that or the diff is uninterpretable. Of four figure sets re-derived on 2026-08-23, three had at least one wrong number |
 | D2 | **Re-run the contiguity-matched accessory pool at n=46** | The only accessory figure still at n=43 (country 30%→23%, region 79%→74%). Flagged in place in `ACCESSORY_ATTRIBUTION_RESULT_2026-08-21.md` §4. Directional support, not a headline |
+| D4 | **Adopt the graded R6 verdict** | `BIOPROJECT_WITHIN_COUNTRY_RESULT_2026-08-24.md` §5. No headline moves — every reported R6 count is a *pass* and no pass changes. What changes is the description of the 14 discarded units, of which only 2 have FDR-confirmed batch structure and 4 have none |
 | D3 | **Batched register refresh** | Register the same-patient Viet Nam pair in `OUTBREAK_GROUPS.tsv` (a no-op for current numbers, which is exactly why it should be deliberate), and decide whether to drop the four retired genomes from the cgMLST pool. The Georgia same-patient pair needs **no** entry — none of those five genomes is in the validation set |
 
 ## E. Tech debt — not blocking, worth doing
