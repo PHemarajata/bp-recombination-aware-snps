@@ -3,7 +3,7 @@
 Started 2026-08-24. One list, ordered by what blocks what. Update in place; when
 an item closes, mark it and name the artifact that closed it.
 
-**Status of the science: no open analysis blockers.** D1 is running as of 2026-08-24 10:01. Everything below is
+**Status of the science: no open analysis blockers.** D1 is paused mid-run and resumable; see `REPRO_RESUME.md`. Everything below is
 deposition, archiving, administration, or verification of work already done.
 
 ---
@@ -40,7 +40,7 @@ deposition, archiving, administration, or verification of work already done.
 
 | # | item | notes |
 |---|---|---|
-| D1 | 🔄 **RUNNING — launched 2026-08-24 10:01 (+07)** | `run_reproducibility_2026-08-24.sh`, detached, pipeline worktree at `79ab645`, Nextflow run `soggy_gilbert`. Monitor per `REPRO_RUN_2026-08-24.md` §3; diff plan in §5. Disk watchdog stops it cleanly below 40 GB free. **Already confirmed: the run reports scriptId `e09a5c4ead`, identical to the reported run's**, which retires the pin's uncommitted-edits caveat for `main.nf` |
+| D1 | ⏸ **PAUSED 2026-08-24 15:47, resumable** | Ran 5h46m: `SNIPPY_SCATTER` 2,656/4,704, `GUBBINS_CLUSTER` 64/172, **5,484 tasks cached**. Stopped cleanly with SIGTERM so the machine could be powered off — `ERR`/`rc=1` is the pause, not a failure. **Resume: `REPRO_RESUME.md`.** Do not delete `REPRO_2026-08-24_work` (140 GB) *or* the worktree at `/home/phemarajata/wf-assembly-snps-mod-79ab645` — the 19 MB resume cache lives in the latter. ~4–5 h remain |
 | D2 | **Re-run the contiguity-matched accessory pool at n=46** | The only accessory figure still at n=43 (country 30%→23%, region 79%→74%). Flagged in place in `ACCESSORY_ATTRIBUTION_RESULT_2026-08-21.md` §4. Directional support, not a headline |
 | D3 | **Batched register refresh** | Register the same-patient Viet Nam pair in `OUTBREAK_GROUPS.tsv` (a no-op for current numbers, which is exactly why it should be deliberate), and decide whether to drop the four retired genomes from the cgMLST pool. The Georgia same-patient pair needs **no** entry — none of those five genomes is in the validation set |
 | D4 | **Adopt the graded R6 verdict** | `BIOPROJECT_WITHIN_COUNTRY_RESULT_2026-08-24.md` §5. No headline moves — every reported R6 count is a *pass* and no pass changes. What changes is the description of the 14 discarded units, of which only 2 have FDR-confirmed batch structure and 4 have none |
