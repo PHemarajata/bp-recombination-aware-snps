@@ -64,8 +64,13 @@ add("panel.exclusions_retired", len(retired & panel), "PANEL_EXCLUSIONS.tsv",
     "rescinded 2026-08-23 as unevidenced -- decided on superseded SKESA "
     "assemblies plus a mis-transcribed core column; all four pass every gate "
     "on the SPAdes assemblies in use. EXCLUSION_RECHECK_2026-08-23.md")
-add("panel.corrected_v4d", len(corrected), "PANEL_v4d_2026-08-21.tsv",
-    "quote this, not 2976")
+add("panel.corrected_v4d", len(corrected),
+    "L1v4c_MERGED_METADATA.tsv minus PANEL_DUPLICATES and ACTIVE PANEL_EXCLUSIONS",
+    "quote this, not 2976 and not 2955. NOT read from PANEL_v4d_2026-08-21.tsv "
+    "-- that file is a 2026-08-21 SNAPSHOT holding 2,955 rows, taken while the "
+    "four exclusions retired on 2026-08-23 were still active (ERR9980356, "
+    "SRR2896257, SRR2896259, SRR2896271). It was cited as the source here until "
+    "2026-08-24, which named a file whose row count contradicts the value")
 add("panel.countries", len({r["country"] for r in meta
                             if r["sample_id"] in corrected and r["country"]}),
     "L1v4c_MERGED_METADATA.tsv")

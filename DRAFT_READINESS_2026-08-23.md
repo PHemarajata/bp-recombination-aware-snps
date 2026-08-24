@@ -199,8 +199,9 @@ The remaining work is bounded and none of it is a data problem:
 | §1 gap: R7 Georgia | ✅ **done, and it was already written** — R7.2 is drafted in `RESULTS_DRAFT` and the outline; all its figures re-verified 2026-08-24 (Asia/non-Asia NN 43/46 κ 0.869 vs modal k=20 46/46 κ 1.000; filtered/raw median 0.090 over exactly 170 replicon-units). The outline's ⚠ 4-vs-5 case-count warning was stale and is now closed |
 | §1 gap: Figure 1 flow diagram | ✅ **done** — `make_figure1_bp.py` → `FIGURE1_STUDY_FLOW.svg` (+ `_dark` variant). Reads `NUMBERS.tsv` and **exits non-zero on a missing key**, so it cannot ship with a hole in it. Regenerate with `python3 generate_numbers.py && python3 make_figure1_bp.py` |
 | IRB approval number in Methods | **needs the lab record** — cannot be resolved from artifacts |
-| data availability + deposit new assemblies | open |
-| pinned production command line (branch + commit) | open |
+| data availability statement | ✅ **written** — `DATA_AVAILABILITY_2026-08-24.md` §1, with bracketed placeholders for the accessions/DOI/IRB that do not exist yet |
+| deposit new assemblies | ❌ **open, and now itemised** — 7-item checklist in `DATA_AVAILABILITY_2026-08-24.md` §3. Items 5 (Zenodo archive → DOI) and 7 (tag the pipeline at 79ab645) are unblocked today; 1–4 chain off a BioProject registration; 6 is the IRB number |
+| pinned production command line (branch + commit) | ✅ **done** — `main` @ **`79ab645`**, Nextflow 25.04.6, verbatim invocation in `PRODUCTION_RUN_PIN_2026-08-24.md`. Two gaps found and disclosed: the run used `nextflow run .` so no git revision was recorded (commit established by bracketing), and the `--input` samplesheet was lost and is reconstructed |
 | reproducibility test end-to-end | open — real compute, do before submission |
 
 **The one item nobody in this repository can close is the IRB number.** Every

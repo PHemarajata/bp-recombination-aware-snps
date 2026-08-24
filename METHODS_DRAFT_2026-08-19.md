@@ -1974,7 +1974,7 @@ confidence tier, zero task failures in either execution trace.**
 
 | tool | version | role |
 |---|---|---|
-| Nextflow | 25.10.0 (production) / 25.04.6 (control) | workflow |
+| Nextflow | **25.04.6 (reported)** / 25.10.0 (control, unverified) | workflow |
 | PopPUNK | 2.7.6 | strain assignment |
 | SKA | 0.4.0 | split-k-mer alignment within strains |
 | fastbaps (PopPIPE) | levels = 3 | within-strain sub-clustering |
@@ -2003,5 +2003,32 @@ and batched builds produced the same taxa and identical alignment column
 multisets, differing only in column order, which `ska align` does not define and
 fastbaps' site-independent model does not use.
 
-Container digests, the exact command line and per-task resource usage are in each
-run's `pipeline_info/`, archived with the results.
+⚠ **The Nextflow row was also inverted by the designation flip.** 25.04.6 is
+read directly out of the reported run's own `.nextflow.log`
+(`N E X T F L O W ~ version 25.04.6`, build 5954) and is certain. The control's
+25.10.0 is carried over from the earlier draft and **has not been verified
+against the A100 host's log**; verify or drop it before submission.
+
+**The reported run is pinned.** Pipeline
+`wf-assembly-snps-mod` (https://github.com/PHemarajata/wf-assembly-snps-mod),
+branch `main`, commit **`79ab645`**, Nextflow 25.04.6, run `agitated_coulomb`,
+session `c90e1105-5b12-455e-9b31-4ecde888d559`, 2026-08-18 19:52 → 2026-08-19
+08:07 (+07). The verbatim command line, the four input files it consumed, the
+resource-override configuration and the limits of the pin are in
+**`PRODUCTION_RUN_PIN_2026-08-24.md`**.
+
+Three points from that document belong in the paper rather than in a
+supplementary file. **(i)** The run was launched as `nextflow run .` from a
+working directory, so Nextflow recorded a script hash (`e09a5c4ead`) and not a
+git revision; the commit is established by bracketing the run between commits
+and is therefore *"the pipeline at `79ab645`"* rather than a proven tree state.
+**(ii)** The `--input` samplesheet was not retained and is reconstructed —
+disclosed as such, with the input set corroborated independently by the run's
+own trace (2,352 staged genomes) and the cluster assignment file (2,352 ids).
+**(iii)** The run was given **86 units / 2,352 genomes / 172 replicon-units**;
+the reported basis of 85 / 2,340 / 170 is a post-hoc correction of its output,
+not a re-execution, so a reproduction lands on the former and must be put
+through §2.12.5 to reach the latter.
+
+Container digests and per-task resource usage are in each run's
+`pipeline_info/`, archived with the results.
