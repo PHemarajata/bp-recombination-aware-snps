@@ -10,8 +10,9 @@ as publishable. One fragile, testable positive lead survives (§6).
 
 > ✅ **FULLY RE-RUN AT n = 46 (2026-08-24).** The body tables below are now the
 > n = 46 figures, with the superseded n = 43 values retained in brackets or in
-> §1a. **Every conclusion is unchanged.** One figure was *not* refreshed and is
-> flagged in place: the contiguity-matched pool in §4.
+> §1a. **Every conclusion is unchanged.** The last outstanding figure, the
+> contiguity-matched pool in §4, was re-run at n = 46 on 2026-08-26; nothing in
+> this document is still an n = 43 figure.
 >
 > Headline: **accessory country 14/46 (30%, κ 0.264) vs cgMLST core 10/46
 > (22%, κ 0.193)**, against a 26% majority baseline.
@@ -257,11 +258,37 @@ python3 score_accessory_bp.py --distance accessory --out-prefix accessory_bp/ATT
 ```
 
 A contiguity-matched pool (nearest neighbour restricted to genomes within ±50%
-of the query's contig count) reduces country 30% → 23% and region 79% → 74%.
-**⚠ These two figures are still the n = 43 run** — the contiguity-matched pool
-is not one of the four controls `accessory_control_bp.py` re-runs, so it was not
-refreshed with the rest. It is directional support, not a headline; re-run it
-before it appears in the manuscript.
+of the query's contig count) reduces country **30% → 24%** and region
+**76% → 72%**.
+
+**Re-run at n = 46 on 2026-08-26**, replacing the stale n = 43 figures
+(country 30% → 23%, region 79% → 74%; that 79% was the n = 43 regional baseline
+of 34/43, not the n = 46 baseline of 35/46, so the old pair compared against a
+different denominator than the rest of this section).
+
+| | unrestricted | contiguity-matched |
+|---|---|---|
+| country | 14/46 (30%) | **11/46 (24%)** |
+| region | 35/46 (76%) | 33/46 (72%) |
+
+All 46 validation genomes have a contig count, so nothing was dropped for
+missing data. Note what the country row now says: at 11/46 the contiguity-matched
+accessory result sits **below the 26% majority baseline** (12/46), so under a
+pool matched for assembly fragmentation, accessory country attribution does not
+beat guessing the most common exposure country. The stratification moves the same
+way, with the close-relative stratum falling from 8/32 to 5/25 as fragmented
+neighbours leave the pool.
+
+Like the §4 leave-two-out, this is now a reproducible command rather than an
+ad-hoc edit. `score_accessory_bp.py` gained `--contiguity-match`:
+
+```bash
+python3 score_accessory_bp.py --distance accessory --contiguity-match 0.5 --out-prefix accessory_bp/ATTR_ACC_CONTIGMATCH
+```
+
+It remains directional support rather than a headline, and it is still **not**
+one of the four controls `accessory_control_bp.py` re-runs, so it must be
+refreshed by hand whenever the panel changes.
 
 For context, the core genome places those same Mexican cases nearest to Ecuador
 and Colombia at d = 0.002 — a coherent Americas lineage signal — and scored them

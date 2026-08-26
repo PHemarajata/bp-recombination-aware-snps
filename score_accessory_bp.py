@@ -149,10 +149,17 @@ def load_drops():
 
 # ---------------------------------------------------------------- scoring
 
-def score(samples, dist_row, labels, truth_c, val, panel_counts_of):
+def score(samples, dist_row, labels, truth_c, val, panel_counts_of,
+          contigs=None, contig_frac=None):
     """Leave-group-out scoring. dist_row(i) -> distances to all samples.
 
     Returns per-genome rows for every scale in `labels`.
+
+    With `contig_frac` set, the pool is additionally restricted to genomes whose
+    contig count is within +/- that fraction of the query's -- the
+    contiguity-matched pool of ACCESSORY_ATTRIBUTION_RESULT §4. A query whose own
+    contig count is unknown cannot be matched and is skipped rather than scored
+    against an unrestricted pool, which would silently mix the two designs.
     """
     idx_of = {s: i for i, s in enumerate(samples)}
     # leave-outbreak-out: same explicit same-source register the cgMLST scorer
@@ -160,6 +167,7 @@ def score(samples, dist_row, labels, truth_c, val, panel_counts_of):
     outbreak_groups = tmpl.load_outbreak_groups()
     group_of = {s: g for g, mem in outbreak_groups.items() for s in mem}
     out = []
+    skipped_no_contigs = set()
     for scale, lab in labels.items():
         panel_n = panel_counts_of[scale]
         tot_n = sum(panel_n.values())
@@ -170,8 +178,21 @@ def score(samples, dist_row, labels, truth_c, val, panel_counts_of):
             held = {x for x in val if truth_c[x] == t}
             if s in group_of:
                 held = held | outbreak_groups[group_of[s]]
+            ok_contig = None
+            if contig_frac is not None:
+                q = (contigs or {}).get(s)
+                if q is None:
+                    skipped_no_contigs.add(s)
+                    continue
+                lo, hi = q * (1.0 - contig_frac), q * (1.0 + contig_frac)
+
+                def ok_contig(x, _lo=lo, _hi=hi):
+                    c = contigs.get(x)
+                    return c is not None and _lo <= c <= _hi
+
             pool = [idx_of[x] for x in samples
-                    if x not in held and lab.get(x) and x != s]
+                    if x not in held and lab.get(x) and x != s
+                    and (ok_contig is None or ok_contig(x))]
             if not pool:
                 continue
             d = dist_row(idx_of[s])[pool]
@@ -192,6 +213,10 @@ def score(samples, dist_row, labels, truth_c, val, panel_counts_of):
                         "nn_sample": samples[pool[j]],
                         **{f"pred_{k}": v for k, v in preds.items()},
                         **{f"ok_{k}": int(v == lab[s]) for k, v in preds.items()}})
+    if skipped_no_contigs:
+        print(f"  contiguity-match: skipped {len(skipped_no_contigs)} validation "
+              f"genome(s) with no contig count: "
+              f"{', '.join(sorted(skipped_no_contigs))}")
     return out
 
 
@@ -243,7 +268,30 @@ def main():
                          "frozen PANEL_DUPLICATES register is never touched.")
     ap.add_argument("--validate", action="store_true",
                     help="check --distance cgmlst against CGMLST_LICHT_ATTRIBUTION.tsv")
+    ap.add_argument("--contiguity-match", type=float, default=None,
+                    metavar="FRAC",
+                    help="restrict the nearest-neighbour pool to genomes within "
+                         "+/- FRAC of the query's contig count (0.5 = the +/-50%% "
+                         "pool of ACCESSORY_ATTRIBUTION_RESULT section 4). Exists "
+                         "so that figure is a reproducible command; it is NOT one "
+                         "of the four controls accessory_control_bp.py re-runs.")
+    ap.add_argument("--stats", default=f"{B}/accessory_bp/ASSEMBLY_STATS_3033.tsv",
+                    help="assembly stats table supplying contig counts for "
+                         "--contiguity-match")
     a = ap.parse_args()
+
+    contigs = None
+    if a.contiguity_match is not None:
+        if a.contiguity_match <= 0:
+            ap.error("--contiguity-match must be > 0")
+        contigs = {}
+        for r in csv.DictReader(open(a.stats), delimiter="\t"):
+            try:
+                contigs[r["sample_id"]] = int(r["contigs"])
+            except (KeyError, TypeError, ValueError):
+                continue
+        print(f"contiguity-match: +/-{a.contiguity_match:.0%} of query contig "
+              f"count, {len(contigs)} genomes have a count in {a.stats}")
 
     drop = load_drops()
     extra = {x.strip() for x in a.exclude.split(",") if x.strip()}
@@ -294,9 +342,12 @@ def main():
 
     panel_counts_of = {sc: Counter(lab[x] for x in samples if lab.get(x))
                        for sc, lab in labels.items()}
-    rows = score(samples, dist_row, labels, truth_c, val, panel_counts_of)
-    report(rows, labels, val, truth_c, samples, a.estimator,
-           f"{a.distance} distance")
+    rows = score(samples, dist_row, labels, truth_c, val, panel_counts_of,
+                 contigs=contigs, contig_frac=a.contiguity_match)
+    title = f"{a.distance} distance"
+    if a.contiguity_match is not None:
+        title += f", contiguity-matched pool (+/-{a.contiguity_match:.0%})"
+    report(rows, labels, val, truth_c, samples, a.estimator, title)
 
     prefix = a.out_prefix or f"{B}/accessory_bp/ATTR_{a.distance.upper()}"
     fields = ["sample_id", "scale", "exposure_country", "truth", "nn_distance",

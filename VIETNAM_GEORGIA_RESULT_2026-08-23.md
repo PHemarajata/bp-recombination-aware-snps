@@ -89,10 +89,13 @@ validation genomes**.
 - **But the denominator is pseudoreplicated.** The validation set is **46 genomes
   from 45 patients**. Report it that way — it belongs beside W1's existing
   pseudoreplication disclosure, not hidden.
-- **`OUTBREAK_GROUPS.tsv` should record the pair** at the next deliberate batched
-  refresh. It is a frozen input, and since leave-group-out already covers this
-  case the change is a no-op for every current number — which is exactly why it
-  should be made deliberately rather than now.
+- **`OUTBREAK_GROUPS.tsv` records the pair.** ✅ **Registered 2026-08-26** (D3) as
+  group `VN_same_patient_2012_2017`. The no-op was verified rather than assumed:
+  cgMLST NN was re-scored before and after and `ATTR_CGMLST.tsv` is identical row
+  for row, country 10/46 and region 37/46 either way, and accessory is likewise
+  unchanged at 14/46 and 35/46. The group deliberately does **not** include the
+  Georgia cases, which are independent and must not be held out when scoring
+  Viet Nam.
 
 ### 2.3 What the paper actually concludes — subtler than "not imports"
 

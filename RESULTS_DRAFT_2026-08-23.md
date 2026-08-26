@@ -279,6 +279,42 @@ Asia & Pacific. At national scale 37 units are single-country.
 **12 units as confounded** — country and BioProject equally significant — plus 5
 where the control could not run, cutting 23 FDR survivors to 6.
 
+**The discarded set is graded, not flat** (adopted 2026-08-26 from
+`BIOPROJECT_WITHIN_COUNTRY_RESULT_2026-08-24.md` §5). "Confounded" is the
+automatic verdict whenever a within-country clonal expansion was deposited by one
+study, because 95% of BioProjects here are single-country and ~99% of
+same-BioProject near-clonal pairs are also same-country. Testing the study-effect
+explanation directly, conditional on country, splits the discarded units three
+ways:
+
+| verdict | n |
+|---|---|
+| confounded, batch structure **confirmed** within country | 8 nominal, of which **2 survive FDR** |
+| not separable, **no batch structure detected**, geography unproven | 4 |
+| not separable, untestable | 2 |
+
+Batch structure is real in aggregate (8 of 22 testable cells at p ≤ 0.05 against
+1.1 expected, binomial P = 6.6 × 10⁻⁶) but is FDR-confirmed in only two units,
+both Thailand. So for at least a third of the discarded set the artefact
+explanation was tested and **not** found; describing them as artefact overstates
+what the control established. **No headline moves**: every reported R6 count is a
+*pass*, and no pass changes.
+
+> **On 12 versus 14** (reconciled 2026-08-26 from
+> `PHYLOGEO_FROZEN_national_2026-08-23.tsv`; both are the frozen 85-unit basis and
+> neither is stale). Of the 23 country-clustered FDR survivors, **14 have
+> BioProject also clustered**, and the R6 conditional-test document counts all 14
+> as confounded. This paragraph counts **12**, because it files two of them,
+> `strain_1_L1_35` and `strain_3_L1_6`, under "the control could not run" instead:
+> their BioProject control is `vacuous` in the frozen table. The five vacuous
+> units are therefore not disjoint from the confounded ones, two of them are the
+> same units seen from the other side. Both descriptions partition the same 23
+> (12 + 5 + 6 = 23; equivalently 14 + 3 + 6). Keep one convention per document and
+> say which. Note the R6 document's own "untestable" pair
+> (`strain_1_L1_17`, `strain_3_L1_6`) is a **third**, unrelated criterion (no
+> testable (unit, country) cell at ≥ 8 genomes and ≥ 2 BioProjects) and overlaps
+> this one only at `strain_3_L1_6`.
+
 **The six national-scale passes are all dominated by Southeast and East Asian
 countries**: `strain_5_L1_3` (Thailand 35 / Laos 6), `strain_1_L1_5` (Singapore
 10 / France 5 / Malaysia 2), `strain_11_L1_5` (Thailand 37 / Cambodia 3),
