@@ -43,7 +43,7 @@ summaries.
 | gap | effort | blocking? | outcome |
 |---|---|---|---|
 | MLST row of Table 5 predates the correction — re-run on n=46 | small | no, tag it | ✅ **changed the claim** — the cell is now a bound, not an accuracy |
-| Accessory control sub-numbers still n=43 (headline already corrected) | small | no | ✅ all sub-numbers at n=46; conclusions unchanged |
+| Accessory control sub-numbers still n=43 (headline already corrected) | small | no | ✅ all sub-numbers at n=46. ⚠ "conclusions unchanged" holds for the headline but **not** for the contiguity-matched control: at n=46 it reads 11/46 (24%), which is **below** the 26% majority baseline, so that sub-analysis now fails outright rather than merely weakening |
 | R7 needs Georgia added as a second autochthonous focus (below) | small | no | ✅ was already drafted; figures re-verified |
 | Flow diagram (Figure 1) does not exist; all five numbers now do | small | no | ✅ `make_figure1_bp.py` |
 
@@ -68,7 +68,7 @@ cross-hardware reproducibility control (lines 1183–1189).
 | 2.12.6 Reference selection | "served the **88 units**" |
 | 2.12.7 Alignment / r/m | "misplaces 15 of these **88 units**" |
 | 2.12.8 Phylogenies | "over those **88 medoids**"; "across **88** divergent lineages" |
-| 2.12.9 Phylogeny–geography | "**2,352** analysed genomes"; "**56 of 88** units" |
+| 2.12.9 Phylogeny–geography | ✅ **fixed 2026-08-26**: the national verdict tally read "39, 25, 5, 13 and 6" (sums to 88, the A100 control) and is now the reported 85-unit basis "**37, 25, 5, 12 and 6**". The graded-verdict paragraph was added in the same edit. *(The "56 of 88" string this row cited no longer appears in METHODS; the row itself was stale.)* |
 
 §2.12 spans lines 1173–1671 — **about 30% of the draft.** A reader following the
 Methods would reconstruct a different analysis from the one reported.
@@ -141,6 +141,7 @@ Worth stating, because the rewrite is smaller than §2 suggests:
    pinned production command line.
 
 **The reproducibility test (open item 1) should come after step 3, not before.**
+*(Ran 2026-08-25 regardless of this ordering, and passed; see `REPRO_RESULT_2026-08-26.md`. The advice stands for any future re-run.)*
 Re-deriving the collection against a Methods section that describes a different
 partition would produce a diff nobody can interpret.
 
@@ -152,9 +153,15 @@ partition would produce a diff nobody can interpret.
 - **Two partitions will remain in the paper** (85 reported, 88 control). That is
   correct and defensible, but §2.12.10 must make the roles unmistakable, because
   this is the single most confusing thing in the corpus.
-- **n=46 is small** and the paper's honesty depends on saying so three ways
-  (W1 pseudoreplication, W7 the effective class count, and the new batch-
-  enrichment check). Those are drafted; keep them.
+- **n=46 is small** and the paper's honesty depends on saying so four ways
+  (W1 pseudoreplication, W7 the effective class count, the batch-enrichment
+  check, and **the same-patient pair**). Those are drafted; keep them. The fourth
+  was added 2026-08-26: the 46 scorable genomes come from **45 patients**, since
+  `SRR31608433` and `SRR31608435` are one person sampled five years apart. It
+  changes no number, and is registered in `OUTBREAK_GROUPS.tsv` as
+  `VN_same_patient_2012_2017`. Write "46 cases from 45 individuals"; both abstract
+  versions, RESULTS §R2.4, DISCUSSION limitations, METHODS §2.12.11a.2 and the
+  outline's W1 now all carry it.
 - **The abstention threshold is calibrated on 46 genomes** and its signal was
   chosen after seeing which won. Disclosed in `ABSTENTION_RESULT` §7 — carry that
   caveat into the paper verbatim rather than softening it.
@@ -172,6 +179,9 @@ main blocker in §2 is cleared. Remaining, in priority order:
 | §2.12.11a attribution Methods | ✅ written from scratch |
 | §2.6.3 union self-contradiction | ✅ stale paragraph deleted |
 | §2.12.13 production/control designation | ✅ fixed |
+| **reproducibility of the reported run** | ✅ **verified 2026-08-25/26**: re-run end to end from the pin; Gate 1 = 47 units, median r/m **7.70**, matching. 81 of 84 comparable units identical in r/m *and* raw SNP counts; per-unit alignment distances identical for 85 of 86. `REPRO_RESULT_2026-08-26.md` |
+| **pipeline release cited** | ✅ **tagged 2026-08-26**: `v1.0.5-mod` at `79ab645`, pushed. ⚠ Methods must state the run is **not seed-reproducible**: the pin predates the `gubbins_seed` fix, so Gubbins draws a random RAxML seed and can silently drop a unit while still exiting 0 |
+| **R6 discarded set described as graded** | ✅ **done 2026-08-26**: 8 nominal / 2 FDR, 4 none, 2 untestable. Adopted in RESULTS R6, MANUSCRIPT_OUTLINE R6, METHODS §2.12.9, PHYLOGEO_INTERP verdict table, PRIMER §1.3, WHAT_THE_ANALYSES_SHOW (+TH). No pass changes |
 | branch support on the reported basis | ✅ 170/170, all trees now carry SH-aLRT/UFBoot |
 | **`+ASC` vs `-fconst`** | ✅ **RESOLVED** — quantified on two units. §2.5 is right (`+ASC` estimates 41.9–72.1% GC, median 56.3%, against a true 68.1%; `-fconst` gives 67.6–68.7%, median 68.1%) but **it changes no reported number**, because every reported quantity derives from Gubbins outputs. `ASC_FCONST_RESULT_2026-08-23.md`. Support trees rebuilt with `-fconst`: `L1v4c_TREES_SUPPORTED_FCONST/`, 170/170 — **publish that set** |
 | Results R1–R8 draft | ✅ written, figures annotated with their keys |
@@ -200,9 +210,9 @@ The remaining work is bounded and none of it is a data problem:
 | §1 gap: Figure 1 flow diagram | ✅ **done** — `make_figure1_bp.py` → `FIGURE1_STUDY_FLOW.svg` (+ `_dark` variant). Reads `NUMBERS.tsv` and **exits non-zero on a missing key**, so it cannot ship with a hole in it. Regenerate with `python3 generate_numbers.py && python3 make_figure1_bp.py` |
 | IRB approval number in Methods | **needs the lab record** — cannot be resolved from artifacts |
 | data availability statement | ✅ **written** — `DATA_AVAILABILITY_2026-08-24.md` §1, with bracketed placeholders for the accessions/DOI/IRB that do not exist yet |
-| deposit new assemblies | ❌ **open, and now itemised** — 7-item checklist in `DATA_AVAILABILITY_2026-08-24.md` §3. Items 5 (Zenodo archive → DOI) and 7 (tag the pipeline at 79ab645) are unblocked today; 1–4 chain off a BioProject registration; 6 is the IRB number |
-| pinned production command line (branch + commit) | ✅ **done** — `main` @ **`79ab645`**, Nextflow 25.04.6, verbatim invocation in `PRODUCTION_RUN_PIN_2026-08-24.md`. Two gaps found and disclosed: the run used `nextflow run .` so no git revision was recorded (commit established by bracketing), and the `--input` samplesheet was lost and is reconstructed |
-| reproducibility test end-to-end | open — real compute, do before submission |
+| deposit new assemblies | ❌ **open, and now itemised** — 7-item checklist in `DATA_AVAILABILITY_2026-08-24.md` §3. Item 7 (tag the pipeline) is ✅ **done 2026-08-26** — `v1.0.5-mod` at `79ab645`, pushed. Item 5 (Zenodo archive → DOI) is unblocked today; 1–4 chain off a BioProject registration; 6 is the IRB number |
+| pinned production command line (branch + commit) | ✅ **done**, `main` @ release **`v1.0.5-mod`** = **`79ab645`**, Nextflow 25.04.6, verbatim invocation in `PRODUCTION_RUN_PIN_2026-08-24.md`. Two gaps found and disclosed: the run used `nextflow run .` so no git revision was recorded (commit established by bracketing), and the `--input` samplesheet was lost and is reconstructed |
+| reproducibility test end-to-end | ✅ **done 2026-08-25/26**: ran from the pin, rc=0 in 6h37m across two segments. Gate 1 = 47 units, median r/m **7.70**, matching. `REPRO_RESULT_2026-08-26.md` |
 
 **The one item nobody in this repository can close is the IRB number.** Every
 other open item is either mechanical or a compute run.

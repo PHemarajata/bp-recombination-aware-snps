@@ -327,8 +327,14 @@ Singapore/Malaysia-versus-France split is genuinely inter-regional.)*
 **Every Americas-dominated unit fails**, by three distinct routes: the Mississippi
 Gulf Coast unit `strain_4_L1_1` is **null at p = 1.0000**, `strain_4_L1_2` is null
 at p = 0.068, `strain_4_L1_3` has a vacuous control, and `strain_4_L1_4` and
-`strain_1_L1_7` are **confounded** at p = 0.0010 — country and BioProject equally
-significant, which is a well-powered negative rather than absence of power. The
+`strain_1_L1_7` are **confounded** at p = 0.0010, country and BioProject equally
+significant. The conditional test separates these last two, and they should not be
+described together: `strain_4_L1_4` does carry within-country batch structure
+(USA, 13 genomes across 4 BioProjects, p = 0.0450), so for it "confounded" is
+supported. `strain_1_L1_7` does **not**: its only testable cell is Singapore at
+p = 0.0569, and it is one of the four units where the study-effect explanation was
+tested and not found. It is better described as *not separable* than as a
+well-powered negative. The
 Viet Nam/Georgia unit `strain_22_L1_1` is **null (p = 0.0430, not surviving
 FDR)**, consistent with the one-locus boundary in R7.2.
 

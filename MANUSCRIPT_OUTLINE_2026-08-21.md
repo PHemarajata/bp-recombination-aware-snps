@@ -450,6 +450,23 @@ The control does the decisive work: at national scale it removes **12 units as
 confounded** plus 5 with a vacuous control, cutting 23 FDR survivors to 6. It
 should be described in Methods as a result in itself.
 
+**Report the discarded set as graded, not flat** (adopted 2026-08-26 from
+`BIOPROJECT_WITHIN_COUNTRY_RESULT_2026-08-24.md` §5; see RESULTS R6). Because 95%
+of BioProjects here are single-country, "confounded" is the automatic verdict for
+any within-country clonal expansion deposited by one study, artefact or not.
+Testing the study effect directly, conditional on country, splits the discarded
+units into **8 with batch structure at nominal p (2 surviving FDR, both
+Thailand)**, **4 with none at all**, and **2 untestable**. Batch structure is real
+in aggregate (8 of 22 cells at p ≤ 0.05 against 1.1 expected, binomial
+P = 6.6 × 10⁻⁶) but FDR-confirmed in only two units, so calling the whole
+discarded set artefact overstates the control. **No headline moves**; every
+reported R6 count is a pass.
+
+> On **12 vs 14**: both are the frozen 85-unit basis and neither is stale. 14
+> units have BioProject clustered; this outline files 2 of them
+> (`strain_1_L1_35`, `strain_3_L1_6`) under vacuous control instead, so
+> 12 + 5 + 6 = 14 + 3 + 6 = 23. Keep one convention per document and say which.
+
 **The six national passes are dominated by Southeast and East Asian countries** —
 ⚠ *not* "all six are Southeast Asian": `strain_1_L1_5` is Singapore 10 / **France
 5** / Malaysia 2, and it is also the single regional-scale pass, where the
@@ -457,9 +474,13 @@ Singapore/Malaysia-versus-France split is genuinely inter-regional.
 
 **Every Americas unit fails**, by three routes: Mississippi `strain_4_L1_1` null
 at p = 1.0000, `strain_4_L1_2` null at 0.068, `strain_4_L1_3` vacuous control,
-and `strain_4_L1_4` / `strain_1_L1_7` **confounded** at p = 0.0010 — well-powered
-negatives. The Viet Nam/Georgia unit `strain_22_L1_1` is **null (p = 0.0430)**,
-consistent with R7.2's one-locus boundary.
+and `strain_4_L1_4` / `strain_1_L1_7` **confounded** at p = 0.0010. ⚠ Do not call
+both "well-powered negatives": the conditional test separates them.
+`strain_4_L1_4` does carry within-country batch structure (USA, p = 0.0450), so
+confounded is supported; `strain_1_L1_7` does not (Singapore, p = 0.0569) and is
+one of the four *not separable* units. The Viet Nam/Georgia unit
+`strain_22_L1_1` is **null (p = 0.0430)**, consistent with R7.2's one-locus
+boundary.
 
 ⚠ **CORRECTED: sub-national is 1 of 81, not 0 of 88.** The previous claim
 *"sub-national geography is indistinguishable from study of origin: 0 of 88"* was
@@ -624,6 +645,18 @@ Philippines is 12 of 46:**
 
 The 24 observations are **not independent**; pseudoreplication operates at the
 study level, and the project already owns `pseudoreplication_bp.py`.
+
+> **A third form of non-independence, at the patient level.** The 46 scorable
+> genomes come from **45 patients**: `SRR31608433` (2017) and `SRR31608435` (2012)
+> are two isolates from one person who travelled to Vietnam, sampled five years
+> apart (Brennan *et al.*, PMID 40835221). Registered 2026-08-26 as
+> `VN_same_patient_2012_2017` in `OUTBREAK_GROUPS.tsv`. **It changes no reported
+> number**: leave-group-out already held them out of each other's pool, verified
+> by re-scoring before and after with per-genome results identical, which is
+> exactly why it should be stated rather than quietly relied upon. Write
+> "46 cases from 45 individuals", as the abstract already does. Note this is a
+> *different* pair from the Georgia same-patient pair at §R7, which needs no
+> register entry because none of those five genomes is in the validation set.
 
 > **A second, unrelated asymmetry — found 2026-08-23, disclose it.** The
 > validation set is **6× enriched for one assembly batch.** 16 of the 46
@@ -1098,7 +1131,9 @@ None of these is a weakness in the work. All of them will stop a submission.
   it does more work than any other single display item because it makes the
   attrition auditable. ⚠ Do not reuse the old chain (8,500 → 2,976 → 2,352 →
   2,342 in 88 units): three of its five numbers are superseded.
-- **The exact production command line is no longer pinned.** The 2026-08-11
+- ~~**The exact production command line is no longer pinned.**~~ ✅ **CLOSED 2026-08-24/26.** Pinned in `PRODUCTION_RUN_PIN_2026-08-24.md` and cited in METHODS §2.12.13 as branch `main`, release **`v1.0.5-mod`** = commit `79ab645`, Nextflow 25.04.6. Original note retained below for context.
+
+**The exact production command line is no longer pinned.** The 2026-08-11
   methods draft cited `branch reference-blocklist, commit f1a7d13`; the 08-19
   rewrite dropped the branch and commit and cites only the repo URL. Restore it.
 - **A single stated inclusion rule.** `SAMPLING_FRAME_2026-08-21.md` §5 already
@@ -1366,8 +1401,13 @@ you:**
    It looked positive (country 30% vs core 21%) but scores **0/13 where a close
    relative exists**, is 5× sensitive to assembly quality, and the entire margin
    rests on two Mississippi reference genomes. **Do not present it as a
-   contrast**; the core result is strengthened by its failure.
-   (`ACCESSORY_ATTRIBUTION_RESULT`)
+   contrast**; the core result is strengthened by its failure. The sharpest
+   single sentence available: under a pool matched for assembly fragmentation
+   (nearest neighbour restricted to genomes within ±50% of the query's contig
+   count), accessory country attribution falls to **11/46 (24%)**, i.e. **below
+   the 26% majority baseline**. Controlling the assembly-quality confound, it
+   does not beat guessing the commonest exposure country. Re-run at n=46 on
+   2026-08-26. (`ACCESSORY_ATTRIBUTION_RESULT` §4)
 7. **Score the PBP dual-locus scheme through the identical holdout.** The one
    published method that could undercut R3 — better to run it than caveat it.
 8. **Delete the stale union-coverage paragraph** in `METHODS_DRAFT` §2.6.3 and

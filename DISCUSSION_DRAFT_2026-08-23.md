@@ -249,9 +249,14 @@ attribution avoid this by using alignment-derived and allelic distances
 respectively.
 
 **Two partitions exist for this collection.** We report the corrected
-85-unit partition and use the 88-unit run as a cross-hardware reproducibility
+85-unit partition and use the 88-unit run as a cross-hardware
 control; the two agree closely, but unit labels are not comparable between them
-and must never be quoted across partitions.
+and must never be quoted across partitions. That agreement is evidence of
+comparability across hardware, not of determinism: at the reported commit the
+pipeline draws an unseeded tree-search seed, so it is not seed-reproducible on
+either host. Reproducibility was instead tested directly, by re-executing the
+reported analysis from its pin; it recovered the reported figures, losing one
+unit to that seeding behaviour.
 
 **Finally, this is a study of the public record as it stands, and we cannot
 separate the two causes of failure quantitatively.** Most of the country-level

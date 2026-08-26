@@ -205,6 +205,16 @@ matching `PHYLOGEOGRAPHY_ASSOCIATION_INTERPRETATION.md` (26→24→6, →11→0,
 New columns: `q_value`, `control_status`, `interpretation`. The national
 breakdown is 39 untestable, 25 null, 13 confounded, 6 geographic, 5 vacuous.
 
+> **Superseded basis, annotated 2026-08-26.** That tally is the **88-unit A100**
+> partition, which is now the cross-hardware control rather than the reported
+> run. On the reported **85-unit** basis the national breakdown is **37
+> untestable, 25 null, 12 confounded, 6 geographic, 5 vacuous**
+> (`PHYLOGEO_FROZEN_national_2026-08-23.tsv`). The pass count, 6, is identical on
+> both. Note also that "confounded" has since been graded: of the discarded
+> units, 8 show within-country batch structure at nominal p (2 surviving FDR), 4
+> show none at all, and 2 are untestable, so the set is not uniformly artefact.
+> See `BIOPROJECT_WITHIN_COUNTRY_RESULT_2026-08-24.md` §5.
+
 **Unit labels in the metadata were badly stale.** `strain`, `subcluster`,
 `unit_n`, `unit_rm`, `reference`, `ref_source`, `ref_mean_mash` were inherited
 verbatim from v4b and never recomputed: 694 rows blank and **65.8% of populated

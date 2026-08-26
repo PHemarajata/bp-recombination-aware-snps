@@ -1638,8 +1638,26 @@ Benjamini–Hochberg FDR at 5% across the testable country tests of a single sca
 and a BioProject control counted as informative only where it covers ≥70% of the
 unit's tips across ≥3 distinct projects. Each unit receives one of five
 interpretations — *untestable (single-valued)*, *null*, *vacuous control*,
-*confounded*, or *geographic (control passes)*. At national scale: 39, 25, 5, 13
-and 6 units respectively.
+*confounded*, or *geographic (control passes)*. At national scale, on the reported
+85-unit basis (`PHYLOGEO_FROZEN_national_2026-08-23.tsv`): **37, 25, 5, 12 and 6**
+units respectively. *(Corrected 2026-08-26. This previously read 39, 25, 5, 13 and
+6, which sums to 88 and is the A100 control partition, not the reported one.)*
+
+**The confounded set is reported as graded rather than flat.** Because 113 of 119
+BioProjects (95%) are entirely single-country, and ~99% of same-BioProject
+near-clonal pairs are also same-country, "confounded" is the automatic verdict for
+any within-country clonal expansion deposited by a single study, whether or not
+anything artefactual is present. A conditional test
+(`bioproject_within_country_bp.py`) therefore asks the study-effect question
+directly, holding country fixed: BioProject is assigned only to the tips of the
+country under test and permuted among those tips alone, with the same statistic,
+permutation scheme, FDR and seed as above. Of the discarded units, **8 show batch
+structure at nominal p (2 surviving FDR, both Thailand), 4 show none at all, and 2
+are untestable**. Batch structure is real in aggregate (8 of 22 testable cells at
+p ≤ 0.05 against 1.1 expected, binomial P = 6.6 × 10⁻⁶) but FDR-confirmed in only
+two units, so the discarded set is described as *confounded*, *not separable* or
+*untestable* rather than uniformly as artefact. No reported count changes: every
+unit reported as a pass remains a pass.
 
 **A draw-probability test was considered and deliberately not implemented.** An
 earlier draft proposed testing near-homogeneous units — for example the
@@ -1661,12 +1679,20 @@ denominator explicitly: Thailand is 66.8% of the 2,340 analysed genomes but
 interchangeable.* Such units are reported as
 **descriptive composition, without a p-value**.
 
-## 2.12.10 The control run, and what it establishes
+## 2.12.10 The two runs, and what their comparison establishes
 
-The 86-unit partition (2.12.4, before refinement) was run to completion
-independently on a 22-core workstation: 8,178 tasks, **zero failures**, 172/172
-replicon-units completed at the highest confidence tier. This is not a duplicate;
-it is the control that makes the effect of refinement measurable.
+⚠ *Designation corrected 2026-08-26. This section previously called the 22-core
+workstation run "the control", contradicting the §2.12 preamble and §2.12.13,
+which both designate it the reported run. The figures below were always the
+reported run's; only the label was wrong.*
+
+The 86-unit partition (2.12.4, before refinement) was run to completion on a
+22-core workstation: 8,178 tasks, **zero failures**, 172/172 replicon-units
+completed at the highest confidence tier. **This is the reported run**, and the
+basis of 85 units / 2,340 genomes follows from it by the post-hoc correction in
+§2.12.5. The independent A100 execution of the refined 88-unit partition is the
+**cross-hardware control**. Comparing them makes both the hardware effect and the
+effect of refinement measurable.
 
 **Comparability.** 82 units have identical membership in both runs. Across those,
 r/m agrees to a **median absolute difference of 0.0145 (0.38% relative)**,
@@ -1674,6 +1700,14 @@ maximum 1.32. Two runs on different hardware, under different resource
 configurations, agreeing to ~0.4% on the median unit — this is the empirical
 basis for treating the two partitions as comparable, rather than assuming it from
 the configuration.
+
+> **What this comparison does and does not establish.** It shows that two
+> executions on different hardware agree closely on the quantity reported. It is
+> not a demonstration that the pipeline is deterministic: at this commit neither
+> host is seed-reproducible (§2.12.12), so some of the residual 0.4% is Gubbins
+> and RAxML tree-search stochasticity rather than a hardware effect, and the same
+> stochasticity can drop a unit outright. The direct test of reproducibility is
+> the re-execution reported in §2.12.12, not this cross-hardware comparison.
 
 **Effect of refinement.** The unsplit `strain_1_L1_26` — the unit as it stands in
 the reported partition, n = 153 — measures r/m **4.47** and is **in-window**, at a
@@ -1786,6 +1820,19 @@ changed only by a deliberate batched refresh, never edited mid-analysis.
 are unattributable at country scale by construction. **The scorable set is
 therefore 46**, drawn from **16 exposure countries**. Every `x/46` in this paper
 is over that set. ⚠ **48 is not an attribution denominator.**
+
+**The 46 scorable genomes come from 45 patients.** `SRR31608433` (2017) and
+`SRR31608435` (2012) are two isolates from one person who travelled to Vietnam,
+sampled five years apart (Brennan *et al.*, PMID 40835221). They are registered as
+one group, `VN_same_patient_2012_2017`, in `OUTBREAK_GROUPS.tsv` and are therefore
+held out together by the leave-outbreak-out rule of §2.12.11a.4. **The registration
+does not change any reported number**, because leave-group-out already removes
+every validation genome sharing the target's exposure country and both carry
+`exposure_country = Viet Nam`, so each was already outside the other's pool; this
+was verified by re-scoring before and after, with per-genome results identical.
+The set is nonetheless described as **46 genomes from 45 patients**, since the
+denominator is pseudoreplicated at that one place and the disclosure belongs with
+the others in the limitations rather than being left implicit.
 
 ### 2.12.11a.3 Estimators, and why the choice is reported per scale
 
@@ -1970,6 +2017,35 @@ that actually produced Gubbins output, and reading `gubbins_status`,
 this way: **176/176 and 172/172 replicon-units complete, exit 0, highest
 confidence tier, zero task failures in either execution trace.**
 
+**The reported analysis is not seed-reproducible, and the mechanism is the one
+above.** Commit `79ab645` predates a later fix that added a `gubbins_seed`
+parameter, so Gubbins derives RAxML's parsimony seed from an unseeded
+`randint(0, 10000)`. That draw is `0` with probability 1/10,001, RAxML rejects a
+non-positive seed, and Gubbins reports the failure only as "Unable to fit model to
+data". Each replicon-unit makes roughly two RAxML calls per iteration, so across a
+full panel the chance that at least one unit is affected is about **16%**. Combined
+with `errorStrategy 'ignore'`, the affected unit is dropped and the run still exits
+zero, which is precisely why verification must be per-unit rather than by exit
+code.
+
+**This was observed, not merely anticipated.** An end-to-end re-execution from
+`79ab645` with identical inputs (2026-08-25) lost
+`strain_1_L1_30__GCF_000755905_1_2` this way: iteration 1 drew `-p 1393` and
+succeeded, iteration 5 drew `-p 0` and failed, and the run reported `rc=0` with
+171 of 172 replicon-units. Two consequences are worth stating plainly. First, a
+re-run of this analysis should be checked against the per-process task counts, and
+a unit count of 171 rather than 172 is the expected signature of this bug rather
+than evidence of a different result. Second, because the Gate 1 window sums
+per-replicon divergence across a unit's replicons, losing one replicon roughly
+halves that sum and can move a unit **into** the window; the lost unit must be
+excluded rather than allowed to shift Gate 1 membership.
+
+**Subject to that, the reported figures reproduce.** On the same re-execution,
+per-unit r/m was identical in both value and raw SNP counts for **81 of 84**
+comparable units, per-unit alignment distances were identical for **85 of 86**
+units, and Gate 1 returned **47 units with a median r/m of 7.70**, matching the
+reported figures (`REPRO_RESULT_2026-08-26.md`).
+
 ## 2.12.13 Software and compute
 
 | tool | version | role |
@@ -2011,13 +2087,14 @@ against the A100 host's log**; verify or drop it before submission.
 
 **The reported run is pinned.** Pipeline
 `wf-assembly-snps-mod` (https://github.com/PHemarajata/wf-assembly-snps-mod),
-branch `main`, commit **`79ab645`**, Nextflow 25.04.6, run `agitated_coulomb`,
+branch `main`, release **`v1.0.5-mod`** = commit **`79ab645`**, Nextflow 25.04.6,
+run `agitated_coulomb`,
 session `c90e1105-5b12-455e-9b31-4ecde888d559`, 2026-08-18 19:52 → 2026-08-19
 08:07 (+07). The verbatim command line, the four input files it consumed, the
 resource-override configuration and the limits of the pin are in
 **`PRODUCTION_RUN_PIN_2026-08-24.md`**.
 
-Three points from that document belong in the paper rather than in a
+Four points from that document belong in the paper rather than in a
 supplementary file. **(i)** The run was launched as `nextflow run .` from a
 working directory, so Nextflow recorded a script hash (`e09a5c4ead`) and not a
 git revision; the commit is established by bracketing the run between commits
@@ -2028,7 +2105,15 @@ own trace (2,352 staged genomes) and the cluster assignment file (2,352 ids).
 **(iii)** The run was given **86 units / 2,352 genomes / 172 replicon-units**;
 the reported basis of 85 / 2,340 / 170 is a post-hoc correction of its output,
 not a re-execution, so a reproduction lands on the former and must be put
-through §2.12.5 to reach the latter.
+through §2.12.5 to reach the latter. **In practice a reproduction lands on 171
+rather than 172 replicon-units about one time in six**, for the seeding reason
+given in §2.12.12; that is a property of this pipeline version, not a difference
+in result. **(iv)** The release tag `v1.0.5-mod` was created at `79ab645` after
+the fact so the analysis can be cited as a release. Note that the pipeline
+manifest at that commit still self-reports `v1.0.3-mod`, which is a different and
+much older commit, so run logs from the reported analysis carry that string; the
+manifest was never bumped and was deliberately left uncorrected, because
+amending it would change the very commit the paper pins.
 
 Container digests and per-task resource usage are in each run's
 `pipeline_info/`, archived with the results.

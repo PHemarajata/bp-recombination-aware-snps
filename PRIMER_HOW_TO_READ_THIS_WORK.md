@@ -99,9 +99,24 @@ twice — once on country, once on BioProject (a proxy for "which study"). Then:
 - Both cluster equally → **confounded**, uninterpretable
 - BioProject data too sparse to test → **vacuous control**, unknown
 
-Result across 88 units: **6 genuinely geographic, 13 confounded**, 5 vacuous, 25
-null, 39 untestable. So when someone shows you a map that agrees with a
-phylogeny, the relevant number is 6 — not 88.
+Result across the reported **85 units**: **6 genuinely geographic, 12
+confounded**, 5 vacuous, 25 null, 37 untestable. So when someone shows you a map
+that agrees with a phylogeny, the relevant number is 6, not 85.
+
+*(Corrected 2026-08-26. This previously read "across 88 units: 6, 13, 5, 25, 39",
+which is the A100 control partition rather than the reported one. The pass count,
+6, is the same on both.)*
+
+**One refinement, because "confounded" is doing more work than it should.** In
+this panel 95% of BioProjects are entirely single-country, so a real within-country
+clonal expansion deposited by one study makes *both* variables fire on the same
+clade, and "confounded" is the automatic verdict whether or not anything
+artefactual is present. Asking the study-effect question directly, holding country
+fixed, splits the discarded units into **8 with batch structure at nominal p (only
+2 surviving FDR), 4 with none at all, and 2 untestable**. So batch structure is
+real in aggregate but confirmed in only two units. "Confounded" honestly means
+*we cannot separate these two explanations here*, which is weaker than *this is an
+artefact* and stronger than *this is geography*.
 
 **The question to ask about any geographic claim:** *did you check whether the
 same pattern is explained by who did the sequencing?* Based on my searches,
@@ -109,8 +124,8 @@ almost nobody in this literature does. That's why it's one of our contributions.
 
 ## 1.4 Circularity — grading your own homework
 
-We have 26 genomes where we *know* the true country of exposure (travel
-histories). Perfect for testing whether our method can predict origin.
+We have 46 genomes where we *know* the true country of exposure (travel
+histories), from 45 patients. Perfect for testing whether our method can predict origin.
 
 Except those genomes are **in the reference panel**. So when we ask "can we
 attribute this Philippine genome?", the method's nearest neighbours include the
@@ -124,24 +139,41 @@ told it those are Philippine. That is circular.
 - **Leave-group-out** — remove every validation genome from that country. Asks:
   *can we attribute to a country with no reference representation?*
 
-**What it did to our numbers:** nearest-neighbour country attribution scored
-**37%** under leave-one-out. Under leave-group-out it scored **0%**. All seven
-apparent successes were validation genomes predicting each other.
+**What it did to our numbers, on the 26-genome SNP analysis where we first caught
+it:** nearest-neighbour country attribution scored **37%** under leave-one-out.
+Under leave-group-out it scored **0%**. All seven apparent successes were
+validation genomes predicting each other.
 
 **If we had published the 37%, it would have been entirely artifact.** Not
-optimistic — artifact.
+optimistic, artifact.
+
+The effect did not go away when the set grew. On the current cgMLST basis, with
+46 scorable genomes and every figure computed under leave-group-out, country
+attribution is **10 of 46 (22%)** against a **26% majority baseline**, that is,
+still not above chance. The holdout is now stricter again: it removes not only
+every validation genome from the target's country but the target's whole outbreak
+group, because same-country was not sufficient once we found that outbreak
+siblings leak across country labels.
 
 **The question to ask about any accuracy figure:** *what exactly was held out,
 and could the answer have leaked in through a back door?*
 
 ## 1.5 A number without a baseline is not a result
 
-We can predict world region with 100% accuracy. Impressive?
+We can predict world region with 89% accuracy. Impressive?
 
-Our collection is **91.8% East Asia & Pacific**. A method that ignores the
-genome entirely and always answers "East Asia & Pacific" scores about 58% on our
-validation set. So the honest framing is 100% *against a 58% floor* — real
-signal, but a third of the apparent performance is free.
+Our collection is **91.8% East Asia & Pacific**. A method that ignores the genome
+entirely and always answers "East Asia & Pacific" scores **46%** on our validation
+set. So the honest framing is **41/46 = 89% against a 46% floor**, κ 0.832: real
+signal, but roughly half the apparent performance is free.
+
+The same discipline flatters and then deflates the binary version. Asia versus
+elsewhere scores **46/46, a perfect 100%**, but on a set that is overwhelmingly
+Asian to begin with, which is why the 7-way region split is the honest operating
+point rather than the binary one.
+
+*(Updated 2026-08-26. This section previously quoted "100% against a 58% floor",
+which was the older and much smaller validation set.)*
 
 This is the **majority-class baseline** (sometimes "no-information rate"). Any
 classification accuracy must be reported next to it.
@@ -370,7 +402,7 @@ readily within a lineage and rarely between lineages.
 
 | term | what it means | our scale |
 |---|---|---|
-| **unit / cluster** | a group we analyse together | 88 units, n=7 to 159 |
+| **unit / cluster** | a group we analyse together | 85 units, n=7 to 159 |
 | **ST (sequence type)** | 7-gene type; the field's shared vocabulary | 514 in our panel |
 | **cgMLST profile** | ~4,000-gene allele profile | 4,089 loci |
 | **clonal cluster** | genomes so close they're plausibly one transmission chain | our Mississippi 21, ≤20 SNPs |
@@ -385,22 +417,23 @@ homoplasy, and it's why 7-gene typing can't do fine-scale work.
 
 | number | what it is | what it means |
 |---|---|---|
-| **88 units** | analysis groups | 2,352 genomes analysed of 2,976 |
+| **85 units** | analysis groups | 2,340 genomes analysed of 2,959 |
 | **~90%** | share of pairwise differences from recombination | why raw SNP distances mislead |
-| **6 of 88** | units with real geographic signal after control | the honest count for any map claim |
-| **13 of 88** | units confounded with study | geography inseparable from who sequenced |
-| **0 / 17, 0 / 25, 0 / 19** | country attribution: MLST, cgMLST, whole-genome | zero across 584-fold resolution range |
-| **58%** | majority-class baseline at region scale | the floor any region accuracy must beat |
-| **19 / 19 → then 20 / 24** | region attribution, core then cgMLST | works *where the panel has references* |
+| **6 of 85** | units with real geographic signal after control | the honest count for any map claim |
+| **12 of 85** | units not separable from study | geography inseparable from who sequenced; only 2 have FDR-confirmed batch structure |
+| **10 / 46 (22%)** | country attribution, cgMLST, vs a 26% baseline | still not above chance; earlier runs on smaller sets scored 0 across a 584-fold resolution range |
+| **46%** | majority-class baseline at region scale | the floor any region accuracy must beat (was 58% on the older, smaller set) |
+| **41 / 46 (89%)** | region attribution, cgMLST modal k=20, κ 0.832 | works *where the panel has references* |
 | **median 7 SNPs** | within the Mississippi cluster | tight enough for an operational rule |
 | **~490 vs ~1,130** | Colombia–Mississippi, filtered vs raw | over half was imported |
 | **rho +0.59** | Gubbins vs ClonalFrameML r/m ranking | moderate; tools not interchangeable |
 | **rho −0.86** | ν vs δ | why ν can't be read alone |
-| **26** | genomes with known exposure country | the entire validation set — small |
+| **46** | genomes with known exposure country, from **45 patients** | the entire validation set, still small |
 
 **The most important limitation to be able to state out loud:** our conclusions
-about attribution rest on **26 genomes, of which 19–25 were scorable, spread
-across five source countries, most with one or two genomes each.** The regional
+about attribution rest on **46 scorable genomes from 45 patients, spread across
+16 source countries, most with one or two genomes each, and with the Philippines
+alone contributing 12.** The regional
 result is consistent and survives the strict test, but "well-supported" is the
 right phrase, not "established."
 

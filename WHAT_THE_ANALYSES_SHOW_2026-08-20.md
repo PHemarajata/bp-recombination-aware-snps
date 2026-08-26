@@ -86,10 +86,17 @@ most. The effect is self-reinforcing and will not go away on its own.
 
 ## Two cautions for anyone interpreting this
 
-**Most apparent geography is really study batch.** Of 88 clusters, only 6 show
-geographic clustering that survives asking "or is this just because one lab
-sequenced all of these together?" Thirteen are outright confounded. When a map
-appears to agree with the genomics, that is the number to hold in mind.
+**Most apparent geography cannot be separated from study batch.** Of 85 clusters,
+only 6 show geographic clustering that survives asking "or is this just because
+one lab sequenced all of these together?" Twelve cannot be separated from study
+of origin. When a map appears to agree with the genomics, 6 is the number to hold
+in mind.
+
+*(Updated 2026-08-26. Previously "of 88 clusters ... thirteen are outright
+confounded", which used the A100 control partition and overstated the verdict.
+Of the twelve, only 2 have batch structure confirmed after multiple-testing
+correction and 4 show none at all, so "outright confounded" was too strong; the
+honest reading is that the two explanations cannot be told apart in this panel.)*
 
 **Raw mutation counts are badly misleading in this organism.** About 90% of the
 differences between any two genomes are imported DNA rather than inherited

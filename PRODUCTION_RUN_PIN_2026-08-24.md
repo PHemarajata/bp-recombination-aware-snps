@@ -75,6 +75,12 @@ waste an afternoon. The commit was therefore established by bracketing:
 > caveat carried, and the end-to-end reproducibility run (open item 1) is what
 > would actually close it. A reproduction that diffs clean against the reported
 > figures retires the caveat; nothing short of that does.
+>
+> ✅ **That run has since happened (2026-08-25) and diffs clean.** Gate 1 = 47
+> units, median r/m **7.70**, matching; per-unit r/m identical in value and raw
+> SNP counts for 81 of 84 comparable units; per-unit alignment distances identical
+> for 85 of 86 units. `REPRO_RESULT_2026-08-26.md`. The caveat about uncommitted
+> edits is therefore retired as far as the reported figures are concerned.
 
 ## 4. What the reported run does *not* contain
 
@@ -114,6 +120,13 @@ A task exiting with one of those codes on attempt 3 falls through to `'ignore'`
 — it is dropped, not failed. **This run lost nothing to it** (zero failures),
 but a reproduction on different hardware could silently drop a unit here, and
 the unit count is the first thing to check if one does.
+
+> ⚠ **Confirmed 2026-08-25, and the cause is not hardware.** The reproducibility
+> run did drop exactly one unit this way, on the *same* workstation. Gubbins at
+> this commit draws RAxML's parsimony seed from an unseeded `randint(0, 10000)`;
+> `strain_1_L1_30__GCF_000755905_1_2` drew `-p 0` at iteration 5, RAxML rejected
+> it, and `'ignore'` dropped the unit while the run exited 0. Roughly a 16% chance
+> per full panel. **Check the per-process task counts, not the exit code.**
 
 ## 6. Tool versions, from the run's own `software_versions.yml`
 
@@ -190,10 +203,20 @@ plus five further duplicate/excluded genomes (`METHODS_DRAFT` §2.12.5). A
 reproduction will therefore reproduce **86/2,352/172** and must then be put
 through the same correction to land on 85/2,340/170.
 
+> **Tested 2026-08-25: it reproduced 86 / 2,352 / *171*.** Units and genomes were
+> exact; replicon-units came up one short because of the unseeded-seed drop in §5.
+> Expect 171 about one run in six. The lost unit must be excluded rather than
+> carried, because Gate 1 sums per-replicon divergence and a unit missing a
+> replicon can be pulled into the window that its full self falls outside.
+
 ## 10. Reproduce
 
 ```bash
-git clone https://github.com/PHemarajata/wf-assembly-snps-mod && cd wf-assembly-snps-mod && git checkout 79ab645
+git clone https://github.com/PHemarajata/wf-assembly-snps-mod && cd wf-assembly-snps-mod && git checkout v1.0.5-mod
 ```
 
-Then the §2 command line with the four §8 inputs repointed.
+Then the §2 command line with the four §8 inputs repointed. `v1.0.5-mod` is the
+release tag at `79ab645`, created 2026-08-26. Note the manifest at that commit
+self-reports `v1.0.3-mod`, which is a different and older commit, so the run log
+will print that string. Verify completion from the per-process task counts, not
+the exit code, for the reason in §5.

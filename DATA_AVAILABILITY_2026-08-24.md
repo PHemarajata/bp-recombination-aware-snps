@@ -39,7 +39,13 @@ deposition receipts before submission.
 > `main` under Nextflow 25.04.6. Note that the pipeline manifest at that release
 > still self-reports `v1.0.3-mod`, so run logs carry that string; the manifest was
 > never bumped and was deliberately left uncorrected so the reported commit
-> remains citable as-is. The exact invocation, the four input files it consumed, and the
+> remains citable as-is. That release **predates the addition of a Gubbins seed
+> parameter**, so the analysis is not seed-reproducible: Gubbins draws RAxML's
+> parsimony seed at random and, with the workflow's `errorStrategy 'ignore'`, a
+> rejected draw silently drops one analysis unit while the run still exits zero.
+> A re-execution should therefore be checked against per-unit task counts, not the
+> exit code. An end-to-end re-run is reported in `REPRO_RESULT_2026-08-26.md`; it
+> lost one unit this way and otherwise recovered the reported figures. The exact invocation, the four input files it consumed, and the
 > resource-override configuration are given in Supplementary Methods and
 > archived at **[DOI]**. Downstream analysis scripts (partition freezing and
 > validation, attribution scoring, the grouping ladder, the abstention rule and

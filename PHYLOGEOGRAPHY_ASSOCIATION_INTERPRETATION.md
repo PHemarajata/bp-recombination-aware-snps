@@ -153,6 +153,20 @@ Four outcomes, in decreasing strength:
 | **vacuous control** | geography significant, BioProject "not significant" but barely measured | nothing — the control did not run, it merely failed to fire |
 | **untestable** | fewer than 2 distinct labels | nothing either way |
 
+> **`confounded` is graded, from 2026-08-26.** This four-way table is still the
+> operative rule, but the `confounded` row conflates two situations that a
+> conditional test can separate. 95% of BioProjects in this panel are entirely
+> single-country, so a genuine within-country clonal expansion deposited by one
+> study makes both variables fire on the same clade and earns `confounded`
+> automatically, artefact or not. Asking the study-effect question directly,
+> holding country fixed
+> (`bioproject_within_country_bp.py` → `BIOPROJECT_WITHIN_COUNTRY_RESULT_2026-08-24.md`),
+> splits the discarded units into **8 with batch structure at nominal p (2
+> surviving FDR), 4 with none at all, and 2 untestable**. Report the second group
+> as **not separable: no batch structure detected, geography unproven**, which is
+> weaker than a pass and stronger than a discard. **No pass changes**, so nothing
+> in §5–§7 below moves; what changes is what the discarded set may be called.
+
 ### The vacuous-control trap
 
 This is the easiest way to fool yourself with this output, and it is not visible

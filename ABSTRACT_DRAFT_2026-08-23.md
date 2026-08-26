@@ -38,7 +38,8 @@ predates the abstention result and carried a conclusion since softened.
 
 > Melioidosis increasingly presents in patients with no travel history, and
 > genomics is asked to supply the place of exposure. Across 2,959
-> *Burkholderia pseudomallei* genomes and 46 cases with independently documented
+> *Burkholderia pseudomallei* genomes and 46 cases from 45 individuals with
+> independently documented
 > exposure, **country attribution did not exceed chance (10/46, 22%; baseline
 > 26%; κ 0.19)** under a holdout removing same-country and same-source
 > references, while **regional attribution reached 89% (κ 0.83)** and the
