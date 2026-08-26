@@ -15,7 +15,7 @@ deposition, archiving, administration, or verification of work already done.
 | # | item | notes |
 |---|---|---|
 | A1 | **Create the Zenodo (or equivalent) archive → DOI** | Contents specified in `DATA_AVAILABILITY_2026-08-24.md` §4: the frozen basis + its registers, the derived tables, the twelve scripts, the run pin's four inputs, and `L1v4c_TREES_SUPPORTED_FCONST/`. **Publish the FCONST tree set, not `L1v4c_TREES_SUPPORTED/`.** |
-| A2 | **Tag the pipeline at `79ab645`** | So the data availability statement cites a release rather than a bare SHA. `wf-assembly-snps-mod`, branch `main`. |
+| A2 | ✅ **DONE 2026-08-26** | Annotated tag **`v1.0.5-mod`** at `79ab645` (tip of `main`/`origin/main`), pushed to origin. Next in sequence after `v1.0.3-mod`/`v1.0.4-mod`, which point at 2025-10-07 commits. `DATA_AVAILABILITY_2026-08-24.md` now cites the release. ⚠ The manifest at `79ab645` still says `version = '1.0.3-mod'`, so run logs print that string while the `v1.0.3-mod` tag is a different, much older commit; left uncorrected on purpose, since bumping it would change the SHA the manuscript pins. Tag message also records that the commit predates the `gubbins_seed` fix. **A GitHub Release object was not created**; do that as part of A1 if Zenodo archiving is wired to releases |
 | A3 | **Pin the A100 control's command line** | Must be read off the A100 host's `.nextflow.log`; it is not in this working directory. `PRODUCTION_RUN_PIN_2026-08-24.md` §7. If it cannot be recovered, say so in the Methods rather than reconstructing it. |
 | A4 | **Verify or drop the control's Nextflow version** | §2.12.13 claims 25.10.0 for the A100 run, carried over from an earlier draft and never checked. The reported run's 25.04.6 *is* verified. |
 

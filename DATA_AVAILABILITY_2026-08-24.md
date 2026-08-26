@@ -35,8 +35,11 @@ deposition receipts before submission.
 >
 > **Code availability.** The analysis pipeline is
 > `wf-assembly-snps-mod` (https://github.com/PHemarajata/wf-assembly-snps-mod),
-> and the reported run used commit **`79ab645`** on branch `main` under Nextflow
-> 25.04.6. The exact invocation, the four input files it consumed, and the
+> and the reported run used release **`v1.0.5-mod`** (commit `79ab645`) on branch
+> `main` under Nextflow 25.04.6. Note that the pipeline manifest at that release
+> still self-reports `v1.0.3-mod`, so run logs carry that string; the manifest was
+> never bumped and was deliberately left uncorrected so the reported commit
+> remains citable as-is. The exact invocation, the four input files it consumed, and the
 > resource-override configuration are given in Supplementary Methods and
 > archived at **[DOI]**. Downstream analysis scripts (partition freezing and
 > validation, attribution scoring, the grouping ladder, the abstention rule and
@@ -83,7 +86,7 @@ before, so it is recomputed rather than quoted:
 | 4 | **Supplementary Table S1** — per-genome accession table for all 2,959 | ❌ not written | needs items 1 and 3 to have accessions first |
 | 5 | **Archive of the frozen basis + scripts** (Zenodo or equivalent) → DOI | ❌ not created | can be done now; does not depend on the others |
 | 6 | **IRB / ethics approval number** | ❌ missing | **the lab record — this is the one item nobody in this repository can supply** |
-| 7 | Pipeline commit tag/release at `79ab645` | ❌ not tagged | tag it so the DA statement cites a release, not a bare SHA |
+| 7 | Pipeline commit tag/release at `79ab645` | ✅ **tagged 2026-08-26** | annotated tag **`v1.0.5-mod`** at `79ab645`, pushed to origin. Tag message records that the manifest self-reports `v1.0.3-mod` and that the commit predates the `gubbins_seed` fix, so runs from it are not seed-reproducible |
 
 **Items 5 and 7 are unblocked and could be done today.** Items 1–4 chain off a
 BioProject registration. Item 6 is external.
