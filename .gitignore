@@ -227,3 +227,6 @@ collaborator/*
 rapid_id_*/panel*.msh
 rapid_id_*/*.msh
 rapid_id_*/dist_raw.tsv
+refs_bpc/bpc.zip
+refs_bpc/bpc/
+refs_bpc/*.msh

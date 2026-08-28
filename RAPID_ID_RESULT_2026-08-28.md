@@ -4,11 +4,18 @@
 (theiagen/public_health_bioinformatics#1127). Ran a species check over the whole
 collection rather than the 40 genomes in that report.
 
-> **Result: all 3,033 assemblies are *Burkholderia pseudomallei*.** Every one
-> passes the project's mash gate to K96243, and **none is within 700 kb of
+> **Result: all 3,033 assemblies are *Burkholderia pseudomallei*.** Every one is
+> nearer a *B. pseudomallei* reference than to *B. mallei*, *B. thailandensis*,
+> *B. oklahomensis* or *B. humptydooensis*, and **none is within 700 kb of
 > *B. mallei*'s genome size**. The smallest assembly here is 1.12x the size of
 > *B. mallei*; the median is 1.22x. This refutes the v3.0.0 *B. mallei* call at
 > n = 3,033 rather than n = 40.
+>
+> **Updated 2026-08-28** with the four complex references downloaded from RefSeq,
+> which turns §6's one-sided distance check into a positive identification and
+> produces a result that matters on its own: **mash to K96243 cannot exclude
+> *B. mallei***, because the two species' references are only 0.0101 apart, inside
+> the project's 0.012 gate. Genome size is doing the work, not mash.
 >
 > **Separately, it found a real QC defect**: two India genomes are duplicated
 > assemblies that mash cannot detect. No reported number changes.
@@ -154,18 +161,82 @@ existing gates are mash distance and core coverage, and this run demonstrates th
 genomes for review; a bound at 8.0 Mb flags only the two clear cases. This is a
 gate the collection currently lacks, not a re-litigation of the exclusion register.
 
-## 6. What this does not establish
+## 6. Positive identification against the complex
 
-- It does not distinguish *B. pseudomallei* from *B. mallei* by sequence identity,
-  because nothing can. The argument is gene content, via size.
-- It does not screen for *B. thailandensis*, *B. oklahomensis* or
-  *B. humptydooensis*, which are genuinely distinct species within the complex. All
-  three would sit further from K96243 than anything observed here, so the
-  ≤ 0.012 result argues against their presence, but no member of the complex was
-  sketched as a reference. Adding those references would make this a positive
-  identification rather than a one-sided distance check. They are not on disk and
-  the sandbox has no network access, so that was not done.
+**Added 2026-08-28.** §6 previously recorded that only K96243 had been sketched,
+making the result a one-sided distance check. The four missing references were
+downloaded from RefSeq and the panel sketch re-used.
+
+| accession | organism | bp | level |
+|---|---|---|---|
+| `GCF_033956065.1` | *B. mallei* | 5,834,748 | Complete |
+| `GCF_000012365.1` | *B. thailandensis* E264 | 6,723,972 | Complete |
+| `GCF_030297255.1` | *B. pseudomallei* (current RefSeq reference) | 7,081,111 | Complete |
+| `GCF_000959365.1` | *B. oklahomensis* C6786 | 7,135,022 | Complete |
+| `GCF_000011545.1` | *B. pseudomallei* K96243 | 7,247,547 | Complete |
+| `GCF_001513745.1` | *B. humptydooensis* | 7,287,809 | Complete |
+
+Requested and returned accessions were diffed: six requested, six returned, no
+substitutions. `GCF_000011545.1` is 7,247,547 bp, matching the local
+`refs/K96243.fasta` exactly, which confirms the local reference is the canonical
+K96243 assembly. Note NCBI's current *B. pseudomallei* reference is **not**
+K96243; both are included.
+
+### 6.1 The references calibrate the gate, and the news is not good for mash
+
+| pair | mash |
+|---|---|
+| *B. pseudomallei* K96243 vs *B. pseudomallei* ref | 0.0048 |
+| **_B. mallei_ vs _B. pseudomallei_ ref** | **0.0096** |
+| **_B. mallei_ vs _B. pseudomallei_ K96243** | **0.0101** |
+| *B. humptydooensis* vs *B. thailandensis* | 0.0587 |
+| *B. thailandensis* vs *B. pseudomallei* K96243 | 0.0639 |
+| *B. humptydooensis* vs *B. pseudomallei* K96243 | 0.0657 |
+| *B. oklahomensis* vs *B. pseudomallei* K96243 | 0.0811 |
+
+**The *B. mallei* reference sits at 0.0101 from K96243, inside the project's
+≤ 0.012 gate.** A genuine *B. mallei* genome would pass the mash gate. This is the
+same fact that defeats GAMBIT, arriving by a different route, and it means the
+mash-to-K96243 gate is a *B. pseudomallei complex* filter rather than a
+*B. pseudomallei* filter. §4's genome-size argument is not a convenience; it is the
+only part of this analysis that actually discriminates *mallei* from
+*pseudomallei*.
+
+The other three species sit at 0.062 to 0.081, roughly seven times the
+collection's maximum distance of 0.0093, so they are excluded with a wide margin.
+
+### 6.2 Every genome is *B. pseudomallei*
+
+Nearest reference across all 3,033:
+
+| nearest reference | n |
+|---|---|
+| *B. pseudomallei* (current RefSeq ref) | 2,395 |
+| *B. pseudomallei* K96243 | 638 |
+| *B. mallei* / *thailandensis* / *oklahomensis* / *humptydooensis* | **0** |
+
+Margin, defined as distance to *B. mallei* minus distance to the nearer
+*B. pseudomallei* reference, is **positive for every genome**: minimum +0.0029,
+median +0.0056, maximum +0.0101. **Zero genomes are closer to *B. mallei*.**
+
+Closest approach to each non-*pseudomallei* species anywhere in the collection:
+*B. thailandensis* 0.0624, *B. humptydooensis* 0.0648, *B. oklahomensis* 0.0793.
+Nothing comes near.
+
+Per-genome distances to all six references are in
+`rapid_id_2026-08-28/RAPID_ID_BPC_3033.tsv`, sorted by ascending *mallei* margin
+so the least clear-cut genomes are at the top.
+
+## 7. What this does not establish
+
+- It does not distinguish *B. pseudomallei* from *B. mallei* **by sequence
+  identity**, because nothing can, and §6.1 now quantifies that: the two references
+  are closer to each other than the project's own species gate. The discriminating
+  evidence is gene content, via genome size.
 - It says nothing about within-species assignment, lineage or ST.
+- The four downloaded references are single representatives. A genome that was
+  genuinely intermediate would need more than one reference per species to place
+  confidently. Nothing here is intermediate, so this does not arise.
 
 ## 7. Artifacts
 
@@ -175,3 +246,7 @@ gate the collection currently lacks, not a re-litigation of the exclusion regist
 | `rapid_id_2026-08-28/dist_raw.tsv` | raw `mash dist` output |
 | `rapid_id_2026-08-28/panel3033.msh` | sketch of all 3,033 at `-s 10000 -k 21`, 232 MB. Reusable; rebuilding takes about a minute |
 | `rapid_id_2026-08-28/K96243.msh` | reference sketch |
+| `rapid_id_2026-08-28/RAPID_ID_BPC_3033.tsv` | per-genome distance to all six complex references, plus the *mallei* margin, contigs, size and GC. Sorted by ascending margin |
+| `rapid_id_2026-08-28/dist_bpc.tsv` | raw `mash dist` output, six references x 3,033 |
+| `refs_bpc/fasta/` | the six RefSeq reference genomes, named by species |
+| `refs_bpc/bpc_refs.msh` | sketch of the six references |
