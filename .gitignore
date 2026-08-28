@@ -222,3 +222,8 @@ collaborator/*
 # draws is between a per-genome data table and a document explaining a decision.
 # One file, named explicitly -- no directory is opened up.
 !PANEL_EXCLUSIONS_README.md
+
+# rapid ID sketches (regenerable in ~1 min from paths.txt)
+rapid_id_*/panel*.msh
+rapid_id_*/*.msh
+rapid_id_*/dist_raw.tsv
