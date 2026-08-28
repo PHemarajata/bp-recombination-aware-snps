@@ -31,8 +31,17 @@ Three independent criteria, in increasing order of what they establish:
 
   3. SIZE SANITY         6.3 Mb <= assembly <= 7.6 Mb.
      B. mallei complete genomes span 5.23-5.91 Mb; this collection spans
-     6.55-10.63 Mb. The upper bound is not about species: it catches duplicated
-     assemblies, which criteria 1 and 2 both pass. See RAPID_ID_RESULT §5.
+     6.55-10.63 Mb. A coarse assembly-quality bound, not a species test.
+
+  4. NOT REDUNDANT       NIPHEM (locus found in multiple EXACT copies) <= 300.
+     Detects an assembly that carries part of the genome twice. Panel median is
+     29 and p99 is 41; the two known-defective genomes score 1,395 and 1,444,
+     and the highest legitimate genome is 131, so 300 sits in a wide gap.
+     This is strictly better than criterion 3 for finding redundant assemblies:
+     it flags exactly the 2 real cases where the size bound flags 20. BUSCO does
+     NOT detect them (duplicated-BUSCO score 4.1%, against 4.3% for a normal
+     genome), because B. pseudomallei's core BUSCOs sit on chromosome 1 and it is
+     chromosome 2 that is duplicated.
 
 Criterion 2 is the one that does the work no other tool does. Criteria 1 and 3 are
 cheap and catch different failure modes.
@@ -58,6 +67,7 @@ B. mallei. Re-derive it if the cgMLST schema changes.
 import argparse, csv, sys
 
 MALLEI_MAX = 0.50      # below this, the genome lacks the B. pseudomallei-specific loci
+NIPHEM_MAX = 300       # above this, part of the genome is present twice (panel p99 = 41)
 MASH_MAX   = 0.012     # complex membership, the project's existing gate
 SIZE_MIN   = 6_300_000
 SIZE_MAX   = 7_600_000
@@ -101,6 +111,7 @@ def main():
         sid, vals = r[0], r[1:]
         n = sum(1 for i in idx if is_called(vals[i]))
         frac = n / len(idx)
+        niphem = sum(1 for v in vals if v.startswith("NIPHEM"))
         d, bp = aux.get(sid, (None, None))
 
         fail = []
@@ -110,11 +121,13 @@ def main():
             fail.append("OUTSIDE_COMPLEX:mash")
         if bp is not None and not (SIZE_MIN <= bp <= SIZE_MAX):
             fail.append("SIZE_OUT_OF_RANGE:" + ("low" if bp < SIZE_MIN else "high"))
+        if niphem > NIPHEM_MAX:
+            fail.append("REDUNDANT_ASSEMBLY:niphem")
 
         verdict = "B_pseudomallei" if not fail else ";".join(fail)
         counts[verdict.split(":")[0]] = counts.get(verdict.split(":")[0], 0) + 1
         out.append(dict(sample_id=sid, diagnostic_loci_called=n,
-                        diagnostic_frac=round(frac, 4),
+                        diagnostic_frac=round(frac, 4), niphem=niphem,
                         mash_K96243="" if d is None else f"{d:.6f}",
                         total_bp="" if bp is None else bp, verdict=verdict))
 

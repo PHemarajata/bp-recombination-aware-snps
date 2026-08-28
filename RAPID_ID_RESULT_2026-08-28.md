@@ -125,41 +125,73 @@ every genome here has. None is. The ten below 6.80 Mb are ordinary draft
 assemblies with incomplete recovery, not reduced genomes, and all pass the mash
 gate.
 
-## 5. What this run did find: two duplicated assemblies
+## 5. What this run did find: two redundant assemblies
 
-| sample_id | total_bp | vs K96243 | contigs | mash | cgMLST call rate |
-|---|---|---|---|---|---|
-| `GCA_017356725_2` | 10,628,399 | **1.47x** | **2** | 0.00605 | **0.653** |
-| `GCA_017356705_2` | 10,601,007 | **1.46x** | **2** | 0.00605 | **0.608** |
+| sample_id | total_bp | vs K96243 | contigs | mash | NIPHEM | cgMLST call rate |
+|---|---|---|---|---|---|---|
+| `GCA_017356725_2` | 10,628,399 | **1.47x** | **2** | 0.00605 | **1,395** | 0.653 |
+| `GCA_017356705_2` | 10,601,007 | **1.46x** | **2** | 0.00605 | **1,444** | 0.608 |
 
 Both are India, `role=assign_only`, in `strain_pp85_L1_1`.
 
-**10.6 Mb in two contigs is not contamination and not a real genome.** A mixed
-sample fragments; these are near-perfectly contiguous. The signature is
-haplotype duplication: the assembly carries two near-identical copies of the same
-genome. That also explains why mash is blind to it. Mash compares sets of distinct
-k-mers, and duplicating a genome adds almost no new distinct k-mers, so the
-distance stays at the panel median while the assembly is half as long again.
+> ⚠ **Corrected 2026-08-28.** This section first read that these were haplotype
+> duplications, "two near-identical copies of the same genome". That was wrong,
+> and BUSCO is what disproved it: a whole-genome duplication would push the
+> duplicated-BUSCO score toward 100%, and it is **4.1%**, against **4.3%** for an
+> ordinary panel genome. The actual defect is narrower and is set out below.
 
-The damage is visible in the allele calls. Panel median cgMLST call rate is
-**0.955** (p05 0.941); these two are **0.653 and 0.608**, the two worst genomes in
-the entire 2,976-genome pool, presumably because duplicated loci call as ambiguous.
+**Chromosome 2 is deposited twice.** The assemblies have two records:
+
+| record | length | label |
+|---|---|---|
+| `CP071526.1` | 7,387,707 | "chromosome, complete" |
+| `CP076289.1` | 3,240,692 | "chromosome 2, complete" |
+
+*B. pseudomallei* chromosome 1 is ~4.07 Mb, so a 7.39 Mb "chromosome" is not
+chromosome 1: it is the **whole genome**. Twenty 200 bp probes drawn at random
+from record 2 were all found verbatim in record 1 (**20/20**), while record 1
+shows no self-containment above background (1/20). So record 1 is the complete
+genome and record 2 repeats chromosome 2. 7.39 + 3.24 = 10.63 Mb.
+
+That explains every observation at once:
+
+- **mash is normal** (0.0060) because repeating existing sequence adds almost no
+  new distinct k-mers.
+- **BUSCO misses it** because *B. pseudomallei*'s core BUSCOs sit on chromosome 1,
+  and it is chromosome 2 that is duplicated.
+- **cgMLST call rate collapses** to 0.61 and 0.65, and the mechanism is visible in
+  the classification: **NIPHEM** (locus found in multiple *exact* copies) is
+  **1,395 and 1,444**, against 116 for a normal genome, while **LNF is normal**
+  (44 and 45 against 36). Nothing is missing. About 1,400 loci are present twice.
+
+### 5.1 NIPHEM is the right detector, and it is free
+
+Screening the existing `results_alleles.tsv` across all 3,033:
+
+| NIPHEM | value |
+|---|---|
+| panel median | 29 |
+| p90 | 32 |
+| p99 | 41 |
+| highest legitimate genome | 131 |
+| **the two defective genomes** | **1,395 and 1,444** |
+
+Thirty-five times the p99, with an order-of-magnitude gap between 131 and 1,395.
+Exactly **two** genomes exceed 500. Compare the genome-size bound, which flags
+**20** genomes of which 18 are ordinary large assemblies. NIPHEM is the specific
+test; size is the blunt one.
 
 **Impact on reported numbers: none.** Neither genome is in the analysed partition,
 neither is a validation genome, and neither wins a nearest-neighbour comparison in
 `ATTR_CGMLST.tsv` or `ATTR_ACCESSORY.tsv`. India is represented by 56 genomes in
-the pool, so these two are not load-bearing. They are, however, **not in
-`PANEL_EXCLUSIONS.tsv`**, and 18 further genomes above 7.60 Mb are also unflagged.
+the pool. Both are, however, **not in `PANEL_EXCLUSIONS.tsv`**.
 
-The register already contains the analogous case: `SRR30648681` was excluded as
-`mixed_sample` on "SPAdes assembled 12.00 Mb ... at good contiguity". These two
-match that pattern and were missed.
+Note this is a defect in the **public GenBank deposit** (`GCA_017356725.2` and
+`GCA_017356705.2`, strain VBM399), not in anything built here.
 
-**Recommendation:** add an upper genome-size bound to the assembly QC gate. The
-existing gates are mash distance and core coverage, and this run demonstrates that
-**neither catches a duplicated assembly**. A bound at roughly 7.6 Mb flags 20
-genomes for review; a bound at 8.0 Mb flags only the two clear cases. This is a
-gate the collection currently lacks, not a re-litigation of the exclusion register.
+**Recommendation:** add `NIPHEM <= 300` to the QC gate. It is computed from output
+the pipeline already produces, costs nothing, and is far more specific than a size
+bound. Implemented as criterion 4 in `species_id_bp.py`.
 
 ## 6. Positive identification against the complex
 
