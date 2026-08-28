@@ -230,3 +230,7 @@ rapid_id_*/dist_raw.tsv
 refs_bpc/bpc.zip
 refs_bpc/bpc/
 refs_bpc/*.msh
+refs_bpc/mallei8.zip
+refs_bpc/mallei8/
+rapid_id_*/cgmlst_refs/out*/cds_coordinates.tsv
+rapid_id_*/cgmlst_refs/input*/

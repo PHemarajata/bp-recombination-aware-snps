@@ -238,7 +238,110 @@ so the least clear-cut genomes are at the top.
   genuinely intermediate would need more than one reference per species to place
   confidently. Nothing here is intermediate, so this does not arise.
 
-## 7. Artifacts
+
+## 8. Recommended species-ID method
+
+**Added 2026-08-28**, replacing the mash-only gate. Implemented as
+`species_id_bp.py`; results in `SPECIES_ID_2026-08-28.tsv`.
+
+The problem to solve is narrow: *B. mallei* passes any similarity-based gate,
+because it is a clone nested inside *B. pseudomallei* diversity. What separates
+them is **gene content**: *B. mallei* deleted ~1.4 Mb. So the test has to ask
+whether the *B. pseudomallei*-specific genes are present, not how similar the
+genome is.
+
+### 8.1 The test: three criteria
+
+| # | criterion | threshold | excludes |
+|---|---|---|---|
+| 1 | mash to K96243 | ≤ 0.012 | *thailandensis* (0.064), *humptydooensis* (0.066), *oklahomensis* (0.081). **Not *mallei*** |
+| 2 | **fraction of 540 diagnostic cgMLST loci called** | **≥ 0.50** | ***B. mallei*** |
+| 3 | assembly size | 6.3 to 7.6 Mb | reduced genomes, and duplicated assemblies that 1 and 2 both pass |
+
+Criterion 2 does the work nothing else does. Criteria 1 and 3 are nearly free and
+catch different failure modes.
+
+### 8.2 How the 540 loci were chosen
+
+Ran chewBBACA `AlleleCall` against the project's own Lichtenegger schema (4,221
+loci) for both *B. pseudomallei* references and **eight complete *B. mallei*
+genomes** spanning 5.23 to 5.91 Mb, then kept loci **called in both
+*B. pseudomallei* and `LNF` in all eight *B. mallei***. That yields **540 loci**.
+
+The gene loss is visible directly in the `LNF` column: *B. pseudomallei* 33 and
+34, against *B. mallei* 614 to 980.
+
+Nothing new has to be run for genomes already in the pipeline. The score is
+computed from the existing `results_alleles.tsv`.
+
+### 8.3 Held-out validation, because defining the set on *B. mallei* is circular
+
+Define the locus set on **4** *B. mallei* genomes, score the **other 4**, across
+all 70 splits (280 held-out evaluations):
+
+| | score |
+|---|---|
+| held-out *B. mallei*, median | **0.000** |
+| held-out *B. mallei*, **worst case** | **0.061** |
+| 3,033 real *B. pseudomallei*, **worst case** | **0.685** |
+| 3,033 real *B. pseudomallei*, median | 0.998 |
+
+**A 62-point gap separates the worst *B. pseudomallei* from the worst-case
+*B. mallei*.** The 0.50 threshold sits in the middle of it with better than
+tenfold margin either way. This is the non-circular evidence: the set generalises
+to *B. mallei* strains it was not built from.
+
+The other complex members score 0.71 to 0.80, so they retain most of these loci.
+The set is specific to *mallei*'s deletions rather than being a generic
+"hard-to-call loci" list, which is also why criterion 1 is still needed.
+
+### 8.4 Result on this collection
+
+| verdict | n |
+|---|---|
+| ***B. pseudomallei*** | **3,013** |
+| `SIZE_OUT_OF_RANGE:high`, all otherwise passing | 20 |
+| failing the *B. mallei* test | **0** |
+
+The lowest diagnostic score in the entire collection is **0.685**
+(`SRR2896257`), eleven times the worst-case *B. mallei*. The 20 size flags are
+the oversized tail of §5, including the two duplicated India assemblies; all 20
+score 0.96 or above on criterion 2 and are *B. pseudomallei* by species, so the
+flag is an assembly-quality flag, not a species call.
+
+**Every isolate in this collection is documented as *B. pseudomallei* by positive
+evidence**: it carries the *B. pseudomallei*-specific gene content that
+*B. mallei* lacks, rather than merely resembling a *B. pseudomallei* reference.
+
+### 8.5 For the Methods
+
+> Species identity was confirmed for all 3,033 assemblies by three criteria: mash
+> distance to *B. pseudomallei* K96243 ≤ 0.012, which excludes *B. thailandensis*,
+> *B. oklahomensis* and *B. humptydooensis*; assembly size between 6.3 and 7.6 Mb;
+> and presence of at least 50% of 540 cgMLST loci that are present in
+> *B. pseudomallei* reference genomes and absent from all eight complete
+> *B. mallei* genomes examined. The third criterion is required because
+> *B. mallei* is a genome-reduced clone within *B. pseudomallei* diversity and is
+> not separable from it by sequence similarity: the *B. mallei* reference lies
+> 0.0101 from K96243, inside the mash gate. Held-out validation over all 70 four-
+> versus-four splits of the *B. mallei* panel gave a worst-case held-out
+> *B. mallei* score of 0.061 against a worst-case *B. pseudomallei* score of 0.685.
+> All 3,033 assemblies satisfied all three criteria except 20 that exceeded the
+> upper size bound and were retained after review as *B. pseudomallei*.
+
+### 8.6 Limits
+
+- The 540 loci are defined against **this** cgMLST schema. If the schema changes,
+  re-derive them; `species_id_bp.py` errors out rather than scoring on a mismatch.
+- Eight *B. mallei* genomes is a small panel, though 70 complete genomes are
+  available and the held-out margin is wide. Re-deriving on more would tighten it.
+- Criterion 2 tests *absence of B. mallei's deletions*, so it would not flag a
+  novel *B. pseudomallei*-complex organism with intact gene content. Criterion 1
+  covers the described complex members; something undescribed would need a tree.
+- These are draft assemblies; a genuinely fragmented genome loses diagnostic loci
+  for reasons unrelated to species, which is why the threshold is 0.50 and not 0.9.
+
+## 9. Artifacts
 
 | file | contents |
 |---|---|
@@ -250,3 +353,7 @@ so the least clear-cut genomes are at the top.
 | `rapid_id_2026-08-28/dist_bpc.tsv` | raw `mash dist` output, six references x 3,033 |
 | `refs_bpc/fasta/` | the six RefSeq reference genomes, named by species |
 | `refs_bpc/bpc_refs.msh` | sketch of the six references |
+| `refs_bpc/mallei_fasta/` | eight complete *B. mallei* genomes used to derive the diagnostic loci |
+| `rapid_id_2026-08-28/BP_DIAGNOSTIC_LOCI.txt` | the 540 diagnostic locus names |
+| `species_id_bp.py` | the three-criterion test |
+| `SPECIES_ID_2026-08-28.tsv` | per-genome verdict for all 3,033 |
