@@ -117,7 +117,18 @@ define it: `PANEL_DUPLICATES_2026-08-21.tsv`, `PANEL_EXCLUSIONS.tsv` **with its
 `grouping_test_bp.py`, `score_cgmlst_lichtenegger.py`, `score_accessory_bp.py`,
 `accessory_control_bp.py`, `abstention_rule_bp.py`, `gate1_from_alignment_bp.py`,
 `mlst_to_allele_table_bp.py`, `reconstruct_v4c_samplesheet_bp.py`,
-`make_figure1_bp.py`, `retire_exclusions_bp.py`.
+`make_figure1_bp.py`, `retire_exclusions_bp.py`, `recurrence_mash_bp.py`,
+`context_snps_bp.py`, `context_report_bp.py`.
+
+**The recurrence control (§R3.1)** — `CONTEXT_RECURRENCE_SNPS.tsv` and the seven
+per-group trees with their iTOL annotation in `context_trees/`. Both are derived
+products and are regenerable from the assemblies with `context_snps_bp.py` then
+`context_report_bp.py`. Neither is tracked in the repository, because the first
+is an isolate-level table and the second is tree data; both fall under the
+standing rule in `.gitignore`. The clinical fields they key on (patient, episode,
+collection date) come from the study record and are **not** ours to release, so
+any published version of this table must be keyed on isolate alone, with patient
+and episode replaced by an arbitrary within-patient grouping index.
 
 **The run pin** — the four input files in `PRODUCTION_RUN_PIN_2026-08-24.md` §8,
 including the reconstructed samplesheet **under its RECONSTRUCTED name**, and

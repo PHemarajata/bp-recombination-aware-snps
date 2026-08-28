@@ -216,3 +216,37 @@ The remaining work is bounded and none of it is a data problem:
 
 **The one item nobody in this repository can close is the IRB number.** Every
 other open item is either mechanical or a compute run.
+
+## 8. Status update — 2026-08-28: a fourth positive control was added
+
+A recurrence table circulating as `C29_recurrence_pairwise.csv` was checked and
+found to be right in its calls and wrong in its evidence. Its `patristic` column
+is reproduced by none of the 1,217 cluster trees nor either global grafted tree;
+one row reads 0.0 for a pair the trees put at 3.1e-4, and three rows have no
+possible source tree because those isolates are either outside the analysed panel
+or in different units. It also classified on same-ST alone, which carries no
+margin here: the collection holds 18 cross-patient pairs with identical
+seven-locus profiles.
+
+Redone on recombination-filtered SNPs through the pipeline's own method, the 20
+calls stand and are now evidenced. **This has been written into the drafts as a
+fourth licensing finding, not as a new topic.**
+
+| item | state |
+|---|---|
+| new Results subsection | ✅ **R3.1** in `RESULTS_DRAFT`, **§4.3.1** in the compiled |
+| new Methods subsection | ✅ **§2.12.11b** in `METHODS_DRAFT`, **§3.4.1** in the compiled |
+| Discussion | ✅ §5.1 goes from **three findings to four**, in both the draft and the compiled |
+| Abstract | ✅ one 22-word clause in the **long version only**; the exclusion from the short version is recorded in the notes |
+| outline | ✅ **R3.1** added, with its caveat and the r/m prohibition |
+| data availability | ✅ three scripts listed; the derived table and trees flagged as untracked, with the clinical-field warning |
+| figure | ❌ **open.** The clade result is currently prose only. A small multiple of the seven context trees, or just the two informative ones, would carry it better than the numbers do |
+| tag registry | ❌ **open.** `[recurrence.pairs]`, `[recurrence.gap]` and `[recurrence.clades]` are cited in `RESULTS_DRAFT` but are not yet keys in `NUMBERS.tsv` |
+
+**Two cautions recorded so they are not lost.** Do not quote r/m for the context
+groups: they are tight single lineages below the Gate 1 window, so their low
+values are detection failure. And "94.4" now denotes two different quantities in
+this corpus, the abstention selective accuracy of **94.4%** in
+`METHODS_DRAFT` §2.12.11a.6 and the SH-aLRT support of **94.4/94** in R3.1. They
+are in different sections and different formats, but a careless search will
+conflate them.

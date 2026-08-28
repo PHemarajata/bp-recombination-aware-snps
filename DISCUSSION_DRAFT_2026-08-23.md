@@ -20,9 +20,9 @@ The value of this result is not that our estimator failed. It is that the failur
 is **structured, measurable and explicable**, and that the same data show exactly
 where the recoverable signal stops.
 
-## The negative result is the useful one, and three findings license it
+## The negative result is the useful one, and four findings license it
 
-A negative result invites the reply that a better method would succeed. Three
+A negative result invites the reply that a better method would succeed. Four
 features of this study are designed to answer that.
 
 **First, the estimator demonstrably works when signal exists.** Region and
@@ -44,6 +44,24 @@ seven loci the nearest neighbour is not even unique for 30 of 33 genomes, and
 **Third, the failure is invariant to the analytical framework.** The result holds
 under a lineage partition and under two partition-free typing systems, so it is
 not an artefact of how we defined units.
+
+**Fourth, the same pipeline answers a finer question cleanly.** Across 20
+recurrence episode pairs from 13 patients, recombination-filtered distances
+separate 19 same-strain relapses at 1 to 14 SNPs from a single reinfection at
+1,102, with a 79-fold gap and nothing inside it, and 12 of the 13 patients form
+an exclusive clade against local context at 94.4/94 to 100/100 support. Sixteen
+of those 20 distances are the production run's own per-unit Gubbins output. So
+the assembly, variant calling, recombination correction and phylogenetics resolve
+a within-patient distinction at single-SNP scale on these very genomes. Whatever
+defeats country attribution, it is not the instrument.
+
+That fourth control has a boundary worth stating, because it is easy to overread.
+Relapse-versus-reinfection and exposure-country differ in kind and not only in
+scale. The first asks whether two genomes descend from one infecting population,
+which the genome records directly. The second asks where that population was
+acquired, which the genome records only through a panel of placed relatives. A
+pipeline can therefore be arbitrarily good at the first and still fail the second,
+which is precisely the shape of the result reported here.
 
 Taken together these license the stronger claim: **for most source countries in
 this collection, exposure country is not recoverable from the genome by any

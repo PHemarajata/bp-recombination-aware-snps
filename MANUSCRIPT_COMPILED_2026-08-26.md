@@ -126,6 +126,38 @@ distances; within that window the median r/m is 7.70 across 47 units. Across the
 indicating that approximately 91% of raw pairwise distance is imported DNA rather
 than inherited mutation.
 
+### 3.4.1 The recurrence control
+
+Thirteen patients in the Nakhon Phanom collection had culture-confirmed recurrent
+melioidosis, giving 29 isolates and 20 episode pairs. Patient identity, episode
+number and collection date come from the clinical record; all 40 isolate-date
+assertions were verified against the collection metadata.
+
+Distances were obtained on two independent bases. For the 16 pairs whose isolates
+share an analysis unit, the distance is read directly from that unit's Gubbins
+output as the number of recombination-filtered sites at which the two sequences
+differ, counting only positions unambiguous in both and summing across replicons.
+For all 20 pairs, including the four that no single unit contains, a local context
+analysis was run over the 259 genomes from the same collection: single-linkage
+clustering of mash distances at a 0.002 radius gave seven groups covering every
+pair, each group padded to a minimum of 12 genomes. Each group was then put through
+the chain of §3.4 at the same parameters, with Snippy against the group medoid,
+a whole-genome alignment retaining invariant sites, Gubbins, and IQ-TREE under
+GTR+ASC with 1,000 ultrafast bootstrap and SH-aLRT replicates.
+
+Two departures from the production settings are deliberate. The snippy-core
+Reference record is dropped, because here the reference is a member of the group
+and would otherwise duplicate a sample. Gubbins is given an explicit seed, which
+the pipeline omits; without one it draws an unseeded integer for the RAxML seed
+and RAxML rejects a value of zero.
+
+For each pair we also report the distance to the nearest genome in the same group
+belonging to a different patient, which tests whether a locally circulating clone
+could explain the second episode equally well. r/m is not reported for these
+groups: they are tight single lineages built to a 0.002 radius, below the
+diversity window in which recombination is detectable, so a low value there would
+reflect detection failure rather than biology.
+
 ## 3.5 Phylogenies
 
 Per-unit maximum-likelihood trees were built with IQ-TREE 2.2.6 on
@@ -358,6 +390,49 @@ country failure is therefore absence of signal rather than bluntness of instrume
 Randomly chosen loci are a lower bound for a curated scheme. The supported claim is
 that resolution alone does not buy country-level attribution, not that no targeted
 scheme could work.
+
+### 4.3.1 The pipeline resolves a finer distinction than country
+
+The resolution curve shows that the estimator converts resolution into accuracy
+when signal is present. A second control asks something stronger: give the same
+pipeline a harder question at a finer scale and see whether it answers.
+
+Thirteen patients had culture-confirmed recurrent melioidosis, giving 20 episode
+pairs. Separating a relapse of the original infection from reinfection with a new
+strain is the finest epidemiological question these data support, and unlike
+exposure country it has an answer the genome records directly.
+
+The separation is categorical. On recombination-filtered SNPs, 19 pairs fall
+between 1 and 14 SNPs and one falls at 1,102, a 79-fold gap with nothing inside
+it, so no threshold between those values changes any call. For 16 of the 20 pairs
+these are the production run's own per-unit Gubbins distances rather than a
+separate calculation.
+
+Tree topology confirms the same split independently. Against local context, 12 of
+the 13 patients form an exclusive clade containing their own episodes and nothing
+else, at 94.4/94 to 100/100 SH-aLRT and ultrafast bootstrap support. The
+thirteenth is the reinfection: that patient's two isolates do not form a clade at
+all, their common ancestor subtends 35 other genomes, and each isolate is closer
+to another patient's genome at 81 SNPs than to its own previous episode at 1,102.
+
+Removing recombination sharpens this contrast rather than blurring it. Gubbins
+removes 44% of the SNPs between unrelated genomes but 1 of 9 within a patient, so
+the correction widens the gap between the two classes. Seven-locus MLST agrees on
+all 20 calls, but with no margin behind it: the collection contains 18 pairs of
+isolates from different patients carrying identical seven-locus profiles, so the
+calls hold on MLST only because the true within-patient pairs are another 10 to 20
+times closer than the chance matches.
+
+This establishes that assembly, variant calling, recombination correction and
+phylogenetics resolve a within-patient distinction at single-SNP scale on these
+genomes, so the country result is not a failure of the instrument. It does not
+show that country is attainable. The two questions differ in kind and not only in
+scale: relapse versus reinfection asks whether two genomes descend from one
+infecting population, which the genome records directly, while exposure country
+asks where that population was acquired, which it records only through a panel of
+placed relatives. One pair carries a thin margin worth naming, at 14 SNPs between
+episodes against 30 to an environmental isolate from the same collection, so a
+locally circulating clone is not excluded there.
 
 ## 4.4 The panel does not contain the source countries
 
@@ -618,9 +693,9 @@ The value of this result is not that our estimator failed. It is that the failur
 is structured, measurable and explicable, and that the same data show where the
 recoverable signal stops.
 
-## 5.1 Three findings license the negative result
+## 5.1 Four findings license the negative result
 
-A negative result invites the reply that a better method would succeed. Three
+A negative result invites the reply that a better method would succeed. Four
 features of this study answer that.
 
 **First, the estimator demonstrably works when signal exists.** Region and country
@@ -641,6 +716,24 @@ its own majority baseline.
 **Third, the failure is invariant to the analytical framework.** The result holds
 under a lineage partition and under two partition-free typing systems, so it is not
 an artefact of how we defined units.
+
+**Fourth, the same pipeline answers a finer question cleanly.** Across 20 recurrence
+episode pairs from 13 patients, recombination-filtered distances separate 19
+same-strain relapses at 1 to 14 SNPs from a single reinfection at 1,102, a 79-fold
+gap with nothing inside it, and 12 of the 13 patients form an exclusive clade
+against local context at 94.4/94 to 100/100 support. Sixteen of those distances are
+the production run's own per-unit output. The assembly, variant calling,
+recombination correction and phylogenetics therefore resolve a within-patient
+distinction at single-SNP scale on these very genomes. Whatever defeats country
+attribution, it is not the instrument.
+
+That fourth control has a boundary worth stating, because it is easy to overread.
+Relapse versus reinfection and exposure country differ in kind and not only in
+scale. The first asks whether two genomes descend from one infecting population,
+which the genome records directly. The second asks where that population was
+acquired, which it records only through a panel of placed relatives. A pipeline can
+be arbitrarily good at the first and still fail the second, which is the shape of
+the result reported here.
 
 Taken together these license the stronger claim: for most source countries in this
 collection, exposure country is not recoverable from the genome by the methods

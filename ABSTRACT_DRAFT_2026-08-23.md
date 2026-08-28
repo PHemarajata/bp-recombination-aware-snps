@@ -24,7 +24,9 @@ predates the abstention result and carried a conclusion since softened.
 > remained flat across a **584-fold** range of resolution, from 7 MLST loci to
 > whole-genome recombination-filtered SNPs, while regional accuracy rose from 50%
 > to 82% over the same range, indicating absence of signal rather than
-> insufficient resolution. Two causes are separable in kind: for **7 of 16**
+> insufficient resolution. The same pipeline separated **19 relapses from one
+> reinfection** across 20 recurrence pairs (1 to 14 versus 1,102 SNPs), so the
+> limit is not the instrument. Two causes are separable in kind: for **7 of 16**
 > exposure countries no public genome exists, all seven in Latin America and the
 > Caribbean; and some lineages span continents — a published US autochthonous
 > cluster and a Viet Nam-acquired case differ by **one cgMLST locus in 4,221**.
@@ -61,7 +63,8 @@ predates the abstention result and carried a conclusion since softened.
 `[attribution.country.nearest_neighbour, ladder.country.kappa]`; 41/46, 46%,
 κ 0.832 `[attribution.region.modal_k20, ladder.region_7way.kappa]`; κ 1.000
 `[ladder.asia_vs_not.kappa]`; 14/14 and 2/14 `[…d_lt_0.05]`; 0.462, 94%, 76%
-`[abstention.region.*]`; 2.5% `[panel.region.South_Asia]`.
+`[abstention.region.*]`; 2.5% `[panel.region.South_Asia]`; 19/1, 1 to 14, 1,102
+`[recurrence.gap]`.
 
 **Deliberately included, against the temptation to cut for space:**
 
@@ -73,6 +76,12 @@ predates the abstention result and carried a conclusion since softened.
   lacked references", which is only part of the story and is the weaker part.
 - **"did not rescue country attribution".** Reporting the abstention rule's
   failure at country scale in the abstract keeps the tool's claim honest.
+- **The recurrence clause, in the long version only.** It answers the first
+  objection a reviewer raises to a negative result, that a better method would
+  succeed, and it answers it with the pipeline's own output rather than with an
+  argument. Twenty-two words is a fair price. It is cut from the short version,
+  where the resolution curve already carries the same point and space is the
+  binding constraint.
 
 **Deliberately excluded:**
 
@@ -88,6 +97,10 @@ predates the abstention result and carried a conclusion since softened.
   measured and stops.
 - **Sub-national (0/5).** True but n=5; it would invite a question the data
   cannot answer well.
+- **The recurrence clades and support values.** 12 of 13 patients monophyletic at
+  94.4/94 to 100/100 is the stronger form of that control, but it needs the word
+  "clade" and a support convention to land, which is a Results cost rather than
+  an abstract one. The SNP gap carries the point unaided.
 
 ⚠ **One number to re-check at submission.** "41% of country-labelled public
 isolates" is the panel against ENA BioSamples carrying a country

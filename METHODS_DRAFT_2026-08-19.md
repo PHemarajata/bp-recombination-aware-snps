@@ -2000,6 +2000,83 @@ independently and are cross-checked against each other for agreement on the
 nearest-neighbour calls and on the scorable denominator, as part of the frozen
 basis validator (2.12.12).
 
+## 2.12.11b Relapse versus reinfection in the recurrence series
+
+This analysis exists as a fine-scale positive control on the pipeline (§R3.1),
+not as a contribution to attribution. Thirteen patients in the Nakhon Phanom
+collection had culture-confirmed recurrent melioidosis: **29 isolates forming 20
+episode pairs**, with two patients contributing three and four episodes
+respectively. Patient identity, episode number and collection date come from the
+clinical record and are not derivable from the genomes. All 40 isolate-date
+assertions were checked against `final_collection_dates` in the collection
+metadata and matched exactly; four of the pairs are independently corroborated by
+the `PreMID` previous-episode field in the clinical database.
+
+**Two independent distance bases are used, and they agree.**
+
+*Basis 1, the production output (16 of 20 pairs).* Where both isolates of a pair
+fall in the same analysis unit, the distance is read directly from that unit's
+Gubbins `filtered_polymorphic_sites.fasta` as the number of positions differing
+between the two sequences, counting only positions where both carry an
+unambiguous A/C/G/T, summed across replicons. No new computation is involved:
+these are the reported run's own recombination-filtered sites.
+
+*Basis 2, a local context analysis (all 20 pairs).* Basis 1 cannot cover four
+pairs: patients 7 and 10 are not in the analysed panel, and patient 9's two
+isolates fall in different units, so no single unit alignment contains them. It
+also places each patient against the global panel rather than against the local
+genomes it could actually be confused with, which is the comparison the control
+needs. Context groups were therefore built over the **259 local genomes** by
+single-linkage clustering of mash distances (k=21, sketch 100,000) at a **0.002**
+radius, giving **7 components that co-locate all 20 pairs**; components smaller
+than 12 genomes were padded with their nearest neighbours so that every group
+supports a tree.
+
+Each group was then run through the same chain as §2.12.7, at the same
+parameters: `snippy 4.6.0 --ctgs` against the group medoid, `snippy-core` to a
+whole-genome alignment **retaining invariant sites**, then
+`run_gubbins.py --tree-builder raxml --iterations 5 --min-snps 3
+--invariant-site-correction --filter-percentage 25.0`, then IQ-TREE with
+`GTR+ASC` and 1,000 ultrafast bootstrap and SH-aLRT replicates on the
+recombination-filtered sites. Two deliberate departures:
+
+- **The `Reference` record is dropped.** Our reference is a member of the group,
+  so snippy-core's `Reference` sequence would enter the alignment as a duplicate
+  of one sample. The production run keeps it only because its references are
+  external to the unit (§2.12.6).
+- **Gubbins is given an explicit `--seed`.** The pipeline passes none, so Gubbins
+  draws an unseeded `randint(0, 10000)` for RAxML's `-p` and RAxML rejects `-p 0`
+  (§2.12.12). Seeding also makes the control reproducible.
+
+**Exclusivity.** For each pair we report the distance to the nearest genome in the
+same context group belonging to a *different* patient. A relapse call is
+exclusive when the pair is at least three times closer to each other than either
+is to that genome. The threshold is chosen, not calibrated, and the raw ratio is
+reported per pair so a reader can apply their own.
+
+**Sequence types** were recomputed from the PubMLST *B. pseudomallei* scheme-1
+profile definitions and compared as **allele profiles rather than ST labels**,
+because two distinct novel profiles both render as untypeable and must not be
+counted as a match.
+
+**Two traps are recorded because both silently corrupt the result.** First,
+snippy writes low-confidence calls in lowercase and those positions concentrate
+at variant sites, so a case-sensitive A/C/G/T comparison scored 787 SNPs between
+two genomes where the correct answer is 15,390; sequences are upper-cased on
+read. Second, because small groups are padded with neighbours, a genome can
+appear in two groups, and scoring it in the borrowed group replaces its true
+nearest neighbour with a distant one; every genome is scored in the group it
+originally belongs to.
+
+**r/m is deliberately not reported for these groups.** They are tight single
+lineages built to a 0.002 radius, which is inside the lower bound of the
+diversity window of §2.6.1, so a low r/m here is detection failure and not
+biology. The r/m figures in this study come from the production units only.
+
+Scripts: `context_snps_bp.py` (alignment through tree), `context_report_bp.py`
+(distances, exclusivity, annotated trees and iTOL annotation) and
+`recurrence_mash_bp.py` (the genome-wide mash screen that preceded them).
+
 ## 2.12.12 Reproducibility
 
 Analysis-unit membership and per-unit references are provided as

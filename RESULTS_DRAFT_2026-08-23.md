@@ -193,6 +193,58 @@ signal, not bluntness of instrument.
 bound for a curated scheme. The permitted claim is *"resolution alone does not
 buy country-level attribution"*, not *"no targeted scheme can work"*.
 
+### R3.1 The pipeline resolves a finer distinction than country, on the same genomes
+
+The resolution curve shows the estimator converting resolution into accuracy when
+signal exists. A second control asks something stronger: give the *same pipeline*
+a harder question at a finer scale, and see whether it answers.
+
+Thirteen patients in the Nakhon Phanom collection had culture-confirmed recurrent
+melioidosis, giving **20 episode pairs across 29 isolates** `[recurrence.pairs]`.
+Distinguishing a relapse of the original infection from a reinfection with a new
+strain is the finest epidemiological question these data support, and unlike
+exposure country it has a genomic answer that is not in doubt.
+
+**The separation is categorical.** On recombination-filtered SNPs, **19 pairs fall
+between 1 and 14 SNPs** and **one pair falls at 1,102** `[recurrence.gap]`. The gap
+spans **79-fold with nothing inside it**, so no threshold anywhere between those
+values changes a single call. For **16 of the 20 pairs the distances are the
+production per-unit Gubbins output itself**, not a separate calculation; the
+remaining four required a local analysis because those isolates fall outside the
+analysed panel or in different units.
+
+**Tree topology confirms it independently.** Against local context, **12 of the 13
+patients form an exclusive clade** containing their own episodes and nothing else,
+at **94.4/94 to 100/100** SH-aLRT and ultrafast bootstrap support
+`[recurrence.clades]`. The thirteenth is the reinfection: patient 9's two isolates
+do not form a clade at all, their common ancestor subtends **35 other genomes**,
+and each isolate is closer to another patient's genome (**81 SNPs**) than to its
+own previous episode (**1,102**).
+
+**Recombination correction sharpens this contrast rather than blurring it.**
+Gubbins removes **44% of SNPs between unrelated genomes but 1 of 9 within a
+patient**, so correcting for recombination widens the relapse/reinfection gap. This
+is the expected direction in an organism importing roughly eight recombined SNPs
+per point mutation, and it is worth stating because the opposite is often assumed.
+
+Seven-locus MLST agrees on all 20 calls but with no margin behind it: this
+collection contains **18 pairs of isolates from different patients carrying
+byte-identical seven-locus profiles**, so same-ST does not imply same strain here.
+The calls survive on MLST only because the true within-patient pairs are another
+10 to 20 times closer than the chance ST matches.
+
+*Caveat that must travel with this result:* it establishes that assembly, variant
+calling, recombination correction and phylogenetics resolve a within-patient
+distinction at single-SNP scale **on these genomes and through this pipeline**, so
+the country result is not an instrument failure. It does **not** show that country
+is attainable. Relapse-versus-reinfection and exposure-country differ in kind and
+not merely in scale: the first asks whether two genomes descend from one infecting
+population, which the genome records directly, while the second asks where that
+population was acquired, which it records only through a reference panel. One pair
+also carries a thin margin worth naming: patient 8's episodes differ by 14 SNPs
+against 30 to an environmental isolate from the same collection, so same strain
+remains the better explanation but a locally circulating clone is not excluded.
+
 ## R4. Why: the panel does not contain the source countries
 
 **For 7 of the 16 exposure countries in our validation set, no public genome

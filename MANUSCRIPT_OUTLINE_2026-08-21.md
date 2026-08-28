@@ -304,6 +304,35 @@ curated scheme. The published PBP dual-locus scheme chose its loci *because*
 they carried geographic signal. The permitted claim is *"resolution alone does
 not buy country-level attribution"* — not *"no two-locus scheme can work."*
 
+### R3.1 — A second positive control, one scale finer (added 2026-08-28)
+
+The resolution curve shows the *estimator* works. This shows the *pipeline*
+works, on a question finer than country and with an answer not in doubt.
+
+**20 recurrence episode pairs, 13 patients, 29 isolates** from the Nakhon Phanom
+collection. On recombination-filtered SNPs: **19 pairs at 1 to 14 SNPs, one at
+1,102**, a **79-fold gap with nothing inside it**. **16 of the 20 distances are
+the production run's own per-unit Gubbins output.** Topology agrees
+independently: **12 of 13 patients form an exclusive clade** at **94.4/94 to
+100/100** support, and the thirteenth (the reinfection) is not a clade at all,
+its two isolates sitting **81 SNPs** from other patients' genomes against
+**1,102** from each other.
+
+Removing recombination **widens** the gap: it strips **44%** of SNPs between
+unrelated genomes but **1 of 9** within a patient.
+
+**Caveat that must travel with it:** this licenses *"the country failure is not an
+instrument failure"*, not *"country is attainable"*. The two questions differ in
+kind, not only in scale: relapse versus reinfection asks whether two genomes
+descend from one infecting population, which the genome records directly;
+exposure country asks where that population was acquired, which it records only
+through a panel of placed relatives. Also name the one thin margin, patient 8 at
+**14 SNPs against 30** to an environmental isolate.
+
+**Do not quote r/m for these context groups.** They are tight single lineages
+built to a 0.002 mash radius, below the Gate 1 diversity window, so their low
+values are detection failure and not biology.
+
 ### R4 — Why: the panel does not contain the source countries
 
 **Table 6.** ⚠ **Corrected 2026-08-21 — see `GENOME_REGISTER_2026-08-21.md` §4.**
