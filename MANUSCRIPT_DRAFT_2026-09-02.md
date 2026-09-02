@@ -541,12 +541,26 @@ uncontrolled count would have overstated the result more than fourfold.
 | clusters, but the control is vacuous | 5 |
 | **clusters by country and survives the control** | **6** |
 
-Two honest qualifications on the six. **Two of them clear the control only
-barely**, `strain_1_L1_5` at BioProject p = 0.060 and `strain_1_L1_11` at
-p = 0.063, either side of the threshold by a hair, so the robust set is arguably
-four. And the six are a small fraction of a collection this size; we report them
-as units in which geography is distinguishable from batch, not as a
-phylogeographic reconstruction.
+Three honest qualifications on the six. **Two clear the control only barely**,
+`strain_1_L1_5` at BioProject p = 0.060 and `strain_1_L1_11` at p = 0.063, either
+side of the threshold by a hair. The six are a small fraction of a collection
+this size, and we report them as units in which geography is distinguishable from
+batch, not as a phylogeographic reconstruction.
+
+**And six is an upper bound.** 426 of 2,340 analysis genomes carry no usable
+BioProject. Absent values are treated as ambiguous, so missing metadata *weakens*
+the confounder test and makes a unit **more** likely to be called geographic; the
+leniency runs toward claiming geography, never against it. Two sensitivity
+results bound this. The six passing units have 75-100% BioProject coverage, so
+they are not artifacts of absent data, and units that genuinely lack it are
+classified as vacuous controls rather than counted as passes. But **276 of the
+missing genomes are a single in-house study that will be deposited under one
+BioProject**; assigning them one synthetic identifier and re-running moves two
+units from geographic to confounded and one from vacuous to geographic, giving
+**five**, of which only **two pass comfortably** (`strain_11_L1_5` at BioProject
+p = 0.89 and `strain_5_L1_3` at 0.36). We report six because that is what the
+archived metadata supports today, and we state five as the value the same
+analysis returns once those genomes are deposited.
 
 **The 37 single-country units are not evidence and must not be quoted as such.**
 They are the stratum in which the test cannot run at all: every genome shares one
