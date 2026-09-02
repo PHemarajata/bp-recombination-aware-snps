@@ -61,7 +61,8 @@ def read_branches(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--stats-dir", default="RUN_STATS_ARCHIVE/L1")
-    ap.add_argument("--clusters", default=".L1_run_clusters.tsv")
+    # DANGEROUS DEFAULT REMOVED: named a specific v1-era run artifact.
+    ap.add_argument("--clusters", required=True)
     ap.add_argument("--audit", default="curated_L1_reference_audit.tsv")
     ap.add_argument("--out", default="RM_RESULTS_L1.tsv")
     a = ap.parse_args()

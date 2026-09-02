@@ -42,6 +42,20 @@ jobs:
           for f in *.sh; do bash -n "$f" || { echo "PARSE FAIL: $f"; fail=1; }; done
           exit $fail
 
+  no-run-specific-defaults:
+    name: no input defaults to a specific run
+    runs-on: ubuntu-latest
+    # Six instances of this one bug have been found in this repository and every
+    # one produced a plausible wrong number rather than an error -- the worst
+    # would have written r/m 8.05 into the manuscript instead of 7.70. All six
+    # were found by accident. This finds the seventh on purpose.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 audit_defaults_bp.py
+
   no-data-tracked:
     name: no isolate data is tracked
     runs-on: ubuntu-latest
