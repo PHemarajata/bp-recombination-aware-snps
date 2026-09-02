@@ -238,5 +238,82 @@ comfortably**. Do not quietly adopt 5 as the headline; the synthetic BioProject
 is a defensible assumption, not a fact in the archive, and it becomes a fact only
 when B1/B2 land.
 
-The direction is the point. **Every improvement to BioProject metadata so far has
-reduced the geographic count, never increased it.** Six is an upper bound.
+> **RETRACTED, same day.** The sentence that stood here said "every improvement
+> to BioProject metadata has reduced the geographic count, never increased it.
+> Six is an upper bound." **That was wrong, and it was wrong because I only
+> looked at one of the two ways this control fails.** See §6.
+
+---
+
+## 6. The synthetic BioProject was a bad idea, and "upper bound" was wrong
+
+**Raised by the author**: we have never investigated *why* the BioProjects in
+this collection group the genomes they group. Submissions are bundled by study,
+by laboratory, by funding source, by collection period, by region -- reasons that
+differ between BioProjects and some of which carry no biological meaning.
+Assigning 276 in-house genomes a single synthetic identifier asserts that their
+grouping reason is equivalent to the grouping reason behind PRJEB25606's 543
+genomes. **Nothing establishes that, and it matters.**
+
+It matters in a specific direction. The 276 are one study from **one province,
+Nakhon Phanom**, over one collection period. Their geographic coherence is
+**real, not administrative**. Feeding them to the control as a batch label and
+watching units turn "confounded" is not detecting an artifact; it is removing
+genuine geography.
+
+### This was already known, and I failed to connect it
+
+`bioproject_within_country_bp.py` (2026-08-24) exists precisely for this. Its
+own docstring: **113 of 119 BioProjects (95%) are entirely single-country**, and
+~99% of same-BioProject pairs are also same-country, so "a genuine within-country
+clonal expansion deposited by one study makes BOTH variables fire on the SAME
+clade, and the unit is discarded as confounded when nothing artefactual has been
+shown."
+
+It runs the conditional test: hold country fixed, ask whether BioProject still
+structures the tree. The result:
+
+| among units discarded as "confounded" and testable | n |
+|---|---|
+| **no independent batch structure -> the discard OVER-CONTROLLED** | **14** |
+| genuine batch structure at nominal p | 8 |
+| of those, surviving FDR | **2** |
+
+**Both units my synthetic BioProject flipped show no independent batch
+structure**: `strain_2_L1_2` (Thailand, p = 0.36, q = 1.00) and `strain_1_L1_11`
+(China, p = 0.58, q = 1.00). The flip removed geography, not artifact. It is a
+worked example of the over-control this project had already documented.
+
+### What is actually true about the control
+
+It errs in **both** directions, and I reported only one:
+
+| failure mode | effect on the count | evidence |
+|---|---|---|
+| missing metadata weakens the confounder test | pushes the count **up** | 18.2% of genomes lack BioProject; §1a |
+| BioProject is nested inside country | pushes the count **down** | 95% single-country; 14 of 22 testable discards over-controlled |
+
+**Six is not an upper bound. It is a discriminant result whose error bars run in
+both directions**, and the documented over-control is the larger of the two
+effects on present evidence.
+
+### Recommendations, revised
+
+1. **Do not adopt the synthetic BioProject.** Not in the manuscript, not as a
+   sensitivity. The assumption it encodes is untested and points the wrong way.
+   §5 is retained as a record of what was tried and why it was rejected.
+2. **Report six as a discriminant result**, stating plainly that the control is a
+   discriminant and not an adjustment, and that it over-controls where BioProject
+   and country are not separable.
+3. **The conditional within-country test is the right instrument** and it already
+   exists. Where a unit is discarded as confounded, report whether batch
+   structure survives holding country fixed. On present evidence that softens 14
+   of 22 testable discards.
+4. **A6 still stands but for a narrower reason.** Recovering the 150 public
+   SRR/ERR BioProjects is worth doing because they are genuine archived facts.
+   It is no longer justified as "can only reduce the count".
+5. **The open question the author identified is real and unaddressed**:
+   characterise what the BioProjects in this collection actually represent, at
+   least for the largest few. Until then, BioProject is a proxy of unknown
+   construct validity being used as a confounder, which is a Methods limitation
+   worth stating rather than a solved problem.
