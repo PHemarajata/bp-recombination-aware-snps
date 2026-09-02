@@ -113,7 +113,8 @@ ax.set_xscale("log"); ax.set_yscale("log")
 ax.set_xlim(lo, 1.35); ax.set_ylim(lo, 1.35)
 ax.set_xlabel("COUNTRY  permutation p-value  (log)", color=fg, fontsize=11.5)
 ax.set_ylabel("BIOPROJECT  permutation p-value  (log)", color=fg, fontsize=11.5)
-ax.set_title("Only 6 of 85 units show geography that survives its confounder",
+ax.set_title("The submission-accession control retains 6 of 85 units,\n"
+             "but it over-adjusts: country causes the accession, not the reverse",
              color=fg, fontsize=13.5, fontweight="bold", loc="left", pad=14)
 ax.tick_params(colors=muted, labelsize=10)
 for s in ax.spines.values():

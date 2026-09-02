@@ -19,12 +19,14 @@
 >   the 88.
 > - "82 units of identical membership" — 82 is the shared-unit count, not a
 >   basis. Cross-platform Gubbins r/m agreement is **0.36% median relative**.
-> - ~~The geography section~~ **DONE 2026-09-02.** Results section 8 is rewritten
->   and narrowed. The claim is no longer geographic structure but its opposite:
->   most apparent phylogeographic signal here is batch structure. 26 units cluster
->   by country alone; **6 survive the BioProject control**, two of those only
->   barely. The 37 "single-country" units are the untestable stratum and are
->   reported as such. See Figure 4.
+> - ~~The geography section~~ **DONE 2026-09-02, reframed twice.** Section 8 no
+>   longer reports a count. 26 units cluster by country with no control; the
+>   correctly specified control retains **18-24**, the submission-accession
+>   discriminant retains **6**, and that discriminant **over-adjusts** because
+>   country causes BioProject rather than the reverse. Both instruments are
+>   inadequate in opposite directions. The section now reports the **range and
+>   its mechanism**, and concludes that country and collection history are not
+>   separable in a collection assembled this way. See Figure 4.
 >
 > Full list: `PR3_CORRECTIONS_2026-09-02.md`. Canonical numbers: `NUMBERS.tsv`.
 > Current state: `STATE_2026-09-02.md`.
@@ -42,12 +44,13 @@ number that must be filled or checked against a run artifact before submission.
 and must not invent. Nothing in this file was rounded, carried across partitions,
 or inferred from a summary line.
 
-**Results section 8 has been run and narrowed (2026-09-02).** It is no longer a
-specification. The analysis was executed on the frozen basis, and the result is
-the reverse of what an earlier draft anticipated: most apparent phylogeographic
-signal in this collection is batch structure, and only 6 of 85 units show country
-signal that survives the BioProject control. The narrowing was done deliberately
-before submission rather than being discovered in review.
+**Results section 8 has been run and reframed (2026-09-02).** It is no longer a
+specification. The analysis was executed on the frozen basis, and the honest
+result is neither the geographic structure an earlier draft anticipated nor its
+simple negation: **the count depends almost entirely on a confounder
+specification these data cannot settle**, ranging from 6 to 24 units. The section
+reports that range with its mechanism rather than a point estimate. This was
+worked out deliberately before submission rather than discovered in review.
 
 **Scope, resolved 2026-09-02.** `PUBLICATION_STRATEGY_2026-09-02.md` argued that
 section 8 should be cut from this paper and carried into a second paper on
@@ -59,8 +62,9 @@ window, because both say the same thing about the same collection -- an apparent
 signal is not a measurement until you have shown what else could produce it.
 
 The consequence for the second paper is that it needs a subject other than "this
-collection shows geographic structure", since at six units, two of them marginal,
-it does not.
+collection shows geographic structure". Whether it shows it is exactly what
+cannot be settled here, which is a limitation of the collection rather than a
+result to build a paper on.
 
 To run the outstanding analyses when they are wanted, see
 `run_manuscript_analyses.sh`, which drives the phylogeography association, the
@@ -509,13 +513,16 @@ pipeline and the per-unit record of dropped branches is retained.
 82-unit partition. Either re-measure on the 88-unit run or state the partition
 explicitly in the manuscript text. Do not present them as v4c numbers.
 
-### 8. Most apparent phylogeographic signal in this collection is batch structure
+### 8. Country structure and collection history cannot be separated in this collection
 
-**Narrowed 2026-09-02**, before submission rather than in review. An earlier draft
-of this section was a specification with placeholders, and a companion document
-quoted "42 of 82 units contain a single country where chance would give 2" as the
-headline geographic result. That framing does not survive the control, and it
-misreads which stratum the single-country units belong to.
+**Reframed 2026-09-02**, twice, and both revisions are recorded because the
+sequence is the argument. This section first read as a specification with
+placeholders, then as "most apparent phylogeographic signal is batch structure",
+and now as what the evidence actually supports: **the number of units showing
+country structure depends almost entirely on a specification choice that these
+data cannot settle.**
+
+#### The test
 
 Per unit we computed the Fitch small-parsimony score of country labels on the
 recombination-corrected topology, against a null of 1,000 label permutations
@@ -523,102 +530,84 @@ across tips of the same tree. Permutation holds topology and country composition
 fixed, so a unit that is 90% Thai is compared against other 90%-Thai
 arrangements, which is necessary because the marginal country distribution is
 extremely uneven. Tips of unknown country are treated as fully ambiguous, so
-missing metadata weakens signal rather than inventing it. **BioProject was tested
-identically, on the same trees with the same machinery**, because a BioProject is
-typically one study, one laboratory, one country and often one outbreak, so
-country and BioProject are largely the same variable wearing different labels.
+missing metadata weakens signal rather than inventing it.
 
-**The control is the result.** Of 85 units, 26 cluster by country at p <= 0.05
-taken alone. **Six survive the BioProject control.** The control removes 20 of
-26, or **77% of the apparent geographic signal** (Figure 4). Reporting the
-uncontrolled count would have overstated the result more than fourfold.
+**Twenty-six of 85 units cluster by country** at p <= 0.05 with no confounder
+applied. Thirty-seven have a single country value and cannot be tested at all;
+the remainder show no signal.
 
-| | units |
+#### Why the confounder is the whole question
+
+Related isolates get sequenced together, so apparent geographic clustering may be
+collection history. The obvious control is the submission accession, tested
+identically on the same trees. **That control is mis-specified here, and its
+error has a direction.**
+
+A confounder must be a common cause of both the exposure and the outcome.
+Submission accession is not: it does not cause country, **country causes it**,
+because a study is defined by where it sampled. In this panel **113 of 119
+BioProjects (95%) are entirely single-country** and the two variables associate
+at Cramer's V = 0.857. Conditioning on a variable that is largely determined by
+the exposure is over-adjustment; it removes part of the effect being estimated
+rather than widening its uncertainty.
+
+Three observations show this is the operative situation and not a theoretical
+caveat. Of the 12 units the accession control discards, **four are driven by
+deliberately diverse reference panels and five by geographically defined sampling
+frames** (for example a survey titled "Northeast Thailand", and an island
+transmission study); **none is driven by an identifiable clonal batch**. The two
+genuinely batch-like projects in the collection, 26 genomes from a single soil
+sample and a set of serial within-patient isolates, drive no discard at all.
+And **12 of the 26 clustering units are discarded despite showing no batch
+structure when country is held fixed**.
+
+#### The count is a function of the specification
+
+| control | units retained |
 |---|---|
-| single country, **untestable** (parsimony 0, no permutation can better it) | 37 |
-| no signal | 25 |
-| clusters by country, but **confounded by BioProject** | 12 |
-| clusters, but the control is vacuous | 5 |
-| **clusters by country and survives the control** | **6** |
+| none | 26 |
+| discount only where within-country batch structure survives FDR | **24** |
+| discount where any nominal within-country batch structure is present | **18** |
+| discriminant on submission accession | **6** |
+| the same, plus collection period | 2 |
 
-Three honest qualifications on the six. **Two clear the control only barely**,
-`strain_1_L1_5` at BioProject p = 0.060 and `strain_1_L1_11` at p = 0.063, either
-side of the threshold by a hair. The six are a small fraction of a collection
-this size, and we report them as units in which geography is distinguishable from
-batch, not as a phylogeographic reconstruction.
+**The correctly specified control -- one that asks whether batch structure exists
+independent of geography -- retains 18 to 24 units. The accession discriminant
+retains 6.** We report the range and its mechanism rather than a point estimate,
+because we cannot justify either endpoint.
 
-**And the control errs in both directions, so six is not a bound.** It is a
-discriminant, not an adjustment: a unit is reported only if country clusters and
-BioProject does not.
+**Neither instrument is adequate, and the failures are opposite.** The accession
+discriminant over-adjusts, for the reasons above. The conditional within-country
+test is **68% untestable** (64 of 94 unit-country rows lack the tips or the
+distinct accessions to run), so its higher count is inflated by absence of
+evidence rather than evidence of absence.
 
-*Toward over-reporting.* 426 of 2,340 analysis genomes carry no usable
-BioProject. Absent values are treated as ambiguous, so missing metadata weakens
-the confounder test and makes a unit more likely to be called geographic. The six
-passing units do have 75-100% BioProject coverage, so they are not artifacts of
-absent data, and units that genuinely lack it are classified as vacuous controls
-rather than counted as passes.
+#### Sensitivity
 
-*Toward under-reporting, and this is the larger effect.* **BioProject is nested
-inside country in this panel: 113 of 119 BioProjects (95%) are entirely
-single-country**, and approximately 99% of same-BioProject pairs are also
-same-country. A genuine within-country clonal expansion deposited by one study
-therefore makes both variables fire on the same clade, and the unit is discarded
-as confounded although nothing artefactual has been shown. Holding country fixed
-and re-testing, **14 of the 22 testable discarded units show no independent batch
-structure**; only 8 do at nominal p, and only 2 survive FDR correction.
+Collection period is available for 90% of genomes and is **less than half as
+nested inside country** as submission accession (Cramer's V 0.379 against 0.857).
+Applied as an additional discriminant, with two binnings pre-specified and
+agreement required, it retains 3 units, and 2 units pass both it and the
+accession control. This is reported as sensitivity, not as an estimate: each
+further discriminant is another filter, and every candidate available here is
+entangled with geography to some degree, so the count falls mechanically with the
+number of tests applied. **`strain_11_L1_5` is the only unit robust to every
+specification examined.** Laboratory, which would be a genuine batch variable,
+is not recorded for this collection.
 
-**A second, independent confounder was sought and partly found.** Laboratory is
-unavailable: no field in the panel encodes it, and `acquired_from`, which reads
-like a provenance field, holds country values. **Collection period is available
-for 90% of genomes and is materially less nested inside country than BioProject**
-(Cramer's V 0.379 for year against 0.857 for BioProject; 29% of year bins are
-single-country against 95% of BioProjects). Repeating the control with period,
-pre-specifying two binnings and requiring both to agree, gives 3 units rather
-than 6, and **2 units pass both the BioProject and the period control**:
-`strain_11_L1_5` and `strain_1_L1_11`.
+#### What we conclude
 
-We report the specification curve rather than a single count, because it never
-rises: 6 (BioProject), 5 (year), 4 (three-year bins), 3 (both binnings), 2 (both
-confounders). Requiring a unit to pass every control is a filter whose severity
-grows with the number of tests, not a better estimator, and period shares
-BioProject's structural flaw at lower magnitude. **One unit, `strain_11_L1_5`, is
-robust to every specification tested.** Full audit in
-`BATCH_PROXY_AUDIT_2026-09-02.md`.
+We do not report a count of geographically structured units, because we cannot
+defend one. **We report that country and collection history are not separable in
+a collection assembled this way**, and that the apparent answer ranges from 6 to
+24 units depending on a choice between two inadequate instruments.
 
-We therefore report six as a discriminant result and state explicitly that it is
-a lower bound on units with geographic signal and an upper bound on units with
-*demonstrated* geographic signal independent of collection history. Those are not
-the same quantity, and the panel's nesting prevents us from estimating the first
-directly.
-
-**The 37 single-country units are not evidence and must not be quoted as such.**
-They are the stratum in which the test cannot run at all: every genome shares one
-country, the parsimony score is zero, and no permutation can better it. They are
-enriched far beyond chance (37 observed against 0.94 expected under
-sampling-without-replacement from the collection's own country distribution,
-exact Poisson-binomial P = 4.1e-64), but that enrichment is close to
-uninformative here. Units are defined by genetic similarity, geography tracks
-phylogeny for legitimate reasons, and **30 of the 37 are Thailand** against
-Thailand being 67% of known-country genomes. Only 3 of the 37 are also
-single-BioProject, so they are not simple submitter artifacts, but that makes
-them unexplained rather than geographic.
-
-Two properties of the collection must be stated wherever these results appear.
-**Thailand is 67% of known-country genomes**, and the two largest sequencing
-projects, PRJEB25606 and PRJEB35787, are 43% of the collection between them. The
-BioProject control is not a formality against that background; it is the only
-thing separating geography from collection history.
-
-One finding is worth re-identifying by membership because it is the applied
-result closest to the paper's motivation. A seven-genome unit in the superseded
-v3 partition contained four mainland US cases with no recorded travel, from Texas
-and California, clustering with two Ecuadorian isolates from 1960 and 1962 and
-one Costa Rica travel case. Either those infections were acquired in the United
-States from a Western Hemisphere lineage, or the travel histories were never
-captured. [CONFIRM] whether the same seven genomes form a unit here, identified
-by membership rather than label, and report its Gate 1 class. In v3 the unit
-carried a maximum surviving branch of 1,595 substitutions, so its r/m of 1.38 was
-depressed by a divergent member and must not be read as a rate.
+That is a limitation of the collection rather than of the method, and it is the
+reason this paper leads with the recombination measurement. **Every factor
+examined -- submission accession, collection period, isolation source -- moves
+the geographic count substantially and moves r/m by at most a few percent.** The
+recombination result is robust to specification in a way the geographic one is
+not.
 
 ### 9. Reproducibility
 
