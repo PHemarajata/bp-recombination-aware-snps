@@ -50,7 +50,17 @@ import statistics as st
 from collections import defaultdict
 
 B = os.path.dirname(os.path.abspath(__file__))
-FLOOR, CEIL = 1270.0, 4671.0   # ska-unit bounds; --floor/--ceiling override
+# Two metrics, two windows. Keeping one pair of constants for both was a live
+# defect: `klass()` fell back to the ska-unit bounds for the ALIGNMENT metric
+# too, so running this script with default arguments silently reported 39
+# in-window units at median r/m 8.05 instead of the reported 47 at 7.70. It did
+# not crash and the wrong number is plausible, which is the dangerous kind. The
+# script's own --floor help already said the ska-unit 1270 is too high for the
+# alignment metric; nothing enforced it. Same family as E0, E1 and E4.
+MASH_FLOOR, MASH_CEIL = 1270.0, 4671.0   # ska-unit bounds, for the Mash proxy
+ALN_FLOOR, ALN_CEIL = 700.0, 4700.0      # relocated bounds, for the ALIGNMENT
+                                         # metric -- these are the REPORTED ones
+FLOOR, CEIL = MASH_FLOOR, MASH_CEIL      # back-compat for klass()'s fallback
 
 
 def load_alignment_diversity(path, combine):
@@ -83,15 +93,23 @@ def klass(x, floor=None, ceil=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--distances", default=f"{B}/DISTANCES_v4c_SUMMARY.tsv")
-    ap.add_argument("--mash", default=f"{B}/trackA_diversity_86units.tsv")
+    # E1. This defaulted to trackA_diversity_86units.tsv -- note "86", an older
+    # partition than the frozen 85-unit basis. The Mash proxy is secondary here
+    # (the alignment-derived window is the reported one, and the proxy misplaced
+    # 22 of 85 units), but a default naming a stale partition is exactly the
+    # pattern behind E0 and E4. No default: name the file you mean.
+    ap.add_argument("--mash", required=True,
+                    help="Mash diversity table; must match --distances and --rm")
     ap.add_argument("--rm", default=f"{B}/L1v4c_out/Summaries/recombination_rm.tsv")
     ap.add_argument("--combine", default="sum", choices=["sum", "mean", "chr1"])
     ap.add_argument("--floor", type=float, default=None,
                     help="override the Gate 1 floor for the ALIGNMENT metric "
-                         "(relocated value: 700; the ska-unit 1270 is too high)")
+                         f"(default {700.0:.0f}, the relocated value; the "
+                         "ska-unit 1270 applies to the Mash proxy only)")
     ap.add_argument("--ceiling", type=float, default=None,
-                    help="override the Gate 1 ceiling (relocated: 4700, "
-                         "essentially unchanged from the ska-unit 4671)")
+                    help="override the Gate 1 ceiling for the ALIGNMENT metric "
+                         f"(default {4700.0:.0f}, essentially unchanged from "
+                         "the ska-unit 4671)")
     ap.add_argument("--out", default=f"{B}/GATE1_ALIGNMENT_2026-08-21.tsv")
     a = ap.parse_args()
 
@@ -113,7 +131,9 @@ def main():
     rows, moved = [], []
     for u in units:
         A, M = aln[u], mash.get(u)
-        ka = klass(A, a.floor, a.ceiling)
+        ka = klass(A,
+                   ALN_FLOOR if a.floor is None else a.floor,
+                   ALN_CEIL if a.ceiling is None else a.ceiling)
         km = klass(M) if M is not None else ""
         try:
             v = float(rm[u]["rm_corrected"])
