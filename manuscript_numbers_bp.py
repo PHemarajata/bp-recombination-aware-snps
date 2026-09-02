@@ -44,8 +44,18 @@ import csv
 import os
 import sys
 
-FLOOR_DEFAULT = 1270.0
-CEIL_DEFAULT = 4671.0
+# TWO METRICS, TWO WINDOWS, and this script accepts either depending on which
+# --diversity file it is handed. A single fixed default pair was a live defect:
+# the ska-unit bounds applied to an ALIGNMENT-derived diversity column reports 39
+# in-window units at median r/m 8.05 instead of the reported 47 at 7.70. It does
+# not crash and 8.05 is plausible, which is the dangerous kind. Same family as
+# E0, E1, E4 and the identical bug in gate1_from_alignment_bp.py.
+#
+# The window is now chosen from the column actually present, so the mismatch is
+# structurally impossible rather than a convention someone has to remember.
+MASH_FLOOR, MASH_CEIL = 1270.0, 4671.0   # ska-unit, for approx_mean_snps
+ALN_FLOOR, ALN_CEIL = 700.0, 4700.0      # relocated, for mean_pairwise_snps
+FLOOR_DEFAULT, CEIL_DEFAULT = None, None  # resolved from the input, see main()
 
 
 def die(msg):
@@ -333,8 +343,12 @@ def main():
     ap.add_argument("--refbranch", help="exclude_reference_branches_bp.py output")
     ap.add_argument("--find-genomes", default="",
                     help="comma-separated sample_ids to locate by membership")
-    ap.add_argument("--floor", type=float, default=FLOOR_DEFAULT)
-    ap.add_argument("--ceiling", type=float, default=CEIL_DEFAULT)
+    ap.add_argument("--floor", type=float, default=None,
+                    help="override; default is chosen from the --diversity "
+                         "column (alignment 700, Mash proxy 1270)")
+    ap.add_argument("--ceiling", type=float, default=None,
+                    help="override; default is chosen from the --diversity "
+                         "column (alignment 4700, Mash proxy 4671)")
     a = ap.parse_args()
 
     if not any((a.rm, a.assignments, a.refbranch)):
@@ -348,11 +362,29 @@ def main():
     if a.diversity:
         drows = read_tsv(a.diversity)
         dcol = pick(drows[0].keys(), "cluster_id", "unit", "cluster")
-        scol = pick(drows[0].keys(), "approx_mean_snps", "mean_snps",
-                    "mean_pairwise_snps")
+        # aln_mean_pairwise_snps is the column name in the frozen artifact
+        # GATE1_ALIGNMENT_2026-08-21.tsv, so that file can be passed directly.
+        # Order matters: alignment columns are preferred over the Mash proxy,
+        # because the alignment window is the reported one.
+        scol = pick(drows[0].keys(), "aln_mean_pairwise_snps",
+                    "mean_pairwise_snps", "approx_mean_snps", "mean_snps")
         if not dcol or not scol:
             die(f"--diversity has no recognisable columns. Saw: "
                 f"{list(drows[0].keys())}")
+        # Resolve the window from the metric actually supplied.
+        if scol in ("mean_pairwise_snps", "aln_mean_pairwise_snps"):
+            auto_floor, auto_ceil, metric = ALN_FLOOR, ALN_CEIL, "ALIGNMENT"
+        else:
+            auto_floor, auto_ceil, metric = MASH_FLOOR, MASH_CEIL, "Mash proxy"
+        if a.floor is None:
+            a.floor = auto_floor
+        if a.ceiling is None:
+            a.ceiling = auto_ceil
+        print(f"diversity column {scol!r} -> {metric} metric, "
+              f"Gate 1 window [{a.floor:.0f}, {a.ceiling:.0f}]")
+        if metric == "Mash proxy":
+            print("  NOTE: the reported window is the ALIGNMENT-derived one. The "
+                  "Mash proxy misplaced 22 of 85 units.")
         for r in drows:
             if r[scol] not in ("", None):
                 try:
@@ -360,6 +392,8 @@ def main():
                 except ValueError:
                     pass
 
+    if a.floor is None:
+        a.floor, a.ceiling = ALN_FLOOR, ALN_CEIL
     if a.rm:
         section_rm(read_tsv(a.rm), div_by_unit, a.floor, a.ceiling)
     if a.assignments:
