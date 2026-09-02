@@ -172,3 +172,69 @@ The pattern across every factor examined is the same: **geography is fragile to
 specification and r/m is not.** That asymmetry is itself reportable, and it is
 the strongest argument for the paper leading with the measurement result rather
 than the geographic one.
+
+---
+
+## 9. Reference choice: a large apparent effect that does not survive checking
+
+Tested because the project already knows the reference taxon's branch distorts
+r/m, and because `ref_source` is a clean, fully covered binary (borrowed 58 units,
+own 27).
+
+**The headline number looks alarming:**
+
+| in-window units | n | median r/m |
+|---|---|---|
+| all | 47 | **7.70** |
+| borrowed reference | 35 | **8.05** |
+| own reference | 12 | **6.71** |
+
+A difference of 1.34, or **17% of the headline**, larger than any other factor
+examined. At that point it looked like the most important thing found all day.
+
+**It does not survive stratification.** Splitting the window at its median SNP
+density:
+
+| stratum | borrowed | own |
+|---|---|---|
+| lower half | 8.05 (n=17) | 6.40 (n=6) |
+| upper half | 7.79 (n=18) | **8.90 (n=6)** |
+
+**The effect reverses sign.** In the upper half of the window, own-reference
+units score *higher*. At six units per cell this is noise, not a reference
+effect.
+
+Two further checks leave nothing to explain. Within the window the two groups are
+**matched on diversity** (median 2,014.6 SNPs borrowed against 1,959.5 own), so
+it is not a diversity artifact either, which was my first hypothesis for it. And
+within the window neither SNP density (r = -0.104) nor unit size (r = +0.018)
+predicts r/m.
+
+The one real difference is that own-reference units are **much larger** (median
+n = 47 against 14), which is unsurprising: a larger unit is likelier to contain a
+suitable internal reference. That does not translate into an r/m effect.
+
+**Verdict: not established.** The 17% figure rests on 12 units and reverses when
+split. Reported here because it is exactly the kind of large, plausible,
+mechanism-having number that would have survived into a manuscript unchallenged,
+and because the check that killed it took one command.
+
+**Also a metadata gap worth recording:** `ref_mean_mash` is empty for all 85
+units in the frozen panel, so the continuous version of this test -- reference
+divergence against r/m -- cannot be run at all. Only the binary own/borrowed
+split is available.
+
+## 10. Factor table, updated
+
+| factor | available? | affects geography | affects r/m |
+|---|---|---|---|
+| **BioProject** | 82% | **decisive** but **over-adjusted** (26 to 6; correctly specified 18-24) | negligible, 7.70 to 7.48 |
+| **collection period** | 90% | **stricter** (6 to 3) | not tested |
+| **isolation source** | 86% | not tested | **weak but consistent**, 3-4% |
+| **reference source** | 100% | not applicable | **apparent 17%, not established** -- reverses on stratification |
+| **laboratory** | **absent** | -- | -- |
+| **ref_mean_mash** | **empty** | -- | -- |
+
+The asymmetry holds and is now better evidenced: **every factor that moves the
+geographic count leaves r/m essentially where it was**, and the one factor that
+appeared to move r/m substantially did not survive a stratified check.
