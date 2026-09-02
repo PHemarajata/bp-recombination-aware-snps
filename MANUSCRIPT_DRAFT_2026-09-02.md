@@ -547,20 +547,31 @@ side of the threshold by a hair. The six are a small fraction of a collection
 this size, and we report them as units in which geography is distinguishable from
 batch, not as a phylogeographic reconstruction.
 
-**And six is an upper bound.** 426 of 2,340 analysis genomes carry no usable
-BioProject. Absent values are treated as ambiguous, so missing metadata *weakens*
-the confounder test and makes a unit **more** likely to be called geographic; the
-leniency runs toward claiming geography, never against it. Two sensitivity
-results bound this. The six passing units have 75-100% BioProject coverage, so
-they are not artifacts of absent data, and units that genuinely lack it are
-classified as vacuous controls rather than counted as passes. But **276 of the
-missing genomes are a single in-house study that will be deposited under one
-BioProject**; assigning them one synthetic identifier and re-running moves two
-units from geographic to confounded and one from vacuous to geographic, giving
-**five**, of which only **two pass comfortably** (`strain_11_L1_5` at BioProject
-p = 0.89 and `strain_5_L1_3` at 0.36). We report six because that is what the
-archived metadata supports today, and we state five as the value the same
-analysis returns once those genomes are deposited.
+**And the control errs in both directions, so six is not a bound.** It is a
+discriminant, not an adjustment: a unit is reported only if country clusters and
+BioProject does not.
+
+*Toward over-reporting.* 426 of 2,340 analysis genomes carry no usable
+BioProject. Absent values are treated as ambiguous, so missing metadata weakens
+the confounder test and makes a unit more likely to be called geographic. The six
+passing units do have 75-100% BioProject coverage, so they are not artifacts of
+absent data, and units that genuinely lack it are classified as vacuous controls
+rather than counted as passes.
+
+*Toward under-reporting, and this is the larger effect.* **BioProject is nested
+inside country in this panel: 113 of 119 BioProjects (95%) are entirely
+single-country**, and approximately 99% of same-BioProject pairs are also
+same-country. A genuine within-country clonal expansion deposited by one study
+therefore makes both variables fire on the same clade, and the unit is discarded
+as confounded although nothing artefactual has been shown. Holding country fixed
+and re-testing, **14 of the 22 testable discarded units show no independent batch
+structure**; only 8 do at nominal p, and only 2 survive FDR correction.
+
+We therefore report six as a discriminant result and state explicitly that it is
+a lower bound on units with geographic signal and an upper bound on units with
+*demonstrated* geographic signal independent of collection history. Those are not
+the same quantity, and the panel's nesting prevents us from estimating the first
+directly.
 
 **The 37 single-country units are not evidence and must not be quoted as such.**
 They are the stratum in which the test cannot run at all: every genome shares one
