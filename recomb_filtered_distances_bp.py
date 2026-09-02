@@ -199,7 +199,16 @@ def callable_fraction(stats_path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--clusters", default=DEF_CLUSTERS)
+    # DANGEROUS DEFAULT REMOVED. DEF_CLUSTERS is L1v4c_out/Clusters, which is a
+    # HYBRID directory: it holds 176 unit dirs against the frozen basis's 170
+    # (85 units x 2 replicons), because it accumulated output from two
+    # partitions. Globbing it double-counts a 153-genome lineage and has already
+    # corrupted two summary tables. This script produces DISTANCES_v4c_SUMMARY,
+    # which feeds Gate 1, which produces the reported r/m -- so a silent hybrid
+    # read here reaches the headline. Name the directory you mean.
+    ap.add_argument("--clusters", required=True,
+                    help="Clusters directory. NOT L1v4c_out/Clusters unless you "
+                         "have checked its unit count; that one is hybrid.")
     ap.add_argument("--out-dir", default=f"{B}/DISTANCES_v4c")
     ap.add_argument("--summary", default=f"{B}/DISTANCES_v4c_SUMMARY.tsv")
     ap.add_argument("--unit", help="only units whose dir name contains this")
@@ -208,7 +217,9 @@ def main():
     # bases: unit_rm, expected_ratio_from_rm and ratio_over_expected came from
     # the reported run while every other column came from the new one. Same
     # class as E0 and E1: a default that points at a specific run.
-    ap.add_argument("--rm", default=f"{B}/L1v4c_out/Summaries/recombination_rm.tsv",
+    # Required, not defaulted. The help below says it must match --clusters,
+    # and --clusters is required, so a default here would contradict it.
+    ap.add_argument("--rm", required=True,
                     help="r/m table; MUST come from the same run as --clusters")
     a = ap.parse_args()
 

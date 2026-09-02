@@ -106,9 +106,12 @@ def neighbour_join(labels, D):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--clusters", default=".L1_run_clusters.tsv")
+    # DANGEROUS DEFAULT REMOVED: a run-specific cluster table.
+    ap.add_argument("--clusters", required=True)
     ap.add_argument("--matrix", default="mash_matrix_2802.tsv")
-    ap.add_argument("--assignments", default="L1_ASSIGNMENTS.tsv")
+    # DANGEROUS DEFAULT REMOVED: L1_ASSIGNMENTS.tsv is the v1 file and holds
+    # 23 units against the frozen basis's 85. This is the same file E0 was about.
+    ap.add_argument("--assignments", required=True)
     ap.add_argument("--out", default="L1_GLOBAL_BACKBONE.nwk")
     ap.add_argument("--medoids", default="L1_unit_medoids.tsv")
     a = ap.parse_args()
