@@ -567,6 +567,24 @@ as confounded although nothing artefactual has been shown. Holding country fixed
 and re-testing, **14 of the 22 testable discarded units show no independent batch
 structure**; only 8 do at nominal p, and only 2 survive FDR correction.
 
+**A second, independent confounder was sought and partly found.** Laboratory is
+unavailable: no field in the panel encodes it, and `acquired_from`, which reads
+like a provenance field, holds country values. **Collection period is available
+for 90% of genomes and is materially less nested inside country than BioProject**
+(Cramer's V 0.379 for year against 0.857 for BioProject; 29% of year bins are
+single-country against 95% of BioProjects). Repeating the control with period,
+pre-specifying two binnings and requiring both to agree, gives 3 units rather
+than 6, and **2 units pass both the BioProject and the period control**:
+`strain_11_L1_5` and `strain_1_L1_11`.
+
+We report the specification curve rather than a single count, because it never
+rises: 6 (BioProject), 5 (year), 4 (three-year bins), 3 (both binnings), 2 (both
+confounders). Requiring a unit to pass every control is a filter whose severity
+grows with the number of tests, not a better estimator, and period shares
+BioProject's structural flaw at lower magnitude. **One unit, `strain_11_L1_5`, is
+robust to every specification tested.** Full audit in
+`BATCH_PROXY_AUDIT_2026-09-02.md`.
+
 We therefore report six as a discriminant result and state explicitly that it is
 a lower bound on units with geographic signal and an upper bound on units with
 *demonstrated* geographic signal independent of collection history. Those are not
