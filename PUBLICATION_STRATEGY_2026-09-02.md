@@ -84,9 +84,11 @@ threshold asserted, and it is also what the evidence supports.
 > 37 units are ones where the permutation test cannot run at all, and 30 of the
 > 37 are Thailand against Thailand being 67% of the collection.
 >
-> **The finding moved to Paper 1** as Results section 8, reframed as what it
-> actually is: a calibration result showing that most apparent phylogeographic
-> signal here is batch structure. That belongs beside the detection window,
+> **The finding moved to Paper 1** as Results section 8, reframed again on
+> 2026-09-02 as what it actually is: **country and collection history are not
+> separable in this collection**, and the count ranges 6-24 depending on a
+> confounder specification the data cannot settle. That belongs beside the
+> detection window,
 > because both say the same thing -- an apparent signal is not a measurement
 > until you have shown what else could produce it.
 >
