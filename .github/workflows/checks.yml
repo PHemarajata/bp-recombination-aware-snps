@@ -1,0 +1,79 @@
+name: checks
+
+# Three jobs, all of which run WITHOUT the isolate data. That constraint is the
+# point: this repository tracks only code and documentation (see .gitignore),
+# so CI must be meaningful on a data-free checkout or it cannot run at all.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    name: unit tests (no data required)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: phylogeography test suite
+        run: python3 test_phylogeography_bp.py
+
+  syntax:
+    name: syntax and shell parse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: python parses
+        run: |
+          fail=0
+          for f in *.py; do
+            python3 -c "import ast,sys; ast.parse(open(sys.argv[1]).read())" "$f" \
+              || { echo "SYNTAX FAIL: $f"; fail=1; }
+          done
+          exit $fail
+      - name: shell parses
+        run: |
+          fail=0
+          for f in *.sh; do bash -n "$f" || { echo "PARSE FAIL: $f"; fail=1; }; done
+          exit $fail
+
+  no-data-tracked:
+    name: no isolate data is tracked
+    runs-on: ubuntu-latest
+    # This enforces mechanically what .gitignore states in prose. The working
+    # directory holds patient-derived genomic data for a US Tier 1 Select Agent
+    # with re-identifiable metadata, and `git add -f` bypasses .gitignore
+    # entirely. A committed data file is the one mistake here that cannot be
+    # undone by a later commit, so it fails the build rather than warning.
+    steps:
+      - uses: actions/checkout@v4
+      - name: only code and documentation may be tracked
+        run: |
+          bad=$(git ls-files \
+            | grep -vE '\.(md|py|sh|nf|config|R|pl|yml)$' \
+            | grep -vE '^(Makefile|environment\.yml|requirements\.txt|LICENSE|\.gitignore)$' \
+            || true)
+          if [ -n "$bad" ]; then
+            echo "REFUSING: files outside the code/documentation allowlist are tracked:"
+            echo "$bad"
+            echo ""
+            echo "See .gitignore. If one of these is genuinely source, re-admit it"
+            echo "by name there and say why in the commit message."
+            exit 1
+          fi
+          echo "clean: $(git ls-files | wc -l) tracked files, all code or documentation"
+      - name: tracked tree stays small
+        run: |
+          kb=$(git ls-files | xargs -r du -ck | tail -1 | cut -f1)
+          echo "tracked tree: ${kb} KB"
+          # The tree is ~3.3 MB of text. A large jump means a data file slipped
+          # past the allowlist by extension.
+          if [ "$kb" -gt 20000 ]; then
+            echo "REFUSING: tracked tree exceeds 20 MB, which suggests a data file."
+            exit 1
+          fi
