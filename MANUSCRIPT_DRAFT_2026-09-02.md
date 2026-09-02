@@ -8,17 +8,12 @@
 > the corrected workstation run. The A100 88-unit run is the **cross-hardware
 > control**. The r/m headline is **7.70 (n=47)**.
 >
-> **Corrected in this commit** (mechanical, unambiguous): the four r/m headline
-> figures and the Gate 1 stratum table.
->
-> **NOT yet corrected**, because these are editorial or scope decisions rather
-> than substitutions:
->
-> - Every "88 units / 2,342 genomes / production run" framing throughout. The
->   reported run is 86 units before correction and **85 after**; the control is
->   the 88.
-> - "82 units of identical membership" — 82 is the shared-unit count, not a
->   basis. Cross-platform Gubbins r/m agreement is **0.36% median relative**.
+> **Corrected 2026-09-02.** The manuscript is now on the reported basis
+> throughout: **85 units, 2,340 genomes, r/m 7.70**. The 88-unit A100 run is the
+> cross-hardware control (section 9), and both runs executed byte-identical
+> pipeline code. Sections 1, 3 and 9 and the abstract were reconciled to this
+> basis. Any remaining "82-unit" mention refers to a specific superseded
+> demonstration and is labelled as such in place.
 > - ~~The geography section~~ **DONE 2026-09-02, reframed twice.** Section 8 no
 >   longer reports a count. 26 units cluster by country with no control; the
 >   correctly specified control retains **18-24**, the submission-accession
@@ -121,8 +116,8 @@ above the ceiling the ratio of recombination-derived to mutation-derived
 substitutions collapses to between 0.16 and 1.73. Both bounds are brackets rather
 than points, and we report them as such.
 
-Applying that window to a production run of 88 units and 2,342 genomes, r/m is a
-measurement for 47 units and a detection failure for 41. The median r/m across the
+Applying that window to the reported partition of 85 units and 2,340 genomes,
+r/m is a measurement for 47 units and a detection failure for 38. The median r/m across the
 47 in-window units is 7.70, against 1.32 below the floor and 2.14 above the
 ceiling. A low r/m in this species is therefore a detection failure rather than a
 clonal unit, and the all-unit median of 5.70 mixes measurements with failures.
@@ -240,7 +235,7 @@ quantified whole-genome attribution accuracy at any spatial scale [14].
 
 ## Results
 
-### 1. A collection of 2,976 assemblies partitioned into 88 analysis units
+### 1. A collection of 2,976 assemblies partitioned into 85 analysis units
 
 The panel comprised 2,976 *B. pseudomallei* assemblies, 2,802 from an established
 curated collection and 174 newly added isolates. Of 188 newly produced SPAdes
@@ -259,8 +254,12 @@ and 3 were computed but not used, so unit size was set by one stated rule rather
 than chosen per lineage.
 
 That gave 86 units and 2,352 genomes, 79.0% of the panel, with a largest unit of
-159 and a median of 18. Refinement for internal population structure produced the
-final partition of **88 units, 2,342 genomes and 176 replicon-units** (Table 1).
+159 and a median of 18. A post-hoc correction removed seven duplicate BioSamples
+and one unit that fell below the n >= 5 floor, giving the **reported basis of 85
+units and 2,340 genomes** (Table 1), on which every result below is computed. An
+independent execution on different hardware refined one unit into three, giving
+88 units and 2,342 genomes; that run is the cross-hardware reproducibility
+control (Results section 9), not the reported basis.
 
 Two observations from the partitioning step are worth reporting because both are
 easy to get wrong.
@@ -319,9 +318,9 @@ upward at a 15% to 21% false-mixture rate. Below n of 25 modality is undecidable
 with both statistics overlapping between classes at every threshold tested. This
 is a limit of the data rather than of tuning.
 
-### 3. Applying the window, r/m is a measurement for 47 of 88 units
+### 3. Applying the window, r/m is a measurement for 47 of 85 units
 
-Classifying all 88 production units against the window reproduces the calibration
+Classifying all 85 reported units against the window reproduces the calibration
 exactly (Table 2).
 
 | Gate 1 class | units | median r/m |
@@ -509,9 +508,11 @@ the root are dropped whenever one is the reference. Where the reference nests
 inside the population nothing is removed. The exclusion is built into the current
 pipeline and the per-unit record of dropped branches is retained.
 
-[CONFIRM] The 52% and the 1.85 to 6.30 shift were measured on the superseded
-82-unit partition. Either re-measure on the 88-unit run or state the partition
-explicitly in the manuscript text. Do not present them as v4c numbers.
+These figures (52%, and the 1.85 to 6.30 shift) were measured on a superseded
+82-unit partition and are presented as an illustrative demonstration of the
+mechanism, labelled as such, not as reported-basis numbers. The exclusion itself
+is built into the reported pipeline, and the reported r/m of 7.70 already
+incorporates it.
 
 ### 8. Country structure and collection history cannot be separated in this collection
 
@@ -611,14 +612,19 @@ not.
 
 ### 9. Reproducibility
 
-Two executions were run to completion independently, on different hardware and
-under different resource configurations. The production run covered 88 units on a
-128-core machine. The control run covered the 86-unit partition before refinement
-on a 22-core workstation, 8,178 tasks. Both completed with zero task failures, and
+Two executions were run to completion independently, on different hardware. The
+**reported run** covered the 86-unit workstation partition (85 units after the
+post-hoc correction) on a 22-core workstation, 8,178 tasks; the **cross-hardware
+control** covered the 88-unit refinement on an NVIDIA DGX Station A100, 8,174
+tasks. Both completed with zero task failures, zero cached and zero ignored, and
 verification was per-unit rather than by exit code, comparing units requested
 against units that produced Gubbins output and reading status, exit code and
-confidence tier per replicon-unit. **176 of 176 and 172 of 172 replicon-units
-completed at the highest confidence tier.**
+confidence tier per replicon-unit. **172 of 172 and 176 of 176 replicon-units
+completed at the highest confidence tier.** The two executions recorded the same
+Nextflow script identifier (a hash of the workflow definition) and identical
+containerized tool versions, so they ran byte-identical pipeline code and differ
+only in Nextflow version and resource profile. Across the 82 units of shared
+membership, r/m agreed to a median relative difference of 0.36%.
 
 **Across the 82 units of identical membership, r/m agrees to a median absolute
 difference of 0.0145, 0.38% relative, with a maximum of 1.32.** Two independent
@@ -709,7 +715,7 @@ correlation analysis that was attempted first.
 
 **What this work does not support.** No dating was attempted and none should be
 inferred. The global tree across units is not recombination-corrected and must not
-be, because across 88 divergent lineages no shared clonal background exists and
+be, because across 85 divergent lineages no shared clonal background exists and
 Gubbins would call most of the alignment recombinant. Its branch lengths include
 recombination and no r/m may be derived from it. Grafted per-unit trees mix branch
 length units and are a topology aid rather than a rate-comparable object. Nothing
@@ -810,7 +816,7 @@ diversity and Gate 2 is modality, applied in that order.
 Per-unit references were chosen by a completeness gate of 2 contigs or fewer and
 centrality ranking within the unit, with empirically poor references blocklisted.
 Units containing no complete genome borrow the nearest from outside. 35 distinct
-references served the 88 units. Reference deflines were normalized before analysis
+references served the 85 units. Reference deflines were normalized before analysis
 for the reason given in Results section 7, with sequence content verified
 byte-identical.
 
@@ -954,7 +960,7 @@ data.
 Planned. None of these has been produced yet.
 
 **Figure 1.** The operating range. Pooled r/m against mean pairwise core SNPs for
-all 88 units, log x-axis, with the window shaded and the three Gate 1 classes
+all 85 units, log x-axis, with the window shaded and the three Gate 1 classes
 colored. This is the paper's central figure and it should carry the argument
 alone. [CONFIRM] whether union coverage is added as a second panel, since it fails
 in only one direction and that asymmetry is itself the reason single-statistic
@@ -1079,7 +1085,7 @@ Additional references to add once the corresponding sections are written.
 
 Ordered by what blocks submission first.
 
-1. **Run the phylogeography analysis on the 88-unit partition.** Results section 8
+1. ~~Run the phylogeography analysis.~~ **Done.** Results section 8
    is otherwise a specification. Repoint both `--assignments` and `--trees`
    together, since the default points at an old output directory and a mismatch
    produces entirely plausible numbers. A previous run of this script silently
