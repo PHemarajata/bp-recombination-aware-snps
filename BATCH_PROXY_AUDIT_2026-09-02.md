@@ -120,3 +120,55 @@ in-house project, and both period binnings.
   limitation, not an omission, and `acquired_from` is a trap for the next person.
 - **Do not add further controls hoping to converge.** Each additional filter
   lowers the count mechanically. The curve is the result.
+
+---
+
+## 7. Isolation source: a factor that touches r/m, but weakly
+
+Checked because it is biologically meaningful rather than administrative, and
+because it could act on the headline directly rather than only on geography.
+
+**Availability.** `ISOLATION_SOURCE_2026-08-16.tsv` covers **86%** of the
+analysis basis with four classes: clinical 1,674, environmental 285, animal 45,
+laboratory 11. Missingness is biased (USA 55%, Laos 27%, against Thailand 8%).
+Nesting vs country is **V = 0.578**, between BioProject (0.857) and collection
+year (0.379). So it is a usable but country-entangled variable, and 83% of
+genomes are one class, which limits within-unit contrast.
+
+**Effect on r/m.** Across all 76 units with >= 5 classified genomes, non-clinical
+share (environmental + animal) correlates with r/m at **r = -0.341**. That is
+*not* a Gate 1 artifact: the 10 units that are >= 50% non-clinical split 4
+in-window, 3 below, 3 above, and the correlation holds within every stratum
+(in -0.226, below -0.339, above -0.394).
+
+**But the effect on the headline is small:**
+
+| within the Gate 1 window | n | median r/m |
+|---|---|---|
+| >= 25% non-clinical | **8** | 7.16 |
+| < 25% non-clinical | 37 | 8.05 |
+| all source-classified in-window | 45 | 7.78 |
+
+Restricting the headline to clinical-dominated units moves it from 7.78 to 8.05,
+about 3-4%, on a subgroup of **n = 8**. Consistent in direction, weak in
+magnitude, and underpowered on the non-clinical side.
+
+**Verdict: report it as checked and small.** Environmental and animal isolates
+trend toward lower r/m, plausibly because soil populations are sampled differently
+from patients, but the effect does not threaten the reported figure. This is a
+negative result worth stating, because the alternative is a reviewer asking
+whether source composition drives r/m and nobody having looked.
+
+## 8. Factors examined, and what each does
+
+| factor | available? | affects geography | affects r/m |
+|---|---|---|---|
+| **BioProject** | 82% | **decisive** -- 26 units to 6 | negligible (7.70 to 7.48) |
+| **collection period** | 90% | **stricter still** -- 6 to 3 | not tested |
+| **isolation source** | 86% | not tested as a confounder | **weak** (r = -0.34 overall, 3-4% on the headline) |
+| **laboratory** | **absent** | -- | -- |
+
+The pattern across every factor examined is the same: **geography is fragile to
+specification and r/m is not.** That asymmetry is itself reportable, and it is
+the strongest argument for the paper leading with the measurement result rather
+than the geographic one.
