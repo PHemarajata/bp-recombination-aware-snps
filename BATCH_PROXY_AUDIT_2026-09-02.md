@@ -238,3 +238,56 @@ split is available.
 The asymmetry holds and is now better evidenced: **every factor that moves the
 geographic count leaves r/m essentially where it was**, and the one factor that
 appeared to move r/m substantially did not survive a stratified check.
+
+---
+
+## 11. Collection period vs r/m: a proxy for the divergent-member effect, not a factor
+
+The last empty cell in the factor table. In-window, tight-span units (<= 10 y)
+show median r/m 8.49 against broad-span 6.80 -- a 22% swing, and unlike reference
+source it survives stratification by SNP density and by unit size. It looked real.
+
+**It is not independent.** The project already documents that a long surviving
+branch (a divergent member) deflates r/m (`rm-spread-is-divergent-members`), and a
+broad collection span is precisely how a unit acquires an old divergent member.
+
+| relationship (in-window, n=47) | r |
+|---|---|
+| span vs max surviving branch | +0.484 |
+| **max surviving branch vs r/m** | **-0.655** |
+| span vs r/m | -0.250 |
+
+The max surviving branch is the far stronger predictor, and span correlates with
+it. Stratifying the span effect by branch length:
+
+| | tight span | broad span |
+|---|---|---|
+| short branch (clean) | 8.73 (n=17) | 8.27 (n=7) |
+| long branch | 6.08 (n=7) | 5.76 (n=16) |
+
+**Within clean units the span effect collapses to 0.46**, from 1.69 unstratified.
+Collection span is a proxy for the divergent member, which is already known and
+already handled by scoring clean units. Recorded, like reference source, as a null
+that a stratified check killed.
+
+## 12. Final factor table
+
+| factor | affects geography | affects r/m | status |
+|---|---|---|---|
+| **BioProject** | decisive but **over-adjusted** (26 to 6; correct 18-24) | negligible (7.70 to 7.48) | real on geography, mis-specified |
+| **collection period** | stricter (6 to 3) | apparent 22%, **is the divergent-member proxy** | geography real; r/m not independent |
+| **isolation source** | not tested | **weak, consistent** (3-4%) | minor real |
+| **reference source** | n/a | apparent 17%, **reverses on stratification** | null |
+| **max surviving branch** | -- | **r = -0.655, the real r/m factor** | already documented and handled |
+| **laboratory** | absent | -- | unavailable |
+| **ref_mean_mash** | -- | empty | unavailable |
+
+**Two conclusions, and they are the reportable result of this whole line of work:**
+
+1. **On r/m, the only real factor is the divergent member**, which Gate 1 and the
+   clean-unit restriction already control. Every other apparent r/m effect
+   (reference source, collection span) was that factor in disguise and vanished
+   on stratification. The reported 7.70 is robust.
+2. **On geography, every specification moves the count and none moves r/m.** The
+   asymmetry is the paper's spine: recombination is a measurement, geographic
+   structure is not resolvable in a collection assembled this way.
