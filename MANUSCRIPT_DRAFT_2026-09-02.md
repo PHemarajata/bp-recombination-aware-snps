@@ -19,12 +19,12 @@
 >   the 88.
 > - "82 units of identical membership" — 82 is the shared-unit count, not a
 >   basis. Cross-platform Gubbins r/m agreement is **0.36% median relative**.
-> - **The geography section needs reframing, not renumbering.** "42 of 82 units
->   contain a single country" is really **37 of 85** against an expected **0.94**,
->   but those 37 are the *untestable* stratum, where the association test cannot
->   run. The defensible geographic claim is **6 units** surviving the BioProject
->   control. 30 of the 37 are Thailand, against Thailand being 67% of the
->   collection. Whether Paper 2 survives that is a scope decision.
+> - ~~The geography section~~ **DONE 2026-09-02.** Results section 8 is rewritten
+>   and narrowed. The claim is no longer geographic structure but its opposite:
+>   most apparent phylogeographic signal here is batch structure. 26 units cluster
+>   by country alone; **6 survive the BioProject control**, two of those only
+>   barely. The 37 "single-country" units are the untestable stratum and are
+>   reported as such. See Figure 4.
 >
 > Full list: `PR3_CORRECTIONS_2026-09-02.md`. Canonical numbers: `NUMBERS.tsv`.
 > Current state: `STATE_2026-09-02.md`.
@@ -42,24 +42,25 @@ number that must be filled or checked against a run artifact before submission.
 and must not invent. Nothing in this file was rounded, carried across partitions,
 or inferred from a summary line.
 
-**One structural gap the author must close.** The phylogeny-geography analysis has
-not been run on the current 88-unit partition. The only recorded results are from
-the superseded 91-unit v3 partition, and PopPUNK strain labels are not comparable
-between fits, so those numbers cannot be carried forward. Results section 8 is
-written as a specification of what to run, with placeholders, rather than as a
-result. Everything else in this draft is measured.
+**Results section 8 has been run and narrowed (2026-09-02).** It is no longer a
+specification. The analysis was executed on the frozen basis, and the result is
+the reverse of what an earlier draft anticipated: most apparent phylogeographic
+signal in this collection is batch structure, and only 6 of 85 units show country
+signal that survives the BioProject control. The narrowing was done deliberately
+before submission rather than being discovered in review.
 
-**Scope recommendation, added after drafting.** `PUBLICATION_STRATEGY_2026-09-02.md`
-argues that Results section 8 should be **cut from this paper entirely** rather
-than filled in, and carried instead into a second paper on geographic structure.
-Two reasons. This paper's argument does not depend on sampling, so including a
-geography section invites a reviewer to attack a sampling frame that is otherwise
-irrelevant to every claim made here. And the geography work has a different
-audience, methodologists here against the melioidosis community there. If that
-recommendation is accepted, delete section 8, drop reference 14 and the sampling
-paragraph in the Discussion, and this paper is complete without any analysis that
-has not already been run. The section is left in place for now because the
-decision is the author's.
+**Scope, resolved 2026-09-02.** `PUBLICATION_STRATEGY_2026-09-02.md` argued that
+section 8 should be cut from this paper and carried into a second paper on
+geographic structure. That recommendation was written when the section was
+expected to report geographic structure. It does not: it reports that the
+structure is largely batch. **That is a calibration finding, not a
+phylogeography finding, and it belongs in this paper** alongside the detection
+window, because both say the same thing about the same collection -- an apparent
+signal is not a measurement until you have shown what else could produce it.
+
+The consequence for the second paper is that it needs a subject other than "this
+collection shows geographic structure", since at six units, two of them marginal,
+it does not.
 
 To run the outstanding analyses when they are wanted, see
 `run_manuscript_analyses.sh`, which drives the phylogeography association, the
@@ -508,59 +509,73 @@ pipeline and the per-unit record of dropped branches is retained.
 82-unit partition. Either re-measure on the 88-unit run or state the partition
 explicitly in the manuscript text. Do not present them as v4c numbers.
 
-### 8. Population structure and geography
+### 8. Most apparent phylogeographic signal in this collection is batch structure
 
-**This section is a specification, not a result.** The phylogeny-geography
-analysis has not been run on the 88-unit partition. The method is fixed and is
-described in Methods. What follows is what must be produced.
+**Narrowed 2026-09-02**, before submission rather than in review. An earlier draft
+of this section was a specification with placeholders, and a companion document
+quoted "42 of 82 units contain a single country where chance would give 2" as the
+headline geographic result. That framing does not survive the control, and it
+misreads which stratum the single-country units belong to.
 
-Per unit, the Fitch small-parsimony score of country labels on the
-recombination-corrected topology, against a null from 1,000 permutations of labels
+Per unit we computed the Fitch small-parsimony score of country labels on the
+recombination-corrected topology, against a null of 1,000 label permutations
 across tips of the same tree. Permutation holds topology and country composition
-fixed, so a unit that is 90% Thai is compared against other 90%-Thai arrangements,
-which is necessary because the marginal country distribution is extremely uneven.
-Tips of unknown country are treated as fully ambiguous, so missing metadata
-weakens signal rather than inventing it. BioProject is tested identically and
-reported alongside, because a BioProject is typically one study, one laboratory
-and one country, and a geographic signal no stronger than the BioProject signal is
-not evidence of phylogeography. Units in which every genome shares one country
-yield a parsimony score of zero that no permutation can better, and are reported
-separately against the probability of drawing n genomes of one country at random
-from the collection's own country distribution.
+fixed, so a unit that is 90% Thai is compared against other 90%-Thai
+arrangements, which is necessary because the marginal country distribution is
+extremely uneven. Tips of unknown country are treated as fully ambiguous, so
+missing metadata weakens signal rather than inventing it. **BioProject was tested
+identically, on the same trees with the same machinery**, because a BioProject is
+typically one study, one laboratory, one country and often one outbreak, so
+country and BioProject are largely the same variable wearing different labels.
 
-Numbers to produce and insert here:
+**The control is the result.** Of 85 units, 26 cluster by country at p <= 0.05
+taken alone. **Six survive the BioProject control.** The control removes 20 of
+26, or **77% of the apparent geographic signal** (Figure 4). Reporting the
+uncontrolled count would have overstated the result more than fourfold.
 
-- [CONFIRM] Units testable for country, and how many cluster at p of 0.05 or less.
-- [CONFIRM] Units testable for BioProject, and how many cluster, as the confounder
-  control.
-- [CONFIRM] Single-country units, the number expected by chance, and how many of
-  them span more than one BioProject. The last is the decisive figure, because
-  only a single-country unit spanning several independent studies separates
-  geography from collection artifact.
-- [CONFIRM] Country coverage of the metadata join and the number of countries
-  represented.
+| | units |
+|---|---|
+| single country, **untestable** (parsimony 0, no permutation can better it) | 37 |
+| no signal | 25 |
+| clusters by country, but **confounded by BioProject** | 12 |
+| clusters, but the control is vacuous | 5 |
+| **clusters by country and survives the control** | **6** |
 
-For orientation only, the superseded 91-unit v3 partition gave 43 units testable
-for country with 23 clustering at p of 0.05 or less, 53%, against 88 testable for
-BioProject with 24 clustering, 27%. **Those numbers must not appear in the
-manuscript.** They describe a different partition, and strain labels do not
-transfer between PopPUNK fits.
+Two honest qualifications on the six. **Two of them clear the control only
+barely**, `strain_1_L1_5` at BioProject p = 0.060 and `strain_1_L1_11` at
+p = 0.063, either side of the threshold by a hair, so the robust set is arguably
+four. And the six are a small fraction of a collection this size; we report them
+as units in which geography is distinguishable from batch, not as a
+phylogeographic reconstruction.
+
+**The 37 single-country units are not evidence and must not be quoted as such.**
+They are the stratum in which the test cannot run at all: every genome shares one
+country, the parsimony score is zero, and no permutation can better it. They are
+enriched far beyond chance (37 observed against 0.94 expected under
+sampling-without-replacement from the collection's own country distribution,
+exact Poisson-binomial P = 4.1e-64), but that enrichment is close to
+uninformative here. Units are defined by genetic similarity, geography tracks
+phylogeny for legitimate reasons, and **30 of the 37 are Thailand** against
+Thailand being 67% of known-country genomes. Only 3 of the 37 are also
+single-BioProject, so they are not simple submitter artifacts, but that makes
+them unexplained rather than geographic.
 
 Two properties of the collection must be stated wherever these results appear.
-Thailand is about 70% of known-country genomes, and the top three sequencing
-projects are a majority of the collection. [CONFIRM] both figures for the v4c
-panel.
+**Thailand is 67% of known-country genomes**, and the two largest sequencing
+projects, PRJEB25606 and PRJEB35787, are 43% of the collection between them. The
+BioProject control is not a formality against that background; it is the only
+thing separating geography from collection history.
 
-One finding from the v3 partition is worth re-identifying by membership in v4c
-because it is the applied result closest to the paper's motivation. A seven-genome
-unit contained four mainland US cases with no recorded travel, from Texas and
-California, clustering with two Ecuadorian isolates from 1960 and 1962 and one
-Costa Rica travel case. Either those infections were acquired in the United States
-from a Western Hemisphere lineage, or the travel histories were never captured.
-[CONFIRM] whether the same seven genomes form a unit in v4c, identified by
-membership rather than label, and report the unit's Gate 1 class. Note that in v3
-the unit carried a maximum surviving branch of 1,595 substitutions, so its r/m of
-1.38 was depressed by a divergent member and must not be read as a rate.
+One finding is worth re-identifying by membership because it is the applied
+result closest to the paper's motivation. A seven-genome unit in the superseded
+v3 partition contained four mainland US cases with no recorded travel, from Texas
+and California, clustering with two Ecuadorian isolates from 1960 and 1962 and
+one Costa Rica travel case. Either those infections were acquired in the United
+States from a Western Hemisphere lineage, or the travel histories were never
+captured. [CONFIRM] whether the same seven genomes form a unit here, identified
+by membership rather than label, and report its Gate 1 class. In v3 the unit
+carried a maximum surviving branch of 1,595 substitutions, so its r/m of 1.38 was
+depressed by a divergent member and must not be read as a rate.
 
 ### 9. Reproducibility
 
@@ -922,9 +937,13 @@ divergence with the measured value marked.
 by dominant country and Gate 1 class. Must carry the caption warning that it is
 not recombination-corrected and that no r/m may be derived from it.
 
-**Figure 4.** Phylogeography, once section 8 is run. [CONFIRM] form. A per-unit
-plot of country parsimony against BioProject parsimony, both as permutation
-p-values, would make the confounder control visible in one panel.
+**Figure 4.** The confounder control, per unit: country permutation p-value
+against BioProject permutation p-value, log-log, on identical trees with
+identical machinery. The diagonal is equal signal, and only the upper-left region
+is geography. Six of 85 units land there, two of them marginally. The 37
+single-country units are absent by construction, since the test cannot run on
+them. Generated by `make_figure4_bp.py`, which refuses to draw if the association
+table's interpretation counts disagree with its caption.
 
 **Table 1.** Panel and partition summary.
 **Table 2.** Gate 1 classification and r/m by class.
