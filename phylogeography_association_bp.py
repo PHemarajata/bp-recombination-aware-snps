@@ -52,6 +52,7 @@ import argparse
 import collections
 import csv
 import glob
+import math
 import os
 import random
 import re
@@ -226,10 +227,149 @@ def permutation_p(tree, labels, states, n_perm, rng):
     return obs, (hits + 1) / (n_perm + 1)
 
 
+# ------------------------------------------------- single-country testing ----
+# This test is described in the Methods and produces a headline geographic
+# figure, but nothing in this repository computed it until now. Note carefully
+# what it does and does not show: a single-country unit is one where the
+# association test CANNOT run (n_distinct == 1), so these are the *untestable*
+# stratum, not units where geography was demonstrated. The number that carries
+# evidential weight is the count passing the BioProject control.
+
+def p_all_one_country(n, country_counts, total):
+    """
+    P(a random draw of n genomes, without replacement, from the whole collection
+    is entirely one country) = sum over countries C of C(N_C, n) / C(N, n).
+
+    Without replacement is the right model: units are disjoint subsets of one
+    finite collection, not independent draws.
+    """
+    if n < 2 or n > total:
+        return 0.0
+    denom = math.comb(total, n)
+    if denom == 0:
+        return 0.0
+    return sum(math.comb(nc, n) for nc in country_counts.values() if nc >= n) / denom
+
+
+def poisson_binomial_tail(probs, k):
+    """
+    Exact P(X >= k) where X is the number of successes among independent
+    Bernoulli trials with unequal probabilities. Exact DP rather than simulation:
+    with ~85 units the state space is trivial, and a simulated p-value would
+    bottom out at 1/nsim and hide the true magnitude.
+    """
+    dist = [1.0]
+    for p in probs:
+        nxt = [0.0] * (len(dist) + 1)
+        for i, d in enumerate(dist):
+            nxt[i] += d * (1.0 - p)
+            nxt[i + 1] += d * p
+        dist = nxt
+    return sum(dist[k:]) if k <= len(dist) - 1 else 0.0
+
+
+def report_single_country(rows, meta):
+    """Observed vs expected single-country units, and the dominant-country share."""
+    counts = collections.Counter(
+        (r.get("country") or "").strip() for r in meta.values()
+        if (r.get("country") or "").strip()
+        and (r.get("country") or "").strip().lower() not in ("na", "unknown"))
+    total = sum(counts.values())
+    if not total:
+        return
+    sizes = [int(r["n_known"]) for r in rows
+             if r["variable"] == "country" and int(r.get("n_known") or 0) >= 2]
+    obs = sum(1 for r in rows
+              if r["variable"] == "country" and r["n_distinct"] == 1
+              and int(r.get("n_known") or 0) >= 2)
+    probs = [p_all_one_country(n, counts, total) for n in sizes]
+    exp = sum(probs)
+    top, topn = counts.most_common(1)[0]
+    print("\nSINGLE-COUNTRY UNITS  (the UNTESTABLE stratum, not the result)")
+    print(f"  observed              : {obs}")
+    print(f"  of testable-size units: {len(sizes)}")
+    print(f"  expected by chance    : {exp:.2f}")
+    print(f"  P(X >= observed)      : {poisson_binomial_tail(probs, obs):.3g}  (exact)")
+    print(f"  dominant country      : {top} at {100.0*topn/total:.1f}% of the collection")
+    print("  READ THIS BEFORE QUOTING THE ABOVE. A single-country unit is one")
+    print("  where the association test CANNOT run (n_distinct == 1), so these")
+    print("  are the units where the question could not be asked, not units")
+    print("  where geography was demonstrated. The enrichment will essentially")
+    print("  always reject: units are defined by genetic similarity, and")
+    print("  geography tracks phylogeny for legitimate reasons. Quote the")
+    print("  BioProject-control-passing count as the geographic result.")
+
+
+def collect_tree_files(trees_dir):
+    """unit -> {replicon -> path} for every Gubbins node-labelled tree found."""
+    found = collections.defaultdict(dict)
+    pattern = os.path.join(trees_dir, "*", "Gubbins",
+                           "*.node_labelled.final_tree.tre")
+    for tre in sorted(glob.glob(pattern)):
+        base = os.path.basename(tre).replace(".node_labelled.final_tree.tre", "")
+        m = re.match(r"^(.*?)__(.*)_(\d+)$", base)
+        if not m:
+            continue
+        unit, _, rep = m.groups()
+        found[unit][rep] = tre
+    return found
+
+
+def preflight(assign_units, tree_units, allow_partial):
+    """
+    Fail loudly when the assignments and the trees describe different partitions.
+
+    This exists because that exact mismatch has happened: new assignments were
+    joined to an old tree directory and produced entirely plausible numbers,
+    caught only by someone noticing the unit count. A plausible wrong answer is
+    the worst failure mode available here, so it is an abort rather than a
+    warning.
+    """
+    only_assign = sorted(assign_units - tree_units)
+    only_trees = sorted(tree_units - assign_units)
+    both = assign_units & tree_units
+
+    print("PREFLIGHT")
+    print(f"  units in assignments : {len(assign_units)}")
+    print(f"  units with trees     : {len(tree_units)}")
+    print(f"  in both              : {len(both)}")
+    if only_assign:
+        print(f"  in assignments only  : {len(only_assign)}  "
+              f"e.g. {', '.join(only_assign[:5])}")
+    if only_trees:
+        print(f"  in trees only        : {len(only_trees)}  "
+              f"e.g. {', '.join(only_trees[:5])}")
+
+    if only_assign or only_trees:
+        if not allow_partial:
+            print("\nABORT: the assignments file and the tree directory describe "
+                  "different partitions.\n"
+                  "       Repoint --assignments and --trees at the SAME run, or "
+                  "pass --allow-partial\n"
+                  "       if you genuinely intend to analyse only the "
+                  "intersection.", file=sys.stderr)
+            sys.exit(2)
+        print("  --allow-partial given: continuing on the intersection only.")
+    print()
+    return both
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--assignments", default="L1_ASSIGNMENTS.tsv")
-    ap.add_argument("--trees", default="L1_out/Clusters")
+    # NO DEFAULTS on the two basis inputs. They previously defaulted to v1 paths
+    # (`L1_ASSIGNMENTS.tsv`, `L1_out/Clusters`), which is exactly how a prior run
+    # joined v3 assignments to v1 trees and reported plausible-looking numbers on
+    # a mixed basis. Both are now required, and the preflight below refuses to
+    # score a tree set whose units are not the assignment set's units.
+    ap.add_argument("--assignments", required=True,
+                    help="per-genome metadata table; must match --trees")
+    ap.add_argument("--trees", required=True,
+                    help="Clusters directory; must match --assignments")
+    ap.add_argument("--unit-col", default="unit",
+                    help="column in --assignments naming the analysis unit")
+    ap.add_argument("--allow-partial", action="store_true",
+                    help="proceed on the intersection when assignments and "
+                         "trees disagree (default: abort)")
     ap.add_argument("--perms", type=int, default=1000)
     ap.add_argument("--seed", type=int, default=20260815)
     ap.add_argument("--out", default="PHYLOGEOGRAPHY_ASSOCIATION.tsv")
@@ -240,8 +380,20 @@ def main():
 
     rng = random.Random(a.seed)
     meta = {}
-    for r in csv.DictReader(open(a.assignments), delimiter="\t"):
-        meta[r["sample_id"]] = r
+    assign_units = set()
+    with open(a.assignments) as fh:
+        rdr = csv.DictReader(fh, delimiter="\t")
+        if a.unit_col not in (rdr.fieldnames or []):
+            print(f"ABORT: --assignments has no column '{a.unit_col}'. "
+                  f"Columns present: {rdr.fieldnames}", file=sys.stderr)
+            sys.exit(2)
+        for r in rdr:
+            meta[r["sample_id"]] = r
+            if r.get(a.unit_col):
+                assign_units.add(r[a.unit_col])
+
+    tree_files = collect_tree_files(a.trees)
+    usable = preflight(assign_units, set(tree_files), a.allow_partial)
 
     rows = []
     for tre in sorted(glob.glob(os.path.join(
@@ -253,6 +405,10 @@ def main():
         unit, _, rep = m.groups()
         # One tree per unit is enough; the two replicons share a genealogy.
         if rep != "1":
+            continue
+        # Preflight decides the unit set. Without this, --allow-partial would
+        # still score units the assignments know nothing about.
+        if unit not in usable:
             continue
         try:
             tree = parse_newick(open(tre).read())
@@ -313,6 +469,8 @@ def main():
         if var == "country":
             surv = [r for r in g if float(r["q_value"]) <= a.fdr]
             print(f"  surviving BH-FDR {a.fdr:.0%}  : {len(surv)}")
+
+    report_single_country(rows, meta)
 
     print("\ncountry interpretation:")
     for k, n in collections.Counter(
