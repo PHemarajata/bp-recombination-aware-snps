@@ -1,0 +1,410 @@
+#!/usr/bin/env python3
+"""
+Regenerate every quotable figure from primary data into one file: NUMBERS.tsv.
+
+The problem this solves: across 60+ documents, figures were written into prose,
+copied onward and never re-derived. Of six headline numbers checked on
+2026-08-21, four were wrong in at least one circulating document, and in every
+case the code had been right all along. A rewrite would not fix that, because
+the mechanism survives it.
+
+The rule this enforces: **documents cite NUMBERS.tsv, they do not restate
+values.** If a figure is not in here, it is not quotable.
+
+Each row carries: key, value, and the file it was computed from, so any figure
+can be traced without re-reading the code.
+
+Run before quoting anything, and immediately before submission.
+"""
+import csv
+import os
+import re
+import statistics as st
+from collections import Counter
+
+import numpy as np
+
+B = os.path.dirname(os.path.abspath(__file__))
+OUT = f"{B}/NUMBERS.tsv"
+ROWS = []
+
+
+def add(key, value, source, note=""):
+    ROWS.append(dict(key=key, value=value, source=source, note=note))
+
+
+def tsv(p):
+    with open(p) as fh:
+        return list(csv.DictReader(fh, delimiter="\t"))
+
+
+def maybe(p):
+    return tsv(p) if os.path.exists(p) else []
+
+
+# ---------------------------------------------------------------- panel -----
+meta = tsv(f"{B}/L1v4c_MERGED_METADATA.tsv")
+dup = {r["sample_id"] for r in maybe(f"{B}/PANEL_DUPLICATES_2026-08-21.tsv")}
+# Honour `status`: status=retired is a RESCINDED decision kept for the record,
+# not an active exclusion. Four rows were retired 2026-08-23 after re-measurement
+# on the assemblies actually in use (EXCLUSION_RECHECK_2026-08-23.md).
+exc = {r["sample_id"] for r in maybe(f"{B}/PANEL_EXCLUSIONS.tsv")
+       if r.get("status") != "retired"}
+retired = {r["sample_id"] for r in maybe(f"{B}/PANEL_EXCLUSIONS.tsv")
+           if r.get("status") == "retired"}
+panel = {r["sample_id"] for r in meta}
+removed = (dup | exc) & panel
+corrected = panel - removed
+
+add("panel.v4c", len(panel), "L1v4c_MERGED_METADATA.tsv")
+add("panel.removed_duplicate", len(dup & panel), "PANEL_DUPLICATES_2026-08-21.tsv")
+add("panel.removed_excluded", len(exc & panel), "PANEL_EXCLUSIONS.tsv",
+    "ACTIVE exclusions only")
+add("panel.exclusions_retired", len(retired & panel), "PANEL_EXCLUSIONS.tsv",
+    "rescinded 2026-08-23 as unevidenced -- decided on superseded SKESA "
+    "assemblies plus a mis-transcribed core column; all four pass every gate "
+    "on the SPAdes assemblies in use. EXCLUSION_RECHECK_2026-08-23.md")
+add("panel.corrected_v4d", len(corrected),
+    "L1v4c_MERGED_METADATA.tsv minus PANEL_DUPLICATES and ACTIVE PANEL_EXCLUSIONS",
+    "quote this, not 2976 and not 2955. NOT read from PANEL_v4d_2026-08-21.tsv "
+    "-- that file is a 2026-08-21 SNAPSHOT holding 2,955 rows, taken while the "
+    "four exclusions retired on 2026-08-23 were still active (ERR9980356, "
+    "SRR2896257, SRR2896259, SRR2896271). It was cited as the source here until "
+    "2026-08-24, which named a file whose row count contradicts the value")
+add("panel.countries", len({r["country"] for r in meta
+                            if r["sample_id"] in corrected and r["country"]}),
+    "L1v4c_MERGED_METADATA.tsv")
+
+cc = Counter(r["country"] for r in meta if r["sample_id"] in corrected and r["country"])
+tot = sum(cc.values())
+for c, n in cc.most_common(3):
+    add(f"panel.top_country.{c}", f"{n} ({100*n/tot:.1f}%)", "L1v4c_MERGED_METADATA.tsv")
+add("panel.top3_share", f"{100*sum(n for _, n in cc.most_common(3))/tot:.1f}%",
+    "L1v4c_MERGED_METADATA.tsv")
+
+prov = Counter()
+for r in meta:
+    if r["sample_id"] not in corrected:
+        continue
+    s = r["sample_id"]
+    prov["in_house" if s.startswith(("IP-", "IE-")) else "public_derived"] += 1
+add("panel.in_house", prov["in_house"], "sample_id prefix")
+add("panel.public_derived", prov["public_derived"], "sample_id prefix")
+
+# The burden table (R1 Table 3) is per REGION, so its denominator is the
+# region-LABELLED panel, not the panel. The two were briefly equal at 2,959 --
+# for unrelated reasons -- which is exactly the kind of coincidence that gets
+# copied into prose as one number meaning two things.
+regof = {r["sample_id"]: r["country"] for r in maybe(f"{B}/assign_region.tsv")}
+labelled = {s for s in corrected if regof.get(s)}
+if labelled:
+    add("panel.region_labelled", len(labelled), "assign_region.tsv",
+        f"DENOMINATOR OF THE BURDEN TABLE (R1 Table 3) -- not the panel total; "
+        f"{len(corrected)-len(labelled)} panel genomes carry no region label")
+    rc = Counter(regof[s] for s in labelled)
+    for rg, k in rc.most_common():
+        add(f"panel.region.{rg.replace(' ', '_').replace('&', 'and')}",
+            f"{k} ({100*k/len(labelled):.1f}%)", "assign_region.tsv")
+
+# ------------------------------------------------------------- clusters -----
+# READ THE FROZEN PARTITION, not curated_L1v4c_clusters.tsv minus the registers.
+#
+# The old derivation took the PRE-correction cluster file (2,352 rows) and
+# subtracted duplicates + exclusions, which happened to give 2,340 in 85 units.
+# That agreement was a coincidence of two independent files, not a guarantee, and
+# it broke the moment the register changed: SRR2896257 is still listed in the
+# stale file under strain_1_L1_26, so retiring its exclusion on 2026-08-23 would
+# have silently reported 2,341 analysed genomes against a frozen basis of 2,340.
+# The partition is the authority on what was analysed; the register is not.
+part = maybe(f"{B}/FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv")
+if part:
+    size = Counter(r["unit"] for r in part)
+    add("units.analysed", len(size), "FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv",
+        "the frozen partition IS the analysed set -- not derived from the "
+        "registers, which cannot subtract their way to it reliably")
+    add("units.below_floor_after_removal",
+        ";".join(f"{u}(n={n})" for u, n in sorted(size.items()) if n < 7) or "none",
+        "FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv", "must be dropped as units")
+    add("genomes.analysed", sum(size.values()),
+        "FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv")
+
+# ----------------------------------------------------------- validation -----
+ovr = {r["sample_id"]: r["exposure_country"] for r in
+       maybe(f"{B}/EXPOSURE_OVERRIDES.tsv")}
+man = maybe(f"{B}/cgmlst_lichtenegger/MANIFEST.tsv")
+val = {r["sample_id"] for r in meta
+       if r.get("origin_basis") == "travel_reattributed"} | set(ovr)
+newgt = {r["sample_id"] for r in man if r.get("role") == "ground_truth"}
+val = (val | newgt) - removed
+add("validation.total", len(val), "origin_basis + EXPOSURE_OVERRIDES + MANIFEST",
+    "REGISTERED genomes. This is NOT the denominator of any attribution "
+    "number: 2 carry a non-country exposure ('Africa', 'Panama and Peru') and "
+    "are unattributable, leaving 46 SCORABLE. The frozen validation set is "
+    "quoted as 46 -- see validation.scorable")
+truth = {}
+for r in meta:
+    if r["sample_id"] in val:
+        truth[r["sample_id"]] = r.get("acquired_from") or r.get("country")
+for r in man:
+    if r["sample_id"] in val and r.get("exposure_country"):
+        truth[r["sample_id"]] = r["exposure_country"]
+truth.update({k: v for k, v in ovr.items() if k in val})
+NOTC = {"Africa", "Panama and Peru", ""}
+add("validation.scorable", sum(1 for v in truth.values() if v not in NOTC),
+    "exposure country",
+    "THE ATTRIBUTION DENOMINATOR. Every x/46 in this file is over this set")
+add("validation.source_countries",
+    len({v for v in truth.values() if v not in NOTC}),
+    "exposure country", "excludes 'Africa' and 'Panama and Peru'")
+
+# ------------------------------------------------------------ ENA census ----
+S = ("/tmp/claude-1000/-home-phemarajata-Downloads-snp-mod-local-working/"
+     "c4b0a8cc-da3c-4dda-a59f-74514bfa4ad8/scratchpad")
+if os.path.exists(f"{S}/ena_all_runs.tsv"):
+    bs = {}
+    for f, a in ((f"{S}/ena_all_runs.tsv", "run_accession"),
+                 (f"{S}/ena_all_asm.tsv", "accession")):
+        for r in tsv(f):
+            k = r["sample_accession"]
+            c = (r.get("country") or "").split(":")[0].strip()
+            if k and (k not in bs or (not bs[k] and c)):
+                bs[k] = c
+    withc = sum(1 for v in bs.values() if v)
+    add("ena.biosamples_union", len(bs), "ENA portal API, read_run + assembly",
+        "MUST union both; read_run alone misses assembly-only depositions")
+    add("ena.biosamples_with_country", withc, "ENA portal API")
+    add("ena.countries", len({v for v in bs.values() if v}), "ENA portal API")
+    add("panel.coverage_of_ena", f"{100*len(corrected)/withc:.1f}%",
+        "derived", "quote this, not 44%")
+
+# ---------------------------------------------------- cgMLST + attribution --
+stats = maybe(f"{B}/cgmlst_lichtenegger/results/results_statistics.tsv")
+if stats:
+    TOTL = 4221
+    rates = [100*(int(r["EXC"])+int(r["INF"]))/TOTL for r in stats]
+    add("cgmlst.scheme", "Lichtenegger v1.1, 4221 loci, PMID 33980649",
+        "cgmlst.org/ncs/schema/Bpseudomallei")
+    add("cgmlst.genomes", len(stats), "results_statistics.tsv")
+    add("cgmlst.call_rate_median", f"{st.median(rates):.1f}%", "results_statistics.tsv")
+    add("cgmlst.genomes_above_90pct",
+        f"{100*sum(1 for x in rates if x >= 90)/len(rates):.1f}%",
+        "results_statistics.tsv")
+
+# Attribution is reported PER ESTIMATOR, with the estimator IN THE KEY.
+#
+# Why the keys changed (2026-08-23). CGMLST_LICHT_ATTRIBUTION.tsv holds exactly
+# one estimator's calls -- whichever was passed to --estimator -- and the frozen
+# copy is NEAREST NEIGHBOUR. Country's best estimator is NN, so that row was
+# right. Region's best estimator is modal k=20, so the old
+# `attribution.region.correct` row published 37/46 (80%) while every document
+# quoted the modal 41/46 (89%), and the region strata printed beside it were
+# NN-derived. A modal headline over NN strata is precisely the comparison this
+# project forbids, and it was latent in the one file everyone is told to quote.
+# The modal figures now come from GROUPING_LADDER.tsv / GROUPING_PREDICTIONS.tsv,
+# which grouping_test_bp.py persists as of the same date; before that they
+# existed only as terminal output and prose.
+STRATA = ((0, .05, "d_lt_0.05"), (.05, .30, "d_0.05_0.30"), (.30, 9, "d_ge_0.30"))
+
+
+def strata_rows(prefix, rows, src):
+    for lo, hi, nm in STRATA:
+        s = [r for r in rows if lo <= float(r["nn_distance"]) < hi]
+        if s:
+            add(f"{prefix}.{nm}", f"{sum(int(r['correct']) for r in s)}/{len(s)}",
+                src, "ALWAYS report the stratification with its headline, and "
+                     "ONLY against the same estimator")
+
+
+att = maybe(f"{B}/CGMLST_LICHT_ATTRIBUTION.tsv")
+if att:
+    for sc in ("country", "region"):
+        rs = [r for r in att if r["scale"] == sc]
+        if not rs:
+            continue
+        ok = sum(int(r["correct"]) for r in rs)
+        add(f"attribution.{sc}.nearest_neighbour",
+            f"{ok}/{len(rs)} ({100*ok/len(rs):.0f}%)",
+            "CGMLST_LICHT_ATTRIBUTION.tsv",
+            "QUOTE THIS as the country headline: NN is country's best estimator"
+            if sc == "country" else
+            "NOT the region headline -- region's best estimator is modal k=20; "
+            "quote attribution.region.modal_k20 (41/46) instead")
+        strata_rows(f"attribution.{sc}.nearest_neighbour", rs,
+                    "CGMLST_LICHT_ATTRIBUTION.tsv")
+
+lad = maybe(f"{B}/GROUPING_LADDER.tsv")
+prd = maybe(f"{B}/GROUPING_PREDICTIONS.tsv")
+if lad:
+    L = {(r["grouping"], r["estimator"]): r for r in lad}
+    hr = L.get(("region_7way", "modal_k20"))
+    if hr:
+        add("attribution.region.modal_k20",
+            f"{hr['correct']}/{hr['n']} "
+            f"({100*int(hr['correct'])/int(hr['n']):.0f}%)",
+            "GROUPING_LADDER.tsv",
+            "QUOTE THIS as the region headline. The NN region figure is 37/46 "
+            "(80%) and is a DIFFERENT estimator, not a correction")
+        if prd:
+            strata_rows("attribution.region.modal_k20",
+                        [x for x in prd if x["grouping"] == "region_7way"
+                         and x["estimator"] == "modal_k20"],
+                        "GROUPING_PREDICTIONS.tsv")
+    # Cohen's kappa is the only statistic comparable ACROSS groupings: raw
+    # accuracy rewards a binary split with a lopsided majority class for saying
+    # nothing. The ladder is the depth-ceiling result -- deep splits are
+    # recovered perfectly, shallow ones are not.
+    for g, est in (("country", "nearest_nb"), ("region_7way", "modal_k20"),
+                   ("sea_vs_not", "modal_k20"), ("asia_vs_not", "modal_k20"),
+                   ("east_vs_west", "modal_k20")):
+        r = L.get((g, est))
+        if r:
+            add(f"ladder.{g}.kappa", f"{float(r['kappa']):.3f}",
+                "GROUPING_LADDER.tsv",
+                f"{est}, n={r['n']}, {r['classes']} classes; accuracy "
+                f"{100*float(r['accuracy']):.0f}% vs baseline "
+                f"{100*float(r['baseline']):.0f}%")
+
+add("attribution.NOTE_estimator",
+    "country best under nearest_neighbour; region best under modal_k20",
+    "score_cgmlst_lichtenegger.py + grouping_test_bp.py",
+    "NEVER compare an NN number to a modal one -- the estimator is in every "
+    "key above precisely so that comparison cannot be made by accident")
+
+# --------------------------------------------------------- abstention rule --
+# D3's "say I don't know". Every row carries TWO baselines because they disagree
+# and the disagreement is the finding: `random` (= answer-everything accuracy;
+# declining at random does not change the expected error rate) tests whether the
+# signal carries information, while `retained_majority` tests whether the rule
+# merely selected an easier class mix. For country the two are IDENTICAL at the
+# best operating point -- the apparent +15.8pp lift is entirely class mix.
+absn = {(r["grouping"], r["signal"], r["target_coverage"]): r
+        for r in maybe(f"{B}/ABSTENTION_OPERATING_POINTS.tsv")}
+r = absn.get(("region_7way", "nn_distance", "0.70"))
+if r:
+    add("abstention.region.threshold", f"{float(r['threshold']):.3f}",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        "cgMLST allelic distance, Lichtenegger scheme, THIS panel -- not a "
+        "species constant and will not transfer to another scheme")
+    add("abstention.region.coverage", f"{100*float(r['coverage']):.1f}%",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        f"answers {r['n_answered']} of 46; declines the rest as 'unattributable'")
+    add("abstention.region.selective_accuracy",
+        f"{100*float(r['selective_accuracy']):.1f}%",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        f"QUOTE WITH BOTH BASELINES: random {100*float(r['random_baseline']):.1f}%, "
+        f"retained-majority {100*float(r['retained_majority_baseline']):.1f}% "
+        "(which ROSE from 45.7%, so the lift over chance barely moves)")
+    add("abstention.region.loo_selective_accuracy",
+        f"{100*float(r['loo_selective_accuracy']):.1f}%",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        f"OUT-OF-SAMPLE (threshold picked on the other 45), coverage "
+        f"{100*float(r['loo_coverage']):.1f}% -- this is the defensible number")
+    add("abstention.region.errors_avoided",
+        f"{r['errors_avoided']} of 5 (cost {r['correct_lost']} correct)",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        "declines BOTH Sub-Saharan African attractor errors; CANNOT decline the "
+        "2 Mississippi errors, which have genuine close relatives")
+c = absn.get(("country", "vote_share", "0.50"))
+if c:
+    add("abstention.country.VERDICT",
+        f"fails: sel.acc {100*float(c['selective_accuracy']):.1f}% == "
+        f"retained-majority {100*float(c['retained_majority_baseline']):.1f}%",
+        "ABSTENTION_OPERATING_POINTS.tsv",
+        "DO NOT QUOTE THE +15.8pp LIFT. Against the retained-subset majority "
+        "baseline the gain is exactly zero -- the rule found an easier subset, "
+        "not a signal. Country is not rescued by abstaining")
+
+# ------------------------------------------------------------------- r/m ----
+# r/m comes from the pipeline's own POOL_RECOMBINATION_STATS output, not from
+# the unit_rm column of the metadata. That column is a per-genome DENORMALISED
+# COPY of a per-unit quantity, and a copy is exactly what goes stale: after the
+# 2026-08-21 re-derivation it still read 3.1042 for strain_1_L1_26 (true value
+# 4.4713) and still carried a value for strain_1_L1_10, a unit that no longer
+# exists. Read the authoritative table; fall back only if it is absent.
+RM_TSV = f"{B}/L1v4c_out/Summaries/recombination_rm.tsv"
+per = {}
+rm_src = "L1v4c_out/Summaries/recombination_rm.tsv"
+if os.path.isfile(RM_TSV):
+    for r in csv.DictReader(open(RM_TSV), delimiter="\t"):
+        try:
+            per[r["unit"]] = float(r["rm_corrected"])
+        except (KeyError, ValueError):
+            pass
+else:
+    rm_src = "L1v4c_MERGED_METADATA.tsv (FALLBACK - authoritative table missing)"
+    for r in meta:
+        if r.get("subcluster") and r.get("unit_rm") and r["sample_id"] in corrected:
+            try:
+                per[r["subcluster"]] = float(r["unit_rm"])
+            except ValueError:
+                pass
+if per:
+    v = sorted(per.values())
+    add("rm.units_with_value", len(v), rm_src)
+    add("rm.median_all_units", f"{st.median(v):.2f}", rm_src,
+        "DO NOT QUOTE: mixes measurements with detection failures")
+    cl = sorted(float(r["rm_corrected"])
+                for r in csv.DictReader(open(RM_TSV), delimiter="\t")
+                if r.get("rm_corrected") not in (None, "", "NA")
+                and r.get("max_kept_branch_len")
+                and float(r["max_kept_branch_len"]) < 1000) if os.path.isfile(RM_TSV) else []
+    if cl:
+        add("rm.median_no_divergent_member", f"{st.median(cl):.2f}", rm_src,
+            f"n={len(cl)} units whose longest surviving branch is <1000 subs; "
+            "the rest are depressed by a divergent member, not by biology")
+    # Gate 1 membership from ALIGNMENT-derived distances, not the Mash proxy.
+    # Two prior versions of this block were wrong in instructive ways:
+    #   - it hardcoded "7.38" copied from METHODS_DRAFT (that is the A100 /
+    #     88-unit variant, not this 85-unit table);
+    #   - it then computed 7.26 from `mash x 3,805,619`, a triage-grade
+    #     conversion in a different unit system from the window's calibration.
+    # GATE1_ALIGNMENT_RESULT_2026-08-21.md shows the proxy is off by a median
+    # 1.30x and up to 17x, and misplaces 22 of 85 units. The window's structure
+    # is confirmed on alignment distances; its FLOOR was in the wrong place.
+    # Relocated on union coverage and tract length -- NOT on r/m, which would be
+    # circular -- to [700, 4700], floor bracketed (588, 755].
+    DIST = f"{B}/DISTANCES_v4c_SUMMARY.tsv"
+    G1_FLOOR, G1_CEIL = 700.0, 4700.0
+    if os.path.isfile(DIST) and os.path.isfile(RM_TSV):
+        aln = {}
+        for r in csv.DictReader(open(DIST), delimiter="\t"):
+            try:
+                aln[r["unit"]] = aln.get(r["unit"], 0.0) + float(r["raw_mean"])
+            except (KeyError, ValueError):
+                continue
+        g1 = [v for u, v in per.items()
+              if u in aln and G1_FLOOR <= aln[u] <= G1_CEIL]
+        out = [v for u, v in per.items()
+               if u in aln and not (G1_FLOOR <= aln[u] <= G1_CEIL)]
+        if g1:
+            add("rm.gate1_units", len(g1),
+                "DISTANCES_v4c_SUMMARY + recombination_rm",
+                "units inside Gate 1, [700, 4700] mean pairwise core SNPs, "
+                "ALIGNMENT-derived (floor bracketed (588, 755])")
+            add("rm.median_gate1", f"{st.median(sorted(g1)):.2f}",
+                "DISTANCES_v4c_SUMMARY + recombination_rm",
+                "QUOTE THIS. Was 7.26 on the Mash proxy; the proxy misplaced 22 "
+                "of 85 units. Outside the window a low r/m is a detection "
+                "failure, not a measurement")
+        if out:
+            add("rm.median_outside_gate1", f"{st.median(sorted(out)):.2f}",
+                "DISTANCES_v4c_SUMMARY + recombination_rm",
+                f"n={len(out)}; the contrast against rm.median_gate1 is what "
+                "makes the window a detection window rather than a filter")
+    add("rm.gate1_caveat",
+        "union coverage does not reproduce the calibration's 76-88% "
+        "(max band median 68%) -- disclose",
+        "GATE1_ALIGNMENT_RESULT_2026-08-21.md §7",
+        "the floor does not depend on it, but the coverage criterion does not "
+        "reproduce quantitatively")
+
+# ------------------------------------------------------------------ write ---
+with open(OUT, "w", newline="") as fh:
+    w = csv.DictWriter(fh, fieldnames=["key", "value", "source", "note"],
+                       delimiter="\t", lineterminator="\n")
+    w.writeheader()
+    w.writerows(ROWS)
+print(f"wrote {OUT}  ({len(ROWS)} figures)")
+for r in ROWS:
+    flag = "  <-- " + r["note"] if r["note"] else ""
+    print(f"  {r['key']:<44}{str(r['value'])[:34]:<36}{flag}")

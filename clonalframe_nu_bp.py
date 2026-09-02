@@ -53,6 +53,8 @@ Usage:
 """
 
 import argparse
+import csv
+import glob
 import os
 import re
 import subprocess
@@ -60,10 +62,24 @@ import sys
 
 SELF = os.path.dirname(os.path.abspath(__file__))
 OUTDIR = os.path.join(SELF, "cfml")
-CONDA_SH = "/home/phemarajata/miniforge3/etc/profile.d/conda.sh"
-ENV_CFML = "cfml"
-ENV_TREE = "bp-gubbins"      # iqtree2
-ENV_SNP = "snp-phylogeny"    # snp-sites
+
+# Conda layout is per-machine. These defaults are the originating workstation;
+# every one is overridable by environment variable so the script runs elsewhere
+# without editing. Point all three ENV_* at one env if you installed the tools
+# together, which is the simplest arrangement:
+#
+#   export CFML_CONDA_SH=$HOME/miniforge3/etc/profile.d/conda.sh
+#   export CFML_ENV_CFML=cfml-v4c CFML_ENV_TREE=cfml-v4c CFML_ENV_SNP=cfml-v4c
+#
+CONDA_SH = os.environ.get("CFML_CONDA_SH",
+                          "/home/phemarajata/miniforge3/etc/profile.d/conda.sh")
+ENV_CFML = os.environ.get("CFML_ENV_CFML", "cfml")
+ENV_TREE = os.environ.get("CFML_ENV_TREE", "bp-gubbins")     # iqtree
+ENV_SNP = os.environ.get("CFML_ENV_SNP", "snp-phylogeny")    # snp-sites
+# bioconda ships IQ-TREE 2 as `iqtree2` in some builds and `iqtree` in others;
+# resolve at run time rather than assuming, since guessing wrong fails only
+# after snp-sites has already run.
+IQTREE = os.environ.get("CFML_IQTREE", "")
 
 # unit -> role. Suspects are the A.11l/9.4 units; controls are diversity-matched
 # units with healthy pooled r/m. (n, ska, gubbins pooled r/m) in comments.
@@ -139,13 +155,58 @@ def find_alignment(armdir):
     return None
 
 
+# ------------------------------------------------------------- v4c layout ----
+# The arms layout above belongs to the prod_*/ generation, whose units carry the
+# s-prefix naming (s3_L1_10) from an older partition. The 46-unit concordance
+# result was computed there, so it does NOT speak to the v4c units directly.
+# Re-running it on v4c needs a second layout: one dir per unit per replicon,
+# holding the pipeline's own .core.full.aln.
+V4C_CLUSTERS = os.path.join(SELF, "L1v4c_out", "Clusters")
+V4C_REP = {"chr1": "1", "chr2": "2"}
+
+
+def v4c_alignment(unit, replicon):
+    """-> path to <unit>.core.full.aln for this unit/replicon, or None."""
+    rep = V4C_REP.get(replicon, replicon)
+    hits = glob.glob(os.path.join(V4C_CLUSTERS,
+                                  "cluster_%s__*_%s" % (unit, rep),
+                                  "*.core.full.aln"))
+    return hits[0] if hits else None
+
+
+def load_v4c_units(path=None):
+    """v4c units in the UNITS tuple shape, from the pipeline's own r/m summary.
+
+    `ska` has no v4c equivalent and is unused downstream of selection, so it is
+    filled with n. Role is 'other' throughout: the suspect/control contrast was
+    defined on the old partition and those unit names do not exist here.
+    """
+    path = path or os.path.join(SELF, "L1v4c_out", "Summaries",
+                                "recombination_rm.tsv")
+    out = []
+    with open(path) as fh:
+        for r in csv.DictReader(fh, delimiter="\t"):
+            try:
+                n, rm = int(r["n"]), float(r["rm_corrected"])
+            except (KeyError, ValueError):
+                continue
+            out.append((r["unit"], "other", n, n, rm))
+    out.sort(key=lambda t: t[4])
+    return out
+
+
 def work_dir(unit, replicon):
     return os.path.join(OUTDIR, "%s__%s" % (unit, replicon))
 
 
-def build_script(unit, replicon, threads):
-    """Bash for one unit/replicon: SNPs -> uncorrected ML tree -> CFML."""
-    aln = find_alignment(arm_dir(unit, replicon))
+def build_script(unit, replicon, threads, aln=None):
+    """Bash for one unit/replicon: SNPs -> uncorrected ML tree -> CFML.
+
+    `aln` must be passed by the caller: main() has already resolved it under the
+    selected --layout, and re-deriving it here would silently fall back to the
+    arms layout and run the wrong files under --layout v4c.
+    """
+    aln = aln or find_alignment(arm_dir(unit, replicon))
     wd = work_dir(unit, replicon)
     return r"""
 set -euo pipefail
@@ -178,8 +239,14 @@ fi
 # had recombination removed. No bootstrap -- CFML uses the topology and
 # lengths, not the support.
 set +u; conda activate {env_tree}; set -u
+IQ="{iqtree}"
+if [ -z "$IQ" ]; then
+    # some bioconda builds ship iqtree2, others only iqtree; both are v2 here
+    IQ=$(command -v iqtree2 || command -v iqtree) || {{
+        echo "ERROR: neither iqtree2 nor iqtree found in env {env_tree}" >&2; exit 5; }}
+fi
 if [ ! -s "$WD/start.treefile" ]; then
-    iqtree2 -s "$WD/snps.fasta" -fconst "$FCONST" \
+    "$IQ" -s "$WD/snps.fasta" -fconst "$FCONST" \
         -m GTR+F+I -T {threads} --prefix "$WD/start" -redo
 fi
 
@@ -193,7 +260,8 @@ ClonalFrameML "$WD/start.treefile" "$ALN" "$WD/cfml" \
     > "$WD/cfml.stdout.log" 2> "$WD/cfml.stderr.log"
 echo "DONE {unit} {replicon}"
 """.format(conda=CONDA_SH, aln=aln, wd=wd, env_snp=ENV_SNP, env_tree=ENV_TREE,
-           env_cfml=ENV_CFML, threads=threads, unit=unit, replicon=replicon)
+           env_cfml=ENV_CFML, threads=threads, unit=unit, replicon=replicon,
+           iqtree=IQTREE)
 
 
 def parse_em(path):
@@ -450,19 +518,27 @@ def main():
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--all", action="store_true",
                     help="all 45 units from tier0_units.tsv, not just the six")
+    ap.add_argument("--layout", choices=("arms", "v4c"), default="arms",
+                    help="arms = prod_*/arms (old s-prefix units, the published "
+                         "46-unit concordance); v4c = L1v4c_out/Clusters")
     args = ap.parse_args()
 
     if args.selftest:
         return selftest()
-    units = load_all_units() if args.all else UNITS
+    if args.layout == "v4c":
+        units = load_v4c_units()
+    else:
+        units = load_all_units() if args.all else UNITS
     if args.report:
         return report(units=units)
 
     reps = [r.strip() for r in args.replicon.split(",")]
+    locate = v4c_alignment if args.layout == "v4c" else (
+        lambda u, r: find_alignment(arm_dir(u, r)))
     jobs = []
     for unit, role, n, ska, rm in units:
         for rep in reps:
-            aln = find_alignment(arm_dir(unit, rep))
+            aln = locate(unit, rep)
             if not aln:
                 print("MISSING alignment: %s %s" % (unit, rep), file=sys.stderr)
                 continue
@@ -488,7 +564,8 @@ def main():
         while len([p for p in procs if p[0].poll() is None]) >= args.jobs:
             _wait_one(procs, done)
         log = open(os.path.join(wd, "run.log"), "w")
-        p = subprocess.Popen(["bash", "-c", build_script(unit, rep, args.threads)],
+        p = subprocess.Popen(["bash", "-c",
+                              build_script(unit, rep, args.threads, aln)],
                              stdout=log, stderr=subprocess.STDOUT)
         procs.append((p, unit, rep, log))
         print("launched %s %s (pid %d)" % (unit, rep, p.pid))

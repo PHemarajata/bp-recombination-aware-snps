@@ -112,7 +112,7 @@ THAI_UNDATED = 1554
 # Pearson T, Sahl JW, Hepp CM, et al. "Pathogen to commensal? Longitudinal
 # within-host population dynamics, evolution, and adaptation during a chronic
 # >16-year Burkholderia pseudomallei infection." PLoS Pathog 2020;16(3):
-# e1008298. PMID 32149236. Verbatim: "The median evolutionary rate across the
+# e1008298. PMID 32134991. Verbatim: "The median evolutionary rate across the
 # entire genomic dataset was 1.7 x 10-7 substitutions/site/year (95% HPD
 # 1.3 x 10-7 - 2.1 x 10-7)."
 #
@@ -792,7 +792,7 @@ def temporal_power(args):
     print(f"Assumed clock rate      : {mu:.3g} substitutions/site/year")
     print(f"  95% HPD               : {args.rate_lo:.3g} - {args.rate_hi:.3g}")
     print(f"  Source                : Pearson et al. 2020, PLoS Pathog "
-          f"16(3):e1008298, PMID 32149236")
+          f"16(3):e1008298, PMID 32134991")
     print(f"Assumed alignment length: {L:,} sites")
     print(f"  => {mu * L:.4g} substitutions per genome per year "
           f"({args.rate_lo * L:.3g} - {args.rate_hi * L:.3g})")
@@ -1083,7 +1083,7 @@ def main():
                          "Chewapreecha 2017)")
     ap.add_argument("--rate", type=float, default=BP_RATE,
                     help="Clock rate, substitutions/site/year "
-                         "(default 1.7e-7, Pearson et al. 2020 PMID 32149236; "
+                         "(default 1.7e-7, Pearson et al. 2020 PMID 32134991; "
                          "see --rate-lo/--rate-hi for the HPD)")
     ap.add_argument("--length", type=int, default=3_805_619,
                     help="Callable alignment length in sites "

@@ -162,6 +162,14 @@ THEIAPROK_SETTINGS.md
 READ_SCREEN_RESCUE.md
 INTERPRETATION_2026-08-16.md
 
+# ACQUISITION_TARGETS_US table 1 lists five 2021 aromatherapy-outbreak runs as
+# run + biosample + month-precision date + anatomical specimen (blood, lung),
+# and the prose immediately below names the four patients' US states. That is
+# the accession -> date -> location -> specimen join this file exists to
+# prevent, on exactly the rare-USA-case population called out at the top. The
+# accessions are individually public; the assembled join is the exposure.
+ACQUISITION_TARGETS_US_2026-08-21.md
+
 # --- 7. explicit exceptions from subdirectories -------------------------------
 # Rule 1 excludes all subdirectories. This is resource configuration, not data:
 # no isolate identifiers, and it carries the measured rationale for the tuning
@@ -176,3 +184,53 @@ a100_stage/*
 !a100_stage/run_a100.sh
 !a100_stage/build_bundle.sh
 !a100_stage/README_A100.md
+
+# --- 8. the frozen basis and the retirement record ---------------------------
+# Documentation, not data: no isolate identifiers in either file. These are the
+# two documents that record WHICH partition every reported number belongs to,
+# and WHY 200+ files were moved out of the workspace. Left untracked they are
+# lost on a fresh clone -- exactly when someone needs them most. Un-ignore each
+# directory so git can descend, then immediately re-deny it so that no data file
+# inside is ever admitted, and name the one admitted file. Same shape as the
+# a100_stage block above, and for the same reason: a blanket `!DIR/` would
+# silently start tracking whatever lands in there later.
+!FINAL_BASIS_2026-08-22/
+FINAL_BASIS_2026-08-22/*
+!FINAL_BASIS_2026-08-22/README.md
+!RETIRED_2026-08-22/
+RETIRED_2026-08-22/*
+!RETIRED_2026-08-22/README.md
+# collaborator/ records a LIVE recall condition (Yuyi's A100 results, pending as
+# of 2026-08-22), so its README is the one place that pending dependency is
+# written down. Same narrow pattern; the runbooks themselves stay untracked.
+!collaborator/
+collaborator/*
+!collaborator/README.md
+
+# --- 9. the exclusion register's SPEC (added 2026-08-23) ----------------------
+# PANEL_EXCLUSIONS_README.md is caught by the `*PANEL_*` guard in section 1.
+# That guard is aimed at isolate-level DATA -- the register TSV itself stays
+# ignored, as does every PANEL_*.tsv. This file is the normative spec: it defines
+# the cross-check that must be run before a panel build, and (since 2026-08-23)
+# the `status=retired` mechanism and the `core=na%` transcription trap.
+#
+# Untracked, it is lost on a fresh clone -- and losing it is precisely how four
+# exclusions that were retired on evidence would get silently re-applied.
+#
+# It does name four accessions in prose. That is the same thing tracked
+# documents already do (MANUSCRIPT_OUTLINE names them too); the line this repo
+# draws is between a per-genome data table and a document explaining a decision.
+# One file, named explicitly -- no directory is opened up.
+!PANEL_EXCLUSIONS_README.md
+
+# rapid ID sketches (regenerable in ~1 min from paths.txt)
+rapid_id_*/panel*.msh
+rapid_id_*/*.msh
+rapid_id_*/dist_raw.tsv
+refs_bpc/bpc.zip
+refs_bpc/bpc/
+refs_bpc/*.msh
+refs_bpc/mallei8.zip
+refs_bpc/mallei8/
+rapid_id_*/cgmlst_refs/out*/cds_coordinates.tsv
+rapid_id_*/cgmlst_refs/input*/

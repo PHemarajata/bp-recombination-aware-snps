@@ -486,7 +486,7 @@ It is three BioProjects, and the largest — PRJEB3409, 26.3% of the entire glob
 ### 4.4 Two citation traps to avoid propagating
 
 - **Do not cite a pooled Chewapreecha rate of 1.03 × 10⁻⁶.** It circulates second-hand and appears nowhere in the paper or its SI.
-- **Do not cite Seng for the value 1.7 × 10⁻⁷.** Their reference [53] resolves to Spring-Pearson 2015, a pangenome paper with no clock analysis. Cite Pearson 2020 (PMID 32149236) for the number and Seng only for the practice of importing one.
+- **Do not cite Seng for the value 1.7 × 10⁻⁷.** Their reference [53] resolves to Spring-Pearson 2015, a pangenome paper with no clock analysis. Cite Pearson 2020 (PMID 32134991) for the number and Seng only for the practice of importing one.
 - **Do not propagate Chewapreecha's ~772 kb divergence denominator.** It reconciles with nothing — 10.7% of K96243, implausibly small for a core genome, and the alternative decimal reading exceeds the reference. The core-alignment length is a definitive non-report.
 
 ---

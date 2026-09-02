@@ -25,7 +25,7 @@ targeted downloads worth more than their raw count.
 |---|---|---|---|
 | **Mexico** | 17 | yes (1 unit, `strain_9_L1_8`, n=6) | 9 held + 17 new ≈ 26; a defensible Americas lineage instead of an orphan sextet. Serves origin attribution directly. |
 | **Ghana** | 17 | no | The **only African data in the collection** (5 held). 22 total moves the Gee/Chewapreecha African-origin question from *untestable* to *visible*. Highest intellectual value per genome. |
-| **Brazil** | 37 | no | Ceará clade (Pearson 2021). Anchors the South American end of `strain_9` and tests whether it is one Western-Hemisphere clade or several. |
+| **Brazil** | 37 | no | Ceará clade (Gee et al. 2021, *mSphere* 6(1):e01259-20, PMID 33536328). Anchors the South American end of `strain_9` and tests whether it is one Western-Hemisphere clade or several. |
 | **Colombia** | 14 | no | Fills the northern–South-America gap between the Caribbean and Brazil. |
 | **Nigeria** | 10 | no | Second African country; pairs with Ghana to make "West Africa" more than one point. |
 

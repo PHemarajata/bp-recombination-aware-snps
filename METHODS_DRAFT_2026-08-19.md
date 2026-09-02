@@ -2,12 +2,16 @@
 
 > **Revision note.** Sections 1–2.11 (method development, calibration and
 > validation) are unchanged from the 2026-08-11 draft. **Section 2.12 has been
-> replaced in full**: it now describes the 88-unit v4c production run of
-> 2026-08-19 and its 86-unit control, superseding the earlier 82-unit run.
-> The substantive changes are: the panel (2,976 assemblies), assembler selection
-> and the recalibrated assembly-QC gate (2.12.1–2.12.3); unit refinement and the
-> Gate 1 / Gate 2 order that governs it (2.12.5); **r/m reported only for the 47
-> in-window units, median 7.38** (2.12.7); and the control run (2.12.10).
+> replaced in full** and rewritten onto the frozen analysis basis: it describes
+> the **reported run — 85 units, 2,340 genomes** on a 22-core workstation — with
+> the **88-unit A100 run as the cross-hardware control**, superseding both the
+> earlier 82-unit run and the drafts in which the A100 run was designated
+> production. The substantive changes are: the corrected panel (**2,959**
+> assemblies after deduplication on BioSample, from 2,976 considered), assembler
+> selection and the recalibrated assembly-QC gate (2.12.1–2.12.3); unit
+> refinement and the Gate 1 / Gate 2 order that governs it (2.12.5); **r/m
+> reported only for the 47 in-window units, median 7.70** (2.12.7), on an
+> alignment-derived Gate 1 (2.6.1); and the reproducibility control (2.12.10).
 
 > **Status.** Sections 2.1–2.11 describe the exploratory and calibration work,
 > written while the production run was still pending. **Section 2.12 describes
@@ -308,8 +312,43 @@ Per unit, the headline union coverage, pooled r/m and median tract length are th
 
 ### 2.6.1 Gate 1 — diversity
 
-Units were required to fall in **≈1,270–4,671 mean pairwise core SNPs
-(`ska distance` units)**.
+Units were required to fall in **≈1,270–4,671 mean pairwise core SNPs**. The
+calibration below was performed in **`ska distance` units**; the window applied
+to this collection is its translation into **alignment-derived** mean pairwise
+core SNPs, **[700, 4,700]**, with the floor bracketed **(588, 755]**.
+
+**The two bounds translate very differently, and the reason the translation was
+necessary is instructive.** Membership had been decided from a Mash-to-SNP
+conversion (`mash × 3,805,619`) whose own documentation describes it as
+triage-grade, and which is in neither unit system. Against distances computed
+directly on each unit's core alignment it overstates diversity by a median
+**1.30×**, by up to **17.20×**, and is more than 2× off for **17 of 85 units**.
+Applying the unchanged bounds to alignment distances **reclassifies 22 of 85
+units** — a quarter of the panel.
+
+The **ceiling translates essentially unchanged** (4,671 → ≈4,700), located where
+median recombination tract length falls from 3.77 kb to 2.69 kb. The **floor does
+not**: it sits near 700, not 1,270. It was located on the same independent
+criteria used in the original calibration — union recombination coverage and
+median tract length, **not** r/m, which would be circular — and the lowest
+diversity band reproduces the original failure signature closely: **union
+coverage 4.3% and a 1.12 kb tract**, against the 0.7% and 1,002 bp recorded below
+for a cluster at 405. The relocated floor bracket is **1.28× wide**, against
+3.1× for the `ska`-unit floor.
+
+The window's structure is unaffected by the change of metric and is in fact
+sharper in alignment units: median r/m across equal-count diversity bands runs
+1.53 → 7.25 → 8.39 → **8.59** → 3.68 → 2.14. The in-window median is insensitive
+to floor placement across the whole bracket (7.70–7.78).
+
+Two limitations are disclosed. Alignment SNP counts are not *provably* identical
+to `ska distance` — SKA counts split k-mers over whole assemblies, this counts
+SNPs on a reference-mapped core alignment — though the ceiling agreeing to within
+1% across the two systems is a point in favour. And **union coverage does not
+reproduce the calibrated 76–88% anywhere in this panel**: the highest band median
+is 68%, and coverage *rises* with diversity, peaking in bands the gate rejects.
+The floor does not depend on that criterion, but it does not reproduce
+quantitatively.
 
 Six consecutive clusters spanning 2,690–4,671 behaved consistently across 12
 replicon measurements: union coverage 76–88%, pooled r/m 3.4–12.1, and median
@@ -443,11 +482,16 @@ by 20 points — with correspondingly high pooled r/m (9.99) and per-branch
 recombination burden (5.4–6.2 versus 2.0–2.7 elsewhere) and entirely normal block
 sizes, i.e. genuinely recombination-rich rather than over-called. The 78% figure
 is therefore cited as context only, not as a value the data should reproduce.
-Union coverage was checked and found **not** to scale with unit size
+⚠ **A stale paragraph stood here and has been deleted (2026-08-23).** It read:
+*"Union coverage was checked and found **not** to scale with unit size
 (r = 0.142 against n) or with branch count (r = −0.059), so a single cutoff is
-applicable across the 20-fold size range spanned by the units. Note that union
-has little dynamic range at the top of its scale and becomes uninformative
-there.
+applicable across the 20-fold size range spanned by the units."* **That directly
+contradicts this same section**, which establishes above that union coverage
+**is** size-confounded — `r(log n, union) = +0.80` (p = 4 × 10⁻¹¹), partial +0.84
+— and it is the earlier, superseded measurement. A single union cutoff is
+therefore **not** applicable across the size range, which is why union is used as
+a disclosed post-hoc screen rather than as a gate. Note also that union has
+little dynamic range at the top of its scale and becomes uninformative there.
 
 Independent corroboration comes from tract length —
 every unit above 18% union has a median tract of 4.3–7.1 kb, and the single unit
@@ -1146,27 +1190,56 @@ partition and the per-unit mapping references were supplied rather than
 re-derived inside the run. Where this section conflicts with 2.1–2.11, this
 section is what was done.
 
-Two runs are reported. The **production run** (88 units) was executed on an
-NVIDIA DGX Station A100. A **control run** (86 units, the partition before
-refinement) was executed independently on a 22-core workstation; it is used in
-2.12.10 to establish that the two are comparable and to measure the effect of
+Two runs are reported. The **reported partition** is the 22-core workstation
+run, corrected: **85 units, 2,340 genomes** after the duplicate-BioSample and
+register exclusions of 2026-08-21 (`FINAL_BASIS_2026-08-22/`). A second run
+(88 units, which refines `strain_1_L1_26` into three) was executed on an NVIDIA
+DGX Station A100 and serves as the **cross-hardware reproducibility control**;
+2.12.10 uses it to establish comparability and to measure the effect of
 refinement. Both completed with zero task failures.
+
+**The reported partition is the corrected one.** Both runs carry the same seven
+duplicate BioSamples; only this one has had them removed, and correcting the
+A100 run would require re-deriving it, which was ruled out. Every alignment for
+this partition is also local, whereas the A100's two refinement children have no
+core alignment here and their r/m cannot be re-derived. The refinement is not
+lost by this choice: 2.12.10 reports what it showed.
 
 ## 2.12.1 Genome panel
 
-The panel comprised **2,976** *B. pseudomallei* assemblies: **2,802** from the
-established curated collection and **174** newly added isolates. Of the
+**2,976** *B. pseudomallei* assemblies were assembled and considered: **2,802**
+from the established curated collection and **174** newly added isolates. Of the
 additions, **169** are on SPAdes paths — **165 assembler swaps plus 4 isolates
 rescued into the panel by re-assembly** — and 5 were retained from other
-assemblers (2.12.2). Panel membership, exclusions and per-isolate assembler
-overrides are recorded in `PANEL_EXCLUSIONS.tsv`, `PANEL_ASSEMBLY_OVERRIDES.tsv`
-and `PANEL_RESCUES_2026-08-18.tsv`.
+assemblers (2.12.2).
+
+**Seventeen assemblies were then removed as duplicate BioSamples**, leaving an
+analysed panel of **2,959**. Deduplication is on BioSample, not run accession: a
+BioSample re-sequenced or re-deposited under several run accessions is one
+isolate and would otherwise contribute repeated observations of the same
+geography. Panel membership, exclusions and per-isolate assembler overrides are
+recorded in `PANEL_EXCLUSIONS.tsv`, `PANEL_ASSEMBLY_OVERRIDES.tsv` and
+`PANEL_RESCUES_2026-08-18.tsv`.
 
 Of 188 SPAdes assemblies produced, 19 were not admitted: 13 duplicates of runs
 already in the collection, 5 not *B. pseudomallei* or grossly divergent, and 1
 mixed sample (`SRR30648681`, which SPAdes revealed as 12.00 Mb of foreign content
 and which SKESA did not rescue). Every exclusion carries a recorded reason and
 evidence.
+
+**The exclusion register is versioned, and four rows were rescinded.** Rows carry
+a `status` field; `status = retired` marks a decision that was withdrawn on
+evidence and is retained for the record rather than deleted. Four rows
+(`SRR2896257`, `SRR2896259`, `ERR9980356`, `SRR2896271`) were retired on
+2026-08-23: each had been excluded for core-genome coverage below 85%, measured
+on the SKESA assemblies, but the panel uses the SPAdes re-assemblies and on those
+all four pass every gate (core 86.2–93.3%, gene-count ratio 0.89–0.97, mash to
+K96243 0.0065–0.0093). The register's `core = na%` on those rows was a
+transcription error rather than an unmeasured field — the value is in
+`core_cov_unfiltered_pct` and the adjacent `core_cov_filtered_pct`, which was
+read instead, is empty for every row in that QC table. **There are consequently
+no active register exclusions in the analysed panel**, and the four are panel
+members that fall in no analysis unit (2.12.5).
 
 ## 2.12.2 Assembly and assembler selection
 
@@ -1229,10 +1302,11 @@ The analysis unit is a **fastbaps level-1 sub-cluster within a PopPUNK strain**,
 retained at **n ≥ 7**. The rule was applied uniformly: no lineage was subdivided
 because it was large, and none was left whole because it was small.
 
-**Strains.** PopPUNK v2.7.6. A sketch database was built over all 2,976
-assemblies (k = 15–31, step 2) and fitted with a Gaussian mixture (`bgmm`, K = 5)
-followed by boundary refinement, yielding **310 clusters of which the largest held
-901 genomes**.
+**Strains.** PopPUNK v2.7.6. A sketch database was built over all **2,976**
+assemblies as sequenced (k = 15–31, step 2) — the partition was derived before
+BioSample deduplication, so the sketch covers the pre-deduplication set — and
+fitted with a Gaussian mixture (`bgmm`, K = 5) followed by boundary refinement,
+yielding **310 clusters of which the largest held 901 genomes**.
 
 **Sub-clusters.** Within each strain, PopPIPE built a split-k-mer alignment
 (SKA v0.4.0), a neighbour-joining guide tree and a fastbaps hierarchical
@@ -1240,8 +1314,10 @@ partition (`levels = 3`), analysed at **level 1**. Levels 2 and 3 were computed
 but not used, so unit size was determined by one stated rule rather than chosen
 per lineage.
 
-**Result before refinement: 86 units, 2,352 genomes (79.0% of the panel)**,
-largest n = 159, median n = 18.
+**Result before refinement: 86 units, 2,352 genomes**, largest n = 159,
+median n = 18. That is **79.0%** of the 2,976 assemblies the partition was
+derived over, or **79.5%** of the 2,959-genome deduplicated panel; quote whichever
+denominator is in use and say which.
 
 > **PopPUNK `bgmm` at fixed K is deterministic per input and exposes no seed**, so
 > cluster boundaries are a property of the panel, not of the run. It follows that
@@ -1264,12 +1340,54 @@ prior-partition unit were ~4× more internally diverse (median-of-medians 0.0022
 vs 0.00054), but the most diverse single-provenance unit (max 0.00538) exceeded
 every one of them. **Modality was diagnostic.** `strain_1_L1_26` (n = 154, median
 pairwise distance 0.00060 — among the tightest units in the panel) held three
-clonal groups at 0.00007 internal against 0.00088 and 0.00134 separation, and was
-split into 98, 47 and 8. `strain_1_L1_11` (24 → 18) and `strain_1_L1_22` (34 → 32)
-had divergent members removed. Units that were diverse but unimodal were left
-intact.
+clonal groups at 0.00007 internal against 0.00088 and 0.00134 separation, and
+this screen proposed splitting it into 98, 47 and 8; the screen also proposed
+removing divergent members from `strain_1_L1_11` (24 → 18) and `strain_1_L1_22`
+(34 → 32). Units that were diverse but unimodal were left intact.
 
-**Final partition: 88 units, 2,342 genomes, 176 replicon-units.**
+### The refinement was applied in the control run, not the reported one
+
+**This is the single point at which the two runs differ, and it must not be read
+past.** The refinement above was executed in the A100 run, giving **88 units,
+2,342 genomes, 176 replicon-units**. **The reported partition is the
+workstation run, which is unrefined**: `strain_1_L1_26` is retained whole,
+`strain_1_L1_11` and `strain_1_L1_22` keep their divergent members, and the
+largest unit is `strain_2_L1_6` (n = 159) rather than a child of
+`strain_1_L1_26`.
+
+The reported partition was then **corrected**, which the A100 partition was not
+and could not be without re-deriving it:
+
+| step | units | genomes |
+|---|---|---|
+| after the n ≥ 7 rule | 86 | 2,352 |
+| − `strain_1_L1_10`: 3 of its 7 members are duplicate BioSamples, leaving 4, below the floor, so the whole unit is dropped | **85** | 2,345 |
+| − 4 further duplicate BioSamples in other units | 85 | 2,341 |
+| − `SRR2896257`, then a register exclusion | **85** | **2,340** |
+
+**Reported partition: 85 units, 2,340 genomes, 170 replicon-units**
+(`FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv`), unit size min 7, median 18,
+max 159, drawn from 28 distinct PopPUNK strains.
+
+⚠ **One genome is a known, deliberate inconsistency, and it is disclosed rather
+than repaired.** `SRR2896257` was removed from `strain_1_L1_26` (154 → 153)
+under a register exclusion that was **subsequently retired as unevidenced**
+(2.12.1). It was not re-added: doing so would require re-deriving that unit's
+alignment, recombination inference and r/m, changing a frozen analysis basis for
+a single genome. It is retained as a panel member assigned to no unit. **The
+reported `strain_1_L1_26` is therefore n = 153 where the current registers would
+support 154.**
+
+Why the unrefined partition is the reported one, in order of weight:
+
+1. **It is the only one that is corrected.** Both runs carry the same duplicate
+   BioSamples; only this one has had them removed.
+2. **Every alignment is local.** The A100's two refinement children of
+   `strain_1_L1_26` have no core alignment in this workspace, so their r/m cannot
+   be re-derived here.
+3. **The refinement buys nothing measurable.** Its n = 98 child is a clonal
+   expansion at 72 mean pairwise SNPs — an order of magnitude below the Gate 1
+   floor — and refinement did not increase the in-window set (2.12.10).
 
 ### The gate order is load-bearing, and refinement must be read through it
 
@@ -1305,14 +1423,21 @@ epidemiological interest, with no r/m** (2.12.7).
 
 Per-unit references were chosen by a completeness gate (≤ 2 contigs) and
 centrality ranking within the unit, with empirically poor references blocklisted;
-units containing no complete genome borrow the nearest one from outside. **35
-distinct references** served the 88 units.
+units containing no complete genome borrow the nearest one from outside. **34
+distinct references** served the 85 reported units
+(`curated_L1v4c_refs.tsv`, restricted to `FINAL_PARTITION.tsv`).
 
 **Reference deflines were normalised before analysis.** Gubbins passes
 `<unit>__<replicon>.core.full.iteration_N_reconstruction` to RAxML as its `-n`
-run id, and RAxML v8 **segfaults at a run id of ≥ 128 characters**. On this
-partition **42 of 172 replicon-units (24.4%) would have exceeded the limit**
-(longest 161 characters); after normalisation the longest was **70**. Sequence
+run id, and RAxML v8 **segfaults at a run id of ≥ 128 characters**. In the run
+where this was diagnosed, **42 of 172 replicon-units (24.4%) would have exceeded
+the limit** (longest 161 characters); after normalisation the longest was **70**.
+The **post-normalisation state has been verified on the reported basis**: across
+all **170** replicon-units the longest run id is **70 characters and none reaches
+128** (recomputed 2026-08-23). The "42 of 172" figure describes the
+**pre-normalisation** state in the run where the failure was diagnosed and is not
+reconstructible here, because the original deflines no longer exist — quote it as
+historical, or drop it and quote only the verified post-fix state. Sequence
 content was verified byte-identical — only `>` lines were rewritten. This failure
 mode is silent in the sense that matters: Gubbins reports it as "Unable to fit
 model to data", which is indistinguishable from a genuinely bad reference.
@@ -1352,20 +1477,43 @@ nothing is removed. The per-unit record of which branches were dropped is in
 ### r/m is reported only for units inside the diversity window
 
 This is the single most important qualification on the recombination results.
-Section 2.6.1 establishes that outside ≈1,270–4,671 mean pairwise core SNPs, r/m
-is **not a measurement**: below the floor Gubbins cannot detect recombination,
-and above the ceiling the estimate collapses (0.16–1.73 in calibration).
-Classifying all 88 production units against that window reproduces the
-calibration exactly:
+Section 2.6.1 establishes that outside the diversity window r/m is **not a
+measurement**: below the floor Gubbins cannot detect recombination, and above the
+ceiling the estimate collapses (0.16–1.73 in calibration). Classifying the 85
+units of the reported partition on **alignment-derived distances** against the
+window as relocated into those units (**[700, 4,700]**, 2.6.1) reproduces the
+calibration:
 
 | Gate 1 class | units | median r/m |
 |---|---|---|
-| **in-window** | **47** | **7.38** |
-| below floor | 9 | 1.67 |
-| above ceiling | 32 | 2.48 |
+| **in-window** | **47** | **7.70** |
+| below floor | 12 | 1.32 |
+| above ceiling | 26 | 2.14 |
+
+Membership was previously taken from a Mash-to-SNP proxy in a different unit
+system from the calibration; that proxy overstates diversity by a median
+**1.30×**, by up to **17.20×**, and **reclassifies 22 of these 85 units**. It
+gave 47 units and a median of **7.26** — close in aggregate, but with a
+below-floor group whose composition did not hold up. The alignment-derived
+classification is the one reported.
+
+⚠ **Four r/m values are in circulation and only one is this analysis.** They are
+the two partitions crossed with the two ways of measuring unit diversity, and
+they differ by basis and by partition, not by biology — none is a correction of
+another:
+
+| median r/m (n in-window) | Mash proxy | alignment-derived |
+|---|---|---|
+| **reported run** (workstation, 85 units) | 7.26 (47) | **7.70 (47)** |
+| control run (A100, 88 units) | 7.38 (47) | 7.44 (48) |
+
+**7.70 is the reported figure.** Read down a column to compare partitions and
+across a row to compare bases; a value taken from the wrong cell will look like a
+small discrepancy rather than a category error, which is why all four are
+tabulated here rather than mentioned in passing.
 
 **The reported recombination result for this collection is therefore
-r/m = 7.38 (median of 47 in-window units).** The all-unit median (5.70) mixes
+r/m = 7.70 (median of 47 in-window units).** The all-unit median (5.51) mixes
 measurements with detection failures and is not reported. A **low r/m is a
 detection failure, not a clean unit** — a reading error that is easy to make in
 both directions, since the collapse is symmetric.
@@ -1377,19 +1525,79 @@ is withheld.
 ## 2.12.8 Phylogenies
 
 **Per unit.** After recombination removal, a maximum-likelihood tree from the
-filtered polymorphic sites: IQ-TREE, GTR with ascertainment-bias correction
-(model and constant-site counts from a per-unit preflight), with branch support
-enabled. **176 replicon-unit trees**, all at the highest confidence tier.
-Gubbins' own node-labelled trees are retained alongside as a second estimator.
+filtered polymorphic sites: IQ-TREE under **`GTR+ASC`**, one tree per
+replicon-unit (**170** on the reported partition). Gubbins' own node-labelled
+trees are retained alongside as a second estimator.
+
+> ⚠ **Two corrections to what this section previously claimed, both verified
+> against the pipeline configuration (`conf/params.config`) rather than against
+> prose.**
+>
+> **1. Production used `+ASC`, not `-fconst`.** `iqtree_model` and
+> `iqtree_asc_model` are both `GTR+ASC` and **`iqtree_fconst = null`**. Where the
+> filtered alignment contains constant columns — which makes `+ASC` abort —
+> `iqtree_asc_fallback = "varsites"` strips those columns and **keeps `+ASC`**;
+> the config notes that `+ASC` and `-fconst` are mutually exclusive and that the
+> two alternative fallbacks alter branch lengths.
+>
+> **This differs from §2.5**, which argues `-fconst` with true counts is
+> preferable here because it reproduces full-alignment base composition exactly
+> whereas `+ASC` collapses composition toward 25/25/25/25 in a 68% GC genome.
+>
+> ✅ **RESOLVED 2026-08-23 by direct comparison on two units**
+> (`ASC_FCONST_RESULT_2026-08-23.md`). Both models were run on the identical
+> variant-site alignment, same build, same seed.
+>
+> **§2.5's argument is correct and the effect is large.** `+ASC` estimated GC at
+> **54.5%** and **58.9%** against a true **68.1%**; `-fconst` returned **67.8%**
+> and **68.0%**. Topologies also differ, in a signal-dependent way: on the clonal
+> `strain_4_L1_1` 65% of bipartitions move, but on the Gate 1 unit
+> `strain_1_L1_28` (15,139 variant sites) **89% are identical**. Branch lengths
+> are **not interconvertible** — naive rescaling by the variant-site fraction
+> misses the observed `-fconst` length five-fold, so no correction factor is
+> offered.
+>
+> **It changes no reported quantity.** Every number in this paper derives from
+> **Gubbins** outputs — r/m and its reference correction from
+> `per_branch_statistics.csv`, and the phylogeography test and global backbone
+> from `node_labelled.final_tree.tre`. The IQ-TREE `+ASC` tree is read only by
+> `archive_L1_stats.sh` and `export_deliverables_bp.sh`; it is a deliverable, not
+> an input. The phylogeography test is moreover Fitch parsimony, which reads
+> topology alone.
+>
+> ⚠ **One consequence does stand.** If per-unit trees are published as
+> supplementary files they should be rebuilt with `-fconst`, because a published
+> tree estimating 54–59% GC in a 68% GC organism is hard to defend and its branch
+> lengths are per-variable-site. That includes `L1v4c_TREES_SUPPORTED/`, which
+> inherited `GTR+ASC` from the preflight — the support values are topology-based
+> and largely unaffected, the branch lengths and composition are not.
+>
+> **2. Branch support was NOT enabled in the production run, and has since been
+> computed separately.** `iqtree_support = false` in the pipeline configuration,
+> which the config itself flags as altering scientific output (no UFBoot or
+> SH-aLRT values on the tree). The earlier claim that all trees were "at the
+> highest confidence tier" was therefore unsupported and has been removed.
+>
+> ✅ **Resolved 2026-08-23.** `add_branch_support_v4c_bp.sh` recomputed each tree
+> from the **published** filtered alignment, reusing the unit's own ASC preflight
+> decision so the topology is computed identically and only support values are
+> new, adding `-bb 1000 -alrt 1000`. **All 170 reported replicon-units completed:
+> 170 OK, 0 skipped, 0 failed** (`L1v4c_TREES_SUPPORTED/`,
+> `SUPPORT_TREES_V4C.log`). Every tree now carries SH-aLRT and UFBoot values, and
+> every unit ran under `GTR+ASC` — independently confirming point 1 above.
+>
+> ⚠ The **earlier** support run (`add_branch_support_bp.sh`, 2026-08-15,
+> `L1_TREES_SUPPORTED/`) read a different output directory and covered **164**
+> replicon-units of an older partition. It is superseded; do not mix the two.
 
 **Across units.** One **medoid per unit** — the member minimising mean SNP
 distance to the rest of its unit, computed on the recombination-filtered
 alignment and excluding the reference taxon — then a parsnp core-genome alignment
-over those 88 medoids and IQ-TREE under GTR+ASC. Tips are unit identifiers.
+over those **85** medoids and IQ-TREE under `GTR+ASC`. Tips are unit identifiers.
 
 **This global tree is not recombination-corrected, and must not be.** Gubbins
 identifies recombination as regions of unusually dense SNPs against a clonal
-background; across 88 divergent lineages no shared clonal background exists, so
+background; across **85** divergent lineages no shared clonal background exists, so
 it would call most of the alignment recombinant — precisely the failure the
 partition exists to prevent. The global tree shows how units relate, its branch
 lengths include recombination, and **no r/m may be derived from it**.
@@ -1412,16 +1620,79 @@ missing metadata weakens signal rather than inventing it.
 BioProject is typically one study, one laboratory and one country, and a
 geographic signal no stronger than the BioProject signal is not evidence of
 phylogeography. Units in which every genome shares one country yield a parsimony
-score of zero that no permutation can better; they are reported separately and
-tested instead against the probability of drawing n genomes of one country at
-random from the collection's own country distribution.
+score of zero that no permutation can better; these carry no information and are
+reported as uninformative, with no p-value, rather than counted as significant.
 
-## 2.12.10 The control run, and what it establishes
+Missing metadata is encoded inconsistently in the source table — `country` uses
+an empty cell, but `bioproject` uses the literal string "unknown" for 274 of the
+**2,340** analysed genomes — so both fields are normalised to a missing state before
+scoring. Left unnormalised, those 274 genomes would be scored as one shared
+274-member study, mis-measuring the confounder in the direction that favours a
+geographic result. A genome whose origin resolves to more than one country
+(one record, "Panama and Peru") is likewise treated as missing at country scale,
+keyed on its `multi_country` resolution rather than on string-matching, since
+"Trinidad and Tobago" is a single country.
 
-The 86-unit partition (2.12.4, before refinement) was run to completion
-independently on a 22-core workstation: 8,178 tasks, **zero failures**, 172/172
-replicon-units completed at the highest confidence tier. This is not a duplicate;
-it is the control that makes the effect of refinement measurable.
+**Multiple testing and the control gate are applied in code**, not by hand:
+Benjamini–Hochberg FDR at 5% across the testable country tests of a single scale,
+and a BioProject control counted as informative only where it covers ≥70% of the
+unit's tips across ≥3 distinct projects. Each unit receives one of five
+interpretations — *untestable (single-valued)*, *null*, *vacuous control*,
+*confounded*, or *geographic (control passes)*. At national scale, on the reported
+85-unit basis (`PHYLOGEO_FROZEN_national_2026-08-23.tsv`): **37, 25, 5, 12 and 6**
+units respectively. *(Corrected 2026-08-26. This previously read 39, 25, 5, 13 and
+6, which sums to 88 and is the A100 control partition, not the reported one.)*
+
+**The confounded set is reported as graded rather than flat.** Because 113 of 119
+BioProjects (95%) are entirely single-country, and ~99% of same-BioProject
+near-clonal pairs are also same-country, "confounded" is the automatic verdict for
+any within-country clonal expansion deposited by a single study, whether or not
+anything artefactual is present. A conditional test
+(`bioproject_within_country_bp.py`) therefore asks the study-effect question
+directly, holding country fixed: BioProject is assigned only to the tips of the
+country under test and permuted among those tips alone, with the same statistic,
+permutation scheme, FDR and seed as above. Of the discarded units, **8 show batch
+structure at nominal p (2 surviving FDR, both Thailand), 4 show none at all, and 2
+are untestable**. Batch structure is real in aggregate (8 of 22 testable cells at
+p ≤ 0.05 against 1.1 expected, binomial P = 6.6 × 10⁻⁶) but FDR-confirmed in only
+two units, so the discarded set is described as *confounded*, *not separable* or
+*untestable* rather than uniformly as artefact. No reported count changes: every
+unit reported as a pass remains a pass.
+
+**A draw-probability test was considered and deliberately not implemented.** An
+earlier draft proposed testing near-homogeneous units — for example the
+22-genome Mississippi unit, 21 of one country — against the hypergeometric
+probability of drawing that composition at random from the collection. We reject
+it. Its null is that the unit is a random draw from the collection, but units are
+clades, and clades are geographically concentrated by descent, so rejecting that
+null demonstrates only that the partitioner works. In the analysed set **54 of 85
+units are ≥90% single-country and 37 are 100%**, so the test fires on almost all of
+them, at a magnitude set by how rare the country happens to be in the collection
+rather than by any property of the unit. The decisive comparison is internal:
+`strain_3_L1_8` (n=22, top share 0.955, 21 Thailand) and `strain_4_L1_1` (n=22,
+top share 0.955, 21 USA) are identical in every tested quantity and both return
+p = 1.0000 under the permutation test — correctly, since each is a clade plus one
+stray. A hypergeometric would separate them by many orders of magnitude solely
+because Thailand is **66.8% of the analysed set** and the USA ~2%. ⚠ *Quote that
+denominator explicitly: Thailand is 66.8% of the 2,340 analysed genomes but
+**59.5% of the 2,959-genome panel**. Both figures are correct and they are not
+interchangeable.* Such units are reported as
+**descriptive composition, without a p-value**.
+
+## 2.12.10 The two runs, and what their comparison establishes
+
+⚠ *Designation corrected 2026-08-26. This section previously called the 22-core
+workstation run "the control", contradicting the §2.12 preamble and §2.12.13,
+which both designate it the reported run. The figures below were always the
+reported run's; only the label was wrong.*
+
+The 86-unit partition (2.12.4, before refinement) was run to completion on a
+22-core workstation: 8,178 tasks, **zero failures**, 172/172 replicon-units
+completed at the highest confidence tier. **This is the reported run**, and the
+basis of 85 units / 2,340 genomes follows from it by the post-hoc correction in
+§2.12.5. The independent A100 execution of the refined 88-unit partition is the
+**cross-hardware control**. Comparing them makes both the hardware effect and the
+effect of refinement measurable.
 
 **Comparability.** 82 units have identical membership in both runs. Across those,
 r/m agrees to a **median absolute difference of 0.0145 (0.38% relative)**,
@@ -1430,9 +1701,81 @@ configurations, agreeing to ~0.4% on the median unit — this is the empirical
 basis for treating the two partitions as comparable, rather than assuming it from
 the configuration.
 
-**Effect of refinement.** The pre-split `strain_1_L1_26` measured r/m 3.10 and was
-**in-window**; its three children measured 1.07 (below floor), 6.68 (in-window)
-and 2.63 (below floor). The number of in-window units was **47 in both runs**.
+The control's invocation and run record were recovered from the A100 host on
+2026-09-01 and are pinned in `PRODUCTION_RUN_PIN_2026-08-24.md` §7. Set against
+the reported run's, **every analysis parameter is identical**
+(`--split_replicons`, `--max_cluster_size`, `--min_replicon_length`,
+`--gubbins_min_snps`, `--gubbins_iterations`, `--gubbins_use_hybrid`,
+`--gubbins_skip_starting_tree`, `--iqtree_support`), and both runs carry the `bp`
+profile, so the Mash sketch size of 50,000 (§2.6) applies to both.
+
+**The two runs executed byte-identical pipeline code.** Both execution reports
+record the same Nextflow `Script ID`, `e09a5c4eadba2c5984f6790095423ee4`, which
+is the hash of `main.nf` and therefore a direct fingerprint of what ran rather
+than of what was checked out. Every containerised tool version matches as well
+(Gubbins 3.4.3, IQ-TREE 2.2.6, snippy 4.6.0, parsnp 1.7.4, numpy 1.26.2, Ubuntu
+22.04.5). The runs differ in exactly **two** respects: the Nextflow version
+(25.04.6 against 25.10.0) and the resource profile
+(`local_workstation_rtx4070` against `dgx_station_a100_updated`).
+
+Both completed every task: 8,178 and 8,174 succeeded respectively, with **zero
+cached, zero ignored, zero failed and zero retries** in both. The zero-cached
+count also establishes that the control's `-resume` flag did no resuming. The
+control ran 2,342 genomes to the reported run's 2,352, its set being a strict
+subset; the ten absent genomes fall in three units and are enumerated in the run
+pin §7.4.
+
+> **What this comparison does and does not establish.** It shows that two
+> executions on different hardware agree closely on the quantity reported. It is
+> not a demonstration that the pipeline is deterministic: at this commit neither
+> host is seed-reproducible (§2.12.12), so some of the residual 0.4% is Gubbins
+> and RAxML tree-search stochasticity rather than a hardware effect, and the same
+> stochasticity can drop a unit outright. The direct test of reproducibility is
+> the re-execution reported in §2.12.12, not this cross-hardware comparison.
+
+**Effect of refinement.** The unsplit `strain_1_L1_26` — the unit as it stands in
+the reported partition, n = 153 — measures r/m **4.47** and is **in-window**, at a
+mean pairwise distance of 1,310. The control run refines it into three children,
+measuring r/m 1.07 (n = 98), 6.68 (`strain_1_L1_36`, n = 47) and 2.63
+(`strain_1_L1_37`, n = 8).
+
+**The n=98 child is a clonal expansion, and the gate is right to exclude it.**
+Computed directly from its own `core.tab` sites over its 98 members, its mean
+pairwise distance is **72 SNPs** (median 72, max 235) and Gate 2 scores it
+**continuous** (gap/mean 0.014, 8/20 empty bins). Ninety-eight genomes within 235
+SNPs of one another, unimodally distributed, is a recent clonal expansion; at 72
+SNPs it sits an order of magnitude below the Gate 1 floor, which is precisely
+where r/m is not a measurement. Its r/m of 1.07 is a detection floor, not a
+biological estimate. `strain_1_L1_36` by contrast has mean pairwise distance
+**1,477** and is in-window with r/m 6.68.
+
+**So refinement did not increase the measurable set**, as stated below: the
+unsplit parent was one in-window unit and the split yields one in-window child.
+
+Two bookkeeping corrections apply to the counts, neither affecting that reading.
+Under the alignment-derived Gate 1 the in-window count is **47 in the reported
+run and 48 in the control**, not 47 in both — the control's extra unit is
+`strain_1_L1_11`, which its smaller membership (n = 18) brings down from
+above-ceiling into the window, not a refinement child.
+
+And **`DISTANCES_v4c_SUMMARY.tsv` must not be joined to the *control* partition
+by unit name**, because the file is keyed to two partitions at once. Its rows for
+`strain_1_L1_11` (n = 24), `strain_1_L1_22` (n = 34) and `strain_1_L1_26`
+(n = 154) carry the **reported** run's membership, while it simultaneously holds
+`strain_1_L1_36` and `strain_1_L1_37`, which exist only in the control — so those
+genomes are counted twice, and the file's 88 unit names are not any one run's
+partition. Joined to the control by name it would hand the n = 98 child the
+unsplit parent's diversity, 1,310, in place of its own 72. Diversity for those
+units must be recomputed on control membership, as it was here; the control's
+in-window figures are **unaffected either way — 48 units, median r/m 7.44** —
+because the two units this misplaces swap in and out and both sit below the
+median. Joining the file to the *reported* partition is sound, and is what
+`generate_numbers.py` does: the reported r/m table carries only the 85 reported
+units, so the control-only rows drop out on the join.
+
+The comparability argument above is unaffected, and is if anything strengthened:
+the two runs' in-window medians are **7.70 (reported) and 7.44 (control)**,
+agreeing to 3.5%.
 Refinement therefore did not increase the measurable set; its contribution is
 that it separates a genuine clonal expansion from the in-window population that
 surrounds it, and surfaces heterogeneity (1.07 to 6.68) that the combined unit
@@ -1458,6 +1801,306 @@ with the mainland: of 21 genomes labelled "USA", 10 are Puerto Rico or the US
 Virgin Islands, leaving 11 from the mainland. Analyses of US origin must
 disaggregate these.
 
+## 2.12.11a Origin attribution, scored against known exposures
+
+**Rewritten 2026-08-23.** The previous version of this section described an
+earlier analysis — 26 genomes, unit-modal labels over recombination-filtered SNP
+distances — that has been superseded twice. It is retained in the project archive
+as `[SNP/24]`, where it serves as an independent-typing-system cross-check on a
+different validation set. The analysis below is the reported one.
+
+### 2.12.11a.1 Typing scheme
+
+Attribution is scored on **core-genome MLST**, not on the SNP units, so that the
+result does not depend on the partition. The scheme is **Lichtenegger *et al.*,
+4,221 core targets** (Lichtenegger S, Trinh TT, Assig K, *et al.* *J Clin
+Microbiol* 2021;59(8):e0009321; PMID 33980649; doi:10.1128/JCM.00093-21), built by
+challenging K96243 with 469 genomes and validated on 320 WGS datasets. Alleles
+were called with chewBBACA (`PrepExternalSchema` then `AlleleCall`) over
+**3,033** genomes; median call rate **96.9%** of 4,221 loci, with **99.2%** of
+genomes above 90%.
+
+Distance between two genomes is the **fraction of commonly-called loci at which
+their alleles differ**, computed pairwise on the loci called in both; loci
+missing in either genome are excluded from that pair rather than imputed. This
+makes the denominator pair-specific, and it is reported alongside every
+attribution call (`n_loci_compared`, median 4,039 of 4,221, range 2,520–4,083).
+
+> A second scheme (PubMLST scheme 2, 4,089 loci) was run in full as a
+> scheme-swap robustness check and is reported in the supplement. The two agree:
+> region accuracy was identical and cgMLST-vs-SNP concordance correlated at
+> r = 0.999 between schemes. **The scheme is not what determines the result.**
+
+### 2.12.11a.2 Validation set
+
+**48 genomes carry an independently documented exposure country** rather than
+merely a country of deposit — CDC submissions with an explicit `ex <country>`
+label, older assemblies whose exposure country is recorded in the assembly name,
+and cases whose exposure is documented in the published literature. The register
+of exposure assignments is `EXPOSURE_OVERRIDES.tsv`; it is a **frozen input**,
+changed only by a deliberate batched refresh, never edited mid-analysis.
+
+**Two of the 48 carry a non-country exposure** ("Africa"; "Panama and Peru") and
+are unattributable at country scale by construction. **The scorable set is
+therefore 46**, drawn from **16 exposure countries**. Every `x/46` in this paper
+is over that set. ⚠ **48 is not an attribution denominator.**
+
+**The 46 scorable genomes come from 45 patients.** `SRR31608433` (2017) and
+`SRR31608435` (2012) are two isolates from one person who travelled to Vietnam,
+sampled five years apart (Brennan *et al.*, PMID 40835221). They are registered as
+one group, `VN_same_patient_2012_2017`, in `OUTBREAK_GROUPS.tsv` and are therefore
+held out together by the leave-outbreak-out rule of §2.12.11a.4. **The registration
+does not change any reported number**, because leave-group-out already removes
+every validation genome sharing the target's exposure country and both carry
+`exposure_country = Viet Nam`, so each was already outside the other's pool; this
+was verified by re-scoring before and after, with per-genome results identical.
+The set is nonetheless described as **46 genomes from 45 patients**, since the
+denominator is pseudoreplicated at that one place and the disclosure belongs with
+the others in the limitations rather than being left implicit.
+
+### 2.12.11a.3 Estimators, and why the choice is reported per scale
+
+Four estimators were computed for every held-out genome against the same pool:
+
+| estimator | rule |
+|---|---|
+| **nearest neighbour** | the label of the single closest genome |
+| **modal k = 20** | the commonest label among the 20 closest |
+| group test | the group whose *median* distance to the target is lowest |
+| hybrid | modal k=20 when a relative closer than 0.30 exists, else the group test |
+
+**The best estimator differs by scale, and both are reported with the estimator
+named.** Country is best under **nearest neighbour**; region is best under
+**modal k = 20**:
+
+| scale | estimator | correct | accuracy | majority baseline | **κ** |
+|---|---|---|---|---|---|
+| country | **nearest neighbour** | 10/46 | 21.7% | **26.1%** | **0.193** |
+| country | modal k = 20 | 7/46 | 15.2% | 26.1% | 0.132 |
+| region (7-way) | nearest neighbour | 37/46 | 80.4% | 45.7% | 0.715 |
+| region (7-way) | **modal k = 20** | **41/46** | **89.1%** | **45.7%** | **0.832** |
+
+⚠ **A nearest-neighbour number and a modal number are different analyses and must
+never be compared with each other.** Region under nearest neighbour is 37/46
+(80%); that is not a correction to 89% and must not be reported as one. The
+per-estimator results are written to `GROUPING_LADDER.tsv` and surfaced with the
+estimator in the key (`attribution.region.modal_k20`,
+`attribution.country.nearest_neighbour`).
+
+**Cohen's κ is the headline statistic, not accuracy.** Accuracy is not comparable
+across groupings: a binary split with a 90% majority class scores 90% by saying
+nothing, and East Asia & Pacific is 66.8% of the analysed set. κ corrects for
+chance agreement and therefore also neutralises the Thailand over-representation.
+
+**Country attribution does not exceed chance.** 21.7% against a 26.1% majority
+baseline. It is reported as a failure to clear baseline, not as "22% accuracy".
+
+### 2.12.11a.4 Holdout: leave-group-out AND leave-outbreak-out
+
+Two holdout rules are applied together.
+
+**Leave-group-out.** Every *other validation genome sharing the target's exposure
+country* is removed from the pool. Without it, validation genomes predict one
+another and country accuracy is inflated by circularity rather than by signal:
+under leave-*one*-out the same estimator reaches 37% at country scale and **all
+of those hits are validation genomes of the same country predicting each other**.
+The collapse under leave-group-out is reported as a result in its own right,
+because it quantifies how much apparent attribution performance is circular.
+
+**Leave-outbreak-out.** Isolates that are the *same epidemiological source* —
+one investigation, one strain, one place — are not independent observations of
+geography and are held out together whenever any member is scored. The register
+is `OUTBREAK_GROUPS.tsv`, also a frozen input.
+
+> **This register is explicit, not automatic, and the reason is a measured
+> counterexample that has since been externally confirmed.** An automatic
+> same-BioProject or near-clone rule would hold out the Georgia, USA cases that
+> sit ~0.01 from two Viet Nam-exposure cases in the same BioProject, "correcting"
+> Viet Nam from 0/2 to 2/2. Those Georgia cases are **not** co-deposits: a CDC
+> and state epidemiologic investigation found no recent international travel and
+> reported them as presumptive autochthonous cases spanning 1983–2024 (Brennan S,
+> *et al.* *Emerg Infect Dis* 2025;31(9):1802–1806; PMID 40835221). They are
+> independent cases of a lineage that genuinely spans Viet Nam and the
+> southeastern United States, and removing them would hide real references and
+> manufacture an answer. **An automatic rule would have produced a false positive
+> here; only an explicit register avoids it.**
+
+### 2.12.11a.5 Stratification by nearest-neighbour distance
+
+Every accuracy is reported stratified by the distance to the closest available
+relative, because the two regimes are different problems:
+
+| stratum | country (NN) | region (modal k = 20) |
+|---|---|---|
+| d < 0.05 — a close relative exists | **2/14** | **14/14** |
+| 0.05 ≤ d < 0.30 | 2/10 | 8/10 |
+| d ≥ 0.30 — no real relative | 6/22 | 19/22 |
+
+⚠ **A stratification must use the same estimator as the headline it accompanies.**
+The region strata above are modal k=20 because 89% is a modal number; the
+nearest-neighbour region strata (11/14 · 6/10 · 20/22) belong with the 80% figure.
+
+**The d ≥ 0.30 row is not the success it appears to be.** At that distance ~30–79%
+of loci differ and there is no relative in any meaningful sense. Nine of those 22
+genomes share a single Ecuadorian nearest neighbour; because most are Latin
+American, "Ecuador → Latin America & Caribbean" scores correct, while **both
+Sub-Saharan African genomes in the stratum are confidently assigned to Latin
+America and scored wrong**. The estimator is reporting *"unlike the Asian
+majority of the panel"*, and a catch-all region label converts that into a
+correct answer for one continent and a wrong one for another.
+
+**A control for the obvious alternative explanation.** Genomes with fewer
+commonly-called loci could have inflated distances, which would make the far
+stratum an assembly-quality artefact. It is not: across the 46, `n_loci_compared`
+against nearest-neighbour distance gives Spearman ρ = **−0.247** (n = 46, not
+significant), and median loci compared is flat across the three strata
+(**4,042 / 4,040 / 4,024**).
+
+### 2.12.11a.6 The abstention rule
+
+Because the d ≥ 0.30 stratum answers confidently without evidence, the estimator
+is paired with an **abstention rule**: where no relative closer than a threshold
+exists, return *"unattributable — novel lineage"* rather than a region.
+
+The threshold is **nearest-neighbour distance ≤ 0.462**, and it is reported
+**out-of-sample**: the threshold is selected on the other 45 genomes and applied
+to the held-out one, so the figure is not the circular result of tuning and
+scoring on the same set.
+
+| | in-sample | leave-one-out |
+|---|---|---|
+| coverage | 78.3% (36/46) | **76.1%** |
+| selective accuracy | 94.4% | **94.3%** |
+
+**Both baselines are required and they disagree**, which is the point. Declining
+cases *at random* leaves the expected error rate unchanged, so the
+random-abstention baseline is simply the answer-everything accuracy (89.1%). But
+abstention also changes the class mix, so the **majority share of the retained
+subset** must be reported too: it rises from 45.7% to 50.0%. The rule therefore
+improves lift over chance only from +43.4 to +44.4 points. **Its value is in
+*which* errors remain, not in the accuracy number**, and the paper states it that
+way.
+
+The rule declines **3 of the 5 region errors**, including **both** Sub-Saharan
+African misassignments, at a cost of 7 correct answers. It **cannot** decline the
+two Georgia/Mississippi-type errors, which have genuine close relatives and high
+neighbourhood agreement — **two distinct failure modes, and this rule addresses
+one of them.**
+
+⚠ **The same rule fails at country scale, and that is reported as a result.** Its
+best operating point reaches 37.5% selective accuracy against an answer-everything
+21.7% — an apparent +15.8 points, reproduced exactly under leave-one-out. But the
+**retained-subset majority baseline is also exactly 37.5%**: on the half of cases
+the rule elects to answer, always guessing the commonest exposure country scores
+identically. **Country attribution is not rescued by abstaining.**
+
+### 2.12.11a.7 Scales not claimed
+
+**Sub-national attribution fails and is reported as failing**: 0 of 5 scorable
+genomes, under every estimator.
+
+**The granularity ladder shows where the ceiling lies.** The same data, the same
+holdout, coarser groupings (modal k = 20):
+
+| grouping | classes | accuracy | baseline | **κ** |
+|---|---|---|---|---|
+| Asia vs non-Asia | 2 | **100%** | 58.7% | **1.000** |
+| Eastern vs Western hemisphere | 2 | 95.7% | 63.0% | **0.909** |
+| region, 7-way | 5 present | 89.1% | 45.7% | **0.832** |
+| SEA vs non-SEA | 2 | 76.1% | 58.7% | 0.461 |
+| country | 16 | 21.7% | 26.1% | **0.193** (NN) |
+
+**We therefore claim regional attribution and an essentially perfect deep split,
+and we do not claim country-level attribution.** The limit is depth of signal,
+not volume of data: the deep splits are recovered without error while the
+shallow ones are not, on the same genomes and the same pool.
+
+### 2.12.11a.8 Software
+
+Attribution is scored by `score_cgmlst_lichtenegger.py` (per-genome calls) and
+`grouping_test_bp.py` (the estimator × grouping ladder and κ), the abstention
+rule by `abstention_rule_bp.py`. The two scorers construct their candidate pools
+independently and are cross-checked against each other for agreement on the
+nearest-neighbour calls and on the scorable denominator, as part of the frozen
+basis validator (2.12.12).
+
+## 2.12.11b Relapse versus reinfection in the recurrence series
+
+This analysis exists as a fine-scale positive control on the pipeline (§R3.1),
+not as a contribution to attribution. Thirteen patients in the Nakhon Phanom
+collection had culture-confirmed recurrent melioidosis: **29 isolates forming 20
+episode pairs**, with two patients contributing three and four episodes
+respectively. Patient identity, episode number and collection date come from the
+clinical record and are not derivable from the genomes. All 40 isolate-date
+assertions were checked against `final_collection_dates` in the collection
+metadata and matched exactly; four of the pairs are independently corroborated by
+the `PreMID` previous-episode field in the clinical database.
+
+**Two independent distance bases are used, and they agree.**
+
+*Basis 1, the production output (16 of 20 pairs).* Where both isolates of a pair
+fall in the same analysis unit, the distance is read directly from that unit's
+Gubbins `filtered_polymorphic_sites.fasta` as the number of positions differing
+between the two sequences, counting only positions where both carry an
+unambiguous A/C/G/T, summed across replicons. No new computation is involved:
+these are the reported run's own recombination-filtered sites.
+
+*Basis 2, a local context analysis (all 20 pairs).* Basis 1 cannot cover four
+pairs: patients 7 and 10 are not in the analysed panel, and patient 9's two
+isolates fall in different units, so no single unit alignment contains them. It
+also places each patient against the global panel rather than against the local
+genomes it could actually be confused with, which is the comparison the control
+needs. Context groups were therefore built over the **259 local genomes** by
+single-linkage clustering of mash distances (k=21, sketch 100,000) at a **0.002**
+radius, giving **7 components that co-locate all 20 pairs**; components smaller
+than 12 genomes were padded with their nearest neighbours so that every group
+supports a tree.
+
+Each group was then run through the same chain as §2.12.7, at the same
+parameters: `snippy 4.6.0 --ctgs` against the group medoid, `snippy-core` to a
+whole-genome alignment **retaining invariant sites**, then
+`run_gubbins.py --tree-builder raxml --iterations 5 --min-snps 3
+--invariant-site-correction --filter-percentage 25.0`, then IQ-TREE with
+`GTR+ASC` and 1,000 ultrafast bootstrap and SH-aLRT replicates on the
+recombination-filtered sites. Two deliberate departures:
+
+- **The `Reference` record is dropped.** Our reference is a member of the group,
+  so snippy-core's `Reference` sequence would enter the alignment as a duplicate
+  of one sample. The production run keeps it only because its references are
+  external to the unit (§2.12.6).
+- **Gubbins is given an explicit `--seed`.** The pipeline passes none, so Gubbins
+  draws an unseeded `randint(0, 10000)` for RAxML's `-p` and RAxML rejects `-p 0`
+  (§2.12.12). Seeding also makes the control reproducible.
+
+**Exclusivity.** For each pair we report the distance to the nearest genome in the
+same context group belonging to a *different* patient. A relapse call is
+exclusive when the pair is at least three times closer to each other than either
+is to that genome. The threshold is chosen, not calibrated, and the raw ratio is
+reported per pair so a reader can apply their own.
+
+**Sequence types** were recomputed from the PubMLST *B. pseudomallei* scheme-1
+profile definitions and compared as **allele profiles rather than ST labels**,
+because two distinct novel profiles both render as untypeable and must not be
+counted as a match.
+
+**Two traps are recorded because both silently corrupt the result.** First,
+snippy writes low-confidence calls in lowercase and those positions concentrate
+at variant sites, so a case-sensitive A/C/G/T comparison scored 787 SNPs between
+two genomes where the correct answer is 15,390; sequences are upper-cased on
+read. Second, because small groups are padded with neighbours, a genome can
+appear in two groups, and scoring it in the borrowed group replaces its true
+nearest neighbour with a distant one; every genome is scored in the group it
+originally belongs to.
+
+**r/m is deliberately not reported for these groups.** They are tight single
+lineages built to a 0.002 radius, which is inside the lower bound of the
+diversity window of §2.6.1, so a low r/m here is detection failure and not
+biology. The r/m figures in this study come from the production units only.
+
+Scripts: `context_snps_bp.py` (alignment through tree), `context_report_bp.py`
+(distances, exclusivity, annotated trees and iTOL annotation) and
+`recurrence_mash_bp.py` (the genome-wide mash screen that preceded them).
+
 ## 2.12.12 Reproducibility
 
 Analysis-unit membership and per-unit references are provided as
@@ -1475,11 +2118,40 @@ that actually produced Gubbins output, and reading `gubbins_status`,
 this way: **176/176 and 172/172 replicon-units complete, exit 0, highest
 confidence tier, zero task failures in either execution trace.**
 
+**The reported analysis is not seed-reproducible, and the mechanism is the one
+above.** Commit `79ab645` predates a later fix that added a `gubbins_seed`
+parameter, so Gubbins derives RAxML's parsimony seed from an unseeded
+`randint(0, 10000)`. That draw is `0` with probability 1/10,001, RAxML rejects a
+non-positive seed, and Gubbins reports the failure only as "Unable to fit model to
+data". Each replicon-unit makes roughly two RAxML calls per iteration, so across a
+full panel the chance that at least one unit is affected is about **16%**. Combined
+with `errorStrategy 'ignore'`, the affected unit is dropped and the run still exits
+zero, which is precisely why verification must be per-unit rather than by exit
+code.
+
+**This was observed, not merely anticipated.** An end-to-end re-execution from
+`79ab645` with identical inputs (2026-08-25) lost
+`strain_1_L1_30__GCF_000755905_1_2` this way: iteration 1 drew `-p 1393` and
+succeeded, iteration 5 drew `-p 0` and failed, and the run reported `rc=0` with
+171 of 172 replicon-units. Two consequences are worth stating plainly. First, a
+re-run of this analysis should be checked against the per-process task counts, and
+a unit count of 171 rather than 172 is the expected signature of this bug rather
+than evidence of a different result. Second, because the Gate 1 window sums
+per-replicon divergence across a unit's replicons, losing one replicon roughly
+halves that sum and can move a unit **into** the window; the lost unit must be
+excluded rather than allowed to shift Gate 1 membership.
+
+**Subject to that, the reported figures reproduce.** On the same re-execution,
+per-unit r/m was identical in both value and raw SNP counts for **81 of 84**
+comparable units, per-unit alignment distances were identical for **85 of 86**
+units, and Gate 1 returned **47 units with a median r/m of 7.70**, matching the
+reported figures (`REPRO_RESULT_2026-08-26.md`).
+
 ## 2.12.13 Software and compute
 
 | tool | version | role |
 |---|---|---|
-| Nextflow | 25.10.0 (production) / 25.04.6 (control) | workflow |
+| Nextflow | **25.04.6 (reported)** / 25.10.0 (control) | workflow |
 | PopPUNK | 2.7.6 | strain assignment |
 | SKA | 0.4.0 | split-k-mer alignment within strains |
 | fastbaps (PopPIPE) | levels = 3 | within-strain sub-clustering |
@@ -1494,8 +2166,10 @@ confidence tier, zero task failures in either execution trace.**
 The Mash sketch size is **50,000**, not the 10,000 named in the repository's
 `params.config`; the sketch header is authoritative.
 
-**Compute.** The production run used an NVIDIA DGX Station A100 (128 cores,
-503 GB RAM); the control run a 22-core, 62 GB workstation. **No stage is
+**Compute.** ⚠ **Note the designation, which was inverted in an earlier draft.**
+The **reported** run is the 22-core, 62 GB workstation (85 units, 2,340 genomes);
+the NVIDIA DGX Station A100 (128 cores, 503 GB RAM) executed the **control** run
+(88 units), per the §2.12 preamble. **No stage is
 GPU-accelerated** — Gubbins, Snippy, IQ-TREE and RAxML are all CPU-bound. The
 hardware requirement is memory, and it falls on partitioning rather than on the
 SNP analysis: `ska build` on the 901-genome strain requires ~500–600 GB when
@@ -1506,5 +2180,41 @@ and batched builds produced the same taxa and identical alignment column
 multisets, differing only in column order, which `ska align` does not define and
 fastbaps' site-independent model does not use.
 
-Container digests, the exact command line and per-task resource usage are in each
-run's `pipeline_info/`, archived with the results.
+⚠ **The Nextflow row was also inverted by the designation flip.** 25.04.6 is
+read directly out of the reported run's own `.nextflow.log`
+(`N E X T F L O W ~ version 25.04.6`, build 5954) and is certain. The control's
+25.10.0 is carried over from the earlier draft and **has not been verified
+against the A100 host's log**; verify or drop it before submission.
+
+**The reported run is pinned.** Pipeline
+`wf-assembly-snps-mod` (https://github.com/PHemarajata/wf-assembly-snps-mod),
+branch `main`, release **`v1.0.5-mod`** = commit **`79ab645`**, Nextflow 25.04.6,
+run `agitated_coulomb`,
+session `c90e1105-5b12-455e-9b31-4ecde888d559`, 2026-08-18 19:52 → 2026-08-19
+08:07 (+07). The verbatim command line, the four input files it consumed, the
+resource-override configuration and the limits of the pin are in
+**`PRODUCTION_RUN_PIN_2026-08-24.md`**.
+
+Four points from that document belong in the paper rather than in a
+supplementary file. **(i)** The run was launched as `nextflow run .` from a
+working directory, so Nextflow recorded a script hash (`e09a5c4ead`) and not a
+git revision; the commit is established by bracketing the run between commits
+and is therefore *"the pipeline at `79ab645`"* rather than a proven tree state.
+**(ii)** The `--input` samplesheet was not retained and is reconstructed —
+disclosed as such, with the input set corroborated independently by the run's
+own trace (2,352 staged genomes) and the cluster assignment file (2,352 ids).
+**(iii)** The run was given **86 units / 2,352 genomes / 172 replicon-units**;
+the reported basis of 85 / 2,340 / 170 is a post-hoc correction of its output,
+not a re-execution, so a reproduction lands on the former and must be put
+through §2.12.5 to reach the latter. **In practice a reproduction lands on 171
+rather than 172 replicon-units about one time in six**, for the seeding reason
+given in §2.12.12; that is a property of this pipeline version, not a difference
+in result. **(iv)** The release tag `v1.0.5-mod` was created at `79ab645` after
+the fact so the analysis can be cited as a release. Note that the pipeline
+manifest at that commit still self-reports `v1.0.3-mod`, which is a different and
+much older commit, so run logs from the reported analysis carry that string; the
+manifest was never bumped and was deliberately left uncorrected, because
+amending it would change the very commit the paper pins.
+
+Container digests and per-task resource usage are in each run's
+`pipeline_info/`, archived with the results.
