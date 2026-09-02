@@ -49,6 +49,19 @@
 !requirements.txt
 !LICENSE
 
+# CI workflows. A DELIBERATE subdirectory exception, and the only one -- rule 1
+# excludes subdirectories wholesale and that stays true for everything else.
+# Justified because the alternative is worse: without CI nothing mechanically
+# enforces the allowlist below, and `git add -f` bypasses this file entirely.
+# The `no-data-tracked` job in checks.yml fails the build if any tracked file
+# falls outside the code/documentation allowlist, which is this file's whole
+# purpose expressed as a test rather than as prose. Scope is narrow on purpose:
+# .yml under .github/workflows/ only, never *.yml generally, because
+# software_versions.yml and similar run records must stay excluded.
+!.github/
+!.github/workflows/
+!.github/workflows/*.yml
+
 # =============================================================================
 # 5. BELT AND BRACES.
 #

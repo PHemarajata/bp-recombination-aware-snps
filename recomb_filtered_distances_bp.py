@@ -203,10 +203,17 @@ def main():
     ap.add_argument("--out-dir", default=f"{B}/DISTANCES_v4c")
     ap.add_argument("--summary", default=f"{B}/DISTANCES_v4c_SUMMARY.tsv")
     ap.add_argument("--unit", help="only units whose dir name contains this")
+    # E4. This was hardcoded to the reported run's table while every other input
+    # was an argument, so running the script on a different run silently mixed
+    # bases: unit_rm, expected_ratio_from_rm and ratio_over_expected came from
+    # the reported run while every other column came from the new one. Same
+    # class as E0 and E1: a default that points at a specific run.
+    ap.add_argument("--rm", default=f"{B}/L1v4c_out/Summaries/recombination_rm.tsv",
+                    help="r/m table; MUST come from the same run as --clusters")
     a = ap.parse_args()
 
     os.makedirs(a.out_dir, exist_ok=True)
-    rm = load_rm(f"{B}/L1v4c_out/Summaries/recombination_rm.tsv")
+    rm = load_rm(a.rm)
     rows = []
     dirs = sorted(glob.glob(os.path.join(a.clusters, "cluster_*")))
     if a.unit:

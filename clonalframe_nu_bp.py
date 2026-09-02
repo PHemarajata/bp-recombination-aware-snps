@@ -199,7 +199,7 @@ def work_dir(unit, replicon):
     return os.path.join(OUTDIR, "%s__%s" % (unit, replicon))
 
 
-def build_script(unit, replicon, threads, aln=None):
+def build_script(unit, replicon, threads, aln=None, iqtree_seed=20260902):
     """Bash for one unit/replicon: SNPs -> uncorrected ML tree -> CFML.
 
     `aln` must be passed by the caller: main() has already resolved it under the
@@ -246,8 +246,21 @@ if [ -z "$IQ" ]; then
         echo "ERROR: neither iqtree2 nor iqtree found in env {env_tree}" >&2; exit 5; }}
 fi
 if [ ! -s "$WD/start.treefile" ]; then
+    # DETERMINISM: -seed AND -T 1. Both are required; neither alone is enough.
+    # Measured on strain_8_L1_1__chr2 with IQ-TREE 2.4.0:
+    #   -seed 12345 -T 4  x2  -> 2 different trees
+    #   -seed 999   -T 4  x2  -> 2 different trees
+    #   -seed 12345 -T 1  x3  -> 1 identical tree, identical log-likelihood
+    # Multithreaded IQ-TREE is non-deterministic regardless of seed, because the
+    # parallel tree search does not impose a deterministic reduction order.
+    # An unseeded tree is not cosmetic here: ClonalFrameML's EM starts from it,
+    # and on that unit the local and A100 runs landed in different optima and
+    # disagreed on r/m by 27%. A crossover test showed CFML returns BYTE-IDENTICAL
+    # output given the same starting tree, so this call is 100% of the pipeline's
+    # run-to-run variation. Do NOT restore -T {threads} for speed; single-threaded
+    # tree search on a SNP alignment costs seconds, and it buys reproducibility.
     "$IQ" -s "$WD/snps.fasta" -fconst "$FCONST" \
-        -m GTR+F+I -T {threads} --prefix "$WD/start" -redo
+        -m GTR+F+I -seed {iqtree_seed} -T 1 --prefix "$WD/start" -redo
 fi
 
 # --- 3. ClonalFrameML on the FULL alignment --------------------------------
@@ -261,6 +274,7 @@ ClonalFrameML "$WD/start.treefile" "$ALN" "$WD/cfml" \
 echo "DONE {unit} {replicon}"
 """.format(conda=CONDA_SH, aln=aln, wd=wd, env_snp=ENV_SNP, env_tree=ENV_TREE,
            env_cfml=ENV_CFML, threads=threads, unit=unit, replicon=replicon,
+           iqtree_seed=iqtree_seed,
            iqtree=IQTREE)
 
 
@@ -514,7 +528,12 @@ def main():
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--replicon", default="chr1")
-    ap.add_argument("--threads", type=int, default=4)
+    ap.add_argument("--threads", type=int, default=4,
+                    help="threads for ClonalFrameML; IQ-TREE is pinned to 1 "
+                         "for determinism, see build_script")
+    ap.add_argument("--iqtree-seed", type=int, default=20260902,
+                    help="fixed IQ-TREE seed; with -T 1 this makes the starting "
+                         "tree, and therefore the whole pipeline, reproducible")
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--all", action="store_true",
                     help="all 45 units from tier0_units.tsv, not just the six")
@@ -565,7 +584,8 @@ def main():
             _wait_one(procs, done)
         log = open(os.path.join(wd, "run.log"), "w")
         p = subprocess.Popen(["bash", "-c",
-                              build_script(unit, rep, args.threads, aln)],
+                              build_script(unit, rep, args.threads, aln,
+                                           args.iqtree_seed)],
                              stdout=log, stderr=subprocess.STDOUT)
         procs.append((p, unit, rep, log))
         print("launched %s %s (pid %d)" % (unit, rep, p.pid))
