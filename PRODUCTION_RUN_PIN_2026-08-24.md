@@ -148,11 +148,151 @@ at `79ab645`, not this table.
 ## 7. The control run
 
 The A100 88-unit cross-hardware control is described in `METHODS_DRAFT` §2.12.10
-and §2.12.13. **Its command line is not pinned here** — no equivalent
-`pipeline_info` record for it was found in this working directory, and the
-run itself lives on the A100. Pin it from that host's `.nextflow.log` before
-submission, or state in the Methods that the control's exact invocation was not
-retained. Do not reconstruct it from this one.
+and §2.12.13. **Recovered 2026-09-01** by reading the A100 host's
+`~/wf-assembly-snps-mod/.nextflow.log` directly. Not reconstructed.
+
+| | |
+|---|---|
+| **Nextflow** | **25.10.0** — verified, was previously carried as "unverified" |
+| **Started / finished** | 2026-08-19 11:49:16 → ~15:11 (+07), ≈3 h 22 m |
+| **Host** | DGX Station A100 (`cdcadmin@cdcadmin`) |
+| **Record** | `/home/cdcadmin/wf-assembly-snps-mod/.nextflow.log` **and** `/data/scratch/v4c/L1v4c_out/pipeline_info/` |
+
+Command line, verbatim from the log's `$>` line:
+
+```bash
+nextflow run . \
+  -profile bp,dgx_station_a100_updated,docker \
+  -c        /home/cdcadmin/v4c_partition/curated_L1_overrides.config \
+  --input   /home/cdcadmin/v4c_partition/wf_L1v4c_run_samplesheet.csv \
+  --cluster_assignments /home/cdcadmin/v4c_partition/.L1_run_clusters.tsv \
+  --cluster_references  /home/cdcadmin/v4c_partition/.L1_run_refs_normalized.tsv \
+  --split_replicons true \
+  --max_cluster_size 1000 \
+  --min_replicon_length 100000 \
+  --gubbins_min_snps 3 \
+  --gubbins_iterations 5 \
+  --gubbins_use_hybrid false \
+  --gubbins_skip_starting_tree true \
+  --iqtree_support true \
+  --outdir    /data/scratch/v4c/L1v4c_out \
+  -work-dir   /data/scratch/v4c/L1v4c_work \
+  -ansi-log false \
+  -resume
+```
+
+### 7.1 What differs from the reported run
+
+Compared against §2 line by line, **every analysis parameter is identical**:
+`--split_replicons`, `--max_cluster_size`, `--min_replicon_length`,
+`--gubbins_min_snps`, `--gubbins_iterations`, `--gubbins_use_hybrid`,
+`--gubbins_skip_starting_tree` and `--iqtree_support` all match. The differences
+are four, and only the first is analysis-relevant:
+
+1. **Resource profile**: `dgx_station_a100_updated` against the reported run's
+   `local_workstation_rtx4070`. This is the one substantive difference between
+   the two runs and should be stated as such in the Methods, rather than
+   describing them as differing only in hardware.
+2. Paths, including an `/data/scratch` outdir rather than the working directory.
+3. `-ansi-log false`, cosmetic.
+4. **`-resume`**, discussed below.
+
+**Both runs used the `bp` profile.** That resolves the same question §2.1 raises
+for the reported run: the Mash sketch size of 50,000 applies to the control too,
+so the two are comparable on that axis.
+
+### 7.2 The `-resume` flag, and why it does not weaken the pin
+
+The invocation carries `-resume`, which raised the question of whether the
+Aug-19 11:49 session was the control's first or a continuation of an earlier one
+with a possibly different command line.
+
+**Checked 2026-09-01 and resolved.** Globbing `~/wf-assembly-snps-mod/.nextflow.log*`
+on the A100 returns **exactly one file**. Nextflow rotates a previous session's
+log to `.nextflow.log.1`, `.log.2` and so on, so the absence of any rotated log
+means **no earlier session was ever launched from that working directory**. The
+command line in §7 is therefore the only recorded invocation, not merely the last
+one, and it can be cited as the control's invocation without qualification.
+
+`-resume` was passed with nothing in that directory to resume from. Nextflow
+accepts the flag whether or not a prior session exists, and a defensively-added
+`-resume` on a first run is a no-op. The residual possibility is that an earlier
+session ran from a *different* directory and this one resumed its cache; that
+would be visible in `.nextflow/history`, which records one row per session with
+its ID, run name and timestamp. Worth reading if the scratch tree still exists,
+but it does not affect what is pinned above.
+
+### 7.3 Two-source verification, matching the reported run
+
+The `pipeline_info` directory under `~/wf-assembly-snps-mod/` is dated
+**2026-05-28 and belongs to an unrelated earlier run**. Do not cite it for the
+control.
+
+**The control's own record survives** at `/data/scratch/v4c/L1v4c_out/pipeline_info/`,
+confirmed 2026-09-01:
+
+| file | size |
+|---|---|
+| `execution_report_2026-08-19_11-49-18.html` | 27.8 MB |
+| `execution_timeline_2026-08-19_11-49-18.html` | 3.3 MB |
+| `execution_trace_2026-08-19_11-49-18.txt` | 1.6 MB |
+| `pipeline_dag_2026-08-19_11-49-18.html` | 3.8 KB |
+| `software_versions.yml` | 231 KB |
+| `process_logs/`, `qc_file_checks/` | directories |
+
+**The command line was re-read out of `execution_report_...html` and matches the
+`.nextflow.log` verbatim.** The control is therefore verified from two
+independent sources, the same standard §2 sets for the reported run, and the
+single-source asymmetry noted earlier does not apply.
+
+### 7.4 The two runs, side by side
+
+Both records read from their own `execution_report`:
+
+| | reported | control |
+|---|---|---|
+| run name | `agitated_coulomb` | `insane_jennings` |
+| session | `c90e1105-5b12-455e-9b31-4ecde888d559` | `13721732-3288-434b-bd23-4cab6f54dd6d` |
+| **Script ID** | **`e09a5c4eadba2c5984f6790095423ee4`** | **`e09a5c4eadba2c5984f6790095423ee4`** |
+| Nextflow | 25.04.6, build 5954 | 25.10.0, build 10289 |
+| profile | `bp,local_workstation_rtx4070,docker` | `bp,dgx_station_a100_updated,docker` |
+| started → finished | 18-Aug 19:52:00 → 19-Aug 08:07:38 | 19-Aug 11:49:18 → 15:11:52 |
+| duration | 12 h 15 m 38 s | 3 h 22 m 33 s |
+| CPU-hours | 200.3 | 320.5 |
+| tasks | 8,178 succeeded | 8,174 succeeded |
+| cached / ignored / failed / retries | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 |
+| work dir | `…/L1v4c_work` | `/data/scratch/v4c/L1v4c_work` |
+| units / replicon-units / genomes | 86 / 172 / 2,352 | 88 / 176 / 2,342 |
+
+Three things follow, and they are worth stating separately.
+
+**1. The two runs executed byte-identical pipeline code.** The `Script ID` is
+Nextflow's hash of `main.nf`, and it is the same string in both reports. This is
+a stronger provenance claim than citing a shared git commit, because it is a
+direct hash of what actually ran rather than of what was checked out. Combined
+with `software_versions.yml`, where **every containerised tool version matches**
+(Gubbins 3.4.3, IQ-TREE 2.2.6, snippy 4.6.0, parsnp 1.7.4, numpy 1.26.2, Ubuntu
+22.04.5), the runs differ in exactly **two** respects: the Nextflow version and
+the resource profile.
+
+**2. `-resume` provably did nothing.** The control reports **0 cached** tasks.
+Had it resumed anything, cached tasks would be non-zero. This replaces the
+inference in §7.2 (drawn from the absence of rotated logs) with direct evidence.
+
+**3. Neither run hid a failure.** Both report **0 ignored** and **0 failed** with
+0 retries. That matters because an `errorStrategy`-ignored failure is precisely
+what made `rc=0` misleading in the D1 re-execution. Here the reports are
+explicit, so both runs completed on every task.
+
+**Caveat on the genome counts.** The control ran 2,342 genomes to the reported
+run's 2,352, and the control's set is a strict **subset**. The 10 absent genomes
+are `GCA_001320065_2`, `GCA_963562295_1`, `GCA_963562875_1`,
+`GCF_002900605_1_Malaysia`, `GCF_002900625_1_Malaysia`, `GCF_006381895_1`,
+`GCF_028621545_1_missing`, `GCF_041028405_1`, `SRR28096039` and `SRR2896257`.
+Nine fall in three frozen-basis units (`strain_1_L1_11` ×6, `strain_1_L1_22` ×2,
+`strain_27_L1_1` ×1) and `SRR2896257` is not in the frozen basis. This is the
+root cause of the concordance-pairing defect documented in
+`A100_CFML_VALIDATION_2026-09-01.md` §4.1.
 
 ## 8. The four input files — and the one that was lost
 

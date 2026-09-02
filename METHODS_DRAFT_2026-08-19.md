@@ -1701,6 +1701,30 @@ configurations, agreeing to ~0.4% on the median unit — this is the empirical
 basis for treating the two partitions as comparable, rather than assuming it from
 the configuration.
 
+The control's invocation and run record were recovered from the A100 host on
+2026-09-01 and are pinned in `PRODUCTION_RUN_PIN_2026-08-24.md` §7. Set against
+the reported run's, **every analysis parameter is identical**
+(`--split_replicons`, `--max_cluster_size`, `--min_replicon_length`,
+`--gubbins_min_snps`, `--gubbins_iterations`, `--gubbins_use_hybrid`,
+`--gubbins_skip_starting_tree`, `--iqtree_support`), and both runs carry the `bp`
+profile, so the Mash sketch size of 50,000 (§2.6) applies to both.
+
+**The two runs executed byte-identical pipeline code.** Both execution reports
+record the same Nextflow `Script ID`, `e09a5c4eadba2c5984f6790095423ee4`, which
+is the hash of `main.nf` and therefore a direct fingerprint of what ran rather
+than of what was checked out. Every containerised tool version matches as well
+(Gubbins 3.4.3, IQ-TREE 2.2.6, snippy 4.6.0, parsnp 1.7.4, numpy 1.26.2, Ubuntu
+22.04.5). The runs differ in exactly **two** respects: the Nextflow version
+(25.04.6 against 25.10.0) and the resource profile
+(`local_workstation_rtx4070` against `dgx_station_a100_updated`).
+
+Both completed every task: 8,178 and 8,174 succeeded respectively, with **zero
+cached, zero ignored, zero failed and zero retries** in both. The zero-cached
+count also establishes that the control's `-resume` flag did no resuming. The
+control ran 2,342 genomes to the reported run's 2,352, its set being a strict
+subset; the ten absent genomes fall in three units and are enumerated in the run
+pin §7.4.
+
 > **What this comparison does and does not establish.** It shows that two
 > executions on different hardware agree closely on the quantity reported. It is
 > not a demonstration that the pipeline is deterministic: at this commit neither
@@ -2127,7 +2151,7 @@ reported figures (`REPRO_RESULT_2026-08-26.md`).
 
 | tool | version | role |
 |---|---|---|
-| Nextflow | **25.04.6 (reported)** / 25.10.0 (control, unverified) | workflow |
+| Nextflow | **25.04.6 (reported)** / 25.10.0 (control) | workflow |
 | PopPUNK | 2.7.6 | strain assignment |
 | SKA | 0.4.0 | split-k-mer alignment within strains |
 | fastbaps (PopPIPE) | levels = 3 | within-strain sub-clustering |
