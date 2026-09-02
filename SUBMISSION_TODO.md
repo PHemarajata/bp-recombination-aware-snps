@@ -73,3 +73,39 @@ deposition, archiving, administration, or verification of work already done.
 | Pin the production command line | `PRODUCTION_RUN_PIN_2026-08-24.md` |
 | Data availability statement (writing) | `DATA_AVAILABILITY_2026-08-24.md` §1 |
 | `+ASC` vs `-fconst` | `ASC_FCONST_RESULT_2026-08-23.md` — changes no reported number |
+
+---
+
+## F. Manuscript `[CONFIRM]` punch list (added 2026-09-02)
+
+21 markers remain after the analysis fills. **None is an analysis blocker.**
+Categorized by who can close it.
+
+**F0 — Analysis fills: DONE.** Results 3's r/m distribution (median 7.70, IQR
+5.51–9.44, range 1.52–18.03) is filled from `NUMBERS.tsv`. No other marker is a
+pure number-fill.
+
+**F1 — Editorial decisions, resolvable now, no external input:**
+| marker | decision | note |
+|---|---|---|
+| §Discussion, ClonalFrameML | state it or drop it | The A100 CFML validation gives a clean result: CFML independently confirms recombination in-window and estimates r/m ~1.74× Gubbins, rank concordance r ≈ +0.56. Recommend a one-sentence mention; independent confirmation strengthens the paper. `A100_CFML_VALIDATION_2026-09-01.md` |
+| §Results 8, union-coverage panel | add second panel or not | The Gate 1 union-coverage caveat is already in `NUMBERS.tsv` (`rm.gate1_caveat`). Recommend a footnote, not a panel. |
+
+**F2 — Citations to retrieve and verify (not external-blocked):**
+- fastbaps (Tonkin-Hill et al., *NAR* 2019) — complete the reference.
+- SKA2, Snippy, IQ-TREE 2, parsnp, BUSCO, seq-gen, RAxML — retrieve and verify each. ⚠ Per `pmids-in-this-corpus-are-unverified`, verify against fetched records.
+- Primary sources for two Results figures (line ~689).
+
+**F3 — External chain (the real critical path; each maps to an existing item):**
+| marker | owner | maps to |
+|---|---|---|
+| IRB / ethics statement | lab record | **C1** |
+| curated-collection provenance | lab record | — |
+| deposition venue, what may be released, availability statement (×5) | biosafety + legal | **B1–B6** |
+| author CRediT roles | author list | — |
+| funding, acknowledgements, competing interests (×3) | authors | — |
+| word counts | final assembled text | — |
+
+**Closing order:** F1 and F2 can be done now (a day of editing). F3 is the same
+external chain already tracked in sections A–C; it gates submission and nothing in
+the repository can close it. The science is complete.

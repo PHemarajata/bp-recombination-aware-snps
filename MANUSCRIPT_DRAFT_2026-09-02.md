@@ -345,11 +345,10 @@ above-ceiling collapse. Leaving them intact was still right, because both are
 unimodal and that is a sound structural reason, but not for the reason given, and
 their r/m values should not be quoted.
 
-[CONFIRM] Report the interquartile range and full range of r/m across the 47
-in-window units, from `Summaries/recombination_rm.tsv` joined to the Gate 1
-classification produced by `cluster_diversity_bp.py`. The draft currently carries
-the median only, and a distribution is needed to support the heterogeneity claim
-in the Discussion.
+Across the 47 in-window units the r/m distribution is right-skewed: median 7.70,
+interquartile range 5.51 to 9.44, full range 1.52 to 18.03. The spread is genuine
+biological heterogeneity in recombination rate among lineages, not measurement
+noise, since every unit in this set sits inside the calibrated detection window.
 
 ### 4. Subdividing a unit can remove it from the measurable set
 
@@ -1091,8 +1090,12 @@ Ordered by what blocks submission first.
    produces entirely plausible numbers. A previous run of this script silently
    joined v3 assignments to v1 trees and reported 82 units against a 91-unit
    partition, caught only by noticing the unit count.
-2. **Fill every [CONFIRM].** There are [CONFIRM] markers in Results 3, 7 and 8,
-   the Discussion, Data availability, and the front and back matter.
+2. **Fill the remaining [CONFIRM] markers.** The analysis markers are cleared
+   (Results 3's r/m distribution is filled from NUMBERS.tsv). What remains is
+   categorized in `SUBMISSION_TODO.md`: two editorial decisions resolvable now
+   (the ClonalFrameML mention, the union-coverage panel), three citation retrievals,
+   and the external chain (deposition, funding, author roles, IRB), which is the
+   real critical path.
 3. **Settle the data availability position** with biosafety and legal review
    before choosing a journal, because some journals will not accept a restriction
    this broad.
