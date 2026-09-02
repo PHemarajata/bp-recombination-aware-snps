@@ -317,3 +317,25 @@ effects on present evidence.
    least for the largest few. Until then, BioProject is a proxy of unknown
    construct validity being used as a confounder, which is a Methods limitation
    worth stating rather than a solved problem.
+
+---
+
+## 7. The projects have now been characterised
+
+`BIOPROJECT_CHARACTERIZATION_2026-09-02.md` answers the open question in §6 by
+fetching the ENA study titles. The result is worse than "unknown construct
+validity": the control fires systematically on the **wrong** projects.
+
+Of the 12 units discarded as confounded, **none is driven by a project we can
+identify as a genuine clonal batch.** Four are driven by *diversity panels*
+(`PRJEB2196`, `PRJNA352974`), whose members were deliberately selected to differ,
+and five by *geographic frames* (`PRJEB25606` Northeast Thailand, `PRJNA669904`
+Hainan island, `PRJNA892040` Vietnam), where controlling for BioProject and
+controlling for geography are the same operation.
+
+The two genuinely batch-like projects drive no discard at all: `PRJNA429426` (26
+genomes from a single soil sample) is dominant in no unit, and `PRJEB2119`
+(serial patient isolates) is 86% of `strain_1_L1_3`, which is classified
+untestable so the control never speaks.
+
+That gives the over-control a mechanism rather than leaving it as an observation.
