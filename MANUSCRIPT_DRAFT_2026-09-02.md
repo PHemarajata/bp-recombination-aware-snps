@@ -18,6 +18,23 @@ between fits, so those numbers cannot be carried forward. Results section 8 is
 written as a specification of what to run, with placeholders, rather than as a
 result. Everything else in this draft is measured.
 
+**Scope recommendation, added after drafting.** `PUBLICATION_STRATEGY_2026-09-02.md`
+argues that Results section 8 should be **cut from this paper entirely** rather
+than filled in, and carried instead into a second paper on geographic structure.
+Two reasons. This paper's argument does not depend on sampling, so including a
+geography section invites a reviewer to attack a sampling frame that is otherwise
+irrelevant to every claim made here. And the geography work has a different
+audience, methodologists here against the melioidosis community there. If that
+recommendation is accepted, delete section 8, drop reference 14 and the sampling
+paragraph in the Discussion, and this paper is complete without any analysis that
+has not already been run. The section is left in place for now because the
+decision is the author's.
+
+To run the outstanding analyses when they are wanted, see
+`run_manuscript_analyses.sh`, which drives the phylogeography association, the
+reference-branch re-measurement, and a consolidated report that fills the
+`[CONFIRM]` markers below.
+
 ---
 
 ## Title page

@@ -124,13 +124,33 @@ def pooled(path, drop):
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--stats-dir", default="RUN_STATS_ARCHIVE/L1")
-    ap.add_argument("--clusters-out", default="L1_out/Clusters")
-    ap.add_argument("--clusters", default=".L1_run_clusters.tsv")
-    ap.add_argument("--audit", default="curated_L1_reference_audit.tsv")
-    ap.add_argument("--out", default="RM_RESULTS_L1_CORRECTED.tsv")
+    # No defaults on the four inputs. Every one of them previously pointed at
+    # the v1 "L1" run, so running this against a later partition while forgetting
+    # any single flag silently mixed two partitions and produced a plausible
+    # r/m table. That failure has happened once in this project, on the sibling
+    # phylogeography script, and was caught only because someone noticed a unit
+    # count. The inputs must now be named.
+    ap = argparse.ArgumentParser(
+        description="Recompute pooled r/m with external reference branches "
+                    "excluded. All inputs must name the SAME run.")
+    ap.add_argument("--stats-dir", required=True,
+                    help="directory of *.per_branch_statistics.csv for this run")
+    ap.add_argument("--clusters-out", required=True,
+                    help="that run's Clusters/ directory")
+    ap.add_argument("--clusters", required=True,
+                    help="TSV of cluster membership for this run")
+    ap.add_argument("--audit", required=True,
+                    help="per-cluster reference audit TSV for this run")
+    ap.add_argument("--out", required=True)
     a = ap.parse_args()
+
+    for label, path in (("--stats-dir", a.stats_dir),
+                        ("--clusters-out", a.clusters_out),
+                        ("--clusters", a.clusters),
+                        ("--audit", a.audit)):
+        if not os.path.exists(path):
+            print(f"ABORT: {label} does not exist: {path}", file=sys.stderr)
+            sys.exit(2)
 
     sizes = collections.Counter()
     with open(a.clusters) as fh:
