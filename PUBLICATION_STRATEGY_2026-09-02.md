@@ -74,10 +74,30 @@ between 535 and 1,265. The ceiling has a counter-example and the same treatment
 applies. A working range honestly bracketed is more useful to the field than a
 threshold asserted, and it is also what the evidence supports.
 
-## Paper 2. Geographic structure that survives recombination correction
+## Paper 2. SUPERSEDED 2026-09-02 -- this claim did not survive its own control
 
-**Claim.** After removing recombination, country structure persists in the
-phylogeny and is not explained by which laboratory sequenced what.
+> **The analysis has since been run, and the claim below is false for this
+> collection.** 26 of 85 units cluster by country taken alone; **6 survive the
+> BioProject control**, and two of those clear it by a hair. The control removes
+> **77% of the apparent signal**. The single-country enrichment listed under
+> "contents" turns out to describe the *untestable* stratum, not evidence: those
+> 37 units are ones where the permutation test cannot run at all, and 30 of the
+> 37 are Thailand against Thailand being 67% of the collection.
+>
+> **The finding moved to Paper 1** as Results section 8, reframed as what it
+> actually is: a calibration result showing that most apparent phylogeographic
+> signal here is batch structure. That belongs beside the detection window,
+> because both say the same thing -- an apparent signal is not a measurement
+> until you have shown what else could produce it.
+>
+> **Paper 2 therefore needs a different subject, or none.** Do not write the
+> paper below. Options worth considering: the attribution work (currently Paper
+> 3), or a melioidosis-community paper built on the six units as case studies
+> rather than as a structural claim. Neither is drafted.
+
+**Claim, as originally written and now known to be wrong.** After removing
+recombination, country structure persists in the phylogeny and is not explained
+by which laboratory sequenced what.
 
 **Contents.** The per-unit Fitch permutation test, the BioProject confounder
 control run on identical trees, the single-country enrichment test against the
