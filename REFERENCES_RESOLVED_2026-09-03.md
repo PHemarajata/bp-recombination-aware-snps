@@ -107,13 +107,27 @@ Related, and worth using the same way: `[125]` Webb 2022 warns that "WGS and
 careful genomics are required to avoid overcalling the relatedness between
 clinical and environmental isolates".
 
-## Open discrepancy, not yet resolved
+## Settled: `[103]` is four cases, and the background is right
 
-**`[103]`: four patients or five?** The background prose says "four patients in
-Georgia, USA, with disease episodes spanning 1983–2024". A project note records
-this focus as **five** cases over the same span. The Brennan title says only
-"Related Melioidosis Cases". The count must be read out of the paper itself
-before either number is used. Do not quote a number for this focus until it is.
+**Resolved 2026-09-04 against the Brennan abstract.** Verbatim: "We identified
+**4 cases** of presumptive autochthonous melioidosis during 1983-2024 in Georgia,
+USA. Epidemiologic investigation identified no recent international travel before
+illness; all cases were geographically linked, and 3 patients became ill after a
+severe weather event."
+
+So the background's "four patients" is **correct and needs no change**.
+
+The apparent conflict with the project's own note was not an error in either
+place. It is **cases against genomes**: the paper reports 4 cases, while the
+BioProject holds 5 Georgia genomes (1983, 1989, and three from 2024). The
+project note already recorded that distinction explicitly as an open item; the
+summary line on it did not, which is what made the two look contradictory. Fixed
+there.
+
+The lesson is the ordinary one for this project rather than anything exotic. Two
+numbers that disagree are not necessarily an error, and the first question is
+always *what is being counted*, which is the same question that separated the
+Gate 1 floor's 1,270 from its 700 and the Thailand share's 58.9% from its 66.7%.
 
 ## The fabricated entries have a signature, and it is mechanical
 
