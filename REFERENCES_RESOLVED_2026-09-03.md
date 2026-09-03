@@ -36,6 +36,10 @@ and this file is where those land as they are done.
 | `[103]` | Brennan S, et al. Related Melioidosis Cases with Unknown Exposure Source, Georgia, USA, 1983-2024. *Emerg Infect Dis* 2025;31(9):1802-1806 | 40835221 | 10.3201/eid3109.250804 | PubMed record retrieved; title carries the 1983–2024 span and the unknown-exposure framing |
 | `[127]` | Gasqué M, Guernier-Cambert V, Girault G, et al. Rapid confirmation of autochthonous origin in suspected cases of melioidosis from French overseas departments in the Caribbean and the Indian Ocean by PCR-high resolution melting (HRM) analysis. *Infect Genet Evol* 2024;127:105711 | 39732273 | 10.1016/j.meegid.2024.105711 | PubMed record retrieved; abstract matches the claim exactly, three region-specific SNP markers for the Indian Ocean, the Americas and Martinique |
 | `[128]` | Sarovich DS, Garin B, De Smet B, et al. Phylogenomic Analysis Reveals an Asian Origin for African *Burkholderia pseudomallei* and Further Supports Melioidosis Endemicity in Africa. *mSphere* 2016;1(2):e00089-15 | 27303718 | 10.1128/mSphere.00089-15 | PubMed record retrieved. **Supports only half the sentence citing it — see below** |
+| `[100]` | Godoy D, Randle G, Simpson AJ, et al. Multilocus sequence typing and evolutionary relationships among the causative agents of melioidosis and glanders. *J Clin Microbiol* 2003;41(5):2068–79 | 12734250 | 10.1128/JCM.41.5.2068-2079.2003 | Already in the verified corpus (`BACKGROUND_RESEARCH` reference table); this is the seven-locus scheme itself |
+| `[123]` | Meumann EM, Kaestli M, Mayo M, et al. Emergence of *Burkholderia pseudomallei* Sequence Type 562, Northern Australia. *Emerg Infect Dis* 2021;27(4):1057-1067 | 33754984 | 10.3201/eid2704.202716 | PubMed record retrieved. **Correct the sentence when using it — see below** |
+| `[124]` | Lichtenegger S, et al., as `[99]` | 33980649 | 10.1128/JCM.00093-21 | Same paper as `[99]`. The two markers cite one source and should be merged on renumbering |
+| `[125]` | Webb JR, Mayo M, Rachlin A, et al. Genomic Epidemiology Links *Burkholderia pseudomallei* from Individual Human Cases to *B. pseudomallei* from Targeted Environmental Sampling in Northern Australia. *J Clin Microbiol* 2022;60(3):e0164821 | 35080450 | 10.1128/JCM.01648-21 | PubMed record retrieved; 98 patient sites, 975 environmental samples, genotype match for 19 patients (19%). Exact match for the claim |
 
 ### Two audit corrections confirmed independently
 
@@ -79,6 +83,27 @@ Note also for the paper's own argument: this study found "distinct
 geography-specific clades for Africa, the Americas, Asia and Australasia", which
 is regional structure, consistent with our own region-level result.
 
+## A second sentence to correct, and it helps the paper
+
+**`[123]`, ST562 "in both Australia and Southeast Asia".** Meumann 2021 places
+ST562 in northern Australia and reports ST562 isolates from **Hainan Province,
+China, and Pingtung County, Taiwan**. That is East Asia, not Southeast Asia, so
+the region is wrong as written.
+
+The more useful correction is the one the background leaves out. Those isolates
+were **"distantly related to ST562 strains from Australia"**, and the paper says
+"the origin and transmission mode of ST562 into Australia remain uncertain". So
+this is not clean evidence of intercontinental sharing of a lineage. It is
+evidence that **the same sequence type occurs on two continents in genomes that
+are not closely related**, which is the homoplasy argument, and it is direct
+external support for this manuscript's finding that country-level attribution
+fails while regional attribution holds. Cited correctly it strengthens Results 8
+instead of being a stray fact in a background.
+
+Related, and worth using the same way: `[125]` Webb 2022 warns that "WGS and
+careful genomics are required to avoid overcalling the relatedness between
+clinical and environmental isolates".
+
 ## Open discrepancy, not yet resolved
 
 **`[103]`: four patients or five?** The background prose says "four patients in
@@ -87,28 +112,36 @@ this focus as **five** cases over the same span. The Brennan title says only
 "Related Melioidosis Cases". The count must be read out of the paper itself
 before either number is used. Do not quote a number for this focus until it is.
 
-## Still to resolve
+## Still to resolve, in scope
 
-- `[100]` PubMLST, expected to be a Jolley reference for the database rather than
-  for *B. pseudomallei* specifically.
-- `[102]` the quoted claim of a "very strong phylogeographic signal that allows
-  accurate identification of strain origin on a continental level". This is a
-  direct quotation and needs its actual source; a topic search did not find it.
-- `[104]`–`[111]`, the acquired-resistance block: PenA structural mutations,
-  *bpss1219* PBP3 deletion, *amrR*/*bpeT* efflux regulator loss of function,
-  BpeEF-OprC and trimethoprim-sulfamethoxazole, and the ARDaP tool. This block
-  carries the most specific factual claims in the background and none of them
-  currently has a citation that resolves.
-- `[112]`–`[122]`, the climate and rainfall block, including the Townsville
-  fortnightly-rainfall association, the 31.6°S temperate Western Australian
-  focus, the 77.7% to 97.4% PCR positivity shift, the 5% to 82% seasonal culture
-  positivity with Spearman's rho 0.905, and the 26°C wettest-quarter MaxEnt
-  threshold.
-- `[123]`–`[130]`: ST562 intercontinental sharing, cgMLST framing, prospective
-  case-to-environment linkage, GWAS of virulence loci, PCR-HRM regional
-  assignment, the African origin of South American isolates, the Australian goat
-  farm, and the typhoon airborne-transmission isolate.
+Scope is now fixed by `BACKGROUND_SCOPE_DECISION_2026-09-03.md`: sections 6, 7
+and 8 enter the manuscript, plus 5.1 for Methods. That leaves 11 in-scope
+dangling citations, of which **9 are resolved above**. Two remain.
 
-These are the topics handoff section 5 identified as ground the SciSpace draft
-covers and our corpus does not, which is exactly why they cannot be resolved from
-the corpus and need primary lookups.
+- `[97]` the claim that typing cannot "reliably distinguish between isolates from
+  different geographic regions at the country level". This is the background's
+  version of this paper's own central negative result, so it needs a real source
+  rather than a plausible one. `[95]` is cited alongside it and is defined, so
+  start there.
+- `[102]` the quotation "very strong phylogeographic signal that allows accurate
+  identification of strain origin on a continental level". Three topic searches
+  did not find it. Because it is presented as a **direct quotation**, it either
+  has a specific source or it is fabricated, and the second possibility has
+  precedent here: the corpus already documents three caught fabrications, and
+  this background re-dated four real papers to July 2024. Treat as unverified
+  until the sentence is found in a real paper. **Do not carry a quotation whose
+  source cannot be produced.**
+
+## Deliberately not resolved, out of scope
+
+23 dangling citations are out of scope per the scope decision and are **not**
+being sourced: `[98]`; `[104]`–`[111]`, the eight-reference acquired-resistance
+block; `[112]`–`[122]`, the eleven-reference climate and rainfall block; `[126]`
+virulence GWAS; `[129]` the goat farm; and `[130]` typhoon airborne
+transmission.
+
+These are real topics and several carry specific, checkable claims. They are not
+being sourced because the sections containing them do not enter this manuscript,
+and sourcing a sentence that is about to be cut is wasted work. If the background
+is ever finished as a standalone review, they come back into play, and this list
+is where that work starts.
