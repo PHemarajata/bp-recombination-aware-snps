@@ -85,12 +85,15 @@ is regional structure, consistent with our own region-level result.
 
 ## A second sentence to correct, and it helps the paper
 
-**`[123]`, ST562 "in both Australia and Southeast Asia".** Meumann 2021 places
-ST562 in northern Australia and reports ST562 isolates from **Hainan Province,
-China, and Pingtung County, Taiwan**. That is East Asia, not Southeast Asia, so
-the region is wrong as written.
+**`[123]`, ST562.** ⚠ **Correction to an earlier version of this entry.** It said
+the background claimed ST562 "in both Australia and Southeast Asia" and that the
+region was therefore wrong. **That was my error, not the background's.** The
+sentence says "Australia and **southern China**", which is right: Meumann 2021
+reports ST562 from Hainan Province. I read a truncated context ending "Australia
+and so..." and expanded it to the wrong phrase instead of checking the full
+sentence, which is the same shortcut this handoff documents elsewhere.
 
-The more useful correction is the one the background leaves out. Those isolates
+What is genuinely missing is the qualification the background leaves out. Those isolates
 were **"distantly related to ST562 strains from Australia"**, and the paper says
 "the origin and transmission mode of ST562 into Australia remain uncertain". So
 this is not clean evidence of intercontinental sharing of a lineage. It is
@@ -111,6 +114,46 @@ Georgia, USA, with disease episodes spanning 1983–2024". A project note record
 this focus as **five** cases over the same span. The Brennan title says only
 "Related Melioidosis Cases". The count must be read out of the paper itself
 before either number is used. Do not quote a number for this focus until it is.
+
+## The fabricated entries have a signature, and it is mechanical
+
+Found while fixing the two sentences above, and it is the most useful audit
+result here.
+
+**The entries for `[103]`–`[130]` exist, but they sit in the document body rather
+than under `## References`.** That is why both tools reported them as dangling:
+`verify_references_bp.py` splits on the `## References` heading, so this block
+counts as prose, its `[n]` labels are counted as citation marks, and nothing in
+it is counted as a definition. The 34 dangling and the 409 marks are both partly
+artifacts of where the block sits. `[97]`–`[102]` have **no entry anywhere**,
+which is why `[102]` could not be sourced: there was never anything to source.
+
+Within that block, five entries share a signature:
+
+| ref | title as given | tell |
+|---|---|---|
+| `[123]` | "ST562 Identified in Both Australia and Southern China: Intercontinental Sharing of a *B. pseudomallei* Sequence Type" | title restates the claim sentence |
+| `[124]` | "Formal Development and Validation of the 4,221-Locus Core-Genome MLST Scheme for *B. pseudomallei*" | title restates the claim sentence |
+| `[126]` | virulence GWAS | out of scope |
+| `[128]` | African origin | out of scope for sourcing, in scope for the sentence |
+| `[130]` | typhoon airborne transmission | out of scope |
+
+All five carry the **`10.60692` prefix** and **no journal field**, and four are
+dated **2024**. `[123]`'s DOI is `10.60692/x9erj-5ns21`, which is the exact
+identifier the handoff traced to a repository rather than a journal.
+
+**Three of the five have real papers, which I found independently before noticing
+the pattern:** `[123]` is Meumann 2021, `[124]` is Lichtenegger 2021, `[128]` is
+Sarovich 2016. So these are not merely bad identifiers attached to real work.
+They are entries whose titles were written to match the sentence citing them,
+standing in for real papers that already existed and were easy to find.
+
+That makes the signature worth encoding rather than remembering: **`10.60692`
+prefix, plus no journal, plus a title that paraphrases the citing sentence.** The
+first two are mechanical and already flagged by `verify_references_bp.py` as
+UNKNOWN-PREFIX and NO-METADATA. The third is the one that identifies fabrication
+rather than sloppiness, and it is checkable by comparing entry title against the
+text of the sentences citing it.
 
 ## `[102]` cannot be substantiated, and the attribution is checkable
 
