@@ -390,8 +390,12 @@ read against the bounds. The n = 98 child's diversity is recomputed on its own
 membership: joining the split children to the unsplit parent by unit name assigns
 that child the parent's 1,310 rather than its own 72.
 
-The count of in-window units was 47 both before and after refinement, and 106 of
-153 genomes moved out of the measurable set. We therefore report `strain_1_L1_36`
+The split itself leaves the in-window count unchanged, one measurable unit before
+and one after, while moving 106 of the 153 genomes out of the measurable set. The
+reported and control bases do differ overall, 47 in-window against 48, but for a
+reason unrelated to this split: `strain_1_L1_11` crosses the ceiling into the
+window once its diversity is recomputed on its own membership rather than
+inherited. We therefore report `strain_1_L1_36`
 as the recombination result arising from the split, and `strain_1_L1_26` and
 `strain_1_L1_37` as identified clonal expansions of epidemiological interest with
 no r/m.
