@@ -183,6 +183,11 @@ conference abstract, and no repository copy of a paper that has a publisher DOI.
 
 ## 6. Number discrepancies to settle on the workstation
 
+> **All three are settled and fixed. See section 13.** The Gate 1 floor is 700,
+> the all-unit median is 5.51 and is not reported, and Thailand is 67%, 1,561 of
+> the 2,340 analysed genomes. Two further errors were found in the course of
+> fixing them, one of them in Table 3.
+
 Three, all checkable against `NUMBERS.tsv`, and all currently inconsistent
 between the Drive documents and the repository.
 
@@ -263,9 +268,9 @@ repository at all.
 
 **Still needed, blocking the number reconciliation:**
 
-1. `NUMBERS.tsv`. The canonical source, with its `QUOTE THIS` / `DO NOT QUOTE`
-   annotations. Everything in section 6 resolves from this one file, and it is
-   the only blocking item left.
+1. `NUMBERS.tsv`. **Received 2026-09-03, and everything in section 6 resolved
+   from it.** The canonical source, with its `QUOTE THIS` / `DO NOT QUOTE`
+   annotations.
 2. Whatever output fixes the Gate 1 floor, most likely the calibration table or
    `gate1_from_alignment_bp.py` output for the reported basis.
 
@@ -428,6 +433,36 @@ written from the Drive folder's contents without running `git ls-files`. The
 pattern is identical: an inventory taken from the nearest visible surface and
 then reported as the whole picture.
 
+**Four more on 2026-09-03, all the same shape.** Each was caught within minutes,
+none of them by me, and each was caught by somebody reading the source.
+
+- I reported four malformed rows in `NUMBERS.tsv`, missing tabs between the
+  source and note fields. `awk -F'\t' 'NF!=4'` returns nothing. The file is
+  clean and the run-together text was a rendering artifact in a terminal paste.
+- I listed six documents needing the Gate 1 floor corrected. Two of them,
+  `METHODS_DRAFT_2026-08-19.md` lines 315 and 1398, were already right: both
+  name their unit system, and 315 gives the translation outright. I built that
+  list from `grep` hits without reading the surrounding lines.
+- **I retracted a true statement.** I had cited a unit at 955 marked below floor
+  in Table 3. Asked to check, I grepped `MANUSCRIPT_COMPILED`, `RESULTS_DRAFT`
+  and `MANUSCRIPT_OUTLINE`, omitted `MANUSCRIPT_DRAFT_2026-09-02.md` itself,
+  found nothing, and told the user the figure did not exist and that I had
+  invented it. It was at line 382. This is the most dangerous of the four,
+  because a confident retraction reads as diligence and destroys a real finding.
+  A partial search returning nothing is not evidence of absence.
+- I added a sentence to Results explaining that the in-window lower quartile,
+  5.51, coincided with the all-unit median. It does not. The published pair
+  5.51 to 9.44 mixes two quantile methods, and under one consistent method the
+  quartile is 5.72. I explained an artifact instead of measuring it.
+
+The common feature is not carelessness about facts I held. It is reporting from
+a partial view as though it were the whole one, and it now has five instances in
+this project across stale trees, folder inventories, `grep` scopes and a
+retraction. The mitigation is structural rather than a resolution to be careful:
+anything quantitative comes from a file someone hands over, a search that finds
+nothing proves nothing unless its scope is stated, and a correction to a claim
+needs the same standard of evidence as the claim did.
+
 **The division of labor that follows.**
 
 The workstation owns every number. Anything quantitative should originate in
@@ -449,6 +484,10 @@ superseded numbers first.
 ---
 
 ## 11. Recommended order
+
+> **Steps 1, 4 and 5 are done. See section 13.** Steps 2, 3 and 6, the
+> background's fate, the three content errors and the merge, are untouched and
+> remain the order of work.
 
 1. Run the two `verify_references_bp.py` commands in section 7. Minutes.
 2. Decide the background's fate. My recommendation is to **keep its outline and
@@ -565,3 +604,87 @@ producing a plausible wrong number rather than an error, all six found by
 accident, and the worst would have written r/m 8.05 into the manuscript instead
 of 7.70. So that recommendation is already implemented and the class is closed.
 `verify_references_bp.py` is intended to sit alongside it as a fifth job.
+
+---
+
+## 13. What was fixed on 2026-09-03, after the sections above
+
+Written at the end of the day. Where this section and sections 1 to 12 disagree,
+this one is later. Everything here is on branch `claude/citation-audit-2026-09-03`,
+CI green on all four jobs at every commit.
+
+### The three numbers in section 6 are settled
+
+**Gate 1 floor is 700, not 1,270.** `GATE1_ALIGNMENT_RESULT_2026-08-21.md`
+relocated the window on 21 August and says outright "Not 1,270." The floor
+brackets to (588, 755], located on union recombination coverage and median tract
+length alone rather than on r/m, so the bounds are not chosen to flatter the
+result. The ceiling sits near 4,700 and translates essentially unchanged from
+4,671, which nothing forced the two unit systems to agree on. The strongest
+sentence was missing everywhere and is now in the manuscript: 588, 700, 755 and
+840 give median in-window r/m of 7.70, 7.70, 7.74 and 7.78, so where in the
+bracket the floor is put carries no weight.
+
+Corrected in `MANUSCRIPT_DRAFT_2026-09-02.md` (Introduction, Results, and the
+bracket paragraph that still gave the superseded (405, 1,268] at 3.1-fold),
+`README.md` and `PUBLICATION_STRATEGY_2026-09-02.md`.
+`METHODS_DRAFT_2026-08-19.md` was already correct and was left alone.
+
+**The all-unit median is 5.51, not 5.70.** `NUMBERS.tsv` annotates it DO NOT
+QUOTE. All three sites in the draft already used it correctly, as the figure the
+paper declines to report, so only the value was wrong. The same Discussion
+sentence also had "47 measurements and 41 detection failures", which sums to 88,
+the A100 control basis rather than the reported 85. It is 38.
+
+**Thailand is 67%, 1,561 of the 2,340 analysed genomes**, with the denominator
+named in the sentence. Four shares had been in circulation, each correct for a
+denominator never stated beside it. `country_share_bp.py` is new in this repo and
+computes it. It reports two denominators rather than choosing one, because
+`phylogeography_association_bp.py` uses two different country filters in one run:
+`genome_state` refuses a genome whose `origin_resolution` is `multi_country`, and
+`report_single_country` does not apply that filter when it builds the counter
+behind its "dominant country" line.
+
+### Two errors found while fixing those
+
+**Table 3 was in Mash units.** All four diversity values match the Mash column of
+`GATE1_ALIGNMENT_A100_2026-08-21.tsv` exactly and none match the alignment
+column, while the column was labelled with the alignment metric and read against
+the alignment-derived floor. That is the cross-unit-system comparison the section
+exists to warn about, committed inside the section itself. The conclusion is
+unchanged, because the n = 98 child is below the floor on both metrics, but the
+table now reads 153 / 1,310 / 4.47 before and 98 / 72, 47 / 1,477, 8 / 123 after,
+all alignment-derived, with the superseded Mash figures named in place. Joining
+the split children to the unsplit parent by unit name is what assigned that child
+the parent's 1,310 rather than its own 72.
+
+**The in-window IQR is 5.72 to 9.41, not 5.51 to 9.44.** The published pair mixes
+quantile methods, 5.51 being the lower-method Q1 and 9.44 the higher-method Q3.
+Under one consistent method the lower quartile is 5.72, so the apparent collision
+with the all-unit median of 5.51 was an artifact of the method rather than a
+coincidence needing a sentence of explanation. That sentence has been removed.
+
+### Also done
+
+The Nextflow Script ID `e09a5c4eadba2c5984f6790095423ee4` is in Results 9, stated
+as a hash of `main.nf` rather than a git commit, which is what makes it support a
+byte-identical-code claim. Step 5 of section 11 is closed.
+
+The reference audit of section 7 was run on the workstation and reproduced the
+web session's counts exactly, all five flag counts included, on a local file that
+never passed through Drive's markdown converter. That rules out the one fair
+objection to the first run, which was that the escaping reversal in `read_text()`
+might have manufactured the 34 dangling citations.
+
+### Still open
+
+- **Steps 2, 3 and 6 of section 11 are untouched**: the background's fate, the
+  three content errors in section 3, and the merge into the manuscript. These
+  are the remaining work and the order still holds.
+- **"The count of in-window units was 47 both before and after refinement"** is
+  still in the draft and is probably wrong. The control basis is 48 in-window per
+  `GATE1_ALIGNMENT_RESULT` section 7b, and the extra unit is `strain_1_L1_11`
+  rather than anything from the split. Correcting it needs cross-run bookkeeping.
+- **`GATE1_ALIGNMENT_RESULT` section 9 is superseded by section 7b** of the same
+  file, which is a day later. Section 9 reads the as-filed value and calls the
+  n = 98 child in-window. Do not act on section 9.
