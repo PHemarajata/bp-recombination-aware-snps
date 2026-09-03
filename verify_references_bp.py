@@ -104,6 +104,51 @@ def parse_entries(refs):
     return bracket if len(bracket) >= len(numbered) else numbered
 
 
+def misplaced_entries(body):
+    """
+    Reference entries that sit in the body instead of under the heading.
+
+    This is not hypothetical. `BP_background_section.md` carries definitions for
+    [103]-[130] *before* its '## References' heading. Everything before that
+    heading is read as prose, so each of those 28 blocks is counted as a citation
+    of itself and none is counted as a definition. That single misplacement is
+    most of why the file reports 34 dangling citations and 409 citation marks.
+
+    Deliberately conservative, and the first attempt was not conservative
+    enough. Accepting "looks bibliographic" as a bare four-digit year matched 130
+    blocks instead of 28, because a wrapped prose line can begin "[85]." and the
+    span after it contains a year like any prose does. Requiring a field-style
+    marker at the start of a line fixes it: a reference entry here is written as
+    'title:' / 'journal:' / 'year:' / 'doi:' lines, and running prose has none of
+    them.
+
+    A numbered-list style is not accepted at all, because ordinary prose lists
+    would match it, and a false positive here sends someone hunting a reference
+    list that does not exist.
+    """
+    field = re.compile(r"(?im)^[ \t]*(title|journal|year|doi|authors?|volume)\s*:\s*\S")
+    out = {}
+    # '[ \t]*' and not '\s*': \s matches newlines, so with re.MULTILINE the
+    # anchor slides past line breaks and matches any inline citation marker that
+    # happens to follow one. That reported 130 entries in a file containing 28.
+    # The label may be followed by a space ('[103] Brennan, B.G.; et al.') or by
+    # a newline ('[1]\n  authors: ...'). Requiring a space made every
+    # newline-style label invisible as a boundary, so one block swallowed the
+    # hundred entries after it and only the first was reported.
+    for m in re.finditer(
+            r"^[ \t]*\[(\d+)\][ \t]*(.*?)(?=^[ \t]*\[\d+\](?:[ \t]|$)|\Z)",
+            body, flags=re.M | re.S):
+        raw = m.group(2)
+        # The marker must appear near the top of the block. A real entry carries
+        # 'title:' on the line straight after its label. A stray '[1]' ending a
+        # wrapped prose line captures everything down to the next line-start
+        # label, which can be thousands of characters away and can swallow a
+        # genuine entry's fields, so an unbounded search reports it too.
+        if field.search(raw[:300]):
+            out[int(m.group(1))] = " ".join(raw.split())
+    return out
+
+
 def cited_numbers(body):
     """
     Every citation number appearing in prose, including grouped markers.
@@ -200,6 +245,22 @@ def main():
     print(f"  ORPHAN (defined, uncited)    : {len(orphan)}")
     if orphan:
         print(f"     {orphan}")
+
+    stray = misplaced_entries(body)
+    explained = sorted(n for n in dangling if n in stray)
+    if stray:
+        print()
+        print(f"  MISPLACED ENTRIES            : {len(stray)}")
+        print(f"     {sorted(stray)}")
+        print(f"     These are reference entries sitting BEFORE the "
+              f"'{a.refs_heading}' heading.")
+        print("     Everything before that heading is read as prose, so each of")
+        print("     these is counted as a citation of itself and none is counted")
+        print("     as a definition.")
+        if explained:
+            print(f"     {len(explained)} of the {len(dangling)} dangling "
+                  f"citations are defined here and would")
+            print("     stop dangling if the block were moved under the heading.")
 
     rows = []
     counts = collections.Counter()

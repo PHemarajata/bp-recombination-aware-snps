@@ -134,13 +134,30 @@ Gate 1 floor's 1,270 from its 700 and the Thailand share's 58.9% from its 66.7%.
 Found while fixing the two sentences above, and it is the most useful audit
 result here.
 
-**The entries for `[103]`–`[130]` exist, but they sit in the document body rather
-than under `## References`.** That is why both tools reported them as dangling:
-`verify_references_bp.py` splits on the `## References` heading, so this block
-counts as prose, its `[n]` labels are counted as citation marks, and nothing in
-it is counted as a definition. The 34 dangling and the 409 marks are both partly
-artifacts of where the block sits. `[97]`–`[102]` have **no entry anywhere**,
-which is why `[102]` could not be sourced: there was never anything to source.
+⚠ **Corrected 2026-09-04, and the correction is larger than the original note.**
+An earlier version of this section said the entries for `[103]`–`[130]` sit in
+the body, and that `[97]`–`[102]` had no entry anywhere. Both were wrong, because
+I had only looked at the part of the block I stumbled into.
+
+**The body contains a complete second bibliography, `[1]`–`[130]`, all 130
+entries**, in a machine-readable `label: value` format introduced by the line
+"These are the papers cited in the insights:" and carrying its own stated schema.
+The document therefore has **two** bibliographies: that one in the body, and the
+prose list of `[1]`–`[96]` under `## References`.
+
+`verify_references_bp.py` splits on the `## References` heading, so the body
+block counts as prose: its `[n]` labels are counted as citation marks and none of
+its entries is counted as a definition. **All 34 dangling citations are defined
+in that block.** So the headline "thirty-four citations point at nothing" is not
+quite right, and the true statement is worse rather than better: they point at
+entries that exist but sit in the wrong section, and among those entries are the
+fabricated ones. A citation pointing at nothing is a formatting defect. A
+citation pointing at a manufactured entry is not.
+
+This also explains `[102]` properly. It was not unsourceable because no entry
+existed. It has an entry; that entry simply does not correspond to a real paper
+that any search can find, which is the conclusion reached independently by
+checking all five Viberg papers.
 
 Within that block, five entries share a signature:
 
