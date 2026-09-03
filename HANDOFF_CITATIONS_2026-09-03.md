@@ -364,7 +364,8 @@ plan proposes auditing every script for defaults that point at a partition or a
 run. That is the right diagnosis and the wrong remedy, because an audit is a
 one-time act and the bug is generative. Make it a test: a CI check that fails if
 any `argparse` default in the repository matches a path-like pattern. Then the
-class is closed rather than the three known instances.
+class is closed rather than the three known instances. **See section 12: this is
+already done on `main` as `audit_defaults_bp.py`.**
 
 *The determinism framing is right and should be stated exactly as the plan has
 it.* The reported run is pinned to a commit predating the seed fix, so re-running
@@ -419,6 +420,13 @@ and produced a manuscript whose headline r/m was correct for the tree I could se
 and wrong for the real one. The lesson is not that I should try harder. It is
 that **this session cannot detect that its inputs are stale**, so staleness has to
 be prevented on the input side.
+
+A second instance of the same failure, found while correcting this handoff.
+Section 8 originally asked the workstation to send seven text artifacts. Six of
+them were tracked in this repository and readable at any point. That list was
+written from the Drive folder's contents without running `git ls-files`. The
+pattern is identical: an inventory taken from the nearest visible surface and
+then reported as the whole picture.
 
 **The division of labor that follows.**
 
