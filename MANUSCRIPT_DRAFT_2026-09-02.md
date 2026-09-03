@@ -121,7 +121,7 @@ Applying that window to the reported partition of 85 units and 2,340 genomes,
 r/m is a measurement for 47 units and a detection failure for 38. The median r/m across the
 47 in-window units is 7.70, against 1.32 below the floor and 2.14 above the
 ceiling. A low r/m in this species is therefore a detection failure rather than a
-clonal unit, and the all-unit median of 5.70 mixes measurements with failures.
+clonal unit, and the all-unit median of 5.51 mixes measurements with failures.
 Detection was bounded from both sides. A matched zero-recombination null over
 1,519 replicates produced a maximum pooled r/m of 0.00668, between 427 and 2,234
 times below any observed value, and spike-in of tracts at the measured donor
@@ -346,7 +346,7 @@ exactly (Table 2).
 | Above ceiling | 26 | 2.14 |
 
 **The recombination result for this collection is r/m 7.70, the median of 47
-in-window units.** The all-unit median of 5.70 mixes measurements with detection
+in-window units.** The all-unit median of 5.51 mixes measurements with detection
 failures and is not reported. The collapse is symmetric, which makes the reading
 error easy to commit in both directions, and the consequence is the single most
 important qualification on these results. **A low r/m in this species is a
@@ -660,9 +660,9 @@ parameters were pinned rather than left at repository defaults for that reason.
 **The reported recombination rate for this species depends on a step nobody has
 been reporting.** Our in-window median of 7.70 sits close to Nandi's 7.2 [7] and
 above Seng's per-lineage values of 3.7, 4.6 and 2.2 [8]. Read naively, our
-all-unit median of 5.70 would have sat between them and looked unremarkable. It is
-not a rate. It is the average of 47 measurements and 41 detection failures, and
-the failures pull it down from both directions at once. That the two published
+all-unit median of 5.51 would have sat between them and looked unremarkable. It is
+not a rate. It is a median taken across 47 measurements and 38 detection
+failures, and the failures pull it down from both directions at once. That the two published
 genome-wide estimates were both computed within clades or lineages is not
 incidental, and it means the comparison is like for like only once the window is
 applied.
