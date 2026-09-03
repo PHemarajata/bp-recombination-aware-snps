@@ -362,9 +362,7 @@ unimodal and that is a sound structural reason, but not for the reason given, an
 their r/m values should not be quoted.
 
 Across the 47 in-window units the r/m distribution is right-skewed: median 7.70,
-interquartile range 5.51 to 9.44, full range 1.52 to 18.03. The lower quartile,
-5.51, is numerically the same as the all-unit median named above, and the two are
-unrelated statistics rather than one number repeated. The spread is genuine
+interquartile range 5.72 to 9.41, full range 1.52 to 18.03. The spread is genuine
 biological heterogeneity in recombination rate among lineages, not measurement
 noise, since every unit in this set sits inside the calibrated detection window.
 
@@ -378,10 +376,19 @@ the floor at which recombination can be detected at all (Table 3).
 
 | | n | mean pairwise core SNPs | r/m | Gate 1 |
 |---|---|---|---|---|
-| Before, `strain_1_L1_26` | 154 | 3,421 | 3.10 | In-window |
-| After, `strain_1_L1_26` | 98 | 955 | 1.07 | Below floor |
-| After, `strain_1_L1_36` | 47 | 3,374 | 6.68 | In-window |
-| After, `strain_1_L1_37` | 8 | 229 | 2.63 | Below floor |
+| Before, `strain_1_L1_26` | 153 | 1,310 | 4.47 | In-window |
+| After, `strain_1_L1_26` | 98 | 72 | 1.07 | Below floor |
+| After, `strain_1_L1_36` | 47 | 1,477 | 6.68 | In-window |
+| After, `strain_1_L1_37` | 8 | 123 | 2.63 | Below floor |
+
+Diversities are alignment-derived, on the same metric as the window. An earlier
+version of this table reported the Mash approximation (3,421, 955, 3,374 and 229)
+against the alignment-derived floor, which is the cross-unit-system comparison
+this section exists to warn about. The conclusion is unchanged, because the n = 98
+child sits below the floor on both metrics, but only the alignment figures may be
+read against the bounds. The n = 98 child's diversity is recomputed on its own
+membership: joining the split children to the unsplit parent by unit name assigns
+that child the parent's 1,310 rather than its own 72.
 
 The count of in-window units was 47 both before and after refinement, and 106 of
 153 genomes moved out of the measurable set. We therefore report `strain_1_L1_36`
@@ -638,7 +645,8 @@ verification was per-unit rather than by exit code, comparing units requested
 against units that produced Gubbins output and reading status, exit code and
 confidence tier per replicon-unit. **172 of 172 and 176 of 176 replicon-units
 completed at the highest confidence tier.** The two executions recorded the same
-Nextflow script identifier (a hash of the workflow definition) and identical
+Nextflow script identifier (`e09a5c4eadba2c5984f6790095423ee4`, a hash of the
+workflow definition `main.nf` rather than a git commit) and identical
 containerized tool versions, so they ran byte-identical pipeline code and differ
 only in Nextflow version and resource profile. Across the 82 units of shared
 membership, r/m agreed to a median relative difference of 0.36%.
@@ -737,7 +745,8 @@ Gubbins would call most of the alignment recombinant. Its branch lengths include
 recombination and no r/m may be derived from it. Grafted per-unit trees mix branch
 length units and are a topology aid rather than a rate-comparable object. Nothing
 here reconstructs direction of spread or migration rates. A collection that is
-about 70% one country cannot support that, and no amount of analysis will fix it.
+about 67% one country (1,561 of the 2,340 analyzed genomes are from Thailand)
+cannot support that, and no amount of analysis will fix it.
 
 **Limitations.** Beyond the floor bracket already discussed, a quarter of the
 analyzable set is unscreened for modality because it falls below n of 25 where
