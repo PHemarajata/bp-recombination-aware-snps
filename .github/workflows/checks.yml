@@ -1,6 +1,6 @@
 name: checks
 
-# Three jobs, all of which run WITHOUT the isolate data. That constraint is the
+# Five jobs, all of which run WITHOUT the isolate data. That constraint is the
 # point: this repository tracks only code and documentation (see .gitignore),
 # so CI must be meaningful on a data-free checkout or it cannot run at all.
 on:
@@ -91,3 +91,33 @@ jobs:
             echo "REFUSING: tracked tree exceeds 20 MB, which suggests a data file."
             exit 1
           fi
+
+  citations:
+    name: no citation points at nothing
+    runs-on: ubuntu-latest
+    # citation_audit_report.md reported "130/130 refs cited and defined, 0
+    # orphans" for a file that cites [1]-[130] and defines [1]-[96]. Thirty-four
+    # citations pointed at nothing, including every fix the audit claimed to have
+    # applied. That is the same failure this repository keeps hitting: a
+    # plausible status line standing in for a measurement. This measures it.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: the manuscript has no dangling citations
+        # Strict, and it passes today at 19 cited over 24 defined. This is the
+        # submission-bound document, so a citation pointing at nothing is a
+        # release blocker rather than a cleanup task. Entry-level flags are
+        # warn-only here because "no journal volume" is a judgement call and
+        # "cited but undefined" is not.
+        run: python3 verify_references_bp.py MANUSCRIPT_DRAFT_2026-09-02.md --warn-only
+      - name: the background does not get worse
+        # A ratchet, not a gate. The background carries 34 dangling citations and
+        # fixing them is scoped work in progress, so demanding a clean sheet
+        # would mean this job could not run at all until that finished, which is
+        # how audits end up never running. Lower this number as they are fixed;
+        # it can only go down.
+        run: |
+          python3 verify_references_bp.py BP_background_section.md \
+            --max-dangling 34 --warn-only

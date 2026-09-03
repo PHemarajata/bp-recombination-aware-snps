@@ -85,11 +85,37 @@ def split_document(text, heading):
 
 
 def parse_entries(refs):
-    """Return {number: entry_text} for lines beginning '[N]'."""
-    out = {}
+    """
+    Return {number: entry_text} for a reference list.
+
+    Two styles occur in this project and both must parse, because the audit is
+    only worth having if it can be pointed at the manuscript as well as at the
+    background. The background numbers entries '[1] Author ...'; the manuscript
+    numbers them '1. Author ...'. Whichever style yields more entries wins, so
+    no caller has to declare it.
+    """
+    bracket, numbered = {}, {}
     for m in re.finditer(r"^\s*\[(\d+)\]\s*(.*?)(?=^\s*\[\d+\]|\Z)",
                          refs, flags=re.M | re.S):
-        out[int(m.group(1))] = " ".join(m.group(2).split())
+        bracket[int(m.group(1))] = " ".join(m.group(2).split())
+    for m in re.finditer(r"^\s*(\d{1,3})\.\s+(.*?)(?=^\s*\d{1,3}\.\s|\Z)",
+                         refs, flags=re.M | re.S):
+        numbered[int(m.group(1))] = " ".join(m.group(2).split())
+    return bracket if len(bracket) >= len(numbered) else numbered
+
+
+def cited_numbers(body):
+    """
+    Every citation number appearing in prose, including grouped markers.
+
+    '[1]' and '[1,2]' and '[1, 2]' all cite. Matching only '\\[(\\d+)\\]' silently
+    drops every grouped marker, which in the manuscript means missing the very
+    first citation in the Introduction.
+    """
+    out = collections.Counter()
+    for grp in re.findall(r"\[(\d+(?:\s*,\s*\d+)*)\]", body):
+        for n in grp.split(","):
+            out[int(n.strip())] += 1
     return out
 
 
@@ -133,6 +159,16 @@ def main():
     ap.add_argument("--sleep", type=float, default=0.1,
                     help="delay between online lookups")
     ap.add_argument("--out", help="write a per-reference TSV here")
+    ap.add_argument("--max-dangling", type=int, default=0, metavar="N",
+                    help="tolerate at most N dangling citations before failing. "
+                         "A ratchet: set it to the current count so the number "
+                         "can only go down, rather than demanding a clean sheet "
+                         "before the audit may run in CI at all")
+    ap.add_argument("--warn-only", action="store_true",
+                    help="report entry-level flags but do not fail on them. "
+                         "Dangling citations still fail, because a citation "
+                         "pointing at nothing is a defect and a thesis-repository "
+                         "DOI is a judgement call")
     a = ap.parse_args()
 
     text = read_text(a.document)
@@ -142,7 +178,7 @@ def main():
               f"The file has no reference list at all.", file=sys.stderr)
         sys.exit(2)
 
-    cited = collections.Counter(int(m) for m in re.findall(r"\[(\d+)\]", body))
+    cited = cited_numbers(body)
     entries = parse_entries(refs)
 
     dangling = sorted(n for n in cited if n not in entries)
@@ -233,7 +269,19 @@ def main():
     print("  published thing. It does NOT check that the paper supports the")
     print("  sentence citing it. That pass is still manual.")
 
-    sys.exit(1 if (dangling or counts) else 0)
+    over = len(dangling) - a.max_dangling
+    if over > 0:
+        print(f"\n  FAIL: {len(dangling)} dangling citations, "
+              f"{a.max_dangling} tolerated ({over} over).")
+        sys.exit(1)
+    if dangling:
+        print(f"\n  {len(dangling)} dangling, within the tolerated "
+              f"{a.max_dangling}. Ratchet this down as they are fixed.")
+    if counts and not a.warn_only:
+        print("\n  FAIL: entry-level flags present.")
+        sys.exit(1)
+    print("\n  PASS")
+    sys.exit(0)
 
 
 if __name__ == "__main__":
