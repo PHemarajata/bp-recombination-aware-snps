@@ -34,6 +34,8 @@ and this file is where those land as they are done.
 | `[99]` | Lichtenegger S, Trinh TT, Assig K, et al. Development and Validation of a *Burkholderia pseudomallei* Core Genome Multilocus Sequence Typing Scheme To Facilitate Molecular Surveillance. *J Clin Microbiol* 2021;59(8):e0009321 | 33980649 | 10.1128/JCM.00093-21 | PubMed record retrieved; abstract states 4,221 core and 1,351 accessory targets from K96243 challenged with 469 genomes, which is the scheme this project uses |
 | `[101]` | Petras JK, Elrod MG, Ty MC, et al. Locally Acquired Melioidosis Linked to Environment — Mississippi, 2020-2023. *N Engl J Med* 2023;389(25):2355-2362 | 38118023 | 10.1056/NEJMoa2306448 | PubMed record retrieved; three patients in one Gulf Coast county, same Western Hemisphere strain recovered from three environmental samples |
 | `[103]` | Brennan S, et al. Related Melioidosis Cases with Unknown Exposure Source, Georgia, USA, 1983-2024. *Emerg Infect Dis* 2025;31(9):1802-1806 | 40835221 | 10.3201/eid3109.250804 | PubMed record retrieved; title carries the 1983–2024 span and the unknown-exposure framing |
+| `[127]` | Gasqué M, Guernier-Cambert V, Girault G, et al. Rapid confirmation of autochthonous origin in suspected cases of melioidosis from French overseas departments in the Caribbean and the Indian Ocean by PCR-high resolution melting (HRM) analysis. *Infect Genet Evol* 2024;127:105711 | 39732273 | 10.1016/j.meegid.2024.105711 | PubMed record retrieved; abstract matches the claim exactly, three region-specific SNP markers for the Indian Ocean, the Americas and Martinique |
+| `[128]` | Sarovich DS, Garin B, De Smet B, et al. Phylogenomic Analysis Reveals an Asian Origin for African *Burkholderia pseudomallei* and Further Supports Melioidosis Endemicity in Africa. *mSphere* 2016;1(2):e00089-15 | 27303718 | 10.1128/mSphere.00089-15 | PubMed record retrieved. **Supports only half the sentence citing it — see below** |
 
 ### Two audit corrections confirmed independently
 
@@ -51,6 +53,31 @@ application. That is backwards. **Lichtenegger 2021 (PMID 33980649) is itself
 titled "Development and Validation of..."**, and its abstract describes building
 and validating the scheme. The proposed 2024 paper carries a `10.60692`
 identifier and was not found in PubMed. Do not cite it.
+
+## A claim that its own source does not support
+
+**`[128]`, the transatlantic slave trade.** The background says the African and
+South American populations share a common origin, "with phylogenomic evidence
+supporting an African origin for Central and South American isolates and a
+temporal link with the transatlantic slave trade".
+
+Sarovich 2016 supports the first half and contradicts the framing of the second.
+Verbatim from the abstract: "South American strains reside within the African
+clade, suggesting more recent dissemination from West Africa to the Americas",
+so African origin for South American isolates is sound. But the paper's proposed
+mechanism is **Austronesian migration from Indonesian Borneo to Madagascar around
+2,000 years ago**, and its headline finding is an **Asian** origin for the
+African isolates. The transatlantic slave trade appears nowhere in it.
+
+So the slave-trade link is either sourced from a different paper or is not
+sourced at all. **Do not carry that clause on this citation.** Either find the
+paper that makes the claim, or cut the clause and keep the part Sarovich
+supports. This is the failure mode the audit never checked for: not a broken
+identifier, but a real paper cited for something it does not say.
+
+Note also for the paper's own argument: this study found "distinct
+geography-specific clades for Africa, the Americas, Asia and Australasia", which
+is regional structure, consistent with our own region-level result.
 
 ## Open discrepancy, not yet resolved
 
