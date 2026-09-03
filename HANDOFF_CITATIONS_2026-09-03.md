@@ -678,13 +678,36 @@ might have manufactured the 34 dangling citations.
 
 ### Still open
 
-- **Steps 2, 3 and 6 of section 11 are untouched**: the background's fate, the
-  three content errors in section 3, and the merge into the manuscript. These
-  are the remaining work and the order still holds.
+- **Steps 2 and 6 of section 11 are untouched**: the background's fate and the
+  merge into the manuscript. The order still holds.
+- **Step 3 is done, but it is not in git.** All three content errors are fixed in
+  `BP_background_section.md`. The per-allele conflation now names the quantity as
+  a per-allele MLST figure over seven loci and says outright that it is not on
+  the same scale as a genome-wide r/m. The 45-countries sentence now separates
+  the 45 endemic-but-under-reported from the 34 that have never reported a case,
+  79 priority countries in total, with the suitability model's predicted range
+  larger than either. The Australian origin is no longer "revealed" but supported
+  and contingent on the root, with Pearson's own provisional wording and the
+  bottleneck alternative named. Each was checked against `BACKGROUND_SRC_1`,
+  `_2` and `_5` rather than taken from this handoff. **That file is untracked**,
+  so these fixes exist only on the workstation disk and no checkout will bring
+  them. Decide whether to track it before Step 2 rebuilds its bibliography.
+
+### Closed after this section was first written
+
+Both in commit `d2e9a16`, against the data rather than the documents.
+
 - **"The count of in-window units was 47 both before and after refinement"** is
-  still in the draft and is probably wrong. The control basis is 48 in-window per
-  `GATE1_ALIGNMENT_RESULT` section 7b, and the extra unit is `strain_1_L1_11`
-  rather than anything from the split. Correcting it needs cross-run bookkeeping.
-- **`GATE1_ALIGNMENT_RESULT` section 9 is superseded by section 7b** of the same
-  file, which is a day later. Section 9 reads the as-filed value and calls the
-  n = 98 child in-window. Do not act on section 9.
+  corrected. Counted directly, the reported basis is in 47 / below 12 / above 26
+  over 85 units and the control is in 48 / below 14 / above 26 over 88. The split
+  is net-neutral on the in-window count, one measurable unit before and one
+  after; the extra unit in the control is `strain_1_L1_11`, crossing the ceiling
+  into the window at its true 3,424 rather than its inherited 5,819. The
+  paragraph now makes the local claim it was actually arguing and names the
+  global difference and its cause.
+- **`GATE1_ALIGNMENT_RESULT` section 9 now carries a supersession banner** rather
+  than an edit, so the wrong claim stays visible and auditable. It flags both
+  faults: the inverted run labels, and the as-filed reading that calls the n = 98
+  child in-window. Its conclusion that the count rose by one is accidentally
+  right for the wrong reason, which the banner says explicitly, because that is
+  the harder kind of error to catch.
