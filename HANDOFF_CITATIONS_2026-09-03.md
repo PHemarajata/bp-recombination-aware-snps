@@ -210,6 +210,10 @@ shared git commit and belongs in Results 9 or Methods.
 
 `verify_references_bp.py` is new in this repo and needs no data.
 
+`BP_background_section.md` is **not** tracked in the repo, so the checkout does
+not bring it. Run these from a directory that also holds the Drive copy, or pass
+a path to it.
+
 ```bash
 # 1. Offline structural audit, on whatever copy is current locally.
 python3 verify_references_bp.py BP_background_section.md \
@@ -218,11 +222,20 @@ python3 verify_references_bp.py BP_background_section.md \
 # 2. Online pass. Resolves every DOI and flags non-journal targets.
 python3 verify_references_bp.py BP_background_section.md --online \
         --out REF_AUDIT_background_online.tsv
-
-# 3. Same audit on the manuscript, which has its own numbering problem.
-python3 verify_references_bp.py MANUSCRIPT_COMPILED_2026-08-26.md \
-        --out REF_AUDIT_manuscript.tsv
 ```
+
+**Correction to an earlier version of this section.** It listed a third command,
+the same audit against `MANUSCRIPT_COMPILED_2026-08-26.md`. That command aborts
+with exit 2, and correctly so. Checked directly against the tracked copy on this
+branch, the compiled manuscript contains no `## References` heading, no `[n]`
+citation marks, no author-year citations and no DOI strings anywhere in its
+53 KB. It carries no bibliography at all, so there is nothing yet to audit.
+
+That is worth knowing before step 2 rather than after. For the manuscript the
+choice is not between repairing entries and rebuilding, because no entries
+exist. The verified corpus goes in as the first bibliography rather than as a
+replacement for a broken one, which makes rebuilding from verified sources the
+cheaper path by a wide margin, not merely the safer one.
 
 Exit code is non-zero when anything is flagged, so it can go straight into the CI
 that Phase 4 of `PLAN_TO_SUBMISSION` calls for, alongside
@@ -234,32 +247,37 @@ Then resolve the three numbers above from `NUMBERS.tsv` and correct the draft.
 
 ## 8. What I need back from the workstation
 
-Nothing here requires isolate data. These are all text artifacts that exist only
-on that machine.
+Nothing here requires isolate data.
 
-**Blocking the citation work:**
+**Correction to an earlier version of this section.** It asked for seven
+artifacts as if none were reachable. Six of them are tracked in this repository
+and were readable all along: `MANUSCRIPT_COMPILED_2026-08-26.md`,
+`RESULTS_DRAFT_2026-08-23.md`, `DISCUSSION_DRAFT_2026-08-23.md`,
+`MANUSCRIPT_OUTLINE_2026-08-21.md`, `STATE_2026-09-02.md` and
+`PR3_CORRECTIONS_2026-09-02.md`. The list was written from the Drive folder's
+contents without checking `git ls-files`, which is the same failure mode this
+handoff documents elsewhere. Do not spend time sending those.
 
-1. `MANUSCRIPT_COMPILED_2026-08-26.md`, `RESULTS_DRAFT_2026-08-23.md`,
-   `DISCUSSION_DRAFT_2026-08-23.md`, `MANUSCRIPT_OUTLINE_2026-08-21.md`. The
-   audit compares against these four and none is in the Drive folder, so its
-   overlap findings could not be checked.
-2. The current local `BP_background_section.md`, if it differs from the Drive
-   copy. The Drive copy is what section 1 above measured.
+What is genuinely absent is every `.tsv`, because no TSV is tracked in this
+repository at all.
 
-**Blocking the number reconciliation:**
+**Still needed, blocking the number reconciliation:**
 
-3. `NUMBERS.tsv`. The canonical source, with its `QUOTE THIS` / `DO NOT QUOTE`
-   annotations. Everything in section 6 resolves from this one file.
-4. `STATE_2026-09-02.md` and `PR3_CORRECTIONS_2026-09-02.md`.
-5. Whatever output fixes the Gate 1 floor, most likely the calibration table or
+1. `NUMBERS.tsv`. The canonical source, with its `QUOTE THIS` / `DO NOT QUOTE`
+   annotations. Everything in section 6 resolves from this one file, and it is
+   the only blocking item left.
+2. Whatever output fixes the Gate 1 floor, most likely the calibration table or
    `gate1_from_alignment_bp.py` output for the reported basis.
 
-**Useful, not blocking:**
+**Still needed, not blocking:**
 
-6. `PHYLOGEOGRAPHY_ASSOCIATION_FROZEN_2026-08-23.tsv`, to check the 26 / 6 / 37
+3. The current local `BP_background_section.md`, if it differs from the Drive
+   copy. The Drive copy is what section 1 above measured.
+4. `PHYLOGEOGRAPHY_ASSOCIATION_FROZEN_2026-08-23.tsv`, to check the 26 / 6 / 37
    stratification quoted in Results 8.
-7. The reference list of the manuscript draft as markdown rather than docx, so
-   the `[1]`/`[2]` numbering gap can be diagnosed rather than guessed at.
+
+Item 7 of the old list, the manuscript's reference list as markdown, is answered
+and withdrawn. There is no reference list. See the correction in section 7.
 
 ---
 
@@ -424,7 +442,7 @@ superseded numbers first.
 
 ## 11. Recommended order
 
-1. Run the three `verify_references_bp.py` commands. Minutes.
+1. Run the two `verify_references_bp.py` commands in section 7. Minutes.
 2. Decide the background's fate. My recommendation is to **keep its outline and
    rebuild its bibliography**, rather than repair 34 dangling and 46 flagged
    entries in place. Rebuilding from our verified corpus is less work than
@@ -437,8 +455,9 @@ superseded numbers first.
 
 Separately, and not blocked by any of the above: resolve the Gate 1 floor, report
 the ClonalFrameML concordance somewhere in the paper rather than only in a
-handoff, and turn the E0/E1/E4 default audit into a CI check so the class closes
-rather than the three known instances.
+handoff, and read section 12 before acting on the E0/E1/E4 default audit, which
+an earlier draft of this list asked for and which already exists on `main` as
+`audit_defaults_bp.py`, wired into CI.
 
 The background is not on the critical path. `PLAN_TO_SUBMISSION` is right that
 IRB and the data availability statement are, and neither depends on any of this.
