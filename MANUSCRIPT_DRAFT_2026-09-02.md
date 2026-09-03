@@ -110,11 +110,12 @@ where detection works, but no study has measured where that range lies.
 
 We measured it. Using 2,976 assemblies partitioned by PopPUNK and fastbaps into
 analysis units, we calibrated the operating range of Gubbins directly and found
-that estimates are interpretable only between approximately 1,270 and 4,671 mean
-pairwise core SNPs. Below the floor recombination is not detected at all, and
-above the ceiling the ratio of recombination-derived to mutation-derived
-substitutions collapses to between 0.16 and 1.73. Both bounds are brackets rather
-than points, and we report them as such.
+that estimates are interpretable only between approximately 700 and 4,700 mean
+pairwise core SNPs, measured on the alignment. Below the floor recombination is
+not detected at all, and above the ceiling the ratio of recombination-derived to
+mutation-derived substitutions collapses. Both bounds are brackets rather than
+points, the floor to (588, 755] and the ceiling to approximately 4,700, and we
+report them as such.
 
 Applying that window to the reported partition of 85 units and 2,340 genomes,
 r/m is a measurement for 47 units and a detection failure for 38. The median r/m across the
@@ -287,23 +288,38 @@ unit, two references crossed with two replicons, validated against a full 12-arm
 protocol. The evidence base is 6 full 12-arm runs, 13 reduced four-arm runs and 2
 level-1 subcluster runs, with 91 clusters measured for diversity.
 
-Units are interpretable between approximately **1,270 and 4,671 mean pairwise core
-SNPs**. Six consecutive clusters spanning 2,690 to 4,671 behaved consistently
-across 12 replicon measurements, with union coverage of 76% to 88%, pooled r/m of
-3.4 to 12.1, and a median recombination tract of 4.7 to 7.1 kb against a
-literature value of about 5 kb. Seven consecutive clusters from 6,342 to 13,826
-collapsed, giving r/m of 0.16 to 1.73 on both replicons. Below the floor detection
-failed outright, with one cluster at 405 returning union coverage of 0.7% and an
-abnormal median tract of 1,002 bp.
+Units are interpretable between approximately **700 and 4,700 mean pairwise core
+SNPs**, measured on the alignment. The calibration itself was performed in `ska
+distance` units, where the corresponding window is 1,270 to 4,671. The two bounds
+translate very differently, and only the alignment-derived window is applied to
+this collection.
+
+The bounds were located on union recombination coverage and median tract length
+alone, without reference to r/m, because choosing them to maximise in-window r/m
+would be circular. Across seven diversity bands of 12 units each, coverage jumps
+from 4.3% to 28.0% and the median tract from 1.12 to 3.37 kb between the 15–588
+and 755–1,349 bands, which brackets the **floor to (588, 755]**. The tract falls
+from 3.77 to 2.69 kb between the 3,403–4,732 and 4,750–6,532 bands, placing the
+**ceiling near 4,700**. The bottom band reproduces the original calibration's
+failure signature, which recorded union coverage of 0.7% and an abnormal 1,002 bp
+median tract for a cluster at 405.
+
+The ceiling translates essentially unchanged from the 4,671 obtained in `ska`
+units, which is a genuine check on the exercise, since nothing forced the two
+unit systems to agree at the top. The floor does not translate, and the Mash
+proxy placed it at 1,270, nearly twice too high. Where in the bracket the floor is
+put does not matter: 588, 700, 755 and 840 give median in-window r/m of 7.70,
+7.70, 7.74 and 7.78.
 
 We report both bounds as brackets, because that is what they are. The floor is
-bracketed to (405, 1,268], still 3.1-fold wide, rests on one cluster either side,
-and moved by more than a factor of two when the gap beneath it was first measured.
-The ceiling is bracketed to (4,671, 6,342], a 1.36-fold interval, and has a
-counter-example, since one continuous cluster at 9,617 has a sound root-to-tip
-slope, the only one of seven above the ceiling to do so. The ceiling is a strong
-tendency rather than a law, and the gate refuses that cluster as the conservative
-choice.
+bracketed to (588, 755], a 1.28-fold interval measured on 12 units either side. It
+replaces the (405, 1,268] bracket obtained in `ska` units, which was 3.1-fold wide
+and rested on one cluster either side. The ceiling sits near 4,700, between the
+3,403–4,732 and 4,750–6,532 bands. In `ska` units it is bracketed to
+(4,671, 6,342], a 1.36-fold interval, and it has a counter-example, since one
+continuous cluster at 9,617 has a sound root-to-tip slope, the only one of seven
+above the ceiling to do so. The ceiling is a strong tendency rather than a law,
+and the gate refuses that cluster as the conservative choice.
 
 A second gate screens for multimodality, and the order is load-bearing. Applying
 modality first fails, because the statistic divides by the mean and a single

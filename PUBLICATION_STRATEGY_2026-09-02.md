@@ -25,14 +25,15 @@ most ready.
 
 Ten things, and they do not divide evenly.
 
-The calibrated operating range for Gubbins, roughly 1,270 to 4,671 mean pairwise
-core SNPs, with both bounds reported as brackets. The validation suite: a matched
-zero-recombination null over 1,519 replicates, spike-in sensitivity at the
-measured donor divergence, and a three-way tree-builder comparison. Two silent
-failure modes, the RAxML 128-character run identifier and the reference branch in
-the r/m denominator. The recombination result itself, r/m 7.38 across 47
-in-window units of 2,342 genomes. Reproducibility at 0.38% across two independent
-executions. The partitioning method. The phylogeography, pending. The attribution
+The calibrated operating range for Gubbins, roughly 700 to 4,700 mean pairwise
+core SNPs measured on the alignment, with the floor reported as the bracket
+(588, 755]. The validation suite: a matched zero-recombination null over 1,519
+replicates, spike-in sensitivity at the measured donor divergence, and a
+three-way tree-builder comparison. Two silent failure modes, the RAxML
+128-character run identifier and the reference branch in the r/m denominator. The
+recombination result itself, r/m 7.70 across 47 in-window units of the reported
+basis, which is 85 units and 2,340 genomes. Reproducibility at 0.38% across two
+independent executions. The partitioning method. The phylogeography, pending. The attribution
 angle, including the Americas unit with mainland US cases carrying no travel
 history. The four literature reviews. And the pipeline.
 
