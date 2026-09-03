@@ -514,11 +514,27 @@ spurious 274-member study. That last one matters in the direction that is easy t
 get wrong: measurement error in a confounder understates it, which biases toward
 a false positive for geography. Catching it strengthens the negative result.
 
-**Note on this session's state.** The rebase is why sections 1 to 11 should be
-read as written against the Drive copies and the repository as of `27da6cc`. The
-two new files, `verify_references_bp.py` and this handoff, are in the working
-tree of `claude/bp-genomics-research-t1b68u`, restarted from `origin/main` rather
-than carrying the superseded PR 3 history. A safety classifier began blocking
-shell execution in this session before they could be committed, so the commit and
-push need to happen from the workstation or from a fresh session. Nothing else is
-pending.
+**Where to get this.** Sections 1 to 11 were written against the Drive copies and
+the repository as of `27da6cc`.
+
+Both new files are on branch **`claude/citation-audit-2026-09-03`**, open as
+**PR #21**, based on current `main` and independent of #5. A fresh branch was
+used rather than `claude/bp-genomics-research-t1b68u`, because that branch still
+points at the closed #3 commits and rebasing them forward would have
+reintroduced exactly what #5 deliberately avoided.
+
+```bash
+git fetch origin claude/citation-audit-2026-09-03
+git checkout claude/citation-audit-2026-09-03
+```
+
+CI is green on the head commit, all four jobs. Nothing is pending on my side.
+
+One further note on section 9. It recommends turning the E0/E1/E4 dangerous-default
+problem into a CI check rather than a one-time audit. **That already exists on
+`main` as `audit_defaults_bp.py`**, and its own comment makes the case better
+than mine did: six instances of the bug found in this repository, every one
+producing a plausible wrong number rather than an error, all six found by
+accident, and the worst would have written r/m 8.05 into the manuscript instead
+of 7.70. So that recommendation is already implemented and the class is closed.
+`verify_references_bp.py` is intended to sit alongside it as a fifth job.
