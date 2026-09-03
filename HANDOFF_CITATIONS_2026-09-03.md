@@ -451,27 +451,42 @@ I rebased this session onto `origin/main` at `27da6cc` before writing anything t
 the repository, having previously worked from `32a08a4`. That changed three
 things in the sections above and surfaced one live defect.
 
-**A. The test suite on `main` is currently failing, and CI will find it
-immediately.**
+**A. The caterpillar test passes on `main`, but for an incidental reason, and one
+docstring is wrong.**
 
-`test_phylogeography_bp.py` line 66 builds a 20,000-tip caterpillar tree and
-asserts the parser survives it. `parse_newick` on `main` is recursive, one frame
-per level of nesting. That check raises `RecursionError` rather than failing an
-assertion.
+**Correction.** An earlier version of this section claimed the test suite on
+`main` was failing. It is not. CI on `main` runs `test_phylogeography_bp.py` and
+reports ALL PASS, including *"caterpillar depth 20000 does not overflow"*. I
+inferred the failure from reading the code rather than running it, and the
+inference was wrong. Also worth recording: CI now exists on this repository, four
+jobs, so Phase 4 item 1 of `PLAN_TO_SUBMISSION` is already done.
+
+What is actually true is smaller and still worth fixing.
 
 PR 5 correctly ported E0, the preflight and the exact single-country enrichment,
-all three of which I confirmed present. It did not port the parser and scorer
-rewrite. `fitch_score` on `main` still opens with *"Fitch small parsimony,
-iterative post-order to avoid recursion limits"* and then defines `def rec(node)`
-and raises the recursion limit to 100,000. The docstring describes code that is
-not there.
+all three confirmed present. It did not port the parser and scorer rewrite, so
+`parse_newick` and `fitch_score` on `main` both still recurse, one frame per
+level of nesting.
 
-At real unit sizes, the largest being 159 tips, recursion depth is never a
-practical problem, so this is not a correctness risk to any reported number. It
-is a blocker for Phase 4 of `PLAN_TO_SUBMISSION`, which proposes adding
-`test_phylogeography_bp.py` as a CI job. Either port the iterative versions from
-the PR 3 branch, or gate the caterpillar check the way the replicon-concordance
-tests were gated. Do not simply delete it. Fix the docstring either way.
+The 20,000-tip caterpillar check survives that only because of a side effect.
+`fitch_score` calls `sys.setrecursionlimit(100000)` at line 148. `test_fitch()`
+runs its small `fitch_score` checks before it builds the caterpillar, so the
+process-wide limit is already raised to 100,000 by the time the recursive parser
+is asked to descend 20,000 levels. **The test passes because an unrelated
+function raised a global limit first.** Reorder the checks, or make `fitch_score`
+iterative without carrying the `setrecursionlimit` call across, and it breaks.
+That is how I hit it locally against the PR 3 versions, where the iterative
+`fitch_score` never raised the limit and the parser then died at the default
+depth of 1,000.
+
+Two small things follow. `fitch_score`'s docstring opens *"Fitch small parsimony,
+iterative post-order to avoid recursion limits"* directly above `def rec(node)`,
+which describes code that is not there and should be corrected either way. And
+the caterpillar check is currently a test of the recursion limit rather than of
+the parser, so if the iterative versions are ever ported, port both together.
+
+None of this is a correctness risk to any reported number. At real unit sizes,
+the largest being 159 tips, recursion depth is never close to binding.
 
 **B. The Thailand share depends on which set is being described, and three
 different figures are in circulation.** `phylogeography_association_bp.py` on
