@@ -362,7 +362,9 @@ unimodal and that is a sound structural reason, but not for the reason given, an
 their r/m values should not be quoted.
 
 Across the 47 in-window units the r/m distribution is right-skewed: median 7.70,
-interquartile range 5.51 to 9.44, full range 1.52 to 18.03. The spread is genuine
+interquartile range 5.51 to 9.44, full range 1.52 to 18.03. The lower quartile,
+5.51, is numerically the same as the all-unit median named above, and the two are
+unrelated statistics rather than one number repeated. The spread is genuine
 biological heterogeneity in recombination rate among lineages, not measurement
 noise, since every unit in this set sits inside the calibrated detection window.
 
