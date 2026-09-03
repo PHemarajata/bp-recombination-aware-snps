@@ -729,6 +729,29 @@ population structure largely intact. The caveat is that the restriction-
 modification result comes from 106 strains in one restricted Asian locale, and
 whether it holds globally has not been tested.
 
+**The scale at which geography is legible is not the scale clinicians ask about,
+and the external evidence already says so.** Our own geographic result is that
+country-level structure cannot be separated from collection history in a
+collection assembled this way. That is easy to read as a null, and it is not one.
+Continental and regional structure in this species is well established and
+independently reproduced: whole-genome phylogenies resolve distinct
+geography-specific clades for Africa, the Americas, Asia and Australasia [21],
+and region-specific SNP markers are already good enough that a three-marker
+PCR-HRM assay separates locally acquired from imported cases in the Caribbean and
+the Indian Ocean [22]. What does not carry the same weight is inference from
+sequence-type identity. ST562 occurs in northern Australia and in Hainan and
+Taiwan, but the Asian and Australian isolates are distantly related and the
+direction of introduction remains unresolved [23]; and twelve isolates from one
+patient shared an identical sequence type while whole-genome sequencing showed a
+polyclonal infection [24]. Shared ST is therefore not evidence of shared origin,
+in either direction. Read together with our Results section 8, the consistent
+reading is that country is the wrong unit for this organism rather than that the
+geographic signal is weak, and that a study reporting country-level attribution
+owes its readers the confounder analysis rather than the point estimate. The same
+caution applies to the environmental linkage that makes attribution actionable at
+all, where whole-genome data and careful genomics are needed to avoid overcalling
+relatedness between clinical and environmental isolates [15].
+
 **Two failure modes are worth the field's attention regardless of the biology.**
 The RAxML run-identifier crash would have destroyed a quarter of this partition
 while reporting a model-fitting failure, and it was misdiagnosed for an entire
@@ -1108,6 +1131,29 @@ Additional references to add once the corresponding sections are written.
     et al. Genomic plasticity of the causative agent of melioidosis, *Burkholderia
     pseudomallei*. *Proc Natl Acad Sci U S A* 2004;101(39):14240–14245. PMID
     15377794. doi:10.1073/pnas.0403302101
+
+21. Sarovich DS, Garin B, De Smet B, Kaestli M, Mayo M, Vandamme P, et al.
+    Phylogenomic analysis reveals an Asian origin for African *Burkholderia
+    pseudomallei* and further supports melioidosis endemicity in Africa.
+    *mSphere* 2016;1(2):e00089-15. PMID 27303718.
+    doi:10.1128/mSphere.00089-15
+
+22. Gasqué M, Guernier-Cambert V, Girault G, Terret J, Neulat-Ripoll F,
+    Rochelle-Newall E, Laroucau K. Rapid confirmation of autochthonous origin in
+    suspected cases of melioidosis from French overseas departments in the
+    Caribbean and the Indian Ocean by PCR-high resolution melting (HRM) analysis.
+    *Infect Genet Evol* 2024;127:105711. PMID 39732273.
+    doi:10.1016/j.meegid.2024.105711
+
+23. Meumann EM, Kaestli M, Mayo M, Ward L, Rachlin A, Webb JR, et al. Emergence
+    of *Burkholderia pseudomallei* sequence type 562, northern Australia. *Emerg
+    Infect Dis* 2021;27(4):1057–1067. PMID 33754984. doi:10.3201/eid2704.202716
+
+24. Price EP, Sarovich DS, Viberg L, Mayo M, Kaestli M, Tuanyok A, et al.
+    Whole-genome sequencing of *Burkholderia pseudomallei* isolates from an
+    unusual melioidosis case identifies a polyclonal infection with the same
+    multilocus sequence type. *J Clin Microbiol* 2015;53(1):282–286. PMID
+    25339397. doi:10.1128/JCM.02560-14
 
 ---
 

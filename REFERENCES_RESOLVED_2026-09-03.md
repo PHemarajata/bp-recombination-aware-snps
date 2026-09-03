@@ -112,25 +112,70 @@ this focus as **five** cases over the same span. The Brennan title says only
 "Related Melioidosis Cases". The count must be read out of the paper itself
 before either number is used. Do not quote a number for this focus until it is.
 
+## `[102]` cannot be substantiated, and the attribution is checkable
+
+The sentence names its author, which makes this decidable rather than merely
+unfound: "**Viberg et al.** used whole-genome phylogenetics to correctly assign
+the isolate of a cystic fibrosis patient to Southeast Asia based solely on its
+position in the global *B. pseudomallei* tree, confirming the established
+principle that the organism carries a 'very strong phylogeographic signal that
+allows accurate identification of strain origin on a continental level'".
+
+**All five Viberg *Burkholderia* papers in PubMed were retrieved and checked.**
+
+| PMID | first author | what it is |
+|---|---|---|
+| 25883282 | **Viberg LT** | Genome announcement, five Australian CF isolates |
+| 28400528 | **Viberg LT** | Within-host evolution, seven Australasian CF patients (mBio) |
+| 29394337 | Sarovich DS | Meropenem susceptibility and efflux regulators |
+| 29989529 | Price EP | Transcriptomics of longitudinal CF isolates |
+| 25339397 | Price EP | Polyclonal infection with the same ST |
+
+Only two have Viberg as first author, and both are about **within-host evolution
+and antibiotic resistance in Australian CF patients**. Neither assigns an isolate
+to Southeast Asia, neither is a phylogeographic study, and a one-paragraph genome
+announcement is not a plausible source for a quoted "established principle". The
+quotation itself was not found by four separate searches.
+
+**Verdict: unsupported. Do not use `[102]`, and do not carry the quotation.** The
+underlying idea, that continental-scale assignment works, is true and is now
+sourced properly in the manuscript to Sarovich 2016 and Gasqué 2024. It does not
+need this sentence.
+
+The caveat on this verdict, stated so it can be overturned: only titles and
+abstracts were read, not full texts. If someone produces the sentence from a real
+paper, this entry is wrong. Nobody should quote it until they have.
+
+## `[97]`: no intended source found, and the claim splits in two
+
+"The limited resolution of MLST ... means that it cannot capture the full genomic
+diversity of *B. pseudomallei* **or reliably distinguish between isolates from
+different geographic regions at the country level** [95], [97]."
+
+No source was found that makes the whole claim. The two halves need different
+treatment.
+
+- **Resolution.** Directly demonstrated by Price 2015 (PMID 25339397): twelve
+  isolates from one patient, identical ST, polyclonal on whole-genome data. That
+  is now manuscript reference `[24]`.
+- **Country-level discrimination.** This is *this paper's own finding*, and it
+  should not be imported from a background citation at all. Citing someone else
+  for the paper's own result would be circular in the direction that flatters it.
+  Rachlin 2019 (PMID 31433287) was checked as a candidate and argues the
+  opposite, reporting "limited geographical dispersal amongst sequence types",
+  though it does document one suspected case of ST homoplasy.
+
+**Verdict: split the sentence.** Keep the resolution half on Price. Drop the
+country-level half or replace it with a forward reference to the paper's own
+Results section 8.
+
 ## Still to resolve, in scope
 
-Scope is now fixed by `BACKGROUND_SCOPE_DECISION_2026-09-03.md`: sections 6, 7
-and 8 enter the manuscript, plus 5.1 for Methods. That leaves 11 in-scope
-dangling citations, of which **9 are resolved above**. Two remain.
-
-- `[97]` the claim that typing cannot "reliably distinguish between isolates from
-  different geographic regions at the country level". This is the background's
-  version of this paper's own central negative result, so it needs a real source
-  rather than a plausible one. `[95]` is cited alongside it and is defined, so
-  start there.
-- `[102]` the quotation "very strong phylogeographic signal that allows accurate
-  identification of strain origin on a continental level". Three topic searches
-  did not find it. Because it is presented as a **direct quotation**, it either
-  has a specific source or it is fabricated, and the second possibility has
-  precedent here: the corpus already documents three caught fabrications, and
-  this background re-dated four real papers to July 2024. Treat as unverified
-  until the sentence is found in a real paper. **Do not carry a quotation whose
-  source cannot be produced.**
+Scope is fixed by `BACKGROUND_SCOPE_DECISION_2026-09-03.md`: sections 6, 7 and 8
+enter the manuscript, plus 5.1 for Methods. That left 11 in-scope dangling
+citations. **All 11 are now closed:** nine resolved to a verified source, and two
+closed as unusable, `[102]` unsupported and `[97]` split. Nothing in scope is
+outstanding.
 
 ## Deliberately not resolved, out of scope
 
