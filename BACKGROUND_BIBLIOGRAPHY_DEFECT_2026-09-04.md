@@ -8,8 +8,9 @@ are real, and they are the smaller half of the problem.
 numberings. The prose follows one of them. The `## References` list is the other
 one.** They agree on `[1]` through `[40]` and disagree on everything after.
 
-Per-number detail is in `BACKGROUND_BIBLIO_COMPARISON.tsv`, one row per citation
-number with what each bibliography says it is.
+Per-number detail is in `BACKGROUND_BIBLIO_COMPARISON.md`, one row per citation
+number with what each bibliography says it is. Regenerate it, and the TSV
+alongside it, with `compare_bibliographies_bp.py`.
 
 ---
 
@@ -161,6 +162,14 @@ applied to is itself the thing that is wrong.
 
 | file | what it is |
 |---|---|
-| `BACKGROUND_BIBLIO_COMPARISON.tsv` | one row per citation number: prose mark count, verdict, fabrication flag, and what each bibliography says |
+| `BACKGROUND_BIBLIO_COMPARISON.md` | one row per citation number: prose mark count, verdict, fabrication flag, and what each bibliography says. Tracked |
+| `compare_bibliographies_bp.py` | generates that table, and a TSV beside it. Exits 1 while any number disagrees |
 | `verify_references_bp.py` | now detects and fails on rival-bibliography disagreement |
 | `REFERENCES_RESOLVED_2026-09-03.md` | the nine that are verified, and why `[102]` is closed |
+
+The TSV is not tracked and is not meant to be. Rule 5 of `.gitignore` excludes
+`*.tsv` as belt and braces against isolate data reaching the repository, and says
+in terms that a future loosening must not silently start tracking it. This table
+carries citation metadata and no accessions, but the right response to a rule
+written that way is to commit the generator and the Markdown, not to force-add
+past it.

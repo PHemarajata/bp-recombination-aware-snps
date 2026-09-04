@@ -1448,7 +1448,7 @@ These are the papers cited in the insights:
 >
 > Full measurement and per-number detail:
 > `BACKGROUND_BIBLIOGRAPHY_DEFECT_2026-09-04.md` and
-> `BACKGROUND_BIBLIO_COMPARISON.tsv`. The nine references verified so far are in
+> `BACKGROUND_BIBLIO_COMPARISON.md`. The nine references verified so far are in
 > `REFERENCES_RESOLVED_2026-09-03.md`; `[102]` is closed as unsupported.
 
 
