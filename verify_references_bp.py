@@ -78,10 +78,42 @@ def read_text(path):
 
 
 def split_document(text, heading):
+    """Split into (prose, reference list), stopping at the next heading.
+
+    Reading to end of file is wrong and quietly corrupts the audit. Anything
+    after the reference list that happens to be a numbered list restarts at 1,
+    and since entries are keyed by number those later items overwrite the real
+    references one for one. On MANUSCRIPT_DRAFT_2026-09-02.md a seven-item
+    submission checklist replaced references [1] through [7], and the audit
+    reported the checklist text as unverifiable citations. The reference list
+    ends where the next heading of the same or higher level begins.
+    """
     i = text.find(heading)
     if i < 0:
         return text, ""
-    return text[:i], text[i:]
+    level = len(heading) - len(heading.lstrip("#"))
+    refs = text[i:]
+    # skip the heading line itself, then look for the next heading at <= level
+    nl = refs.find("\n")
+    m = re.search(rf"^#{{1,{level}}} ", refs[nl:], re.M) if nl > 0 and level else None
+    if m:
+        return text[:i], refs[:nl + m.start()]
+    return text[:i], refs
+
+
+# year;volume:pages, the Vancouver form this project's bibliographies use, e.g.
+# "*Nat Rev Dis Primers* 2018;4:17107". The previous test was `"vol." not in e`,
+# which no entry in the manuscript satisfies, so it flagged all 24 and the flag
+# became noise. A check that fires on everything is worse than no check: it
+# teaches the reader to skip the column that would have shown the real two.
+LOCATOR = re.compile(r"\b(19|20)\d{2}\s*;\s*\d+\s*[:(]"      # 2018;4:17107
+                     r"|\bvol\.\s*\d+"                        # vol. 4
+                     r"|\b(19|20)\d{2}\s*;\s*\d+\s*\(\d+\)")  # 2018;4(2)
+
+
+def has_locator(entry):
+    """True if the entry carries enough to be found by hand in a library."""
+    return bool(LOCATOR.search(entry))
 
 
 def parse_entries(refs):
@@ -270,7 +302,7 @@ def main():
         flags = []
         if not doi and not pmid:
             flags.append("NO-ID")
-        if "vol." not in e:
+        if not has_locator(e):
             flags.append("NO-METADATA")
         if PREPRINT_MARKERS.search(e) and not re.search(r"10\.1101/gr\.", e):
             flags.append("PREPRINT")
