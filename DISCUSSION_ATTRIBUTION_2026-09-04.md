@@ -40,17 +40,24 @@ confusion matrix in the way classifier error usually is. Four of the five land i
 a single cell, and each of the three mechanisms behind them is identifiable.
 
 **Two are a lineage that genuinely spans the label boundary.** Both misplaced
-North American genomes are from the Mississippi Gulf Coast focus, and both sit in
-`strain_4_L1_1`, a unit of 22 genomes comprising 21 from the United States and one
-from Colombia. Validation requires holding out the entire outbreak rather than the
-single genome being scored, because the Mississippi cases sit within 0.005 allelic
-distance of one another and scoring one against its siblings measures nothing. Once
-the outbreak is held out, the only member of that lineage remaining in the panel is
-the Colombian genome, at a distance of 0.153. The panel answers Latin America and
-Caribbean because that is the only evidence left standing. This is the correct
-answer to the question actually being asked, which is what the rest of the world
-looks like in the neighborhood of this genome. It is scored wrong because the label
-is a political boundary and the lineage is not.
+North American genomes are from the Mississippi Gulf Coast focus, and they belong to
+a sequence type that is pan-American. Thirty-six genomes in the panel carry their
+exact seven-locus profile, distributed across seven countries every one of which is
+in the Americas: the United States (26), Mexico (3), Brazil (3), Guadeloupe,
+Martinique, Colombia and Nicaragua. The regional scheme divides that single lineage
+between two of its regions, so a genome from it can be scored wrong at region level
+without anything having gone wrong genomically.
+
+The same fact is visible in the analysis panel. Both genomes sit in `strain_4_L1_1`,
+a unit of 22 comprising 21 from the United States and one from Colombia. Validation
+requires holding out the entire outbreak rather than the single genome being scored,
+because the Mississippi cases sit within 0.005 allelic distance of one another and
+scoring one against its siblings measures nothing. Once the outbreak is held out, the
+only member of that lineage remaining in the panel is the Colombian genome, at a
+distance of 0.153. The panel answers Latin America and Caribbean because that is the
+only evidence left standing, and for a lineage of this distribution that answer is
+arguably the true one. It is scored wrong because the label is a political boundary
+and the lineage is not.
 
 **Two are sparsity compounding a real phylogenetic adjacency.** Both African
 genomes are misplaced into Latin America and Caribbean. For the Nigerian genome the
@@ -71,11 +78,20 @@ any of the 46, and no phylogeographic story is needed to explain it.
 Two consequences follow. First, **every region represented by six or more validation
 genomes is correct 41 times out of 42**; all five errors fall in the two regions
 represented by exactly two genomes each. That is a statement about reference
-sampling, and it comes with a remedy. Second, North America and Sub-Saharan Africa
-are never emitted as predictions for any genome in the set. A region that is
-sampled too thinly to win a vote cannot be assigned to anything, which is a failure
-mode distinct from being assigned incorrectly and one that a confusion matrix alone
-does not reveal.
+sampling, and it comes with a remedy.
+
+Second, and more sharply than a confusion matrix shows: **of the seven regions in the
+scheme, the 20-neighbor vote only ever emits three.** East Asia and Pacific, Latin
+America and Caribbean, and South Asia are the only labels it returns for any genome
+in the set. North America, Sub-Saharan Africa, Europe and Central Asia, and Middle
+East and North Africa are not wrong answers, they are unreachable ones, because no
+region sampled that thinly can win a vote of twenty. A nearest-neighbor estimator
+reaches six of the seven. This is the price of the more robust estimator, and it
+should be stated as a trade rather than left implicit: the 20-neighbor vote corrects
+five of the nearest-neighbor errors and introduces one, moving region accuracy from
+37 to 41 of 46, and it buys that by collapsing the output space onto the three
+densest regions. A confusion matrix built only on the observed rows hides this
+entirely, because the unreachable regions look merely untested.
 
 ## Coarsening only helps when it follows the phylogeny
 
@@ -98,6 +114,33 @@ clades will inherit the country-level failure at a coarser grain, and will do so
 while appearing more defensible because it has fewer classes. Groupings must be
 chosen along the grain of the tree, and the fact that a grouping is coarse is not
 evidence that it is easier.
+
+## More markers lift the region and do not rescue the country
+
+The obvious objection to a country-level negative is that it reflects insufficient
+resolution rather than an absent signal, and that a denser typing scheme would
+recover it. The same validation genomes scored on seven-locus MLST rather than the
+4,221-locus core-genome scheme answer that directly.
+
+On seven loci, region attribution is correct for 17 of 33 scorable genomes, 51.5%
+against a majority baseline of 45.5%, which is barely distinguishable from the
+baseline. On 4,221 loci it is correct for 41 of 46, 89% against a baseline of 46%.
+Region attribution is therefore strongly resolution-limited, and the additional loci
+are what make it work.
+
+Country attribution does not behave that way. On seven loci it is correct for 0 of
+33. On 4,221 loci it is correct for 10 of 46, which is 22% against a baseline of 26%
+and therefore still no better than ignoring the genome. **Three orders of magnitude
+more loci move region from marginal to reliable and leave country below its own
+baseline at both ends.** The two denominators differ, 33 against 46, because fewer
+genomes are scorable on the MLST scheme, so the comparison is between trends rather
+than between paired figures; the direction is nonetheless unambiguous.
+
+This is the strongest available evidence that the country-level ceiling is a property
+of the organism and its sampling rather than of the marker set. Densifying the scheme
+is a solved problem and it does not help. What the failing regions need is references
+from places that have none, which is a different and harder problem than sequencing
+more of what is already represented.
 
 ## Abstention converts ignorance into a declared limit, and does no more than that
 
