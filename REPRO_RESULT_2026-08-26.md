@@ -67,10 +67,21 @@ unseeded `randint(0, 10000)` returning 0, which RAxML rejects, at roughly 1 call
 in 10,001 and about a 16% chance per full panel run. `errorStrategy` ignored it,
 which is why the three downstream processes sit at 171.
 
-**This is a pipeline bug, not a reproducibility finding.** The pinned commit is
-dated 2026-08-16, three days before the `gubbins_seed` fix of 2026-08-19, so the
-reported analysis is **not seed-reproducible by construction**. That belongs in
-the Methods rather than being left for a reader to infer.
+**This is a pipeline bug, not a reproducibility finding.** The reported analysis
+is **not seed-reproducible by construction**. That belongs in the Methods rather
+than being left for a reader to infer.
+
+> **⚠ Corrected 2026-09-04.** This paragraph previously dated the pinned commit
+> "three days before the `gubbins_seed` fix of 2026-08-19". **No such fix exists**
+> — verified against the pipeline repository on every branch. The 2026-08-19
+> commits are PR #5, on CSV line terminators and pipe draining.
+>
+> This matters for how the observation above should be read. The zero-seed
+> casualty seen in this run (`strain_1_L1_30`, iteration 5, `-p 0`) was recorded
+> as a property of an old pin that a later fix had since closed. It was not.
+> Gubbins 3.4.3 exposes `--seed`, this pipeline has never passed it, and the same
+> failure has the same ~16% per-panel probability **today**. This run is evidence
+> of a live defect rather than a historical one.
 
 ## 4. Per-unit r/m
 
@@ -138,8 +149,12 @@ this pipeline, and no input to them changed.
 
 ## 7. Three things recorded that outlive this run
 
-1. **The pin is not seed-reproducible.** `79ab645` predates the `gubbins_seed`
-   fix and carries no such parameter. State it in the Methods.
+1. **The pin is not seed-reproducible, and neither is current code.** `79ab645`
+   carries no seed parameter, and **no later commit adds one** — the
+   `gubbins_seed` fix referred to here and in five other documents does not
+   exist (corrected 2026-09-04, see section 3). Gubbins 3.4.3 exposes `--seed`
+   and this pipeline never passes it. State it in the Methods, and state it as a
+   live defect rather than a historical one.
 2. **`REPRO_2026-08-24_out/Clusters` is a hybrid directory**: 172 Gubbins outputs
    on disk against 171 in the r/m table. The failed unit's `GUBBINS_CLUSTER`
    succeeded in the *first* segment and published output on 2026-08-24, then

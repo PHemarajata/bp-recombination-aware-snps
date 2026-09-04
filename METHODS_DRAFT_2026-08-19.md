@@ -2119,15 +2119,47 @@ this way: **176/176 and 172/172 replicon-units complete, exit 0, highest
 confidence tier, zero task failures in either execution trace.**
 
 **The reported analysis is not seed-reproducible, and the mechanism is the one
-above.** Commit `79ab645` predates a later fix that added a `gubbins_seed`
-parameter, so Gubbins derives RAxML's parsimony seed from an unseeded
-`randint(0, 10000)`. That draw is `0` with probability 1/10,001, RAxML rejects a
-non-positive seed, and Gubbins reports the failure only as "Unable to fit model to
-data". Each replicon-unit makes roughly two RAxML calls per iteration, so across a
-full panel the chance that at least one unit is affected is about **16%**. Combined
-with `errorStrategy 'ignore'`, the affected unit is dropped and the run still exits
-zero, which is precisely why verification must be per-unit rather than by exit
-code.
+above.** Gubbins 3.4.3 exposes a `--seed` option, and this pipeline does not pass
+it at any of its three `run_gubbins.py` call sites. Gubbins therefore takes the
+default path in `gubbins/utils.py::set_seed`, which derives RAxML's parsimony seed
+from an unseeded `randint(0, 10000)`. That draw is `0` with probability 1/10,001,
+RAxML rejects a non-positive seed, and Gubbins reports the failure only as "Unable
+to fit model to data". Each replicon-unit makes roughly two RAxML calls per
+iteration, so across a full panel the chance that at least one unit is affected is
+about **16%**. Combined with `errorStrategy 'ignore'`, the affected unit is dropped
+and the run still exits zero, which is precisely why verification must be per-unit
+rather than by exit code.
+
+> **⚠ Corrected 2026-09-04. This is not a property of the pinned commit alone.**
+> An earlier version of this paragraph said commit `79ab645` "predates a later fix
+> that added a `gubbins_seed` parameter". **No such fix exists.** Verified against
+> the pipeline repository: the string `seed` has never appeared in any Gubbins
+> module on any branch in its history, `conf/params.config` defines eight
+> `gubbins_*` parameters and none is a seed, and no commit on any branch adds one.
+> What landed on 2026-08-19, the date the fix was attributed to, was pull request
+> #5, which pins CSV line terminators and drains a pipe. The date was right and
+> the content was not, and the error propagated into six other documents.
+>
+> The consequence for this section is that the behaviour described above was
+> **live in the current pipeline**, not merely in the reported run.
+>
+> **Resolved 2026-09-04, and the resolution is narrower than expected.**
+> `gubbins_seed` now passes `--seed` at all five call sites across the two Gubbins
+> modules (`wf-assembly-snps-mod` PR #6, `0543892`), which closes the silent unit
+> loss described above. **It does not deliver determinism.** Measured over ten
+> units, two runs each, on real alignments: a fixed seed at four threads gave 5 of
+> 10 identical pairs against 4 of 10 with no seed at all, while a fixed seed at
+> one thread gave **10 of 10**. Thread count, not the seed, is the dominant source
+> of run-to-run variation, exactly as this project already measured for IQ-TREE.
+> `gubbins_deterministic` (PR #7, `4fd7b22`) forces a single thread at a cost of
+> 1.28x on 8 taxa and 1.98x on 37.
+>
+> **What this manuscript may therefore claim** is three separate things, each
+> measured, and not the single sentence that preceded them: the reported run
+> reproduces empirically; the pipeline is deterministic *when run
+> single-threaded*; and the reported run itself remains not seed-reproducible,
+> because it predates both parameters. See
+> `DETERMINISM_DEMONSTRATION_2026-09-04.md`.
 
 **This was observed, not merely anticipated.** An end-to-end re-execution from
 `79ab645` with identical inputs (2026-08-25) lost

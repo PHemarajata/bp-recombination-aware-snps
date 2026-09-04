@@ -1,6 +1,6 @@
 name: checks
 
-# Three jobs, all of which run WITHOUT the isolate data. That constraint is the
+# Five jobs, all of which run WITHOUT the isolate data. That constraint is the
 # point: this repository tracks only code and documentation (see .gitignore),
 # so CI must be meaningful on a data-free checkout or it cannot run at all.
 on:
@@ -91,3 +91,45 @@ jobs:
             echo "REFUSING: tracked tree exceeds 20 MB, which suggests a data file."
             exit 1
           fi
+
+  citations:
+    name: no citation points at nothing
+    runs-on: ubuntu-latest
+    # citation_audit_report.md reported "130/130 refs cited and defined, 0
+    # orphans" for a file that cites [1]-[130] and defines [1]-[96]. Thirty-four
+    # citations pointed at nothing, including every fix the audit claimed to have
+    # applied. That is the same failure this repository keeps hitting: a
+    # plausible status line standing in for a measurement. This measures it.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: the manuscript has no dangling citations
+        # Strict, and it passes today at 34 cited over 34 defined with no
+        # orphans. This is the submission-bound document, so a citation pointing
+        # at nothing is a release blocker rather than a cleanup task. Entry-level
+        # flags are warn-only here because "no journal volume" is a judgement
+        # call and "cited but undefined" is not. One entry is flagged and stays
+        # flagged: Snippy has no peer-reviewed publication, so it genuinely has
+        # no identifier, and the flag is correct rather than something to fix.
+        run: python3 verify_references_bp.py MANUSCRIPT_DRAFT_2026-09-02.md --warn-only
+      - name: the background does not get worse
+        # Two ratchets, not gates. The background carries 34 dangling citations,
+        # and 56 numbers that mean a different paper in the printed reference
+        # list from the one the prose cites. Both are scoped work in progress,
+        # and demanding a clean sheet would mean this job could not run at all
+        # until that finished, which is how audits end up never running.
+        #
+        # The second number is the one measured on 2026-09-04 and written up in
+        # BACKGROUND_BIBLIOGRAPHY_DEFECT_2026-09-04.md, with per-number detail in
+        # BACKGROUND_BIBLIO_COMPARISON.md. It is not a formatting problem: 136 of
+        # the 277 citation marks in the prose resolve to the wrong paper. It is
+        # tolerated here only because it is recorded there.
+        #
+        # Lower both as they are fixed. Neither may go up, and the default for
+        # --max-rival-conflicts is 0, so any other document fails on the first
+        # conflict.
+        run: |
+          python3 verify_references_bp.py BP_background_section.md \
+            --max-dangling 34 --max-rival-conflicts 56 --warn-only

@@ -110,17 +110,18 @@ where detection works, but no study has measured where that range lies.
 
 We measured it. Using 2,976 assemblies partitioned by PopPUNK and fastbaps into
 analysis units, we calibrated the operating range of Gubbins directly and found
-that estimates are interpretable only between approximately 1,270 and 4,671 mean
-pairwise core SNPs. Below the floor recombination is not detected at all, and
-above the ceiling the ratio of recombination-derived to mutation-derived
-substitutions collapses to between 0.16 and 1.73. Both bounds are brackets rather
-than points, and we report them as such.
+that estimates are interpretable only between approximately 700 and 4,700 mean
+pairwise core SNPs, measured on the alignment. Below the floor recombination is
+not detected at all, and above the ceiling the ratio of recombination-derived to
+mutation-derived substitutions collapses. Both bounds are brackets rather than
+points, the floor to (588, 755] and the ceiling to approximately 4,700, and we
+report them as such.
 
 Applying that window to the reported partition of 85 units and 2,340 genomes,
 r/m is a measurement for 47 units and a detection failure for 38. The median r/m across the
 47 in-window units is 7.70, against 1.32 below the floor and 2.14 above the
 ceiling. A low r/m in this species is therefore a detection failure rather than a
-clonal unit, and the all-unit median of 5.70 mixes measurements with failures.
+clonal unit, and the all-unit median of 5.51 mixes measurements with failures.
 Detection was bounded from both sides. A matched zero-recombination null over
 1,519 replicates produced a maximum pooled r/m of 0.00668, between 427 and 2,234
 times below any observed value, and spike-in of tracts at the measured donor
@@ -192,8 +193,9 @@ confidence intervals from 1,391 genomes, and found that between 96.6% and 99.9% 
 genes had recombined at least once within a single lineage [8]. The frequently
 quoted claim that *B. pseudomallei* has the highest recombination rate reported in
 bacteria derives from a per-allele multilocus sequence typing quantity of 18 to 30
-[9], which is not comparable to any per-site genome-wide estimate and should not
-be placed beside one.
+[9], measured across the seven loci of the standard scheme [27], which is not
+comparable to any per-site genome-wide estimate and should not be placed beside
+one.
 
 The mechanism that makes partitioning necessary is also documented. Recombination
 in this species occurs predominantly within clades, interclade exchange is rare,
@@ -261,6 +263,28 @@ independent execution on different hardware refined one unit into three, giving
 88 units and 2,342 genomes; that run is the cross-hardware reproducibility
 control (Results section 9), not the reported basis.
 
+| | value | source |
+|---|---|---|
+| Assemblies in the v4c panel | 2,976 | `L1v4c_MERGED_METADATA.tsv` |
+| Panel after duplicate and exclusion correction | 2,959 | `NUMBERS.tsv` |
+| Countries represented in the panel | 50 | `NUMBERS.tsv` |
+| | | |
+| **Analysis units (reported basis)** | **85** | `FINAL_PARTITION.tsv` |
+| **Genomes in analysis units** | **2,340** | `FINAL_PARTITION.tsv` |
+| Genomes per unit, median (range) | 18 (7 to 159) | `FINAL_PARTITION.tsv` |
+| Countries in the analyzed set | 43 | joined to metadata |
+| Most-represented country | Thailand 1,561 (66.8% of 2,336 with a known country) | joined to metadata |
+| | | |
+| Units in-window (Gate 1) | 47 | `GATE1_ALIGNMENT_2026-08-21.tsv` |
+| Units below floor | 12 | as above |
+| Units above ceiling | 26 | as above |
+| **Median r/m, in-window units** | **7.70** | `NUMBERS.tsv` |
+
+**Table 1.** Panel and partition summary. The panel is 2,976 assemblies as
+submitted to PopPUNK and 2,959 after removing duplicate BioSamples; both appear
+above and they are different stages, not a discrepancy. The analyzed set is
+smaller again because a unit must reach n >= 5 to be analyzed.
+
 Two observations from the partitioning step are worth reporting because both are
 easy to get wrong.
 
@@ -287,23 +311,38 @@ unit, two references crossed with two replicons, validated against a full 12-arm
 protocol. The evidence base is 6 full 12-arm runs, 13 reduced four-arm runs and 2
 level-1 subcluster runs, with 91 clusters measured for diversity.
 
-Units are interpretable between approximately **1,270 and 4,671 mean pairwise core
-SNPs**. Six consecutive clusters spanning 2,690 to 4,671 behaved consistently
-across 12 replicon measurements, with union coverage of 76% to 88%, pooled r/m of
-3.4 to 12.1, and a median recombination tract of 4.7 to 7.1 kb against a
-literature value of about 5 kb. Seven consecutive clusters from 6,342 to 13,826
-collapsed, giving r/m of 0.16 to 1.73 on both replicons. Below the floor detection
-failed outright, with one cluster at 405 returning union coverage of 0.7% and an
-abnormal median tract of 1,002 bp.
+Units are interpretable between approximately **700 and 4,700 mean pairwise core
+SNPs**, measured on the alignment. The calibration itself was performed in `ska
+distance` units, where the corresponding window is 1,270 to 4,671. The two bounds
+translate very differently, and only the alignment-derived window is applied to
+this collection.
+
+The bounds were located on union recombination coverage and median tract length
+alone, without reference to r/m, because choosing them to maximise in-window r/m
+would be circular. Across seven diversity bands of 12 units each, coverage jumps
+from 4.3% to 28.0% and the median tract from 1.12 to 3.37 kb between the 15–588
+and 755–1,349 bands, which brackets the **floor to (588, 755]**. The tract falls
+from 3.77 to 2.69 kb between the 3,403–4,732 and 4,750–6,532 bands, placing the
+**ceiling near 4,700**. The bottom band reproduces the original calibration's
+failure signature, which recorded union coverage of 0.7% and an abnormal 1,002 bp
+median tract for a cluster at 405.
+
+The ceiling translates essentially unchanged from the 4,671 obtained in `ska`
+units, which is a genuine check on the exercise, since nothing forced the two
+unit systems to agree at the top. The floor does not translate, and the Mash
+proxy placed it at 1,270, nearly twice too high. Where in the bracket the floor is
+put does not matter: 588, 700, 755 and 840 give median in-window r/m of 7.70,
+7.70, 7.74 and 7.78.
 
 We report both bounds as brackets, because that is what they are. The floor is
-bracketed to (405, 1,268], still 3.1-fold wide, rests on one cluster either side,
-and moved by more than a factor of two when the gap beneath it was first measured.
-The ceiling is bracketed to (4,671, 6,342], a 1.36-fold interval, and has a
-counter-example, since one continuous cluster at 9,617 has a sound root-to-tip
-slope, the only one of seven above the ceiling to do so. The ceiling is a strong
-tendency rather than a law, and the gate refuses that cluster as the conservative
-choice.
+bracketed to (588, 755], a 1.28-fold interval measured on 12 units either side. It
+replaces the (405, 1,268] bracket obtained in `ska` units, which was 3.1-fold wide
+and rested on one cluster either side. The ceiling sits near 4,700, between the
+3,403–4,732 and 4,750–6,532 bands. In `ska` units it is bracketed to
+(4,671, 6,342], a 1.36-fold interval, and it has a counter-example, since one
+continuous cluster at 9,617 has a sound root-to-tip slope, the only one of seven
+above the ceiling to do so. The ceiling is a strong tendency rather than a law,
+and the gate refuses that cluster as the conservative choice.
 
 A second gate screens for multimodality, and the order is load-bearing. Applying
 modality first fails, because the statistic divides by the mean and a single
@@ -330,7 +369,7 @@ exactly (Table 2).
 | Above ceiling | 26 | 2.14 |
 
 **The recombination result for this collection is r/m 7.70, the median of 47
-in-window units.** The all-unit median of 5.70 mixes measurements with detection
+in-window units.** The all-unit median of 5.51 mixes measurements with detection
 failures and is not reported. The collapse is symmetric, which makes the reading
 error easy to commit in both directions, and the consequence is the single most
 important qualification on these results. **A low r/m in this species is a
@@ -346,7 +385,7 @@ unimodal and that is a sound structural reason, but not for the reason given, an
 their r/m values should not be quoted.
 
 Across the 47 in-window units the r/m distribution is right-skewed: median 7.70,
-interquartile range 5.51 to 9.44, full range 1.52 to 18.03. The spread is genuine
+interquartile range 5.72 to 9.41, full range 1.52 to 18.03. The spread is genuine
 biological heterogeneity in recombination rate among lineages, not measurement
 noise, since every unit in this set sits inside the calibrated detection window.
 
@@ -360,13 +399,26 @@ the floor at which recombination can be detected at all (Table 3).
 
 | | n | mean pairwise core SNPs | r/m | Gate 1 |
 |---|---|---|---|---|
-| Before, `strain_1_L1_26` | 154 | 3,421 | 3.10 | In-window |
-| After, `strain_1_L1_26` | 98 | 955 | 1.07 | Below floor |
-| After, `strain_1_L1_36` | 47 | 3,374 | 6.68 | In-window |
-| After, `strain_1_L1_37` | 8 | 229 | 2.63 | Below floor |
+| Before, `strain_1_L1_26` | 153 | 1,310 | 4.47 | In-window |
+| After, `strain_1_L1_26` | 98 | 72 | 1.07 | Below floor |
+| After, `strain_1_L1_36` | 47 | 1,477 | 6.68 | In-window |
+| After, `strain_1_L1_37` | 8 | 123 | 2.63 | Below floor |
 
-The count of in-window units was 47 both before and after refinement, and 106 of
-153 genomes moved out of the measurable set. We therefore report `strain_1_L1_36`
+Diversities are alignment-derived, on the same metric as the window. An earlier
+version of this table reported the Mash approximation (3,421, 955, 3,374 and 229)
+against the alignment-derived floor, which is the cross-unit-system comparison
+this section exists to warn about. The conclusion is unchanged, because the n = 98
+child sits below the floor on both metrics, but only the alignment figures may be
+read against the bounds. The n = 98 child's diversity is recomputed on its own
+membership: joining the split children to the unsplit parent by unit name assigns
+that child the parent's 1,310 rather than its own 72.
+
+The split itself leaves the in-window count unchanged, one measurable unit before
+and one after, while moving 106 of the 153 genomes out of the measurable set. The
+reported and control bases do differ overall, 47 in-window against 48, but for a
+reason unrelated to this split: `strain_1_L1_11` crosses the ceiling into the
+window once its diversity is recomputed on its own membership rather than
+inherited. We therefore report `strain_1_L1_36`
 as the recombination result arising from the split, and `strain_1_L1_26` and
 `strain_1_L1_37` as identified clonal expansions of epidemiological interest with
 no r/m.
@@ -396,8 +448,8 @@ For false positives we built a matched zero-recombination null of **1,519
 replicates across 62 unit-replicons**. Each replicate inherits from the real unit
 it matches its tree, fitted substitution model, alignment length, base composition
 and per-genome missing-data pattern applied verbatim, with sequences simulated
-under that model and passed through the identical Gubbins invocation used in
-production. By construction the truth is zero recombination. **Twenty of 1,519
+under that model with Seq-Gen [26] and passed through the identical Gubbins
+invocation used in production. By construction the truth is zero recombination. **Twenty of 1,519
 replicates, 1.32%, produced any false-positive block**, one block each. The maximum
 pooled r/m the null ever reached is **0.00668** and the median is zero, against
 observed values in real units of 2.85 to 14.92, which is **427-fold to 2,234-fold
@@ -620,7 +672,8 @@ verification was per-unit rather than by exit code, comparing units requested
 against units that produced Gubbins output and reading status, exit code and
 confidence tier per replicon-unit. **172 of 172 and 176 of 176 replicon-units
 completed at the highest confidence tier.** The two executions recorded the same
-Nextflow script identifier (a hash of the workflow definition) and identical
+Nextflow script identifier (`e09a5c4eadba2c5984f6790095423ee4`, a hash of the
+workflow definition `main.nf` rather than a git commit) and identical
 containerized tool versions, so they ran byte-identical pipeline code and differ
 only in Nextflow version and resource profile. Across the 82 units of shared
 membership, r/m agreed to a median relative difference of 0.36%.
@@ -644,9 +697,9 @@ parameters were pinned rather than left at repository defaults for that reason.
 **The reported recombination rate for this species depends on a step nobody has
 been reporting.** Our in-window median of 7.70 sits close to Nandi's 7.2 [7] and
 above Seng's per-lineage values of 3.7, 4.6 and 2.2 [8]. Read naively, our
-all-unit median of 5.70 would have sat between them and looked unremarkable. It is
-not a rate. It is the average of 47 measurements and 41 detection failures, and
-the failures pull it down from both directions at once. That the two published
+all-unit median of 5.51 would have sat between them and looked unremarkable. It is
+not a rate. It is a median taken across 47 measurements and 38 detection
+failures, and the failures pull it down from both directions at once. That the two published
 genome-wide estimates were both computed within clades or lineages is not
 incidental, and it means the comparison is like for like only once the window is
 applied.
@@ -683,11 +736,11 @@ where Gubbins detects only 5% to 10% of real recombination events [11]. One step
 up in scale, recombination accounts for most of the SNP distance. Recombination is
 therefore most consequential and least detectable at exactly the scale where
 outbreak calls are made. The published examples bear this out in both directions.
-A genuine point-source outbreak spanned 1,328 SNPs of which only about 5% survived
-recombination filtering, and isolates sharing a sequence type have been reported
-more than 20,000 SNPs apart. [CONFIRM] retrieve and cite the primary sources for
-both figures before using them, per `BACKGROUND_RESEARCH_2026-09-02.md` section
-12.3.
+A point-source outbreak traced to one unchlorinated water supply spanned 1,328
+SNPs between its two commonest sequence types, of which only about 5% survived
+recombination filtering [33]. In the other direction, isolates sharing a sequence
+type have been reported 21,211 and 20,567 SNPs apart, against 404 SNPs for a
+genuinely clonal same-sequence-type pair in the same study [34].
 
 **Partitioning before measuring is a biological requirement, not a computational
 convenience.** Clade-specific restriction-modification systems restrict interclade
@@ -698,6 +751,29 @@ because recombination homogenizes within a population while leaving between-
 population structure largely intact. The caveat is that the restriction-
 modification result comes from 106 strains in one restricted Asian locale, and
 whether it holds globally has not been tested.
+
+**The scale at which geography is legible is not the scale clinicians ask about,
+and the external evidence already says so.** Our own geographic result is that
+country-level structure cannot be separated from collection history in a
+collection assembled this way. That is easy to read as a null, and it is not one.
+Continental and regional structure in this species is well established and
+independently reproduced: whole-genome phylogenies resolve distinct
+geography-specific clades for Africa, the Americas, Asia and Australasia [29],
+and region-specific SNP markers are already good enough that a three-marker
+PCR-HRM assay separates locally acquired from imported cases in the Caribbean and
+the Indian Ocean [30]. What does not carry the same weight is inference from
+sequence-type identity. ST562 occurs in northern Australia and in Hainan and
+Taiwan, but the Asian and Australian isolates are distantly related and the
+direction of introduction remains unresolved [31]; and twelve isolates from one
+patient shared an identical sequence type while whole-genome sequencing showed a
+polyclonal infection [32]. Shared ST is therefore not evidence of shared origin,
+in either direction. Read together with our Results section 8, the consistent
+reading is that country is the wrong unit for this organism rather than that the
+geographic signal is weak, and that a study reporting country-level attribution
+owes its readers the confounder analysis rather than the point estimate. The same
+caution applies to the environmental linkage that makes attribution actionable at
+all, where whole-genome data and careful genomics are needed to avoid overcalling
+relatedness between clinical and environmental isolates [15].
 
 **Two failure modes are worth the field's attention regardless of the biology.**
 The RAxML run-identifier crash would have destroyed a quarter of this partition
@@ -719,13 +795,14 @@ Gubbins would call most of the alignment recombinant. Its branch lengths include
 recombination and no r/m may be derived from it. Grafted per-unit trees mix branch
 length units and are a topology aid rather than a rate-comparable object. Nothing
 here reconstructs direction of spread or migration rates. A collection that is
-about 70% one country cannot support that, and no amount of analysis will fix it.
+about 67% one country (1,561 of the 2,340 analyzed genomes are from Thailand)
+cannot support that, and no amount of analysis will fix it.
 
 **Limitations.** Beyond the floor bracket already discussed, a quarter of the
 analyzable set is unscreened for modality because it falls below n of 25 where
 modality is undecidable, and the r/m safety net acts only after the fact.
 Within-BioProject correlation is unmeasured, so effective sample size is uncertain.
-No published benchmark exists for these tools on a two-replicon 7.2 Mb genome, and
+No published benchmark exists for these tools on a two-replicon 7.2 Mb genome [28], and
 the behavior of the subtree merge under recombination remains unvalidated. The
 sensitivity bound rests on one unit and one replicon with terminal-branch implants
 only, so it does not speak to clade-level imports. Variant calling by split k-mers
@@ -868,19 +945,25 @@ of 21 genomes labelled USA, 10 are Puerto Rico or the US Virgin Islands, leaving
 
 ### Software, compute and reproducibility
 
-| Tool | Version | Role |
-|---|---|---|
-| Nextflow | 25.10.0 production, 25.04.6 control | workflow |
-| PopPUNK | 2.7.6 | strain assignment |
-| SKA | 0.4.0 | split-k-mer alignment within strains |
-| fastbaps via PopPIPE | 3 levels | within-strain subclustering |
-| Mash | sketch size 50,000, k = 21 | distances for reference choice and medoids |
-| Snippy | 4.6.0 | reference-based variant calling |
-| Gubbins | 3.4.3 | recombination detection |
-| RAxML | 8.2.12 within Gubbins | tree builder inside Gubbins |
-| IQ-TREE | 2.2.6 | per-unit and global trees |
-| parsnp | 1.7.4 | core-genome alignment for the global tree |
-| BUSCO | 5.8.2, `burkholderiales_odb10` | assembly base-accuracy screening |
+| Tool | Version | Role | Ref |
+|---|---|---|---|
+| Nextflow | 25.10.0 production, 25.04.6 control | workflow | [18] |
+| PopPUNK | 2.7.6 | strain assignment | [16] |
+| SKA2 | 0.4.0, within PopPIPE | split-k-mer alignment within strains | [19] |
+| fastbaps via PopPIPE | 3 levels | within-strain subclustering | [17] |
+| Mash | sketch size 50,000, k = 21 | distances for reference choice and medoids | [20] |
+| Snippy | 4.6.0 | reference-based variant calling | [21] |
+| Gubbins | 3.4.3 | recombination detection | [11] |
+| RAxML | 8.2.12 within Gubbins | tree builder inside Gubbins | [22] |
+| IQ-TREE | 2.2.6 | per-unit and global trees | [23] |
+| parsnp | 1.7.4 | core-genome alignment for the global tree | [24] |
+| BUSCO | 5.8.2, `burkholderiales_odb10` | assembly base-accuracy screening | [25] |
+| Seq-Gen | GTR, per-unit fitted model | zero-recombination null simulation | [26] |
+| ClonalFrameML | | recombination comparison in the Discussion | [12] |
+
+The SKA2 row is the version used inside PopPIPE for partitioning. The SNP
+workflow pins `ska2` 0.3.7 for its own alignment path, which was not the path
+used here: `alignment_method` was Snippy.
 
 The Mash sketch size is 50,000 rather than the 10,000 named in the repository
 configuration, and the sketch header is authoritative.
@@ -956,23 +1039,35 @@ data.
 
 ## Figures and tables
 
-Planned. None of these has been produced yet.
+**All five figures are generated, not drawn.** Each has a script that reads the
+frozen basis and fails rather than emitting a figure with a stale or missing
+number in it. Regenerate with `python3 make_figureN_bp.py`, and add `--dark` for
+the dark variant. An earlier version of this section listed four planned figures
+and said none had been produced; both were wrong, and the numbering below is the
+one the scripts actually use.
 
-**Figure 1.** The operating range. Pooled r/m against mean pairwise core SNPs for
-all 85 units, log x-axis, with the window shaded and the three Gate 1 classes
-colored. This is the paper's central figure and it should carry the argument
-alone. [CONFIRM] whether union coverage is added as a second panel, since it fails
-in only one direction and that asymmetry is itself the reason single-statistic
-approaches do not work.
+**Figure 1.** Study flow. A CONSORT-style accounting from 2,959 panel genomes to
+the 85 units and 2,340 genomes of the reported basis, and on to the 47 in-window
+units and the 46 scorable validation genomes. Generated by `make_figure1_bp.py`
+directly from `NUMBERS.tsv`, which is what makes it impossible for the flow and
+the text to disagree.
 
-**Figure 2.** Detection bounds. Panel A, the null distribution of pooled r/m over
-1,519 replicates against the observed range, on a log scale so the 427-fold to
-2,234-fold separation is visible. Panel B, spike-in recovery against donor
-divergence with the measured value marked.
+**Figure 2.** The operating range, and the paper's central figure. Pooled r/m
+against mean pairwise core SNPs for all 85 units, log x-axis, window shaded, the
+three Gate 1 classes colored. It should carry the argument alone. Generated by
+`make_figure2_bp.py`, which cross-checks its own medians against `NUMBERS.tsv`
+before writing. [CONFIRM] whether union coverage is added as a second panel,
+since it fails in only one direction and that asymmetry is itself the reason
+single-statistic approaches do not work.
 
-**Figure 3.** The global maximum-likelihood tree over 88 unit medoids, annotated
-by dominant country and Gate 1 class. Must carry the caption warning that it is
-not recombination-corrected and that no r/m may be derived from it.
+**Figure 3.** The global maximum-likelihood tree over **85** unit medoids, one
+tip per analysis unit, annotated by dominant country and Gate 1 class. The source
+treefile carries 86 tips and `make_figure3_bp.py` prunes the one that is not in
+the frozen basis, refusing to draw if the remainder disagrees with
+`units.analysed`. The caption must state that the tree is **unrooted**, is **not
+recombination-corrected**, and that **no r/m may be derived from it**, and that
+geography was never an input to PopPUNK, fastbaps or IQ-TREE, which is what makes
+the recovery of known biogeography a result rather than an assumption.
 
 **Figure 4.** The confounder control, per unit: country permutation p-value
 against BioProject permutation p-value, log-log, on identical trees with
@@ -982,11 +1077,96 @@ single-country units are absent by construction, since the test cannot run on
 them. Generated by `make_figure4_bp.py`, which refuses to draw if the association
 table's interpretation counts disagree with its caption.
 
-**Table 1.** Panel and partition summary.
-**Table 2.** Gate 1 classification and r/m by class.
-**Table 3.** The `strain_1_L1_26` refinement, before and after.
-**Table 4.** Spike-in recovery.
-**Table 5.** Tree-builder comparison.
+**Figure 5.** Detection is bounded from both sides, supporting Results section 5,
+which previously had no figure. Panel A, observed pooled r/m against a matched
+zero-recombination null per unit-replicon on a log scale, so the separation is
+read rather than asserted. Panel B, spike-in recovery against donor divergence
+with the value measured in this collection marked. Generated by
+`make_figure5_bp.py`.
+
+> **Resolved 2026-09-04, in the manuscript's favour. No text change needed.** An
+> earlier version of this note reported Figure 5 as disagreeing with the
+> Abstract, because the figure was built by summarising `TIER2_null.txt`, which
+> gives 1,302 replicates over 54 unit-replicons and a separation of 434x to
+> 2,131x. **That file is a mid-run snapshot.** `REVISED_STRATEGY_2026-08.md`
+> A.11ag carries an addendum recording that the completed run is **1,519
+> replicates over 62 unit-replicons**, with 59 of 62 clearing p <= 0.05 and 20
+> replicates (1.32%) producing any false-positive block, and instructing that the
+> completed figures be quoted in the paper. The maximum null r/m is unchanged at
+> **0.00668**, and the completed run's lowest observed value is `strain_13` chr2
+> at **2.85**, so the separation is **427x to 2,234x** exactly as stated in the
+> Abstract and Results section 5.
+>
+> `make_figure5_bp.py` now takes those completed-run values as constants rather
+> than recomputing them from the snapshot, refuses to run if the ratio stops
+> matching 427x-2,234x, and prints a warning that `TIER2_null.txt` must not be
+> summarised. The per-unit points in panel A are the 54 replicons available on
+> this workstation and are drawn and labelled as a subset; every quantity the
+> figure claims is from the completed run.
+>
+> This was the project's seventh instance of reading a count off a denominator
+> that was still filling, and A.11ag's own note on the sixth is the standing
+> rule: **do not record a count until the run that produces it has stopped.**
+
+**Figure 6.** The analysed collection by PopPUNK strain: the grafted
+genome-level tree carrying **all 2,340 analysed genomes**, 85 units in 28
+strains, drawn as a circular cladogram with the strains shaded. Where Figure 3
+answers how the units relate, this answers what the collection is. Generated by
+`make_figure6_bp.py`.
+
+Two things in it are deliberate and must survive into the caption. **Branch
+lengths are not drawn**, because the grafted tree splices two scales, backbone
+substitutions per site over the parsnp core against within-unit substitutions per
+site over recombination-filtered variable sites, differing by about 133-fold;
+drawing them radially would compress every unit to a dot while implying the
+distances are comparable. And **a slice is drawn only where it is a real clade**:
+contiguity in tip order is not monophyly, so each candidate is checked against
+its MRCA's leaf set. That check changes the figure. `strain_1` occupies **three**
+separate blocks rather than one, and one of those three has an MRCA subtending
+172 leaves against a block of 139, so it is outlined rather than filled. 29 of 30
+blocks are shaded.
+
+**iTOL components.** Two packages, both on the frozen basis and both refusing to
+write if the tip count disagrees with `NUMBERS.tsv`.
+
+`make_itol_bp.py` writes `itol/` for Figure 3: the pruned 85-tip tree with
+readable labels, Gate 1 class and dominant country as color strips, and r/m,
+diversity and unit size as bars.
+
+`make_itol_grafted_bp.py` writes `itol_global_strains/` for Figure 6: the
+2,340-tip tree with the strain slices as `TREE_COLORS` ranges, strain and Gate 1
+color strips, and collapse plus label files so all 85 unit clades open collapsed
+and named. It applies the same MRCA test and refuses the same block, so the
+interactive tree and the figure cannot disagree.
+
+Both READMEs carry the caveats their figure's caption carries, because a tree
+that can be re-styled is a tree that can be re-styled into a claim it does not
+support.
+
+**Tables 1 to 5 are generated, on the same rule as the figures.**
+`make_tables_bp.py` rebuilds all five from the frozen basis into `TABLES.md`, and
+**fails rather than writing if any value disagrees with the one printed here**,
+which is the only thing that keeps a hand-typed table and its data in step. Table
+1 is new; the other four appear inline in the Results above and are reproduced
+there from the same generator.
+
+**Table 1.** Panel and partition summary. Results section 1.
+**Table 2.** Gate 1 classification and r/m by class, with IQR and genome counts.
+Results section 3.
+**Table 3.** The `strain_1_L1_26` refinement, before and after. Results section 4.
+**Table 4.** Spike-in recovery. Results section 5.
+**Table 5.** Tree-builder comparison. Results section 6.
+
+Two values in these tables cannot be read from a file and are named constants
+with their provenance recorded in the generator. Table 3's n = 98 child sits at
+**72** mean pairwise core SNPs, recomputed on its own membership in
+`GATE1_ALIGNMENT_RESULT_2026-08-21.md` section 7b; the distances file gives 1,310,
+which is the unsplit parent's diversity arriving through a join on unit name, and
+using it would be wrong by a factor of eighteen and would flip that row's Gate 1
+class. Table 4's recovery rates are taken from `SPIKEIN_RESULT.txt` rather than
+recomputed, because the printed counts are rounded summaries across replicates:
+the nu = 0.002 and nu = 0.01 rows show identical integers and different rates, so
+recomputing would silently turn the reported 91% into 90%.
 
 **Supplementary Table S1.** Per-genome accession, unit, country, BioProject,
 collection date, subject to the data availability decision.
@@ -1051,34 +1231,95 @@ Verified against PubMed records. Full provenance and per-citation caveats are in
 14. Dale J, Price EP, Hornstra H, Busch JD, Mayo M, Godoy D, et al.
     Epidemiological tracking and population assignment of the non-clonal
     bacterium, *Burkholderia pseudomallei*. *PLoS Negl Trop Dis* 2011;5(12):e1381.
-    doi:10.1371/journal.pntd.0001381. **PMID 22163051 unconfirmed against an
-    index. Verify.**
+    PMID 22180792. doi:10.1371/journal.pntd.0001381
 15. Webb JR, Mayo M, Rachlin A, Woerle C, Meumann EM, Rigas V, et al. Genomic
     epidemiology links *Burkholderia pseudomallei* from individual human cases to
     *B. pseudomallei* from targeted environmental sampling in northern Australia.
     *J Clin Microbiol* 2022;60(3):e0164821. PMID 35080450. doi:10.1128/JCM.01648-21
 
-Additional references to add once the corresponding sections are written.
+References 16 to 26 are the method and software citations. They are cited
+from the Software table in Methods rather than from the narrative.
 
 16. Lees JA, Harris SR, Tonkin-Hill G, Gladstone RA, Lo SW, Weiser JN, et al. Fast
     and flexible bacterial genomic epidemiology with PopPUNK. *Genome Res*
     2019;29(2):304–316. PMID 30679308. doi:10.1101/gr.241455.118
-17. [CONFIRM] fastbaps. Tonkin-Hill G, Lees JA, Bentley SD, Frost SDW, Corander J.
-    Fast hierarchical Bayesian analysis of population structure. *Nucleic Acids
-    Res* 2019. Retrieve and verify.
-18. [CONFIRM] SKA2, Snippy, IQ-TREE 2, parsnp, BUSCO, seq-gen, RAxML. Retrieve and
-    verify each before submission.
-19. Godoy D, Randle G, Simpson AJ, Aanensen DM, Pitt TL, Kinoshita R, Spratt BG.
+17. Tonkin-Hill G, Lees JA, Bentley SD, Frost SDW, Corander J. Fast hierarchical
+    Bayesian analysis of population structure. *Nucleic Acids Res*
+    2019;47(11):5539-5549. PMID 31076776. doi:10.1093/nar/gkz361
+18. Di Tommaso P, Chatzou M, Floden EW, Barja PP, Palumbo E, Notredame C. Nextflow
+    enables reproducible computational workflows. *Nat Biotechnol*
+    2017;35(4):316-319. PMID 28398311. doi:10.1038/nbt.3820
+19. Derelle R, von Wachsmann J, Maklin T, Hellewell J, Russell T, Lalvani A,
+    Chindelevitch L, Croucher NJ, Harris SR, Lees JA. Seamless, rapid, and
+    accurate analyses of outbreak genomic data using split-mer analysis. *Genome
+    Res* 2024;34(10):1661-1673. PMID 39406504. doi:10.1101/gr.279449.124
+20. Ondov BD, Treangen TJ, Melsted P, Mallonee AB, Bergman NH, Koren S, Phillippy
+    AM. Mash: fast genome and metagenome distance estimation using MinHash.
+    *Genome Biol* 2016;17(1):132. PMID 27323842. doi:10.1186/s13059-016-0997-x
+21. Seemann T. Snippy: rapid haploid variant calling and core genome alignment.
+    https://github.com/tseemann/snippy. Snippy has no peer-reviewed publication
+    and is cited by the version used here, 4.6.0.
+22. Stamatakis A. RAxML version 8: a tool for phylogenetic analysis and
+    post-analysis of large phylogenies. *Bioinformatics* 2014;30(9):1312-1313.
+    PMID 24451623. doi:10.1093/bioinformatics/btu033
+23. Minh BQ, Schmidt HA, Chernomor O, Schrempf D, Woodhams MD, von Haeseler A,
+    Lanfear R. IQ-TREE 2: new models and efficient methods for phylogenetic
+    inference in the genomic era. *Mol Biol Evol* 2020;37(5):1530-1534. PMID
+    32011700. doi:10.1093/molbev/msaa015
+24. Treangen TJ, Ondov BD, Koren S, Phillippy AM. The Harvest suite for rapid
+    core-genome alignment and visualization of thousands of intraspecific
+    microbial genomes. *Genome Biol* 2014;15(11):524. PMID 25410596.
+    doi:10.1186/s13059-014-0524-x
+25. Manni M, Berkeley MR, Seppey M, Simao FA, Zdobnov EM. BUSCO update: novel and
+    streamlined workflows along with broader and deeper phylogenetic coverage for
+    scoring of eukaryotic, prokaryotic, and viral genomes. *Mol Biol Evol*
+    2021;38(10):4647-4654. PMID 34320186. doi:10.1093/molbev/msab199
+26. Rambaut A, Grassly NC. Seq-Gen: an application for the Monte Carlo simulation
+    of DNA sequence evolution along phylogenetic trees. *Comput Appl Biosci*
+    1997;13(3):235-238. PMID 9183526. doi:10.1093/bioinformatics/13.3.235
+27. Godoy D, Randle G, Simpson AJ, Aanensen DM, Pitt TL, Kinoshita R, Spratt BG.
     Multilocus sequence typing and evolutionary relationships among the causative
     agents of melioidosis and glanders, *Burkholderia pseudomallei* and
     *Burkholderia mallei*. *J Clin Microbiol* 2003;41(5):2068–2079. PMID 12734250.
     doi:10.1128/JCM.41.5.2068-2079.2003
-20. Holden MTG, Titball RW, Peacock SJ, Cerdeño-Tárraga AM, Atkins T, Crossman LC,
+28. Holden MTG, Titball RW, Peacock SJ, Cerdeño-Tárraga AM, Atkins T, Crossman LC,
     et al. Genomic plasticity of the causative agent of melioidosis, *Burkholderia
     pseudomallei*. *Proc Natl Acad Sci U S A* 2004;101(39):14240–14245. PMID
     15377794. doi:10.1073/pnas.0403302101
 
+29. Sarovich DS, Garin B, De Smet B, Kaestli M, Mayo M, Vandamme P, et al.
+    Phylogenomic analysis reveals an Asian origin for African *Burkholderia
+    pseudomallei* and further supports melioidosis endemicity in Africa.
+    *mSphere* 2016;1(2):e00089-15. PMID 27303718.
+    doi:10.1128/mSphere.00089-15
+
+30. Gasqué M, Guernier-Cambert V, Girault G, Terret J, Neulat-Ripoll F,
+    Rochelle-Newall E, Laroucau K. Rapid confirmation of autochthonous origin in
+    suspected cases of melioidosis from French overseas departments in the
+    Caribbean and the Indian Ocean by PCR-high resolution melting (HRM) analysis.
+    *Infect Genet Evol* 2024;127:105711. PMID 39732273.
+    doi:10.1016/j.meegid.2024.105711
+
+31. Meumann EM, Kaestli M, Mayo M, Ward L, Rachlin A, Webb JR, et al. Emergence
+    of *Burkholderia pseudomallei* sequence type 562, northern Australia. *Emerg
+    Infect Dis* 2021;27(4):1057–1067. PMID 33754984. doi:10.3201/eid2704.202716
+
+32. Price EP, Sarovich DS, Viberg L, Mayo M, Kaestli M, Tuanyok A, et al.
+    Whole-genome sequencing of *Burkholderia pseudomallei* isolates from an
+    unusual melioidosis case identifies a polyclonal infection with the same
+    multilocus sequence type. *J Clin Microbiol* 2015;53(1):282–286. PMID
+    25339397. doi:10.1128/JCM.02560-14
+
 ---
+
+33. Sarovich DS, Chapple SNJ, Price EP, Mayo M, Holden MTG, Peacock SJ, Currie BJ.
+    Whole-genome sequencing to investigate a non-clonal melioidosis cluster on a
+    remote Australian island. *Microb Genom* 2017;3(8):e000117. PMID 29026657.
+    doi:10.1099/mgen.0.000117
+34. Aziz A, Sarovich DS, Harris TM, Kaestli M, McRobb E, Mayo M, Currie BJ, Price
+    EP. Suspected cases of intracontinental *Burkholderia pseudomallei* sequence
+    type homoplasy resolved using whole-genome sequencing. *Microb Genom*
+    2017;3(11):e000139. PMID 29208140. doi:10.1099/mgen.0.000139
 
 ## Submission checklist
 
@@ -1091,17 +1332,22 @@ Ordered by what blocks submission first.
    joined v3 assignments to v1 trees and reported 82 units against a 91-unit
    partition, caught only by noticing the unit count.
 2. **Fill the remaining [CONFIRM] markers.** The analysis markers are cleared
-   (Results 3's r/m distribution is filled from NUMBERS.tsv). What remains is
-   categorized in `SUBMISSION_TODO.md`: two editorial decisions resolvable now
-   (the ClonalFrameML mention, the union-coverage panel), three citation retrievals,
-   and the external chain (deposition, funding, author roles, IRB), which is the
-   real critical path.
+   (Results 3's r/m distribution is filled from NUMBERS.tsv), and so are the
+   citation retrievals: the reference list is now 34 entries, every one cited and
+   every citation defined, with no [CONFIRM] left in it. What remains is two
+   editorial decisions (the ClonalFrameML mention, the union-coverage panel) and
+   the external chain (deposition, funding, author roles, IRB), which is the real
+   critical path.
 3. **Settle the data availability position** with biosafety and legal review
    before choosing a journal, because some journals will not accept a restriction
    this broad.
 4. **Produce Figures 1 to 4 and Tables 1 to 5.**
-5. **Verify the remaining citations**, including the 12 items listed in
-   `BACKGROUND_RESEARCH_2026-09-02.md` section 12.3 and reference 14 above.
+5. ~~**Verify the remaining citations.**~~ **Done 2026-09-04.** All 34 were
+   checked against PubMed records retrieved in session. Reference 14 carried
+   PMID 22163051, which is a paper on cannabidiol and neuroinflammation; the
+   correct record is 22180792. The DOI beside it was right, which is why the
+   entry looked plausible: a wrong PMID next to a right DOI is not visible
+   without retrieving one of them.
 6. **Decide the ClonalFrameML comparison.** It currently appears in the Discussion
    only. Either report the six-unit result in Results with its caveats, or remove
    the Discussion sentence.
