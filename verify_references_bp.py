@@ -181,6 +181,56 @@ def misplaced_entries(body):
     return out
 
 
+def numbering_agreement(stray, entries):
+    """
+    Where a document carries a second bibliography in its body, check that the
+    two agree on what each number means.
+
+    A misplaced block was treated as a formatting defect: move it under the
+    heading and the dangling citations stop dangling. That is only true if the
+    two bibliographies are the same bibliography. In `BP_background_section.md`
+    they are not. The body block and the reference list agree on [1]-[40] and
+    disagree on every one of [41]-[96], because the two numberings drift apart
+    by one at [41] and by two again at [51]. Reading the prose settles which is
+    authoritative: the sentence citing [59] is about select-agent status and the
+    body block's [59] is about bioterrorism agents, while the reference list's
+    [59] is about soil sampling depth.
+
+    So the list under the heading names a different paper from the one the prose
+    cites, for 56 of its 96 entries, and nothing in a dangling-and-orphan audit
+    can see it: every number in [1]-[96] is defined, and every definition is
+    cited. The counts are perfect. The document is 63% wrong.
+
+    Returns (agree, disagree, first_divergence).
+    """
+    def key(text):
+        m = re.search(r"(?i)\b(?:doi:\s*)?(10\.\d{4,9}/\S+?)(?:[.,;]\s|$|\s)",
+                      text + " ")
+        return ("doi", m.group(1).rstrip(".").lower()) if m else None
+
+    def title_words(text):
+        return set(re.findall(r"[a-z]{4,}", text.lower()))
+
+    shared = sorted(set(stray) & set(entries))
+    agree = disagree = 0
+    first = None
+    for n in shared:
+        a, b = stray[n], entries[n]
+        ka, kb = key(a), key(b)
+        if ka and kb:
+            same = ka == kb
+        else:
+            wa, wb = title_words(a), title_words(b)
+            same = bool(wa & wb) and len(wa & wb) / max(1, min(len(wa), len(wb))) > 0.5
+        if same:
+            agree += 1
+        else:
+            disagree += 1
+            if first is None:
+                first = n
+    return agree, disagree, first
+
+
 def cited_numbers(body):
     """
     Every citation number appearing in prose, including grouped markers.
@@ -279,6 +329,7 @@ def main():
         print(f"     {orphan}")
 
     stray = misplaced_entries(body)
+    rival_conflict = False
     explained = sorted(n for n in dangling if n in stray)
     if stray:
         print()
@@ -293,6 +344,23 @@ def main():
             print(f"     {len(explained)} of the {len(dangling)} dangling "
                   f"citations are defined here and would")
             print("     stop dangling if the block were moved under the heading.")
+
+        agree, disagree, first = numbering_agreement(stray, entries)
+        if agree or disagree:
+            print()
+            print(f"     Do the two bibliographies agree on what each number means?")
+            print(f"       numbers defined in both : {agree + disagree}")
+            print(f"       agree                   : {agree}")
+            print(f"       DISAGREE                : {disagree}")
+            if disagree:
+                rival_conflict = True
+                print(f"       first divergence at     : [{first}]")
+                print("     A number that resolves to a different paper in each")
+                print("     bibliography is invisible to a dangling-and-orphan")
+                print("     audit: every number is defined and every definition")
+                print("     is cited, so the counts are perfect and the citations")
+                print("     are wrong. Read the prose to decide which numbering")
+                print("     is authoritative before moving or merging anything.")
 
     rows = []
     counts = collections.Counter()
@@ -361,6 +429,21 @@ def main():
     print("  NOTE: this checks that a citation points at a real, locatable,")
     print("  published thing. It does NOT check that the paper supports the")
     print("  sentence citing it. That pass is still manual.")
+
+    # A rival bibliography that disagrees on numbering is not tolerable at any
+    # ratchet setting. --max-dangling exists because dangling citations get
+    # fixed a few at a time; a number meaning two different papers is a wrong
+    # citation being served to a reader, not an incomplete one, and it is not
+    # something to count down from.
+    # Not gated on --warn-only. That flag exists to let entry-level quality
+    # flags through while the list is still being built, the way --max-dangling
+    # lets an incomplete list through. Neither is the right treatment here: a
+    # number that means one paper in the prose and another in the list is a
+    # citation that is actively wrong, not one that is merely incomplete, and it
+    # is the only defect this tool finds that a reader cannot see for themselves.
+    if rival_conflict:
+        print("\n  FAIL: the two bibliographies disagree on what a number means.")
+        sys.exit(1)
 
     over = len(dangling) - a.max_dangling
     if over > 0:

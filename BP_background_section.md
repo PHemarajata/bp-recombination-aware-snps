@@ -1431,6 +1431,27 @@ These are the papers cited in the insights:
 
 ## References
 
+> ## ⚠ This list is not the bibliography the prose above cites
+>
+> Measured 2026-09-04. The prose follows the machine-readable block earlier in
+> this file, not this list. The two agree on `[1]` through `[40]` and disagree
+> from `[41]` on, because two entries were inserted into one and not the other.
+>
+> Of the 277 citation marks in the prose, 102 land on the paper the sentence
+> means, **136 land on a different paper**, and 36 land on nothing. Of the 96
+> entries below, 54 name a work the citing sentence is not about.
+>
+> Nothing below `[41]` may be quoted, moved or cited without being resolved
+> against a primary record first. The block earlier in this file is aligned with
+> the prose but its entries carry invented titles and mismatched identifiers, so
+> it is not a usable replacement either.
+>
+> Full measurement and per-number detail:
+> `BACKGROUND_BIBLIOGRAPHY_DEFECT_2026-09-04.md` and
+> `BACKGROUND_BIBLIO_COMPARISON.tsv`. The nine references verified so far are in
+> `REFERENCES_RESOLVED_2026-09-03.md`; `[102]` is closed as unsupported.
+
+
 [1]D. Thangaraju, V. Sundaramoorthy, and V. Thiagarajan, “P-148. Melioidosis: A Seven-Year Review (2017-2023),” Open Forum Infectious Diseases, vol. 12, no. Supplement_1, Jan. 2025, doi: 10.1093/ofid/ofae631.353.
 
 [2]P. R. Mohapatra, B. Behera, and B. Mishra, “Melioidosis: An Indian Perspective,” Journal of Association of Physicians of India, vol. 73, no. 5, pp. 63–68, Jan. 2025, doi: 10.59556/japi.73.0945.
