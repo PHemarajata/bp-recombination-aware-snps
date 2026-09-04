@@ -84,11 +84,30 @@ def repo_state(repo):
         "head": sh(["git", "rev-parse", "--short", "HEAD"], repo).strip(),
         "branch": sh(["git", "rev-parse", "--abbrev-ref", "HEAD"], repo).strip(),
         "date": sh(["git", "log", "-1", "--format=%cs"], repo).strip(),
-        "tag": sh(["git", "describe", "--tags", "--abbrev=0"], repo,
-                          allow_fail=True).strip() or "(untagged)",
+        # `git describe --abbrev=0` names the nearest tag REACHABLE from HEAD,
+        # so a repository two commits past v1.1.0-mod still reports
+        # "tag v1.1.0-mod" and the package reads as though it ships the tagged
+        # release. Say when it does not. This project has spent enough time on
+        # provenance lines that were true of a nearby commit.
+        "tag": _describe(repo),
         "files": [f for f in sh(["git", "ls-files"], repo).splitlines() if f],
         "dirty": dirty,
     }
+
+
+def _describe(repo):
+    """The tag, and whether HEAD actually is it."""
+    exact = sh(["git", "describe", "--tags", "--exact-match", "HEAD"], repo,
+               allow_fail=True).strip()
+    if exact:
+        return exact
+    near = sh(["git", "describe", "--tags", "--abbrev=0"], repo,
+              allow_fail=True).strip()
+    if not near:
+        return "(untagged)"
+    ahead = sh(["git", "rev-list", "--count", f"{near}..HEAD"], repo,
+               allow_fail=True).strip() or "?"
+    return f"{ahead} commits past {near}, NOT the tagged commit"
 
 
 def copy_tracked(state, dest):
