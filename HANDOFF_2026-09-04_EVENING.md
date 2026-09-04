@@ -9,7 +9,7 @@ for what closed in the morning; this covers what happened to its open list.
 
 | | |
 |---|---|
-| **Analysis repo** | `claude/citation-audit-2026-09-03` at `0b9b766`, 42 commits ahead of `main`, pushed, CI green |
+| **Analysis repo** | `claude/citation-audit-2026-09-03` at `9f19fe5`, 44 commits ahead of `main`, pushed, CI green |
 | **Open PR** | [#21](https://github.com/PHemarajata/bp-recombination-aware-snps/pull/21), base `main` |
 | **Pipeline repo** | `~/wf-assembly-snps-mod`, `main` at `b8c6b85`, CI green on nine jobs |
 | **Tag `v1.1.0-mod`** | still `0551e72`. **Not moved.** Two behaviour changes have landed on `main` since it, so the tag no longer describes the tip |
@@ -99,7 +99,12 @@ Fixed: `iqtree_seed` passed always, and `deterministic` pinning both tools.
 `gubbins_deterministic` still works and either turns it on. CI asserts all five
 invocations.
 
-**5. PR #21.** See below.
+**5. PR #21. Ready for review, not merged.** 44 commits, mergeable, clean, and
+the description now covers today's work. It was left for you rather than merged:
+the morning handoff authorised a merge of a 37-commit branch, and what is on it
+now is materially different, including the judgement call not to rebuild the
+background's 130 references. Merge with a **merge commit, not squash**; the
+commit titles are the record of which claim was corrected when.
 
 ---
 
