@@ -178,9 +178,16 @@ def main():
 
     pkg = args.outdir / f"BP_REVIEW_PACKAGE_{stamp}"
     prior = pkg.is_dir()
-    # Carry forward the hand-written review material and evidence if refreshing.
+    # evidence/ and figures/ are carried forward: they are generated artifacts
+    # and derived tables, not repository content. REVIEW/ is not carried
+    # forward -- it is the most reviewer-facing writing in the project and it
+    # lived only in this directory, untracked, where deleting the package would
+    # have destroyed it. It is now REVIEW_*.md at the top level of the analysis
+    # repository, kept there rather than in a REVIEW/ subdirectory because the
+    # .gitignore re-admits only top-level files by extension and that rule is
+    # load-bearing.
     carried = {}
-    for sub in ("REVIEW", "evidence", "figures"):
+    for sub in ("evidence", "figures"):
         if prior and (pkg / sub).is_dir():
             carried[sub] = pkg / sub
 
@@ -201,15 +208,32 @@ def main():
         sys.exit("REFUSING to build; package would carry isolate-level data:\n  "
                  + "\n  ".join(problems[:20]))
 
-    # README is regenerated so its counts and pins cannot go stale.
-    readme = staging / "README.md"
-    if prior and (pkg / "README.md").is_file():
-        text = (pkg / "README.md").read_text()
-        text = re.sub(r"the complete tracked repository, \d+ files",
-                      f"the complete tracked repository, {n_a} files", text)
-        readme.write_text(text)
-    else:
-        readme.write_text(f"# Review package {stamp}\n")
+    # The review layer comes from the repository, so a correction made to the
+    # register is a commit rather than an edit to a directory in ~/Downloads.
+    review = staging / "REVIEW"
+    review.mkdir(parents=True, exist_ok=True)
+    n_r = 0
+    for src in sorted(ANALYSIS_REPO.glob("REVIEW_*.md")):
+        if src.name == "REVIEW_README.md":
+            continue
+        shutil.copy2(src, review / src.name[len("REVIEW_"):])
+        n_r += 1
+    if n_r == 0:
+        shutil.rmtree(staging)
+        sys.exit("REFUSING: no REVIEW_*.md found in the analysis repository. The "
+                 "review layer is the package's whole point; shipping without it "
+                 "silently would be worse than not building.")
+
+    # README counts are rewritten so they cannot go stale the way they did when
+    # the package was assembled by hand.
+    text = (ANALYSIS_REPO / "REVIEW_README.md").read_text()
+    text = re.sub(r"the complete tracked repository, \d+ files",
+                  f"the complete tracked repository, {n_a} files", text)
+    text = re.sub(r"the Nextflow workflow that produced the results, at\n"
+                  r"\s*v[\d.]+\S*, \d+ files",
+                  f"the Nextflow workflow that produced the results, at\n"
+                  f"                     {pipeline['tag']}, {n_p} files", text)
+    (staging / "README.md").write_text(text)
 
     if prior:
         shutil.rmtree(pkg)
