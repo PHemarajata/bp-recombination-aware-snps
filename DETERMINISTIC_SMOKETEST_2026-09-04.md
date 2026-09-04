@@ -6,9 +6,8 @@ Gubbins on alignments and IQ-TREE on alignments, each outside the pipeline. This
 runs the whole workflow twice and compares everything it published.
 
 > **Result: all ten scientific outputs are byte-identical across two runs.**
-> 43 of 58 comparable published files match exactly. The 15 that differ are
-> timestamps, runtimes, work-directory paths, and two files whose rows are the
-> same but ordered differently.
+> **45 of 58** comparable published files match exactly, after the ordering fix
+> below. The 13 that differ are timestamps, runtimes and work-directory paths.
 
 ---
 
@@ -63,8 +62,8 @@ Every published file outside `work/`, hashed with SHA-256.
 | | files |
 |---|---|
 | present in both | 58 |
-| **identical** | **43** |
-| differing | 15 |
+| **identical** | **45** |
+| differing | 13 |
 | present in only one | 0, outside `pipeline_info` |
 
 ### The scientific outputs, all identical
@@ -82,7 +81,7 @@ Every published file outside `work/`, hashed with SHA-256.
 | `recombination_rm.tsv` | pooled r/m |
 | `cluster_phylogeny_summary.csv` | the per-unit summary the audit reads |
 
-### The 15 that differ, and why each one does
+### The 13 that differ, and why each one does
 
 | files | what differs |
 |---|---|
@@ -90,7 +89,10 @@ Every published file outside `work/`, hashed with SHA-256.
 | 2 × `*.iqtree` | IQ-TREE's own "Date and time" line and its two runtime lines |
 | 1 × `backbone_report.txt` | a UTC timestamp |
 | 1 × `Gubbins/cluster_0.diagnostics.log` | work-directory paths, and 20 lines that differ only in a timing float |
-| 2 × `Summary.QC_File_Checks.tsv`, `software_versions.yml` | **row order** |
+
+`Summary.QC_File_Checks.tsv` and `software_versions.yml` were a fifteenth and
+sixteenth entry here until the ordering fix in section 4. They are identical
+now.
 
 The Gubbins log was the one worth checking properly rather than waving through.
 After masking work-directory paths, 20 line pairs differ. Every one of them
@@ -98,16 +100,60 @@ differs in a timing number and nothing else: no text differs, and no likelihood
 moves. Both log-likelihood values, `-9645778.005072` and `-9645929.937335`,
 appear identically in both runs.
 
-## 4. One real, non-scientific nondeterminism
+## 4. One real nondeterminism, since fixed
 
 `Summaries/Summary.QC_File_Checks.tsv` and `pipeline_info/software_versions.yml`
-hold **the same rows in a different order**. Sorting either file makes the two
-runs identical.
+held **the same rows in a different order** on every run. Nextflow's collection
+order, not a tool's output, so it touched no number and no tree. Fixed anyway,
+because a diff of two agreeing runs should be empty, and a reviewer who diffs
+these two files and sees noise learns to skip them.
 
-This is Nextflow's collection order, not a tool's output. It touches no number
-and no tree, so it is cosmetic. It is still worth fixing, because a diff of two
-runs should be empty when the runs agree, and a reviewer who diffs these two
-files sees noise and learns to skip them. Sorting before writing is the fix.
+The QC summary used `collectFile(sort: 'index')`, which is the order chunks
+arrived on the channel, that is, task completion order. Measured over 3 runs of
+an 8-task harness with randomised completion times:
+
+| `sort:` | run 1 vs 2 | run 1 vs 3 |
+|---|---|---|
+| default | differs | differs |
+| `'index'` | differs | differs |
+| `true` | differs | differs |
+| **`{ it.name }`** | **same** | **same** |
+
+The versions file had no `sort` at all, and sorting by name would not have helped
+because every chunk is named `versions.yml`, so the key ties. It sorts by content
+now. Both files carry the same rows and the same count as before; only the order
+changed. **Verified over two further full runs: both are byte-identical.**
+
+### The fix surfaced a second defect in the same file
+
+`software_versions.yml` also carried a stray line, `    END_VERSIONS`. `<<-`
+strips leading **tabs** only, so a space-indented terminator is not recognised.
+Bash closed the heredoc at end-of-file with a warning and wrote the terminator
+into the file as content.
+
+It bites only where Nextflow does not dedent the script block, and Nextflow
+dedents by the block's **minimum** indentation, so one wrapped error message
+starting at column 0 silently arms every heredoc in that process. 57 of 58 sites
+in the repository worked for that reason alone. All 58 terminators are at column
+0 now, which is recognised either way, and CI asserts it. The stray line and the
+bash warning are both gone, confirmed over a full run.
+
+### One thing that is still not reproducible, correctly
+
+`cluster_phylogeny_summary.csv` carries an `iqtree_log_size_bytes` column, which
+is the byte size of a log containing timestamps and runtimes. It moves by a byte
+or two between runs: 4220 against 4221 in one pair, equal in two others. That is
+luck, not determinism. It is a diagnostic column rather than a result, and the
+earlier claim here that the file was identical held only because the byte counts
+happened to agree.
+
+### Noted and not fixed
+
+`software_versions.yml` does not parse as YAML, before or after this change.
+Module script blocks dedent by different amounts, so some entries are emitted at
+column 0 and others at four spaces. Making it valid means normalising every
+heredoc body, which changes the published file's shape, so it is left for a
+decision.
 
 ## 5. What this does not show
 
