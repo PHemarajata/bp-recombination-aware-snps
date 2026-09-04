@@ -197,8 +197,13 @@ faulty versions of the check itself before either was trusted.
 
 **The pipeline is deterministic under `--deterministic true`, which pins both
 Gubbins and IQ-TREE to one thread and seeds both.** Gubbins was demonstrated at
-10 of 10 units and IQ-TREE at 3 of 3 alignments. Neither was demonstrated
-end to end through the workflow, and that test has not been run.
+10 of 10 units and IQ-TREE at 3 of 3 alignments.
+
+**Demonstrated end to end as well, later the same day.** Two full workflow runs
+on 9 real genomes produced byte-identical output for all ten scientific results,
+including both IQ-TREE trees. See `DETERMINISTIC_SMOKETEST_2026-09-04.md`. What
+that does not establish is scale: 9 genomes and one cluster against a frozen
+basis of 85 units and 2,340 genomes.
 
 ## Why this matters for the reproducibility test
 

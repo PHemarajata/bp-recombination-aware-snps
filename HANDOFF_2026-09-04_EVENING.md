@@ -81,7 +81,7 @@ looks consistent unless one of them is resolved.
 20 `[CONFIRM]` markers remain in the body and every one is an author decision:
 word counts, deposition, funding, author roles, IRB, and two editorial calls.
 
-**4. The reproducibility test. Still not run, and it would have failed.**
+**4. The reproducibility test. Run at smoke-test scale, and it passes.**
 
 `gubbins_deterministic` governed Gubbins and never governed IQ-TREE. All five
 IQ-TREE invocations ran unseeded and multi-threaded, two of which produce
@@ -99,6 +99,16 @@ Fixed: `iqtree_seed` passed always, and `deterministic` pinning both tools.
 `gubbins_deterministic` still works and either turns it on. CI asserts all five
 invocations.
 
+**Then run.** Two full workflow runs over the 9-genome smoke test, sequential,
+separate working directories, `--deterministic true`. Both 34 tasks, zero
+non-zero exit codes, identical process sets. **All ten scientific outputs
+byte-identical**, including both IQ-TREE trees. Of 58 comparable published files,
+43 match exactly and the 15 that differ are timestamps, runtimes, work paths, and
+two files whose rows are the same in a different order.
+`DETERMINISTIC_SMOKETEST_2026-09-04.md` has the detail. The full-scale run is
+still open, and so is `GLOBAL_ML_TREE`, which a single-cluster test cannot
+exercise.
+
 **5. PR #21. Ready for review, not merged.** 44 commits, mergeable, clean, and
 the description now covers today's work. It was left for you rather than merged:
 the morning handoff authorised a merge of a 37-commit branch, and what is on it
@@ -110,8 +120,10 @@ commit titles are the record of which claim was corrected when.
 
 ## What to do next, in the order I would take it
 
-**1. Run the reproducibility test.** It is genuinely unblocked now. It was not
-this morning.
+**1. Run the reproducibility test at full scale.** The smoke-test scale is done
+and passes; see item 4 above and `DETERMINISTIC_SMOKETEST_2026-09-04.md`. What is
+left is whether it holds over 85 units and 2,340 genomes, and `GLOBAL_ML_TREE`,
+which needs at least three medoids and so cannot run on a single-cluster test.
 
 ```bash
 nextflow run . -profile bp,local_workstation,docker --deterministic true \
@@ -127,11 +139,16 @@ Two things to settle before starting it:
   units run to 159, so budget more than 2x. Demonstrating reproducibility needs
   two runs. Call it two days of the workstation.
 
-A cheaper version answers most of the question: `run_smoketest.sh` runs 9 real
-genomes from unit s4_L1_5, all nine input files present. Run it twice under
-`--deterministic true` and diff the trees and `per_branch_statistics.csv`. That
-closes the "not demonstrated end to end through the workflow" gap for about an
-hour, and it is the thing I would do before spending two days.
+Two things found while running the smoke test that will bite the full run:
+
+- **`~/.docker/config.json` holds a Docker Hub token that expired in September
+  2025.** Apptainer prefers it over anonymous access and Docker Hub answers
+  "unauthorized: incorrect username or password", which reads like a rate limit
+  and is not one. Anything on this host pulling from Docker Hub hits it.
+- **`-profile ...,singularity` does not select singularity.** The workstation
+  profile wins and resolves `docker.enabled = true`, whatever order the profiles
+  are given in. A `-c` overlay at run time works. On a host with a working Docker
+  daemon this would silently run under Docker and nobody would notice.
 
 **2. Decide what the background section is for.** The three options are set out
 at the end of `BACKGROUND_BIBLIOGRAPHY_DEFECT_2026-09-04.md`. Nothing else in the
