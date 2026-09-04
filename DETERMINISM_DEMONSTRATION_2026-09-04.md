@@ -119,8 +119,12 @@ What is supported:
 
 1. The reported run reproduces **empirically**: Gate 1 = 47 units, median r/m
    7.70 (D1, `REPRO_RESULT_2026-08-26.md`).
-2. The pipeline is **deterministic when run single-threaded**, demonstrated at
-   10 of 10 on real alignments, at a cost of roughly 2x.
+2. ~~The pipeline is **deterministic when run single-threaded**, demonstrated at
+   10 of 10 on real alignments, at a cost of roughly 2x.~~
+   **Corrected later the same day. That was true of Gubbins and not of the
+   pipeline.** `gubbins_deterministic` pinned Gubbins and nothing else. Every
+   IQ-TREE call ran unseeded and multi-threaded, including the two that produce
+   reported output. See the correction below. It is true now.
 3. The reported run itself remains **not** seed-reproducible: it predates both
    parameters, and re-running produces a different run rather than validating the
    pinned one.
@@ -135,3 +139,74 @@ Harnesses are `seedtest/run.sh` (the 40-run seeded/unseeded comparison) and
 the scratch outputs. Pipeline support is
 `wf-assembly-snps-mod@0543892` (`gubbins_seed`) and `@4fd7b22`
 (`gubbins_deterministic`), PRs #6 and #7.
+
+---
+
+# Correction, later on 2026-09-04: the flag did not cover IQ-TREE
+
+The section above ends by observing that multithreaded tree search in this stack
+is non-deterministic regardless of seed, and that it "should be assumed to hold
+for any threaded tree builder here unless measured otherwise". IQ-TREE is a
+threaded tree builder here. It was measured, in the earlier work that section
+cites. And `gubbins_deterministic` did not touch it.
+
+So the demonstration above is a demonstration about Gubbins, and claim 2 read it
+as a demonstration about the pipeline.
+
+## What was actually running
+
+Five IQ-TREE invocations, none seeded, all multi-threaded:
+
+| module | what it produces |
+|---|---|
+| `IQTREE_ASC` | the per-unit final ML trees |
+| `GLOBAL_ML_TREE` | the reported global ML tree, two invocations |
+| `IQTREE_FAST` | the Gubbins starting tree |
+| `BUILD_INTEGRATED_TREE` | integrated mode, `-nt AUTO`, sized to the host |
+
+Two of those are reported output.
+
+## Measured
+
+Three real unit alignments, 24 to 34 taxa, two runs per configuration, the
+production invocation (`GTR`, `-bb 1000 -alrt 1000`), treefile compared byte for
+byte:
+
+| configuration | result |
+|---|---|
+| no seed, `-T 4` (production) | differs on all three |
+| `-seed`, `-T 4` | differs |
+| no seed, `-T 1` | differs |
+| **`-seed`, `-T 1`** | **identical on all three** |
+
+Both are needed. That is a sharper result than Gubbins gave, where a seed at four
+threads still matched on the units that were stable without one. Under `-seed`
+with `-T 1` the only difference left anywhere is the `.iqtree` report's own
+timestamp and its two runtime lines.
+
+## Fixed
+
+`wf-assembly-snps-mod` gains `iqtree_seed`, passed to every invocation always,
+and `deterministic`, which pins Gubbins and IQ-TREE both.
+`gubbins_deterministic` still works and either turns determinism on, so nothing
+already written down breaks. CI asserts all five invocations are seeded and
+thread-controlled and refuses if it finds fewer than five, which caught two
+faulty versions of the check itself before either was trusted.
+
+## What claim 2 should say
+
+**The pipeline is deterministic under `--deterministic true`, which pins both
+Gubbins and IQ-TREE to one thread and seeds both.** Gubbins was demonstrated at
+10 of 10 units and IQ-TREE at 3 of 3 alignments. Neither was demonstrated
+end to end through the workflow, and that test has not been run.
+
+## Why this matters for the reproducibility test
+
+Open item 4 of `HANDOFF_2026-09-04.md` was to run the end-to-end reproducibility
+test, on the grounds that it was "now unblocked: the seeded, single-threaded
+configuration exists". It did not exist. It exists now.
+
+Had the test been run this morning it would have failed, and it would have failed
+on the per-unit and global trees while Gubbins reproduced perfectly, which is a
+confusing place to start debugging from. The cheap check came first for that
+reason: four call sites, read in a few minutes, against a run measured in days.
