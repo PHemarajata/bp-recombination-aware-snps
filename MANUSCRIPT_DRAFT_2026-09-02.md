@@ -193,8 +193,9 @@ confidence intervals from 1,391 genomes, and found that between 96.6% and 99.9% 
 genes had recombined at least once within a single lineage [8]. The frequently
 quoted claim that *B. pseudomallei* has the highest recombination rate reported in
 bacteria derives from a per-allele multilocus sequence typing quantity of 18 to 30
-[9], which is not comparable to any per-site genome-wide estimate and should not
-be placed beside one.
+[9], measured across the seven loci of the standard scheme [27], which is not
+comparable to any per-site genome-wide estimate and should not be placed beside
+one.
 
 The mechanism that makes partitioning necessary is also documented. Recombination
 in this species occurs predominantly within clades, interclade exchange is rare,
@@ -447,8 +448,8 @@ For false positives we built a matched zero-recombination null of **1,519
 replicates across 62 unit-replicons**. Each replicate inherits from the real unit
 it matches its tree, fitted substitution model, alignment length, base composition
 and per-genome missing-data pattern applied verbatim, with sequences simulated
-under that model and passed through the identical Gubbins invocation used in
-production. By construction the truth is zero recombination. **Twenty of 1,519
+under that model with Seq-Gen [26] and passed through the identical Gubbins
+invocation used in production. By construction the truth is zero recombination. **Twenty of 1,519
 replicates, 1.32%, produced any false-positive block**, one block each. The maximum
 pooled r/m the null ever reached is **0.00668** and the median is zero, against
 observed values in real units of 2.85 to 14.92, which is **427-fold to 2,234-fold
@@ -735,11 +736,11 @@ where Gubbins detects only 5% to 10% of real recombination events [11]. One step
 up in scale, recombination accounts for most of the SNP distance. Recombination is
 therefore most consequential and least detectable at exactly the scale where
 outbreak calls are made. The published examples bear this out in both directions.
-A genuine point-source outbreak spanned 1,328 SNPs of which only about 5% survived
-recombination filtering, and isolates sharing a sequence type have been reported
-more than 20,000 SNPs apart. [CONFIRM] retrieve and cite the primary sources for
-both figures before using them, per `BACKGROUND_RESEARCH_2026-09-02.md` section
-12.3.
+A point-source outbreak traced to one unchlorinated water supply spanned 1,328
+SNPs between its two commonest sequence types, of which only about 5% survived
+recombination filtering [33]. In the other direction, isolates sharing a sequence
+type have been reported 21,211 and 20,567 SNPs apart, against 404 SNPs for a
+genuinely clonal same-sequence-type pair in the same study [34].
 
 **Partitioning before measuring is a biological requirement, not a computational
 convenience.** Clade-specific restriction-modification systems restrict interclade
@@ -757,15 +758,15 @@ country-level structure cannot be separated from collection history in a
 collection assembled this way. That is easy to read as a null, and it is not one.
 Continental and regional structure in this species is well established and
 independently reproduced: whole-genome phylogenies resolve distinct
-geography-specific clades for Africa, the Americas, Asia and Australasia [21],
+geography-specific clades for Africa, the Americas, Asia and Australasia [29],
 and region-specific SNP markers are already good enough that a three-marker
 PCR-HRM assay separates locally acquired from imported cases in the Caribbean and
-the Indian Ocean [22]. What does not carry the same weight is inference from
+the Indian Ocean [30]. What does not carry the same weight is inference from
 sequence-type identity. ST562 occurs in northern Australia and in Hainan and
 Taiwan, but the Asian and Australian isolates are distantly related and the
-direction of introduction remains unresolved [23]; and twelve isolates from one
+direction of introduction remains unresolved [31]; and twelve isolates from one
 patient shared an identical sequence type while whole-genome sequencing showed a
-polyclonal infection [24]. Shared ST is therefore not evidence of shared origin,
+polyclonal infection [32]. Shared ST is therefore not evidence of shared origin,
 in either direction. Read together with our Results section 8, the consistent
 reading is that country is the wrong unit for this organism rather than that the
 geographic signal is weak, and that a study reporting country-level attribution
@@ -801,7 +802,7 @@ cannot support that, and no amount of analysis will fix it.
 analyzable set is unscreened for modality because it falls below n of 25 where
 modality is undecidable, and the r/m safety net acts only after the fact.
 Within-BioProject correlation is unmeasured, so effective sample size is uncertain.
-No published benchmark exists for these tools on a two-replicon 7.2 Mb genome, and
+No published benchmark exists for these tools on a two-replicon 7.2 Mb genome [28], and
 the behavior of the subtree merge under recombination remains unvalidated. The
 sensitivity bound rests on one unit and one replicon with terminal-branch implants
 only, so it does not speak to clade-level imports. Variant calling by split k-mers
@@ -944,19 +945,25 @@ of 21 genomes labelled USA, 10 are Puerto Rico or the US Virgin Islands, leaving
 
 ### Software, compute and reproducibility
 
-| Tool | Version | Role |
-|---|---|---|
-| Nextflow | 25.10.0 production, 25.04.6 control | workflow |
-| PopPUNK | 2.7.6 | strain assignment |
-| SKA | 0.4.0 | split-k-mer alignment within strains |
-| fastbaps via PopPIPE | 3 levels | within-strain subclustering |
-| Mash | sketch size 50,000, k = 21 | distances for reference choice and medoids |
-| Snippy | 4.6.0 | reference-based variant calling |
-| Gubbins | 3.4.3 | recombination detection |
-| RAxML | 8.2.12 within Gubbins | tree builder inside Gubbins |
-| IQ-TREE | 2.2.6 | per-unit and global trees |
-| parsnp | 1.7.4 | core-genome alignment for the global tree |
-| BUSCO | 5.8.2, `burkholderiales_odb10` | assembly base-accuracy screening |
+| Tool | Version | Role | Ref |
+|---|---|---|---|
+| Nextflow | 25.10.0 production, 25.04.6 control | workflow | [18] |
+| PopPUNK | 2.7.6 | strain assignment | [16] |
+| SKA2 | 0.4.0, within PopPIPE | split-k-mer alignment within strains | [19] |
+| fastbaps via PopPIPE | 3 levels | within-strain subclustering | [17] |
+| Mash | sketch size 50,000, k = 21 | distances for reference choice and medoids | [20] |
+| Snippy | 4.6.0 | reference-based variant calling | [21] |
+| Gubbins | 3.4.3 | recombination detection | [11] |
+| RAxML | 8.2.12 within Gubbins | tree builder inside Gubbins | [22] |
+| IQ-TREE | 2.2.6 | per-unit and global trees | [23] |
+| parsnp | 1.7.4 | core-genome alignment for the global tree | [24] |
+| BUSCO | 5.8.2, `burkholderiales_odb10` | assembly base-accuracy screening | [25] |
+| Seq-Gen | GTR, per-unit fitted model | zero-recombination null simulation | [26] |
+| ClonalFrameML | | recombination comparison in the Discussion | [12] |
+
+The SKA2 row is the version used inside PopPIPE for partitioning. The SNP
+workflow pins `ska2` 0.3.7 for its own alignment path, which was not the path
+used here: `alignment_method` was Snippy.
 
 The Mash sketch size is 50,000 rather than the 10,000 named in the repository
 configuration, and the sketch header is authoritative.
@@ -1224,57 +1231,95 @@ Verified against PubMed records. Full provenance and per-citation caveats are in
 14. Dale J, Price EP, Hornstra H, Busch JD, Mayo M, Godoy D, et al.
     Epidemiological tracking and population assignment of the non-clonal
     bacterium, *Burkholderia pseudomallei*. *PLoS Negl Trop Dis* 2011;5(12):e1381.
-    doi:10.1371/journal.pntd.0001381. **PMID 22163051 unconfirmed against an
-    index. Verify.**
+    PMID 22180792. doi:10.1371/journal.pntd.0001381
 15. Webb JR, Mayo M, Rachlin A, Woerle C, Meumann EM, Rigas V, et al. Genomic
     epidemiology links *Burkholderia pseudomallei* from individual human cases to
     *B. pseudomallei* from targeted environmental sampling in northern Australia.
     *J Clin Microbiol* 2022;60(3):e0164821. PMID 35080450. doi:10.1128/JCM.01648-21
 
-Additional references to add once the corresponding sections are written.
+References 16 to 26 are the method and software citations. They are cited
+from the Software table in Methods rather than from the narrative.
 
 16. Lees JA, Harris SR, Tonkin-Hill G, Gladstone RA, Lo SW, Weiser JN, et al. Fast
     and flexible bacterial genomic epidemiology with PopPUNK. *Genome Res*
     2019;29(2):304–316. PMID 30679308. doi:10.1101/gr.241455.118
-17. [CONFIRM] fastbaps. Tonkin-Hill G, Lees JA, Bentley SD, Frost SDW, Corander J.
-    Fast hierarchical Bayesian analysis of population structure. *Nucleic Acids
-    Res* 2019. Retrieve and verify.
-18. [CONFIRM] SKA2, Snippy, IQ-TREE 2, parsnp, BUSCO, seq-gen, RAxML. Retrieve and
-    verify each before submission.
-19. Godoy D, Randle G, Simpson AJ, Aanensen DM, Pitt TL, Kinoshita R, Spratt BG.
+17. Tonkin-Hill G, Lees JA, Bentley SD, Frost SDW, Corander J. Fast hierarchical
+    Bayesian analysis of population structure. *Nucleic Acids Res*
+    2019;47(11):5539-5549. PMID 31076776. doi:10.1093/nar/gkz361
+18. Di Tommaso P, Chatzou M, Floden EW, Barja PP, Palumbo E, Notredame C. Nextflow
+    enables reproducible computational workflows. *Nat Biotechnol*
+    2017;35(4):316-319. PMID 28398311. doi:10.1038/nbt.3820
+19. Derelle R, von Wachsmann J, Maklin T, Hellewell J, Russell T, Lalvani A,
+    Chindelevitch L, Croucher NJ, Harris SR, Lees JA. Seamless, rapid, and
+    accurate analyses of outbreak genomic data using split-mer analysis. *Genome
+    Res* 2024;34(10):1661-1673. PMID 39406504. doi:10.1101/gr.279449.124
+20. Ondov BD, Treangen TJ, Melsted P, Mallonee AB, Bergman NH, Koren S, Phillippy
+    AM. Mash: fast genome and metagenome distance estimation using MinHash.
+    *Genome Biol* 2016;17(1):132. PMID 27323842. doi:10.1186/s13059-016-0997-x
+21. Seemann T. Snippy: rapid haploid variant calling and core genome alignment.
+    https://github.com/tseemann/snippy. Snippy has no peer-reviewed publication
+    and is cited by the version used here, 4.6.0.
+22. Stamatakis A. RAxML version 8: a tool for phylogenetic analysis and
+    post-analysis of large phylogenies. *Bioinformatics* 2014;30(9):1312-1313.
+    PMID 24451623. doi:10.1093/bioinformatics/btu033
+23. Minh BQ, Schmidt HA, Chernomor O, Schrempf D, Woodhams MD, von Haeseler A,
+    Lanfear R. IQ-TREE 2: new models and efficient methods for phylogenetic
+    inference in the genomic era. *Mol Biol Evol* 2020;37(5):1530-1534. PMID
+    32011700. doi:10.1093/molbev/msaa015
+24. Treangen TJ, Ondov BD, Koren S, Phillippy AM. The Harvest suite for rapid
+    core-genome alignment and visualization of thousands of intraspecific
+    microbial genomes. *Genome Biol* 2014;15(11):524. PMID 25410596.
+    doi:10.1186/s13059-014-0524-x
+25. Manni M, Berkeley MR, Seppey M, Simao FA, Zdobnov EM. BUSCO update: novel and
+    streamlined workflows along with broader and deeper phylogenetic coverage for
+    scoring of eukaryotic, prokaryotic, and viral genomes. *Mol Biol Evol*
+    2021;38(10):4647-4654. PMID 34320186. doi:10.1093/molbev/msab199
+26. Rambaut A, Grassly NC. Seq-Gen: an application for the Monte Carlo simulation
+    of DNA sequence evolution along phylogenetic trees. *Comput Appl Biosci*
+    1997;13(3):235-238. PMID 9183526. doi:10.1093/bioinformatics/13.3.235
+27. Godoy D, Randle G, Simpson AJ, Aanensen DM, Pitt TL, Kinoshita R, Spratt BG.
     Multilocus sequence typing and evolutionary relationships among the causative
     agents of melioidosis and glanders, *Burkholderia pseudomallei* and
     *Burkholderia mallei*. *J Clin Microbiol* 2003;41(5):2068–2079. PMID 12734250.
     doi:10.1128/JCM.41.5.2068-2079.2003
-20. Holden MTG, Titball RW, Peacock SJ, Cerdeño-Tárraga AM, Atkins T, Crossman LC,
+28. Holden MTG, Titball RW, Peacock SJ, Cerdeño-Tárraga AM, Atkins T, Crossman LC,
     et al. Genomic plasticity of the causative agent of melioidosis, *Burkholderia
     pseudomallei*. *Proc Natl Acad Sci U S A* 2004;101(39):14240–14245. PMID
     15377794. doi:10.1073/pnas.0403302101
 
-21. Sarovich DS, Garin B, De Smet B, Kaestli M, Mayo M, Vandamme P, et al.
+29. Sarovich DS, Garin B, De Smet B, Kaestli M, Mayo M, Vandamme P, et al.
     Phylogenomic analysis reveals an Asian origin for African *Burkholderia
     pseudomallei* and further supports melioidosis endemicity in Africa.
     *mSphere* 2016;1(2):e00089-15. PMID 27303718.
     doi:10.1128/mSphere.00089-15
 
-22. Gasqué M, Guernier-Cambert V, Girault G, Terret J, Neulat-Ripoll F,
+30. Gasqué M, Guernier-Cambert V, Girault G, Terret J, Neulat-Ripoll F,
     Rochelle-Newall E, Laroucau K. Rapid confirmation of autochthonous origin in
     suspected cases of melioidosis from French overseas departments in the
     Caribbean and the Indian Ocean by PCR-high resolution melting (HRM) analysis.
     *Infect Genet Evol* 2024;127:105711. PMID 39732273.
     doi:10.1016/j.meegid.2024.105711
 
-23. Meumann EM, Kaestli M, Mayo M, Ward L, Rachlin A, Webb JR, et al. Emergence
+31. Meumann EM, Kaestli M, Mayo M, Ward L, Rachlin A, Webb JR, et al. Emergence
     of *Burkholderia pseudomallei* sequence type 562, northern Australia. *Emerg
     Infect Dis* 2021;27(4):1057–1067. PMID 33754984. doi:10.3201/eid2704.202716
 
-24. Price EP, Sarovich DS, Viberg L, Mayo M, Kaestli M, Tuanyok A, et al.
+32. Price EP, Sarovich DS, Viberg L, Mayo M, Kaestli M, Tuanyok A, et al.
     Whole-genome sequencing of *Burkholderia pseudomallei* isolates from an
     unusual melioidosis case identifies a polyclonal infection with the same
     multilocus sequence type. *J Clin Microbiol* 2015;53(1):282–286. PMID
     25339397. doi:10.1128/JCM.02560-14
 
 ---
+
+33. Sarovich DS, Chapple SNJ, Price EP, Mayo M, Holden MTG, Peacock SJ, Currie BJ.
+    Whole-genome sequencing to investigate a non-clonal melioidosis cluster on a
+    remote Australian island. *Microb Genom* 2017;3(8):e000117. PMID 29026657.
+    doi:10.1099/mgen.0.000117
+34. Aziz A, Sarovich DS, Harris TM, Kaestli M, McRobb E, Mayo M, Currie BJ, Price
+    EP. Suspected cases of intracontinental *Burkholderia pseudomallei* sequence
+    type homoplasy resolved using whole-genome sequencing. *Microb Genom*
+    2017;3(11):e000139. PMID 29208140. doi:10.1099/mgen.0.000139
 
 ## Submission checklist
 
@@ -1287,17 +1332,22 @@ Ordered by what blocks submission first.
    joined v3 assignments to v1 trees and reported 82 units against a 91-unit
    partition, caught only by noticing the unit count.
 2. **Fill the remaining [CONFIRM] markers.** The analysis markers are cleared
-   (Results 3's r/m distribution is filled from NUMBERS.tsv). What remains is
-   categorized in `SUBMISSION_TODO.md`: two editorial decisions resolvable now
-   (the ClonalFrameML mention, the union-coverage panel), three citation retrievals,
-   and the external chain (deposition, funding, author roles, IRB), which is the
-   real critical path.
+   (Results 3's r/m distribution is filled from NUMBERS.tsv), and so are the
+   citation retrievals: the reference list is now 34 entries, every one cited and
+   every citation defined, with no [CONFIRM] left in it. What remains is two
+   editorial decisions (the ClonalFrameML mention, the union-coverage panel) and
+   the external chain (deposition, funding, author roles, IRB), which is the real
+   critical path.
 3. **Settle the data availability position** with biosafety and legal review
    before choosing a journal, because some journals will not accept a restriction
    this broad.
 4. **Produce Figures 1 to 4 and Tables 1 to 5.**
-5. **Verify the remaining citations**, including the 12 items listed in
-   `BACKGROUND_RESEARCH_2026-09-02.md` section 12.3 and reference 14 above.
+5. ~~**Verify the remaining citations.**~~ **Done 2026-09-04.** All 34 were
+   checked against PubMed records retrieved in session. Reference 14 carried
+   PMID 22163051, which is a paper on cannabidiol and neuroinflammation; the
+   correct record is 22180792. The DOI beside it was right, which is why the
+   entry looked plausible: a wrong PMID next to a right DOI is not visible
+   without retrieving one of them.
 6. **Decide the ClonalFrameML comparison.** It currently appears in the Discussion
    only. Either report the six-unit result in Results with its caveats, or remove
    the Discussion sentence.
