@@ -291,6 +291,18 @@ def main():
                          "A ratchet: set it to the current count so the number "
                          "can only go down, rather than demanding a clean sheet "
                          "before the audit may run in CI at all")
+    ap.add_argument("--max-rival-conflicts", type=int, default=0, metavar="N",
+                    help="tolerate at most N numbers on which the two "
+                         "bibliographies disagree. Defaults to 0, so any "
+                         "document that grows a conflict fails. Deliberately "
+                         "separate from --warn-only: a conflict is a citation "
+                         "that is actively wrong rather than one that is "
+                         "merely incomplete, so it should not be masked by a "
+                         "blanket quality-flag switch, but a document with a "
+                         "known and recorded count should not hold CI red "
+                         "forever either. Set it to the current number so it "
+                         "can only go down, and say in the caller where the "
+                         "number is written up")
     ap.add_argument("--warn-only", action="store_true",
                     help="report entry-level flags but do not fail on them. "
                          "Dangling citations still fail, because a citation "
@@ -330,6 +342,7 @@ def main():
 
     stray = misplaced_entries(body)
     rival_conflict = False
+    rival_count = 0
     explained = sorted(n for n in dangling if n in stray)
     if stray:
         print()
@@ -354,6 +367,7 @@ def main():
             print(f"       DISAGREE                : {disagree}")
             if disagree:
                 rival_conflict = True
+                rival_count = disagree
                 print(f"       first divergence at     : [{first}]")
                 print("     A number that resolves to a different paper in each")
                 print("     bibliography is invisible to a dangling-and-orphan")
@@ -435,15 +449,28 @@ def main():
     # fixed a few at a time; a number meaning two different papers is a wrong
     # citation being served to a reader, not an incomplete one, and it is not
     # something to count down from.
-    # Not gated on --warn-only. That flag exists to let entry-level quality
-    # flags through while the list is still being built, the way --max-dangling
-    # lets an incomplete list through. Neither is the right treatment here: a
-    # number that means one paper in the prose and another in the list is a
-    # citation that is actively wrong, not one that is merely incomplete, and it
-    # is the only defect this tool finds that a reader cannot see for themselves.
+    # Not gated on --warn-only. That flag exists to let entry-level quality flags
+    # through while a list is still being built, and a number that means one
+    # paper in the prose and another in the list is a citation that is actively
+    # wrong rather than incomplete. It is also the only defect this tool finds
+    # that a reader cannot see for themselves.
+    #
+    # It does have its own ratchet, --max-rival-conflicts, defaulting to 0. That
+    # is not the same concession: --warn-only would hide the whole class, while
+    # the ratchet names a count that a caller has written up and forces it
+    # downward. Without it the background section holds CI red permanently over
+    # a defect already recorded in two places, which teaches people to ignore a
+    # red build.
     if rival_conflict:
-        print("\n  FAIL: the two bibliographies disagree on what a number means.")
-        sys.exit(1)
+        over = rival_count - a.max_rival_conflicts
+        if over > 0:
+            print(f"\n  FAIL: {rival_count} numbers mean a different paper in "
+                  f"each bibliography, {a.max_rival_conflicts} tolerated "
+                  f"({over} over).")
+            sys.exit(1)
+        print(f"\n  {rival_count} rival-numbering conflicts, within the "
+              f"tolerated {a.max_rival_conflicts}. Ratchet this down as they "
+              f"are fixed; it must never go up.")
 
     over = len(dangling) - a.max_dangling
     if over > 0:

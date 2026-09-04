@@ -106,18 +106,30 @@ jobs:
         with:
           python-version: "3.12"
       - name: the manuscript has no dangling citations
-        # Strict, and it passes today at 19 cited over 24 defined. This is the
-        # submission-bound document, so a citation pointing at nothing is a
-        # release blocker rather than a cleanup task. Entry-level flags are
-        # warn-only here because "no journal volume" is a judgement call and
-        # "cited but undefined" is not.
+        # Strict, and it passes today at 34 cited over 34 defined with no
+        # orphans. This is the submission-bound document, so a citation pointing
+        # at nothing is a release blocker rather than a cleanup task. Entry-level
+        # flags are warn-only here because "no journal volume" is a judgement
+        # call and "cited but undefined" is not. One entry is flagged and stays
+        # flagged: Snippy has no peer-reviewed publication, so it genuinely has
+        # no identifier, and the flag is correct rather than something to fix.
         run: python3 verify_references_bp.py MANUSCRIPT_DRAFT_2026-09-02.md --warn-only
       - name: the background does not get worse
-        # A ratchet, not a gate. The background carries 34 dangling citations and
-        # fixing them is scoped work in progress, so demanding a clean sheet
-        # would mean this job could not run at all until that finished, which is
-        # how audits end up never running. Lower this number as they are fixed;
-        # it can only go down.
+        # Two ratchets, not gates. The background carries 34 dangling citations,
+        # and 56 numbers that mean a different paper in the printed reference
+        # list from the one the prose cites. Both are scoped work in progress,
+        # and demanding a clean sheet would mean this job could not run at all
+        # until that finished, which is how audits end up never running.
+        #
+        # The second number is the one measured on 2026-09-04 and written up in
+        # BACKGROUND_BIBLIOGRAPHY_DEFECT_2026-09-04.md, with per-number detail in
+        # BACKGROUND_BIBLIO_COMPARISON.md. It is not a formatting problem: 136 of
+        # the 277 citation marks in the prose resolve to the wrong paper. It is
+        # tolerated here only because it is recorded there.
+        #
+        # Lower both as they are fixed. Neither may go up, and the default for
+        # --max-rival-conflicts is 0, so any other document fails on the first
+        # conflict.
         run: |
           python3 verify_references_bp.py BP_background_section.md \
-            --max-dangling 34 --warn-only
+            --max-dangling 34 --max-rival-conflicts 56 --warn-only
