@@ -262,6 +262,28 @@ independent execution on different hardware refined one unit into three, giving
 88 units and 2,342 genomes; that run is the cross-hardware reproducibility
 control (Results section 9), not the reported basis.
 
+| | value | source |
+|---|---|---|
+| Assemblies in the v4c panel | 2,976 | `L1v4c_MERGED_METADATA.tsv` |
+| Panel after duplicate and exclusion correction | 2,959 | `NUMBERS.tsv` |
+| Countries represented in the panel | 50 | `NUMBERS.tsv` |
+| | | |
+| **Analysis units (reported basis)** | **85** | `FINAL_PARTITION.tsv` |
+| **Genomes in analysis units** | **2,340** | `FINAL_PARTITION.tsv` |
+| Genomes per unit, median (range) | 18 (7 to 159) | `FINAL_PARTITION.tsv` |
+| Countries in the analyzed set | 43 | joined to metadata |
+| Most-represented country | Thailand 1,561 (66.8% of 2,336 with a known country) | joined to metadata |
+| | | |
+| Units in-window (Gate 1) | 47 | `GATE1_ALIGNMENT_2026-08-21.tsv` |
+| Units below floor | 12 | as above |
+| Units above ceiling | 26 | as above |
+| **Median r/m, in-window units** | **7.70** | `NUMBERS.tsv` |
+
+**Table 1.** Panel and partition summary. The panel is 2,976 assemblies as
+submitted to PopPUNK and 2,959 after removing duplicate BioSamples; both appear
+above and they are different stages, not a discrepancy. The analyzed set is
+smaller again because a unit must reach n >= 5 to be analyzed.
+
 Two observations from the partitioning step are worth reporting because both are
 easy to get wrong.
 
@@ -1114,11 +1136,30 @@ Both READMEs carry the caveats their figure's caption carries, because a tree
 that can be re-styled is a tree that can be re-styled into a claim it does not
 support.
 
-**Table 1.** Panel and partition summary.
-**Table 2.** Gate 1 classification and r/m by class.
-**Table 3.** The `strain_1_L1_26` refinement, before and after.
-**Table 4.** Spike-in recovery.
-**Table 5.** Tree-builder comparison.
+**Tables 1 to 5 are generated, on the same rule as the figures.**
+`make_tables_bp.py` rebuilds all five from the frozen basis into `TABLES.md`, and
+**fails rather than writing if any value disagrees with the one printed here**,
+which is the only thing that keeps a hand-typed table and its data in step. Table
+1 is new; the other four appear inline in the Results above and are reproduced
+there from the same generator.
+
+**Table 1.** Panel and partition summary. Results section 1.
+**Table 2.** Gate 1 classification and r/m by class, with IQR and genome counts.
+Results section 3.
+**Table 3.** The `strain_1_L1_26` refinement, before and after. Results section 4.
+**Table 4.** Spike-in recovery. Results section 5.
+**Table 5.** Tree-builder comparison. Results section 6.
+
+Two values in these tables cannot be read from a file and are named constants
+with their provenance recorded in the generator. Table 3's n = 98 child sits at
+**72** mean pairwise core SNPs, recomputed on its own membership in
+`GATE1_ALIGNMENT_RESULT_2026-08-21.md` section 7b; the distances file gives 1,310,
+which is the unsplit parent's diversity arriving through a join on unit name, and
+using it would be wrong by a factor of eighteen and would flip that row's Gate 1
+class. Table 4's recovery rates are taken from `SPIKEIN_RESULT.txt` rather than
+recomputed, because the printed counts are rounded summaries across replicates:
+the nu = 0.002 and nu = 0.01 rows show identical integers and different rates, so
+recomputing would silently turn the reported 91% into 90%.
 
 **Supplementary Table S1.** Per-genome accession, unit, country, BioProject,
 collection date, subject to the data availability decision.
