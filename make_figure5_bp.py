@@ -14,13 +14,25 @@ and only useful if the method would have found the recombination that is there.
 Panel A answers the first, Panel B the second. Reporting either alone leaves the
 obvious objection open.
 
-IT CROSS-CHECKS THE MANUSCRIPT AND SAYS SO WHEN THEY DISAGREE. The draft states
-1,519 null replicates and a separation of 427 to 2,234 fold. This script
-recomputes both from `TIER2_null.txt` and prints the comparison. It warns rather
-than failing, because the table rounds null values to three decimals and may be a
-reported subset of a larger run, so a mismatch here is a question about
-provenance and not necessarily an error. It must not be ignored, and it must not
-be silently absorbed into a figure either.
+⚠ `TIER2_null.txt` IS A MID-RUN SNAPSHOT AND MUST NOT BE SUMMARISED. It reports
+1,302 replicates over 54 unit-replicons. The completed run is **1,519 replicates
+over 62 unit-replicons**, and `REVISED_STRATEGY_2026-08.md` A.11ag carries an
+addendum saying so outright: "THE COUNTS BELOW ARE STALE; THE VERDICT IS NOT ...
+Quote the completed figures, not these, in the paper."
+
+That is why the headline numbers here are constants taken from the completed run
+rather than recomputed from the file. Summarising the file instead gives 434x to
+2,131x, which is wrong, and wrong in the most dangerous way available: close
+enough to the right answer to look like rounding. The first version of this
+script did exactly that and reported the manuscript as being in error when the
+manuscript was correct.
+
+The project has now hit this same shape seven times, and its own note on the
+sixth is the rule: *do not record a count until the run that produces it has
+stopped.* The per-replicate statistics files for the completed run are not on
+this workstation, so the per-unit detail plotted in panel A is the 54-replicon
+subset and is drawn and labelled AS a subset, while every quantity the figure
+actually claims comes from the completed run.
 
   python3 make_figure5_bp.py            # FIGURE5_DETECTION_BOUNDS.svg
   python3 make_figure5_bp.py --dark     # dark variant
@@ -42,11 +54,21 @@ SPIKE = f"{B}/SPIKEIN_RESULT.txt"
 DARK = "--dark" in sys.argv
 OUT = f"{B}/FIGURE5_DETECTION_BOUNDS{'_dark' if DARK else ''}.svg"
 
-# What the manuscript currently claims, so a drift is visible at generation time.
-CLAIM_REPS = 1519
-CLAIM_LO, CLAIM_HI = 427, 2234
-CLAIM_RECOVERY = 0.91
+# The COMPLETED run (REVISED_STRATEGY_2026-08.md A.11ag addendum, recomputed
+# there from the 1,519 per-replicate statistics files; METHODS_DRAFT 2.8.3).
+# These are the figure's claims. They are not recomputed from TIER2_null.txt,
+# which is the superseded mid-run snapshot.
+RUN_REPS = 1519
+RUN_REPLICONS = 62
+RUN_CLEARING = 59           # unit-replicons at p <= 0.05
+RUN_FP_BLOCKS = 20          # replicates producing any false-positive block
+RUN_NULL_MAX = 0.00668
+RUN_OBS_LO, RUN_OBS_HI = 2.85, 14.92
 CLAIM_NU = 0.002
+
+# Sanity: the separation quoted in the Abstract must be these numbers' ratio.
+SEP_LO = round(RUN_OBS_LO / RUN_NULL_MAX)
+SEP_HI = round(RUN_OBS_HI / RUN_NULL_MAX)
 
 # The null table prints three decimals, so a null max of 0.000 means "below
 # display precision", not zero. Clamping to half the last place keeps the log
@@ -89,31 +111,28 @@ def main():
             sys.exit(f"FATAL: {p} not found.")
 
     nulls, spikes = read_null(), read_spike()
-    reps = sum(r["reps"] for r in nulls)
-    obs = [r["obs"] for r in nulls]
-    gmax = max(r["null_max"] for r in nulls)
-    lo, hi = min(obs) / gmax, max(obs) / gmax
-    sig = sum(1 for r in nulls if r["p"] <= 0.05)
+    sub_reps = sum(r["reps"] for r in nulls)
+    sub_sig = sum(1 for r in nulls if r["p"] <= 0.05)
 
-    print(f"null: {len(nulls)} unit-replicons, {reps} replicates")
-    print(f"  observed r/m {min(obs):.2f} to {max(obs):.2f}")
-    print(f"  greatest null r/m {gmax:.5f}")
-    print(f"  separation {lo:.0f}x to {hi:.0f}x")
-    print(f"  {sig} of {len(nulls)} exceed their own null at p <= 0.05")
+    print(f"COMPLETED RUN (what this figure claims):")
+    print(f"  {RUN_REPS} replicates over {RUN_REPLICONS} unit-replicons")
+    print(f"  greatest null r/m {RUN_NULL_MAX:.5f}, median 0.000")
+    print(f"  observed r/m {RUN_OBS_LO:.2f} to {RUN_OBS_HI:.2f}")
+    print(f"  separation {SEP_LO}x to {SEP_HI}x")
+    print(f"  {RUN_CLEARING} of {RUN_REPLICONS} clear p <= 0.05; "
+          f"{RUN_FP_BLOCKS} replicates produced any false-positive block")
 
-    drift = []
-    if reps != CLAIM_REPS:
-        drift.append(f"replicates: manuscript {CLAIM_REPS}, this table {reps}")
-    if abs(lo - CLAIM_LO) > 1 or abs(hi - CLAIM_HI) > 1:
-        drift.append(f"separation: manuscript {CLAIM_LO}-{CLAIM_HI}x, "
-                     f"this table {lo:.0f}-{hi:.0f}x")
-    if drift:
-        print("\n  *** DISAGREES WITH THE MANUSCRIPT ***")
-        for d in drift:
-            print(f"    {d}")
-        print("    The figure is drawn from the table, not from the claim.")
-        print("    Reconcile before submission: either the table is a reported")
-        print("    subset of a larger null run, or the draft is on a stale one.")
+    print(f"\nTIER2_null.txt (mid-run snapshot, plotted as detail only):")
+    print(f"  {len(nulls)} unit-replicons, {sub_reps} replicates, "
+          f"{sub_sig} clearing p <= 0.05")
+    if sub_reps != RUN_REPS or len(nulls) != RUN_REPLICONS:
+        print("  ^ superseded by the completed run; see REVISED_STRATEGY A.11ag.")
+        print("    Do NOT summarise this file. Summarising it gives 434x-2131x,")
+        print("    which is wrong by just enough to look like rounding.")
+
+    if abs(SEP_LO - 427) > 1 or abs(SEP_HI - 2234) > 1:
+        sys.exit(f"FATAL: separation recomputes to {SEP_LO}x-{SEP_HI}x but the "
+                 f"manuscript states 427x-2234x. One of them has moved.")
 
     fg = "#e8e8e8" if DARK else "#1a1a1a"
     bg = "#111111" if DARK else "#ffffff"
@@ -135,8 +154,9 @@ def main():
         axA.plot(r["obs"], y, "o", ms=4.4, color=c_obs, zorder=3)
     axA.set_xscale("log")
     axA.set_xlabel("pooled r/m (log scale)", color=fg, fontsize=10)
-    axA.set_ylabel(f"unit-replicon, sorted by observed r/m  (n = {len(nulls)})",
-                   color=fg, fontsize=10)
+    axA.set_ylabel(f"unit-replicon, sorted by observed r/m\n"
+                   f"(detail: {len(nulls)} of {RUN_REPLICONS} available here)",
+                   color=fg, fontsize=9.5)
     axA.set_title("A  Lower bound: observed against a matched\n"
                   "zero-recombination null",
                   color=fg, fontsize=11, loc="left")
@@ -144,12 +164,21 @@ def main():
     axA.text(FLOOR * 1.15, len(nulls) * 0.02,
              "null below display\nprecision (<0.001)",
              color=fg, fontsize=7.5, va="bottom")
-    axA.annotate("", xy=(min(obs), len(nulls) * 0.62),
-                 xytext=(gmax, len(nulls) * 0.62),
+    # The separation is stated from the COMPLETED run, not from the points drawn.
+    axA.axvline(RUN_NULL_MAX, color=c_null, ls="--", lw=1.2, alpha=0.9)
+    axA.axvline(RUN_OBS_LO, color=c_obs, ls="--", lw=1.2, alpha=0.9)
+    axA.annotate("", xy=(RUN_OBS_LO, len(nulls) * 0.62),
+                 xytext=(RUN_NULL_MAX, len(nulls) * 0.62),
                  arrowprops=dict(arrowstyle="<->", color=fg, lw=1.1))
-    axA.text((gmax * min(obs)) ** 0.5, len(nulls) * 0.645,
-             f"{lo:.0f}x to {hi:.0f}x", color=fg, fontsize=9,
+    axA.text((RUN_NULL_MAX * RUN_OBS_LO) ** 0.5, len(nulls) * 0.645,
+             f"{SEP_LO}x to {SEP_HI}x", color=fg, fontsize=9,
              ha="center", va="bottom")
+    axA.text(RUN_NULL_MAX * 1.15, len(nulls) * 0.40,
+             f"greatest null r/m\n{RUN_NULL_MAX:.5f}", color=c_null,
+             fontsize=7.5, va="center")
+    axA.text(RUN_OBS_LO * 1.10, len(nulls) * 0.30,
+             f"lowest observed\n{RUN_OBS_LO:.2f}", color=c_obs,
+             fontsize=7.5, va="center")
     axA.tick_params(colors=fg, labelsize=8)
     for s in axA.spines.values():
         s.set_color(grid)
@@ -189,11 +218,16 @@ def main():
              alpha=0.8)
 
     fig.text(0.5, 0.015,
-             f"A: {sig} of {len(nulls)} unit-replicons exceed their own null at "
-             f"p <= 0.05 over {reps} replicates. The null has one tree and no "
-             f"population structure, so it calibrates the recombination role of "
-             f"pooled r/m only.",
-             color=fg, fontsize=7.6, ha="center", wrap=True)
+             f"A: completed null run, {RUN_REPS} replicates over "
+             f"{RUN_REPLICONS} unit-replicons; {RUN_CLEARING} of "
+             f"{RUN_REPLICONS} exceed their own null at p <= 0.05 and "
+             f"{RUN_FP_BLOCKS} replicates ({100*RUN_FP_BLOCKS/RUN_REPS:.2f}%) "
+             f"produced any false-positive block. Points show the "
+             f"{len(nulls)} unit-replicons available on this machine; the "
+             f"dashed lines and the fold range are the completed run. The null "
+             f"has one tree and no population structure, so it calibrates the "
+             f"recombination role of pooled r/m only.",
+             color=fg, fontsize=7.2, ha="center", wrap=True)
 
     fig.tight_layout(rect=(0, 0.045, 1, 1))
     fig.savefig(OUT, facecolor=bg, bbox_inches="tight")
