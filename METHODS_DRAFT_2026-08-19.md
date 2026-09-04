@@ -2119,15 +2119,31 @@ this way: **176/176 and 172/172 replicon-units complete, exit 0, highest
 confidence tier, zero task failures in either execution trace.**
 
 **The reported analysis is not seed-reproducible, and the mechanism is the one
-above.** Commit `79ab645` predates a later fix that added a `gubbins_seed`
-parameter, so Gubbins derives RAxML's parsimony seed from an unseeded
-`randint(0, 10000)`. That draw is `0` with probability 1/10,001, RAxML rejects a
-non-positive seed, and Gubbins reports the failure only as "Unable to fit model to
-data". Each replicon-unit makes roughly two RAxML calls per iteration, so across a
-full panel the chance that at least one unit is affected is about **16%**. Combined
-with `errorStrategy 'ignore'`, the affected unit is dropped and the run still exits
-zero, which is precisely why verification must be per-unit rather than by exit
-code.
+above.** Gubbins 3.4.3 exposes a `--seed` option, and this pipeline does not pass
+it at any of its three `run_gubbins.py` call sites. Gubbins therefore takes the
+default path in `gubbins/utils.py::set_seed`, which derives RAxML's parsimony seed
+from an unseeded `randint(0, 10000)`. That draw is `0` with probability 1/10,001,
+RAxML rejects a non-positive seed, and Gubbins reports the failure only as "Unable
+to fit model to data". Each replicon-unit makes roughly two RAxML calls per
+iteration, so across a full panel the chance that at least one unit is affected is
+about **16%**. Combined with `errorStrategy 'ignore'`, the affected unit is dropped
+and the run still exits zero, which is precisely why verification must be per-unit
+rather than by exit code.
+
+> **⚠ Corrected 2026-09-04. This is not a property of the pinned commit alone.**
+> An earlier version of this paragraph said commit `79ab645` "predates a later fix
+> that added a `gubbins_seed` parameter". **No such fix exists.** Verified against
+> the pipeline repository: the string `seed` has never appeared in any Gubbins
+> module on any branch in its history, `conf/params.config` defines eight
+> `gubbins_*` parameters and none is a seed, and no commit on any branch adds one.
+> What landed on 2026-08-19, the date the fix was attributed to, was pull request
+> #5, which pins CSV line terminators and drains a pipe. The date was right and
+> the content was not, and the error propagated into six other documents.
+>
+> The consequence for this section is that the behaviour described above is
+> **live in the current pipeline**, not merely in the reported run. The remedy is
+> one parameter passed at three call sites, and until it is applied no claim of
+> determinism by construction should be made anywhere in this manuscript.
 
 **This was observed, not merely anticipated.** An end-to-end re-execution from
 `79ab645` with identical inputs (2026-08-25) lost

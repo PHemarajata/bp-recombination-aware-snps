@@ -61,13 +61,29 @@ that gap, and be precise about what it can and cannot retroactively buy.
 4. **Then** the reproducibility test that has been waiting on a Methods freeze.
 
 **State the limit honestly in the Methods.** The reported run is pinned at
-`79ab645`, which predates the `gubbins_seed` fix, so re-running seeded produces a
-*different* run rather than validating the pinned one. The claim that survives is
-two-part and both halves are already evidenced: the reported run reproduces
-empirically (D1: Gate 1 = 47 units, median 7.70), and the pipeline is
-deterministic going forward once seeded.
+`79ab645` and is not seed-reproducible. The claim that survives is two-part, and
+**only one half is currently evidenced**: the reported run reproduces empirically
+(D1: Gate 1 = 47 units, median 7.70). The second half, that the pipeline is
+deterministic going forward once seeded, **cannot be asserted yet** — see below.
 
-**Cheap, high-value:** run ten units twice under the seeded configuration and show
+> **⚠ Corrected 2026-09-04.** This passage previously said the pin "predates the
+> `gubbins_seed` fix". **There is no such fix.** Verified against the pipeline
+> repository: no `gubbins_seed` parameter, no commit adding one on any branch, and
+> the string `seed` has never appeared in a Gubbins module. PR #5, which landed on
+> the date the fix was attributed to, pins CSV line terminators and drains a pipe.
+>
+> **Gubbins 3.4.3 does expose `--seed`, and this pipeline never passes it.** So
+> the zero-seed failure is live in current code, and the seeded configuration this
+> plan depends on does not exist. Phase 1 therefore gains a step 0, before
+> everything else in it:
+>
+> **0. Add a `gubbins_seed` parameter and pass `--seed` at all three
+> `run_gubbins.py` call sites in `modules/local/gubbins_cluster/main.nf`.** One
+> parameter, three lines. Until it is done, steps 1 to 4 below cannot be completed
+> and no determinism claim may be made.
+
+**Cheap, high-value, and blocked on step 0:** run ten units twice under the seeded
+configuration and show
 byte-identical output. Hours, not days. That converts "should be deterministic"
 into a measurement.
 
