@@ -2140,10 +2140,26 @@ rather than by exit code.
 > #5, which pins CSV line terminators and drains a pipe. The date was right and
 > the content was not, and the error propagated into six other documents.
 >
-> The consequence for this section is that the behaviour described above is
-> **live in the current pipeline**, not merely in the reported run. The remedy is
-> one parameter passed at three call sites, and until it is applied no claim of
-> determinism by construction should be made anywhere in this manuscript.
+> The consequence for this section is that the behaviour described above was
+> **live in the current pipeline**, not merely in the reported run.
+>
+> **Resolved 2026-09-04, and the resolution is narrower than expected.**
+> `gubbins_seed` now passes `--seed` at all five call sites across the two Gubbins
+> modules (`wf-assembly-snps-mod` PR #6, `0543892`), which closes the silent unit
+> loss described above. **It does not deliver determinism.** Measured over ten
+> units, two runs each, on real alignments: a fixed seed at four threads gave 5 of
+> 10 identical pairs against 4 of 10 with no seed at all, while a fixed seed at
+> one thread gave **10 of 10**. Thread count, not the seed, is the dominant source
+> of run-to-run variation, exactly as this project already measured for IQ-TREE.
+> `gubbins_deterministic` (PR #7, `4fd7b22`) forces a single thread at a cost of
+> 1.28x on 8 taxa and 1.98x on 37.
+>
+> **What this manuscript may therefore claim** is three separate things, each
+> measured, and not the single sentence that preceded them: the reported run
+> reproduces empirically; the pipeline is deterministic *when run
+> single-threaded*; and the reported run itself remains not seed-reproducible,
+> because it predates both parameters. See
+> `DETERMINISM_DEMONSTRATION_2026-09-04.md`.
 
 **This was observed, not merely anticipated.** An end-to-end re-execution from
 `79ab645` with identical inputs (2026-08-25) lost

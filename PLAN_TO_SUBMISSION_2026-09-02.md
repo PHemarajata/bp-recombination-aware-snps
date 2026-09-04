@@ -82,6 +82,8 @@ deterministic going forward once seeded, **cannot be asserted yet** — see belo
 > parameter, three lines. Until it is done, steps 1 to 4 below cannot be completed
 > and no determinism claim may be made.
 
+> **✅ DONE 2026-09-04.** `gubbins_seed` (PR #6, `0543892`) and `gubbins_deterministic` (PR #7, `4fd7b22`) are on `main`, and the demonstration is run. The result corrects this plan: **`--seed` alone is not determinism.** Ten units, two runs each: seed at 4 threads 5/10 identical, no seed at 4 threads 4/10, seed at 1 thread **10/10**. Determinism costs ~2x and is opt-in. See `DETERMINISM_DEMONSTRATION_2026-09-04.md`.
+
 **Cheap, high-value, and blocked on step 0:** run ten units twice under the seeded
 configuration and show
 byte-identical output. Hours, not days. That converts "should be deterministic"
