@@ -12,7 +12,7 @@ for what closed in the morning; this covers what happened to its open list.
 | **Analysis repo** | `claude/citation-audit-2026-09-03` at `9f19fe5`, 44 commits ahead of `main`, pushed, CI green |
 | **Open PR** | [#21](https://github.com/PHemarajata/bp-recombination-aware-snps/pull/21), base `main` |
 | **Pipeline repo** | `~/wf-assembly-snps-mod`, `main` at `b8c6b85`, CI green on nine jobs |
-| **Tag `v1.1.0-mod`** | still `0551e72`. **Not moved.** Two behaviour changes have landed on `main` since it, so the tag no longer describes the tip |
+| **Tag `v1.1.0-mod`** | still `0551e72`. **Not moved.** `main` is 3 commits past it, two of which change behaviour, so the tag no longer describes the tip |
 | **Frozen basis** | unchanged: 85 units, 2,340 genomes, r/m **7.70** |
 
 ---
@@ -137,9 +137,9 @@ hour, and it is the thing I would do before spending two days.
 at the end of `BACKGROUND_BIBLIOGRAPHY_DEFECT_2026-09-04.md`. Nothing else in the
 citation work is blocked on it, and the manuscript is not.
 
-**3. Move `v1.1.0-mod`, or cut `v1.2.0-mod`.** The tag is behind `main` by two
-commits that both change behaviour: the 26.x config migration and the IQ-TREE
-determinism control. `PROVENANCE.md` already records that the tag was moved more
+**3. Move `v1.1.0-mod`, or cut `v1.2.0-mod`.** The tag is 3 commits behind
+`main`. Two of them change behaviour, the 26.x config migration and the IQ-TREE
+determinism control, and the third is CI only. `PROVENANCE.md` already records that the tag was moved more
 than once on the day it was made, so moving it again is the worse option. A new
 tag is cleaner. Resolve any tag with `git rev-list -n1 <tag>`, never from a
 transcribed SHA.
