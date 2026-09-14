@@ -281,42 +281,51 @@ containers.
 
 ### Step 8: verify on the Mac
 
-Three checks, none of which writes anything. Run them in this order.
+The bundle is the curated subset, not the whole workspace, so completeness is
+not "does every filename the code mentions exist here". Most of those names are
+scratch outputs, f-string fragments, or files that live in subfolders or were
+excluded on purpose, and none of them belongs in this copy. The real
+completeness test is whether the scripts that read data can read theirs: if an
+input is genuinely missing, the tools below stop with a `FileNotFoundError` that
+names it, and that one file can then be added to the transfer. There is no
+grep-the-source check here, because the one that used to be here produced a
+screenful of false positives on the curated copy while reporting nothing on the
+full workspace, which made it worse than useless.
 
-First, completeness. Every data file the top-level scripts name should exist:
+**Do not** paste a `for f in $(grep ... *.py); do [ -e "$f" ]...` loop to check
+completeness. It conflates files the scripts read with files they write or
+build names from, and its silence on the full workspace means only that the
+workspace is a superset, not that the check is sound.
 
-    for f in $(grep -ohE '[A-Za-z0-9_-]+\.(tsv|csv|nwk|treefile|json|txt)' *.py | sort -u); do
-      [ -e "$f" ] || echo "MISSING $f"
-    done
+Three checks, in this order.
 
-Silence is the pass. On this workstation that loop reports nothing, so anything
-it names on the Mac is a gap in the transfer and not a pre-existing absence.
+**The basis validates.** This reads the frozen partition and panel and is the
+strongest single proof the data arrived intact. It ends with `BASIS IS
+CONSISTENT` at 85 units and 2,340 genomes:
 
-Second, integrity. All three manifests verified here on 2026-09-14 with zero
-failures, at 44, 2 and 40 files respectively, so any mismatch is the copy:
+    python3 freeze_basis_bp.py
 
-    ( cd ANIMO_PACK && sha256sum -c MANIFEST.sha256 ) | grep -c ': OK$'
-    ( cd FINAL_BASIS_2026-08-22 && sha256sum -c MANIFEST.sha256 ) | grep -c ': OK$'
-    ( cd ~/Downloads/ANIMO_DELIVERABLES_2026-09-09 && sha256sum -c MANIFEST.sha256 ) | grep -c ': OK$'
+**The manifests match.** macOS spells it `shasum -a 256 -c`. All three verified
+here on 2026-09-14 with zero failures, so counts of 44, 2 and 40 mean the copy
+is intact:
 
-Third, the toolchain. This reports how the narration fits each clip and writes
-nothing:
+    ( cd ANIMO_PACK && shasum -a 256 -c MANIFEST.sha256 ) | grep -c ': OK$'
+    ( cd FINAL_BASIS_2026-08-22 && shasum -a 256 -c MANIFEST.sha256 ) | grep -c ': OK$'
+    ( cd ~/Downloads/ANIMO_DELIVERABLES_2026-09-09 && shasum -a 256 -c MANIFEST.sha256 ) | grep -c ': OK$'
 
-    python3 make_narrated_videos_bp.py --check
-
-The stronger test is regenerating the tables, because it proves the numbers
-reproduce and not merely that the files arrived. It is held back to last
-because **`make_tables_bp.py` overwrites `TABLES.md` in place**, and `TABLES.md`
-currently carries uncommitted manual edits. Commit those first, or copy the
-file aside:
+**The tables reproduce.** This proves the numbers survive the move, not merely
+that files arrived, and it doubles as the completeness test because it reads the
+data files. `make_tables_bp.py` overwrites `TABLES.md` in place, so copy it
+aside first:
 
     cp TABLES.md ~/TABLES.md.mine
     python3 make_tables_bp.py
     diff ~/TABLES.md.mine TABLES.md
 
-Read that diff rather than expecting it to be empty. A difference can mean the
-bundle is incomplete, or it can mean the manual edits are not reproducible from
-the script, which is a question about the manuscript and not about the move.
+An empty diff is the clean pass. A `FileNotFoundError` names a genuinely missing
+input. A non-empty diff that is not an error means the committed `TABLES.md` was
+hand-edited away from what the script produces, which is a manuscript question
+and not a transfer problem.
 
 ## 6. The Mac is better for narration, and worse for one thing
 
