@@ -130,8 +130,13 @@ matters more than the one-liner being short.
       echo L1v4c_out/global_ml_tree.treefile;
       echo L1v4c_out/global_grafted_chr1.treefile;
     } | sort -u | grep -v '^mash_matrix_2802.tsv$' > /tmp/bundle.txt
-    wc -l /tmp/bundle.txt          # expect 1,015
+    wc -l /tmp/bundle.txt
+    while read f; do [ -e "$f" ] || echo "MISSING $f"; done < /tmp/bundle.txt
     tar czf ~/bp_bundle.tgz -T /tmp/bundle.txt
+
+The count was 1,030 files at 223 MB on 2026-09-14. Do not treat that as a
+target: it rises whenever a file is tracked or a clip directory grows. The
+check that matters is the second line, which must print nothing.
 
 Then the home-level pieces, separately, because they land outside the repo:
 
