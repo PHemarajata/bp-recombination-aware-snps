@@ -150,12 +150,36 @@ Then the home-level pieces, separately, because they land outside the repo:
 
 ### Step 3: transfer
 
-From the Mac, pulling over ssh:
+171 MB across three archives, plus `bp_TRANSFER_SHA256.txt`. Whichever route
+you take, verify before unpacking:
 
-    rsync -avP --partial phemarajata@<linux-host>:'~/bp_bundle.tgz ~/bp_home.tgz ~/bp_memory.tgz' ~/
+    sha256sum -c bp_TRANSFER_SHA256.txt      # shasum -a 256 -c on the Mac
 
-About 300 MB compressed. If ssh is not set up, use a USB disk formatted exFAT
-so both machines can write it, and delete the copy from the disk afterward.
+**This workstation does not run an ssh server.** Checked on 2026-09-14: nothing
+listens on port 22 and the service is inactive. So the Mac cannot pull from it,
+and the obvious `rsync user@linux-host:...` command fails with a connection
+refusal rather than anything informative. Three routes, best first.
+
+**Push from here to the Mac.** Enable Remote Login on the Mac under System
+Settings, General, Sharing. Then, from this workstation:
+
+    rsync -avP --partial ~/bp_bundle.tgz ~/bp_home.tgz ~/bp_memory.tgz \
+      ~/bp_TRANSFER_SHA256.txt <mac-user>@<mac-hostname>.local:
+
+This is the recommended route. It needs no daemon and no `sudo` on the Linux
+side, and one toggle on the Mac. This workstation is `192.168.1.142` on the LAN.
+
+**Or serve the ssh daemon here and pull.** `sudo systemctl enable --now ssh`,
+then rsync from the Mac. It works, but it starts a network service on the
+machine holding the restricted data, for a one-time copy. Prefer the first
+route, and if you do take this one, stop the service afterward.
+
+**Or use a USB disk**, formatted exFAT so both machines can write it. Delete
+the copy from the disk once the Mac verifies the checksums. Use this if the two
+machines are not on the same network.
+
+Not Google Drive, and not the `peerah-gdrive:` rclone remote, for the reason in
+section 4.
 
 ### Step 4: on the Mac, clone then unpack over the clone
 
