@@ -240,6 +240,30 @@ Per-unit output in `GATE1_ALIGNMENT_2026-08-21.tsv`.
 
 ## 9. Consequences for the documents
 
+> **⚠ TWO CLAIMS IN THIS SECTION ARE SUPERSEDED. Do not act on it as written.**
+>
+> **1. The run labels are inverted**, as the header box at the top of this file
+> warns for everything below §7a. The reported run is the **workstation, 85 units,
+> 7.70 (n = 47)**; the A100 88-unit run at **7.44 (n = 48)** is the cross-hardware
+> control. The bullet below says the opposite.
+>
+> **2. The `strain_1_L1_26` reading is wrong, and §7b supersedes it.** The bullet
+> below calls the n = 98 child **in-window** and concludes refinement increased
+> the measurable set by one. That reads the **as-filed** diversity of 1,310, which
+> §7b shows is the unsplit parent's value inherited through a join on unit name.
+> Recomputed on its own membership the child sits at **72**, which is **below the
+> floor**. §7b was written a day later and is the correct reading.
+>
+> The in-window count does go 47 → 48 between the two bases, so that half of the
+> bullet is accidentally right, but the extra unit is **`strain_1_L1_11`**
+> (above ceiling → in-window at its true 3,424) and not this split, which is
+> net-neutral. Confirmed 2026-09-03 against `GATE1_ALIGNMENT_2026-08-21.tsv` and
+> the control's own gate file.
+>
+> This matters beyond bookkeeping: comparing the child's Mash figure of 955 to the
+> alignment-derived floor of 700 is exactly the cross-unit-system error this whole
+> document exists to correct, and it reached Table 3 of the manuscript.
+
 - **`METHODS_DRAFT` §2.6.1** should state the window in alignment units,
   **[700, 4,700]** with the floor bracketed **(588, 755]**, and record the
   ska-unit bounds as the original calibration.

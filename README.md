@@ -39,7 +39,8 @@ analysis units taken at level 1 and retained at n >= 7 — and Gubbins is run
 within each unit, per replicon, never across the whole collection.
 
 **The operating range was measured, not assumed**, because Gubbins publishes no
-divergence ceiling. Outside roughly **1,270–4,671 mean pairwise core SNPs** the
+divergence ceiling. Outside roughly **700–4,700 mean pairwise core SNPs**
+(alignment-derived, with the floor bracketed to (588, 755]) the
 r/m estimate is not a measurement: below the floor recombination cannot be
 detected, above the ceiling the estimate collapses. **A low r/m is therefore a
 detection failure, not a clean unit** — the single most important thing to know

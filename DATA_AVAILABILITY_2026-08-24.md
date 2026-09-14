@@ -92,7 +92,7 @@ before, so it is recomputed rather than quoted:
 | 4 | **Supplementary Table S1** — per-genome accession table for all 2,959 | ❌ not written | needs items 1 and 3 to have accessions first |
 | 5 | **Archive of the frozen basis + scripts** (Zenodo or equivalent) → DOI | ❌ not created | can be done now; does not depend on the others |
 | 6 | **IRB / ethics approval number** | ❌ missing | **the lab record — this is the one item nobody in this repository can supply** |
-| 7 | Pipeline commit tag/release at `79ab645` | ✅ **tagged 2026-08-26** | annotated tag **`v1.0.5-mod`** at `79ab645`, pushed to origin. Tag message records that the manifest self-reports `v1.0.3-mod` and that the commit predates the `gubbins_seed` fix, so runs from it are not seed-reproducible |
+| 7 | Pipeline commit tag/release at `79ab645` | ✅ **tagged 2026-08-26** | annotated tag **`v1.0.5-mod`** at `79ab645`, pushed to origin. Tag message records that the manifest self-reports `v1.0.3-mod` and that the commit carries no seed parameter, ⚠ **CORRECTED 2026-09-04: there is no `gubbins_seed` fix.** No such parameter or commit exists on any branch of the pipeline repository; PR #5 of 2026-08-19, the date it was attributed to, pins CSV line terminators. Gubbins 3.4.3 exposes `--seed` and this pipeline never passes it, so the zero-seed failure is live in current code, not confined to the pin. The tag message itself repeats the false claim and cannot be corrected without retagging a published release; treat this row as the correction of record. so runs from it are not seed-reproducible |
 
 **Items 5 and 7 are unblocked and could be done today.** Items 1–4 chain off a
 BioProject registration. Item 6 is external.
