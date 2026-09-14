@@ -91,6 +91,14 @@ encrypted bundle, and do not forward it.
 
 ## 5. Steps
 
+**The Mac's default shell is zsh, and it does not treat `#` as an inline
+comment.** Every command block below is comment-free for that reason. If you
+copy a command from anywhere else in this document that has a trailing
+`# ...`, delete the comment before you paste it, or zsh will hand the comment
+words to the command as arguments. This is not hypothetical: it is how the
+first run of this runbook extracted nothing and put the memory in the wrong
+place.
+
 ### Step 0, on this workstation: commit the loose work
 
 **Done on 2026-09-14**, in three commits: the Table 5 and Gate 1 numeric
@@ -153,7 +161,9 @@ Then the home-level pieces, separately, because they land outside the repo:
 171 MB across three archives, plus `bp_TRANSFER_SHA256.txt`. Whichever route
 you take, verify before unpacking:
 
-    sha256sum -c bp_TRANSFER_SHA256.txt      # shasum -a 256 -c on the Mac
+    shasum -a 256 -c bp_TRANSFER_SHA256.txt
+
+That is the macOS spelling. On Linux the command is `sha256sum -c`.
 
 **This workstation does not run an ssh server.** Checked on 2026-09-14: nothing
 listens on port 22 and the service is inactive. So the Mac cannot pull from it,
@@ -206,7 +216,7 @@ section 4.
 
     git clone https://github.com/PHemarajata/bp-recombination-aware-snps.git
     cd bp-recombination-aware-snps
-    tar xzf ~/bp_bundle.tgz            # unpacks in place, tracked files identical
+    tar xzf ~/bp_bundle.tgz
     cd .. && git clone https://github.com/PHemarajata/wf-assembly-snps-mod.git
     git clone https://github.com/PHemarajata/PopPIPE-bp.git
 
@@ -238,13 +248,22 @@ Claude Code derives the directory name from the project path by replacing each
 slash with a dash. On the Mac the project sits under `/Users/<you>/`, so the
 name changes and the old directory will not be found. Rename it on arrival:
 
-    P=~/bp-recombination-aware-snps                       # or wherever it lives
-    D=~/.claude/projects/$(echo "$P" | sed 's|/|-|g')
-    mkdir -p "$D" && tar xzf ~/bp_memory.tgz -C "$D"
-    ls "$D/memory" | wc -l                                # expect 122
+    P="$HOME/bp-recombination-aware-snps"
+    D="$HOME/.claude/projects/$(printf '%s' "$P" | sed 's|/|-|g')"
+    echo "$D"
+    mkdir -p "$D"
+    tar xzf ~/bp_memory.tgz -C "$D"
+    ls "$D/memory" | wc -l
+
+The `echo` prints the target before the extraction, so you can see it is a
+`-Users-...` path and not a bare `~/.claude/projects/`. The count is about
+123 files, not an exact number to match. If `$P` is ever empty the target
+collapses to `~/.claude/projects/` and the memory lands in a stray `memory/`
+directory there; if that happens, `rm -rf ~/.claude/projects/memory` and
+re-run the block.
 
 Check `MEMORY.md` is at `$D/memory/MEMORY.md`. Without this step the next
-session starts with no history, and the traps recorded in those 122 files get
+session starts with no history, and the traps recorded in those files get
 rediscovered the expensive way.
 
 The session transcripts are a separate 311 MB in the same project directory.
