@@ -158,7 +158,28 @@ you take, verify before unpacking:
 **This workstation does not run an ssh server.** Checked on 2026-09-14: nothing
 listens on port 22 and the service is inactive. So the Mac cannot pull from it,
 and the obvious `rsync user@linux-host:...` command fails with a connection
-refusal rather than anything informative. Three routes, best first.
+refusal rather than anything informative. Four routes, best first.
+
+**Through the NoMachine session, if you are already connected over it.** This
+is the route actually used on 2026-09-14. Both mechanisms are enabled by
+default on the NoMachine 9.8.3 server here, and neither size limit is active:
+`EnableUploadSizeLimit` and `EnableDownloadSizeLimit` both default to 0, which
+the config documents as allowing transfers regardless of the 100 MiB default
+ceiling. So the 107 MB bundle is not capped, despite appearances.
+
+Prefer connecting a Mac folder over sending files one at a time. In the session
+menu, ctrl+alt+0 or peel the top right corner, open Devices and connect a
+folder from the Mac. It mounts here under `~/Desktop`, the default
+`DiskSharingPrivateBasePath`. Then:
+
+    cp ~/bp_bundle.tgz ~/bp_home.tgz ~/bp_memory.tgz \
+       ~/bp_TRANSFER_SHA256.txt ~/Desktop/<mounted-folder>/
+
+Transfer runs over the session channel rather than a raw socket, so budget a
+few minutes for 171 MB. The traffic is encrypted machine to machine with no
+third-party service, which satisfies section 4 on its own. If Devices will not
+mount, the same menu's file transfer sends server to client, one archive at a
+time.
 
 **Push from here to the Mac.** Enable Remote Login on the Mac under System
 Settings, General, Sharing. Then, from this workstation:
