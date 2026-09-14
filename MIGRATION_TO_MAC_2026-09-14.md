@@ -93,6 +93,11 @@ encrypted bundle, and do not forward it.
 
 ### Step 0, on this workstation: commit the loose work
 
+**Done on 2026-09-14**, in three commits: the Table 5 and Gate 1 numeric
+reconciliations, the twelve-script presentation toolchain, and this runbook.
+All five CI checks passed and the tracked tree stayed at 4.9 MB across 267
+files. Kept here because it is the step that would be skipped on a re-run.
+
     git add -A && git commit && git push
 
 Nothing else in this plan protects the 14 untracked scripts. Check
@@ -151,15 +156,16 @@ so both machines can write it, and delete the copy from the disk afterward.
 
     git clone https://github.com/PHemarajata/bp-recombination-aware-snps.git
     cd bp-recombination-aware-snps
-    git checkout claude/citation-audit-2026-09-03
     tar xzf ~/bp_bundle.tgz            # unpacks in place, tracked files identical
     cd .. && git clone https://github.com/PHemarajata/wf-assembly-snps-mod.git
     git clone https://github.com/PHemarajata/PopPIPE-bp.git
 
+No branch checkout is needed. `main` carries every commit of the presentation
+work as of 2026-09-14, so the default clone is the right tree.
+
 Unpacking over the clone is safe: the tracked files in the tarball came from
 the same commit, so they overwrite themselves byte for byte. Confirm with
-`git status`, which should show only the same 5 modified files if step 0 was
-skipped, and nothing if it was not.
+`git status`, which should report a clean tree.
 
 ### Step 5: restore the home-level dependencies
 
