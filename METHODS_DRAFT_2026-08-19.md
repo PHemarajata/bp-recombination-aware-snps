@@ -1096,7 +1096,7 @@ that died mid-iteration.
    measures phylogenetic signal rather than analysability. **The reported value
    should therefore be described as the lowest diversity at which a unit has been
    observed to work, not as a measured threshold.** Resolving it requires a
-   unimodal unit of n ≥ 25 between 535 and 1,265, which the present partition
+   unimodal unit of n ≥ 25 between 588 and 755, which the present partition
    does not contain.
 2. **A quarter of the analysable set (360 genomes, 25 units) is unscreened for
    modality**, and the r/m safety net acts only post hoc (Section 2.7).

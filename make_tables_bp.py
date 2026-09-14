@@ -326,8 +326,9 @@ def main():
         f"distance-based constructor is selected, so it isolates the "
         f"constructor alone. That third row is derived from the other two "
         f"files' r/m values, which they print to two decimals, so its "
-        f"extremes carry about +/-0.2 points of rounding; the manuscript "
-        f"reports its worst case as 51.6%.*\n",
+        f"extremes carry about +/-0.2 points of rounding. Recomputed from the "
+        f"two result files the worst case is 51.75%, and the manuscript was "
+        f"reconciled to 51.8% on 2026-09-10, having previously read 51.6%.*\n",
     ]
     check("Table 5 IQ/RAx median ratio", round(m_iq, 3), 0.988, 0.0005)
     check("Table 5 rapidnj/RAx median ratio", round(m_nj, 3), 0.922, 0.0005)

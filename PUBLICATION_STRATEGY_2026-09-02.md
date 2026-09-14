@@ -71,7 +71,7 @@ the draft states. A reviewer will push there. The answer is not to defend a
 precision the data do not have. It is to lead with the bracket, call the floor
 the lowest diversity at which a unit has been observed to work, and name the
 experiment that would settle it, which is a unimodal unit of n at least 25
-between 535 and 1,265. The ceiling has a counter-example and the same treatment
+between 588 and 755. The ceiling has a counter-example and the same treatment
 applies. A working range honestly bracketed is more useful to the field than a
 threshold asserted, and it is also what the evidence supports.
 

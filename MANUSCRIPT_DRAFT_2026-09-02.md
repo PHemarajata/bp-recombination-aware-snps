@@ -300,7 +300,7 @@ Overall diversity did not diagnose internal structure, but modality did. Units
 drawn from more than one prior-partition unit were about fourfold more internally
 diverse, median of medians 0.00221 against 0.00054, yet the most diverse
 single-provenance unit exceeded every one of them at 0.00538. By contrast
-`strain_1_L1_26`, at n of 154 and among the tightest units in the panel with a
+`strain_1_L1_26`, at n of 153 and among the tightest units in the panel with a
 median pairwise distance of 0.00060, held three clonal groups at 0.00007 internal
 against separations of 0.00088 and 0.00134. It was split into 98, 47 and 8.
 
@@ -498,7 +498,7 @@ replicons for 12 comparisons, chosen to span r/m from 1.81 to 14.13 (Table 5).
 |---|---|---|---|---|---|
 | IQ-TREE against RAxML | 0.988 | 2.3% | 15.0% | 7 of 12 | p = 0.77 |
 | **rapidnj against RAxML** | **0.922** | **7.8%** | **45.5%** | **11 of 12** | **p = 0.0063** |
-| rapidnj against IQ-TREE | 0.938 | 6.2% | 51.6% | 10 of 12 | p = 0.039 |
+| rapidnj against IQ-TREE | 0.938 | 6.2% | 51.8% | 10 of 12 | p = 0.039 |
 
 The two maximum-likelihood builders agree with no directional bias, and the 7 of
 12 split is what chance predicts. Union coverage differed by a median of 0.3
@@ -516,7 +516,7 @@ recombination signal.
 
 Every number reported in this work comes from the RAxML production arm, so no
 result is affected. But a pipeline configured with rapidnj would not reproduce
-them, and would report r/m biased low by a median of 8% and by as much as 46% in
+them, and would report r/m biased low by a median of 8% and by as much as 45.5% in
 individual replicons. We pin the tree builder and recommend against distance-based
 builders for recombination inference at this scale. The finding also argues that
 builder equivalence should be verified per builder class rather than assumed from
@@ -676,7 +676,7 @@ Nextflow script identifier (`e09a5c4eadba2c5984f6790095423ee4`, a hash of the
 workflow definition `main.nf` rather than a git commit) and identical
 containerized tool versions, so they ran byte-identical pipeline code and differ
 only in Nextflow version and resource profile. Across the 82 units of shared
-membership, r/m agreed to a median relative difference of 0.36%.
+membership, r/m agreed to a median relative difference of 0.38%.
 
 **Across the 82 units of identical membership, r/m agrees to a median absolute
 difference of 0.0145, 0.38% relative, with a maximum of 1.32.** Two independent
@@ -715,15 +715,15 @@ recombination and simply less of it relative to mutation. Low r/m and low
 recombination are different statements, and only one of them is supported.
 
 **The operating range is a construct calibrated on one dataset, and we say so.**
-The floor is bracketed 3.1-fold wide and every observation supporting it is
+The floor is bracketed 1.28-fold wide and every observation supporting it is
 inadmissible on its own terms. Only three units fall below the bound, two are
 unambiguous mixtures so their failures are attributable to structure rather than
 diversity, and the third cannot be assessed because modality is interpretable only
 inside the diversity range whose lower bound is the quantity being derived. That
 circularity is real and we could not break it. The honest description of the floor
 is the lowest diversity at which a unit has been observed to work, not a measured
-threshold. Resolving it requires a unimodal unit of n of 25 or more between 535
-and 1,265 mean pairwise SNPs, which this partition does not contain. The ceiling
+threshold. Resolving it requires a unimodal unit of n of 25 or more between 588
+and 755 mean pairwise SNPs, which this partition does not contain. The ceiling
 is better bracketed at 1.36-fold but has a counter-example. Both should be treated
 as a working range for this genome and this tool version, and re-verified against
 any new partition.
@@ -816,7 +816,7 @@ on the reported statistics is not detectable, the screen that found the two
 oversized assemblies was ad hoc.
 
 **What would settle the open questions.** A unimodal unit of adequate size between
-535 and 1,265 mean pairwise SNPs would fix the floor. Extending the ClonalFrameML
+588 and 755 mean pairwise SNPs would fix the floor. Extending the ClonalFrameML
 comparison from six units to the full in-window set would establish whether the
 rank disagreement between estimators is real or is an artifact of six points.
 [CONFIRM] state the ClonalFrameML result in Results or drop it from the
