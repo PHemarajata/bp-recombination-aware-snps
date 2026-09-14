@@ -305,6 +305,14 @@ CONSISTENT` at 85 units and 2,340 genomes:
 
     python3 freeze_basis_bp.py
 
+On the curated copy this prints 12 of the 15 checks it runs on the full
+workspace. The three it omits test the cgMLST reference pool and the r/m
+results table, whose inputs are left out of the bundle on purpose: the raw
+cgMLST data is large and unused by the presentation stage, and the r/m table
+carries the restricted accession-to-country join. The script skips a check
+when its file is absent rather than failing, so 12 of 15 with a consistent
+basis is the expected pass here, not a partial one.
+
 **The manifests match.** macOS spells it `shasum -a 256 -c`. All three verified
 here on 2026-09-14 with zero failures, so counts of 44, 2 and 40 mean the copy
 is intact:
