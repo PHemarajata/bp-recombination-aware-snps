@@ -251,6 +251,7 @@ collaborator/*
 tuc_briefing/*
 !tuc_briefing/01_concept/
 tuc_briefing/01_concept/*
+!tuc_briefing/01_concept/BRIEF-03-what-the-ruler-measured.md
 !tuc_briefing/01_concept/BRIEF-04-how-close-is-close-enough.md
 
 # rapid ID sketches (regenerable in ~1 min from paths.txt)

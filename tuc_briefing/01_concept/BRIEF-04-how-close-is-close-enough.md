@@ -79,13 +79,33 @@ exclusions. None of the six linked patients fell inside the near-identical range
 that genuine matches elsewhere in the collection occupy. State it as a finding,
 not a disappointment.
 
-### Act 3. Existing clip `7.12_outbreak_threshold`, dropped in whole (44.9 s)
+### Act 3. Existing clip `7.12_outbreak_threshold`, revised then dropped in whole (44.9 s)
 *Entry and exit as built.* Narration as delivered, do not re-author.
 
 Explains why act 2's result was predictable: recombination is least detectable and
 most consequential at exactly the tight SNP distances where linkage claims are
 made. This is the mechanistic answer to the household result, and placing it
 immediately after act 2 is the whole point of the reuse.
+
+**Apply its two pending revisions first.** `ANIMO_BRIEF_2026-09-09.md` section 11.2
+specified both on 2026-09-10, costed each as a re-render, and neither was
+executed. The delivered file is the pre-revision version.
+
+1. **The decision band reads as an edge case.** Zero to fifteen SNPs is where every
+   outbreak call happens, and on a log axis it is a sliver at the far left. Invert
+   the emphasis by dimming outside the band, or add a second panel zoomed to it.
+2. **The most visually dominant object is the least real one.** The field between
+   the two curves fills the frame and both curves are schematic, while the four
+   published anchor points are the only measured values in the clip and arrive as
+   thin dashed verticals in the last third. Render the schematic curves in a
+   visibly sketchy style, reserve solid rendering for the anchors, and make the
+   anchors the spine.
+
+Do not fix the second by making the curves look more like data. They are schematic
+and must stay schematic, and the on-screen label saying so stays. This is the same
+rule act 6 is held to below, which is why the two acts must be styled
+consistently: schematic and measured have to be distinguishable the same way in
+both.
 
 ### Act 4. The geography scale, set up (~95 words, ~54 s)
 *Entry:* the 46 marks arrive. *Exit:* 46 marks, each with a true exposure label.
