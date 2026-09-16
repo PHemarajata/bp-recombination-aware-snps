@@ -236,6 +236,23 @@ collaborator/*
 # One file, named explicitly -- no directory is opened up.
 !PANEL_EXCLUSIONS_README.md
 
+# --- 9. the TUC briefing concept briefs --------------------------------------
+# Documentation, not data: these are handoff briefs for an animation builder.
+# They carry aggregate results already in TABLES.md and NUMBERS.tsv (kappas,
+# unit counts, the funded-isolate accounting) and no isolate identifier, no
+# accession and no per-genome row. Untracked they live in exactly one place,
+# which is the failure this repository has already paid for once.
+#
+# Same shape as rule 7 and for the same reason: un-ignore each directory so git
+# will descend into it, immediately re-deny its contents, then name every
+# admitted file. A blanket `!tuc_briefing/**/*.md` would silently admit whatever
+# lands there later. Each new brief costs one line here, deliberately.
+!tuc_briefing/
+tuc_briefing/*
+!tuc_briefing/01_concept/
+tuc_briefing/01_concept/*
+!tuc_briefing/01_concept/BRIEF-04-how-close-is-close-enough.md
+
 # rapid ID sketches (regenerable in ~1 min from paths.txt)
 rapid_id_*/panel*.msh
 rapid_id_*/*.msh
