@@ -251,6 +251,9 @@ collaborator/*
 tuc_briefing/*
 !tuc_briefing/01_concept/
 tuc_briefing/01_concept/*
+!tuc_briefing/01_concept/SHORTLIST.md
+!tuc_briefing/01_concept/BRIEF-01-from-one-province-to-a-global-question.md
+!tuc_briefing/01_concept/BRIEF-02-a-ruler-you-can-trust.md
 !tuc_briefing/01_concept/BRIEF-03-what-the-ruler-measured.md
 !tuc_briefing/01_concept/BRIEF-04-how-close-is-close-enough.md
 
