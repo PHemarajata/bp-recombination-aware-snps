@@ -14,7 +14,8 @@ import os, itertools, importlib.util
 
 CLIP_SOURCE = os.environ.get("CLIP_SOURCE", "tuc_clip1_scenes.py")
 MIN_OVERLAP = 0.02
-CLEARANCE = 0.12            # scene units of breathing room text must keep
+CLEARANCE = 0.12
+MARKS_ON_TEXT = 3           # how many individual marks under one text line is a defect            # scene units of breathing room text must keep
 # Text that merely ABUTS other text reads as collided at a glance even when the
 # boxes do not intersect. Two lines in TUC clip 1 sat 0.12 units from the source
 # note and looked broken in review while an overlap-only test passed them.          # fraction of the smaller box's area.
@@ -129,6 +130,41 @@ class CollisionCheck:
             # overlapping in one axis and nearly touching in the other
             if (gx < 0 and 0 <= gy < CLEARANCE) or (gy < 0 and 0 <= gx < CLEARANCE):
                 REPORT.append((t, a.text[:46], b.text[:46], -max(gx, gy)))
+
+        # text must not be drawn over the data. This is the blind spot that let a
+        # dot row sit on a mark grid in clip 1 and let clip 3's most important
+        # line print across a scatter plot: both are text against SHAPES.
+        #
+        # Only individual MARKS count. A shape whose box is much larger than the
+        # text is a container -- a background panel, a shaded band, the bounding
+        # box of a whole scatter -- and text sitting inside one of those is
+        # normal. A dot or a bar that the text lands on top of is not.
+        # Every glyph of every Text is itself a small VMobject with points, so it
+        # would be counted as a mark. Exclude the whole family of every Text.
+        glyphs = set()
+        for other in self.mobjects:
+            for sub in other.get_family():
+                if isinstance(sub, Text):
+                    glyphs.update(id(g) for g in sub.get_family())
+        for m in texts:
+            tb = _box(m)
+            ta = max(1e-6, (tb[1]-tb[0]) * (tb[3]-tb[2]))
+            hits = 0
+            for other in self.mobjects:
+                for sub in other.get_family():
+                    if id(sub) in glyphs or len(sub.points) == 0:
+                        continue
+                    if _opacity(sub) <= 0.05:
+                        continue
+                    ob = _box(sub)
+                    oa = (ob[1]-ob[0]) * (ob[3]-ob[2])
+                    if oa > ta * 1.5 or oa < 1e-5:
+                        continue          # container, or a hairline
+                    if _overlap(tb, ob) > 0:
+                        hits += 1
+            if hits >= MARKS_ON_TEXT:
+                REPORT.append((t, m.text[:46],
+                               "<drawn over %d marks>" % hits, 1.0))
 
         # white text has to sit entirely on something dark, or it disappears
         for m in texts:

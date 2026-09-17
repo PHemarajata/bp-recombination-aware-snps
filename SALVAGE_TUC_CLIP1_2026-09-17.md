@@ -411,3 +411,59 @@ ratio alone over-reports on short strings.
   on.
 - The APHL caption band: two-line captions exceed the reserved bottom eighth.
 - APHL acts 3, 4 and 5 sit at 26 to 30% silence, which needs the picture shortened.
+
+---
+
+# Clip 3 review, 2026-09-18: text drawn over the data in four acts
+
+Reported as "super messy, a ton of overlapping elements". **The collision checker
+had passed clip 3 clean**, because every finding was text against a *shape*, and
+it only compared text against text. Third time that blind spot has been found by
+eye rather than by tooling, after clip 1's dot row and its white bar label.
+
+## What was wrong
+
+The unit strip occupies a fixed band, `UY = 0.10` plus or minus 0.62, so y from
+-0.52 to +0.72. Narrative text stacks downward from the title and eventually
+reaches it.
+
+| act | element | was at y | over the strip? |
+|---|---|---|---|
+| 1 | "That makes this a test, not a selection." | 0.45 | yes |
+| 2 | "In-window IQR is 5.72 to 9.41." | 0.62 | yes, top edge |
+| 3 | **"A low ratio is a detection failure, not a quiet genome."** | 0.30 | **yes** |
+| 3 | its underline rule, full width | -0.20 | **yes, straight through** |
+| 3 | "Only the units inside the window are quiet..." | -0.55 | yes, bottom edge |
+| 4 lead | "with no one noticing the cost." | 0.50 | yes |
+
+The act 3 pair is the worst of it. **The single most important line in the series
+was printed across the data, with an underline ruled through the scatter.**
+
+## Fixed
+
+Acts 1, 2 and 4's lines moved below the strip and above the axis. Act 3's headline
+and rule moved up into the space freed by fading the two build-up lines, which
+also reads better: the headline replaces the build-up rather than crowding it.
+
+All seven acts are clean on all five checks now. Frame counts unchanged, so the
+narration did not have to be re-synthesized. Act 3's event count dropped 12 to 10
+because two reveals became one play, so two of its cues were re-anchored.
+
+## The checker gained a fifth check, and it took three passes to get right
+
+**Text drawn over marks.** It counts how many individual mark shapes a line of
+text overlaps, and flags at three or more.
+
+Three wrong versions first, each recorded because the failure modes are
+instructive:
+
+1. **Any text over any shape.** Flagged every title and axis label at 100%,
+   because a background panel contains them. A container is not a collision.
+2. **Excluding shapes larger than the text.** Still flagged every title, because
+   **a Text's glyphs are themselves small VMobjects with points**, so other text
+   was being counted as marks.
+3. **Excluding `Text` instances.** Not enough: the glyphs are not `Text`
+   instances, they are its children. The fix is to exclude the entire *family* of
+   every Text.
+
+Version four reports exactly the four lines found by eye, and nothing else.
