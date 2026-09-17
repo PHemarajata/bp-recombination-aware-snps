@@ -1,12 +1,20 @@
 # Merge specification: one codebase, two films
 
-Step 4 of `FILM_SHARING_ARCHITECTURE_2026-09-17.md`. This is the item that
-unblocks the TUC briefing series and it also closes every pending revision on the
-five legacy clips, because they are the same pass over the same file.
+Step 4 of `FILM_SHARING_ARCHITECTURE_2026-09-17.md`, the item that unblocks the
+TUC briefing series.
 
-**For the builder.** Manim is not installed on the Mac, so this is a
-specification, not a change set. The Franklin Gothic faces are installed here, so
-layout can be checked locally once renders come back.
+> **Two corrections, 2026-09-17.**
+>
+> **Manim 0.21.0 now installs and renders on this Mac**, in a venv at
+> `/tmp/manimenv`, at the exact version the package was built with. This is no
+> longer a specification for someone else: the merge can be done and verified
+> here.
+>
+> **Section 4 is already done.** The section 11 revisions were applied to the
+> legacy source and rendered on 2026-09-10, so the clips in
+> `~/Downloads/ANIMO_DELIVERABLES_2026-09-09/video/` are the revised set. The
+> merge is therefore sections 2, 3 and 5 only. See
+> `CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
 
 ## 1. What is being merged
 
@@ -100,8 +108,11 @@ were spaced for the longer word.
 
 ## 4. Fold in the pending section 11 revisions
 
-All five legacy clips are pre-revision. Doing these during the merge costs one
-render each instead of two.
+> **CORRECTED 2026-09-17.** The section 11 revisions below were already applied and rendered; the clips in `~/Downloads/ANIMO_DELIVERABLES_2026-09-09/video/` are the revised set. Treat this section as the record of what was fixed, not as work outstanding. What remains is that `7.09`'s narration still describes the superseded picture. See `CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
+
+
+**Already applied and rendered.** Kept as the record of what each fix was, since
+the merge has to preserve them and nothing else states them in one place.
 
 - **`7.09`**, the largest payoff. Replace paired absolute r/m with one dot per
   comparison against a reference line at 1.0. Eleven dots below, one above. Per-

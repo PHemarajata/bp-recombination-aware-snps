@@ -9,6 +9,9 @@ it: the voice is describing something happening while the picture is still.
 
 ## Summary
 
+> **CORRECTED 2026-09-17.** The section 11 revisions below were already applied and rendered; the clips in `~/Downloads/ANIMO_DELIVERABLES_2026-09-09/video/` are the revised set. Treat this section as the record of what was fixed, not as work outstanding. What remains is that `7.09`'s narration still describes the superseded picture. See `CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
+
+
 | clip | dur | lines | moments | last moment | dead tail | orphaned | verdict |
 |---|---|---|---|---|---|---|---|
 | `7.01` negative control | 41.5 s | 10 | 16 | 37.83 s | 3.7 s | **0 of 10** | accept, retime L1 |

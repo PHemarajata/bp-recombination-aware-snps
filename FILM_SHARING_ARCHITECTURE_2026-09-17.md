@@ -97,11 +97,12 @@ cut states the result, the TUC cut walks the derivation.
 
 **Two corrections to the four briefs in `tuc_briefing/01_concept/`.**
 
-First, they say "reuse `7.xx` with its pending revision applied", which implied
-dropping a finished MP4 into a new series. Replace that with: rebuild the scene
-from `scene.py` in the shared system, applying the section 11 revision and the
-semantic realignment in one pass. Same work, better result, and it is the only way
-`7.09` can be done at all since its fix changes the encoding.
+First, they say "reuse `7.xx` with its pending revision applied". **The revisions
+are already applied** and the delivered clips are the revised set, corrected in
+`CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`. What the briefs should say instead
+is: rebuild the scene from `scene.py` in the shared system for the semantic
+realignment, and fix `7.09`'s narration, which still describes the encoding its
+picture no longer uses.
 
 Second, and this is the substantive one: **the TUC series has no confound
 material.** None of the four briefs covers the fact that country and collection

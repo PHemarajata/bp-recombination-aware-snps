@@ -129,6 +129,9 @@ and representative at the same time, not a biased corner.
 
 ## Reused clips: apply the pending revisions first
 
+> **CORRECTED 2026-09-17.** The section 11 revisions below were already applied and rendered; the clips in `~/Downloads/ANIMO_DELIVERABLES_2026-09-09/video/` are the revised set. Treat this section as the record of what was fixed, not as work outstanding. What remains is that `7.09`'s narration still describes the superseded picture. See `CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
+
+
 `7.07`, `7.09` and `7.12` all carry revisions specified in `ANIMO_BRIEF_2026-09-09.md`
 section 11 on 2026-09-10, each costed as a re-render, none of which was executed.
 The delivered files are the pre-revision versions. Do not drop them into a
