@@ -1,13 +1,13 @@
-# TUC clip 1 narration, draft 1
+# TUC clip 1 narration, draft 2
 
 Written 2026-09-17 against the measured beat map of
 `~/Downloads/TUC_CLIP1_2026-09-17/beats/`, not against the source's `# ->`
 comments, which are stale in acts 3 to 5 by up to nineteen seconds.
 
-**596 words over 291 s of picture, which is 123 words per minute of runtime** and
-clears the 120 floor. Silence is 25 to 29% in every act, distributed rather than
-piled at the end. Every line starts on a detected beat, and no line runs into the
-next: the tightest boundary is 0.34 s.
+**601 words over 291 s of picture, which is 124 words per minute of runtime** and
+clears the 120 floor. Silence is 20 to 29% per act, distributed rather than piled
+at the end. Every line starts on a detected beat, and no line runs into the next:
+the tightest boundary is 0.34 s.
 
 Spoken forms differ from written ones. `isolates` is voiced `isolits` and
 `isolate` is voiced `isolit`; captions keep the written form. No line in this clip
@@ -15,6 +15,31 @@ contains SNPs.
 
 **Nothing here is voiced yet.** Settle the text first, because an unseeded line
 comes back a different length and the fit above would have to be redone.
+
+## Changed in draft 2
+
+**The funding framing is gone.** Act 1 opened on "This is what the funding paid
+for". It now opens on the work itself and lets the closeout's numbers speak.
+
+**Act 3 was rebuilt so the two panel sizes cannot be misread as two datasets.**
+Draft 1 said the counts "do not match" and then called a one-genome difference
+"the cleanest evidence", without ever saying why a small difference is evidence of
+sameness rather than of difference. A listener could reasonably have heard two
+rival datasets and a discrepancy being waved away.
+
+It now does three things in order: names the situation plainly, resolves it before
+the evidence rather than after, and then explains why the evidence works.
+
+1. Two panels, different sizes. Say it, do not bury it.
+2. **"That is one collection curated twice, not two collections."** The conclusion
+   arrives immediately, so nothing is held in suspense.
+3. **"Here is how you can tell."** Then the Thai counts, then the reason that
+   matters: two separately built datasets would never agree to within one genome.
+
+The third number is also now explicitly a subset. Draft 1 said "Of that panel,
+two thousand three hundred forty enter analysis", which could sound like a fourth
+figure; it now reads "Of those", immediately after the panel it comes from, and
+ends on the eighty five units.
 
 ## Checks that ran
 
@@ -35,10 +60,10 @@ to the isolates. Act 4 now says only "watch where they land".
 
 ## Act 1. What this project built
 
-*34 s picture, 69 words, 24.6 s speech, 28% silence*
+*34 s picture, 68 words, 24.3 s speech, 29% silence*
 
-** 2.50**  (17 w, to 8.57)
-> This is what the funding paid for. Three hundred twenty six isolates sequenced, three hundred twelve confirmed.
+** 2.50**  (16 w, to 8.21)
+> Three hundred twenty six isolates were sequenced for this project, and three hundred twelve were confirmed.
 
 ** 9.10**  (14 w, to 14.10)
 > Two hundred fifty nine came from patients. Fifty three came from soil and water.
@@ -75,22 +100,22 @@ to the isolates. Act 4 now says only "watch where they land".
 
 ## Act 3. Two frameworks, one collection
 
-*40 s picture, 84 words, 30.0 s speech, 25% silence*
+*40 s picture, 90 words, 32.1 s speech, 20% silence*
 
 ** 4.15**  (17 w, to 10.22)
-> These genomes have been placed in a global framework twice, and the two counts do not match.
+> These genomes have been placed in a global panel twice, and the two panels are different sizes.
 
-**11.15**  (20 w, to 18.29)
-> The closeout framework held two thousand seven hundred seventy three genomes. This one holds two thousand nine hundred seventy six.
+**11.15**  (21 w, to 18.65)
+> That is one collection curated twice, not two collections. The second is larger because it was expanded for a different question.
 
-**19.20**  (18 w, to 25.63)
-> Thailand differs between them by a single genome, which is the cleanest evidence that this is one collection.
+**19.20**  (22 w, to 27.06)
+> Here is how you can tell. Count the Thai genomes in each panel: seventeen hundred fifty four, and seventeen hundred fifty three.
 
-**27.30**  (10 w, to 30.87)
-> Of that panel, two thousand three hundred forty enter analysis.
+**27.82**  (9 w, to 31.03)
+> Two separately built datasets would never agree that closely.
 
-**31.48**  (19 w, to 38.27)
-> A unit needs a minimum size before it can be measured at all, which leaves eighty five analysis units.
+**31.48**  (21 w, to 38.98)
+> Of those, two thousand three hundred forty enter analysis, because a unit needs a minimum size. That gives eighty five units.
 
 
 ## Act 4. Where the 312 went
@@ -184,4 +209,4 @@ to the isolates. Act 4 now says only "watch where they land".
 
 ---
 
-**596 words. Draft 1, unvoiced, for review.**
+**601 words. Draft 2, unvoiced, for review.**
