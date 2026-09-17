@@ -260,6 +260,7 @@ tuc_briefing/01_concept/*
 !tuc_briefing/02_review/
 tuc_briefing/02_review/*
 !tuc_briefing/02_review/REVIEW-reused-clips.md
+!tuc_briefing/02_review/QA-two-panels-explained.md
 !tuc_briefing/03_narration/
 tuc_briefing/03_narration/*
 !tuc_briefing/03_narration/NARRATION-CLIP-01.md
