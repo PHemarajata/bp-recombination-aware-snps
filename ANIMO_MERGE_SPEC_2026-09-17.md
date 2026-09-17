@@ -88,15 +88,20 @@ schematically, a neutral marked as schematic.
 Audit the other four scenes' rust uses against the same rule. I have not read all
 35 and most are likely correct.
 
-### 3.3 The diversity axis is log in legacy and linear in the house system
+### 3.3 ~~Adopt the house linear axis~~ WITHDRAWN 2026-09-17
 
-Same quantity, same window `[700, 4700]`. **Adopt the house linear axis.**
+**This was wrong and would have damaged the scenes. Keep the log axes.**
 
-This is not only consistency. Section 11.2's complaint about `7.07` is that the
-eighteen-fold drop from 1,310 to 72 "reads as a small step" on a log axis.
-**Switching to the house axis closes that revision for free**, so do 3.3 before
-attempting the `7.07` annotation fix and then re-check whether the annotation is
-still needed.
+`7.07` plots four values at 72, 123, 1,310 and 1,477. On a linear axis 72 and 123
+collapse together at the left edge, and showing three children at 72, 1,477 and
+123 is the clip's entire subject. `7.12` spans four orders of magnitude and needs
+log outright.
+
+The revision that drew the eighteen-fold drop had already considered this and
+said so in the source: "on a log axis that reads as a small step, so it is
+annotated explicitly." Annotating was the right answer, not rescaling. I
+proposed rescaling without reading that comment or checking what the values
+would do on a linear axis.
 
 ### 3.4 Nomenclature
 
@@ -136,6 +141,10 @@ the merge has to preserve them and nothing else states them in one place.
   claimed, and settle on one name for the control.
 
 ## 5. Em dash sweep, twenty strings
+
+**Applies to the APHL `src/` files only.** The legacy source carries **zero** em
+or en dashes on screen, so there is nothing to sweep on that side. Checked
+2026-09-17.
 
 The house style forbids em dashes in anything on screen. The APHL style guide
 never inherited the rule and mentions em dashes only as a `t2s` italic bug.
@@ -187,6 +196,23 @@ re-rendered rather than running it as its own pass.
 - **Every `run_time` stays a multiple of 0.1 s.**
 - **The `Txt()` K-scaling glyph fix applies to every text object**, including all
   legacy text once `L()` is retired.
+
+## 6a. DONE, 2026-09-17
+
+Sections 2, 3.1, 3.2 and 3.4 are applied and rendered, in
+`tuc_legacy_scenes_merged.py` at the repo root, with renders beside it in
+`~/Downloads/TUC_LEGACY_MERGED_2026-09-17/`.
+
+All five render **frame-for-frame identical in length** to the delivered clips
+(2490, 2868, 2142, 1596 and 2694 frames), so no narration timing moves. Forty
+lines changed. `PURPLE` survives only as an unused token definition, free for
+geography. Zero "group" strings remain on screen. Sampled at 7.03's flip, the two
+bars read `#01A0AF` against `#005057` at different lengths, which was the one
+constraint set on 3.1.
+
+What remains of the merge is cosmetic: splitting the file into the house layout
+and importing `aphl_common.py` rather than carrying its own token block. That
+buys consistency, not behaviour.
 
 ## 7. Verification, in order
 
