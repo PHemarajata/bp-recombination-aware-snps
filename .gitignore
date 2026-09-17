@@ -264,6 +264,7 @@ tuc_briefing/02_review/*
 !tuc_briefing/03_narration/
 tuc_briefing/03_narration/*
 !tuc_briefing/03_narration/NARRATION-CLIP-01.md
+!tuc_briefing/03_narration/NARRATION-CLIP-02.md
 
 # rapid ID sketches (regenerable in ~1 min from paths.txt)
 rapid_id_*/panel*.msh
