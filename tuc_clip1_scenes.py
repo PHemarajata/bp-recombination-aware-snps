@@ -221,7 +221,7 @@ class TucC1Act1(Scene):
         self.wait(1.2)                                                   # -> 4.0
 
         conf = count_chip("312", "confirmed B. pseudomallei", "funded", value_size=40)
-        conf.move_to([3.3, 1.35, 0])
+        conf.move_to([3.58, 1.35, 0])   # was 3.3: its label sat 0.12 from the drops
         arrow2 = Arrow([1.75, 1.35, 0], [2.45, 1.35, 0], buff=0, stroke_width=3,
                        color=INK, max_tip_length_to_length_ratio=0.28)
         self.play(GrowArrow(arrow2, run_time=0.5),
@@ -333,17 +333,26 @@ class TucC1Act2(Scene):
         bar = VGroup(seg_a, seg_b).arrange(RIGHT, buff=0).move_to([BX + BW / 2, BY, 0])
         bar_o = Rectangle(width=BW, height=BH, stroke_width=1.4, color=SRCGRAY
                           ).move_to(bar.get_center())
-        lab_a = Body("219 of 312 carry no predicted determinant at all",
-                     font_size=23, color="#FFFFFF").move_to(seg_a.get_center())
-        pct = Body("seventy percent", font_size=24, color=TEAL_TXT
-                   ).next_to(bar, DOWN, buff=0.24).align_to(bar, LEFT)
+        # WRONG NUMBER ON SCREEN, FIXED 2026-09-17. This label was the full
+        # sentence in white, centred on seg_a, which is only 4.49 units wide. It
+        # overflowed left onto the white background, so "219 of" was invisible and
+        # the bar read "312 carry no predicted determinant at all". Only a short
+        # value goes inside a bar; the sentence goes underneath in INK. This is
+        # the pattern act 5's bar already uses.
+        lab_a = Body("219 of 312", font_size=23, color="#FFFFFF"
+                     ).move_to(seg_a.get_center())
+        pct = Body("carry no predicted determinant at all", font_size=23,
+                   color=INK).next_to(bar, DOWN, buff=0.24).align_to(bar, LEFT)
+        pct2 = Body("seventy percent", font_size=24, color=TEAL_TXT
+                    ).next_to(pct, DOWN, buff=0.18).align_to(bar, LEFT)
         self.play(FadeOut(VGroup(b1, b1s), run_time=0.5))                # -> 9.1
         self.play(Create(bar_o, run_time=0.5), FadeIn(bar, run_time=0.6))  # -> 9.7
-        self.play(FadeIn(lab_a, run_time=0.5), FadeIn(pct, run_time=0.5))  # -> 10.2
+        self.play(FadeIn(lab_a, run_time=0.5), FadeIn(pct, run_time=0.5),
+                  FadeIn(pct2, run_time=0.5))                              # -> 10.2
         self.wait(2.8)                                                   # -> 13.0
 
         # --- beat 3: first-line therapy unaffected ------------------------
-        self.play(FadeOut(VGroup(bar, bar_o, lab_a, pct), run_time=0.6))  # -> 13.6
+        self.play(FadeOut(VGroup(bar, bar_o, lab_a, pct, pct2), run_time=0.6))  # -> 13.6
         ft = Body("First-line therapy is unaffected.", font_size=27, color=TEAL_TXT
                   ).move_to([0.55, 1.75, 0])
         rows = VGroup()
@@ -664,7 +673,9 @@ class TucC1Act5(Scene):
         self.wait(4.3)   # 2.2 -> 4.3, tail redistributed
 
         # --- the headline share --------------------------------------------
-        BX, BY, BW, BH = -3.2, -0.95, 6.4, 0.6
+        # BY raised from -0.95 2026-09-17: the in-window line below the bar ended
+        # 0.011 units from the source note, measured.
+        BX, BY, BW, BH = -3.2, -0.82, 6.4, 0.6
         frac = 34.0 / 42.0
         sa = Rectangle(width=BW * frac, height=BH, stroke_width=0).set_fill(TEAL_DK, 0.92)
         sb = Rectangle(width=BW * (1 - frac), height=BH, stroke_width=0
@@ -676,22 +687,24 @@ class TucC1Act5(Scene):
         bt = Body("environmental isolates in the analysed set sit in a unit\n"
                   "that also holds a patient isolate",
                   font_size=23, color=INK, line_spacing=0.8
-                  ).next_to(bar, DOWN, buff=0.24)
+                  ).next_to(bar, DOWN, buff=0.22)
         self.play(FadeOut(ml, run_time=0.5))                             # -> 17.3
         self.play(Create(bo, run_time=0.5), FadeIn(bar, run_time=0.6),
                   FadeIn(bl, run_time=0.5))                              # -> 17.9
         self.play(FadeIn(bt, run_time=0.7))                              # -> 18.6
         self.wait(5.2)   # 3.0 -> 5.2, tail redistributed
 
+        # RAISED 2026-09-17: was -2.35, which put it hard against the source
+        # note; the conclusion below clipped the note outright.
         iw = Body("16 of the 20 mixed units sit inside the measurable range.",
-                  font_size=23, color=SRCGRAY).move_to([0, -2.35, 0])
+                  font_size=23, color=SRCGRAY).next_to(bt, DOWN, buff=0.16)
         self.play(FadeIn(iw, run_time=0.6))                              # -> 22.2
         self.wait(4.7)   # 2.4 -> 4.7, tail redistributed
 
         # --- the conclusion ------------------------------------------------
         self.play(FadeOut(VGroup(bar, bo, bl, bt, iw), run_time=0.6))    # -> 25.2
         c1 = Body("The same answer, from a different instrument.",
-                  font_size=27, color=TEAL_TXT).move_to([0, -1.55, 0])
+                  font_size=27, color=TEAL_TXT).move_to([0, -1.35, 0])
         c2 = Body("One local tree of 312 genomes said it. A global partition of\n"
                   "2,340 genomes, which never saw the labels, says it again.",
                   font_size=23, color=INK, line_spacing=0.8
@@ -761,11 +774,19 @@ class TucC1Act6(Scene):
         # two isolates carrying the same sequence type
         a = genome_strip(n=8, color=TEAL_DK).move_to([-3.05, 0.28, 0])
         b = genome_strip(n=8, color=TEAL_DK).move_to([3.05, 0.28, 0])
-        tag_a = Body("same sequence type", font_size=21, color=PURPLE
-                     ).move_to([0, 0.95, 0])
+        # PURPLE FREED 2026-09-17. The house system reserves it for geography and
+        # clip 4 uses it for regions and countries; a sequence type is not a
+        # place. This bracket is the weaker evidence being set aside, so it is
+        # drawn neutral and the rust below carries the verdict.
+        tag_a = Body("same sequence type", font_size=21, color=SRCGRAY
+                     ).move_to([0, 0.88, 0])
         brace_a = Line(a.get_top() + [0, 0.12, 0], b.get_top() + [0, 0.12, 0],
-                       stroke_width=2, color=PURPLE)
-        stag2 = schematic_tag().scale(0.95).move_to([4.5, -2.35, 0])
+                       stroke_width=2, color=SRCGRAY)
+        # MOVED 2026-09-17 off the source note, which it sat directly above.
+        # OFF THE BOTTOM 2026-09-17. It sat above the source note and then, once
+        # the verdict lines moved, across the rust one. The right margin between
+        # the strips and the axis is the only genuinely empty space here.
+        stag2 = schematic_tag().scale(0.95).move_to([4.55, -0.62, 0])
         self.play(LaggedStartMap(FadeIn, a, lag_ratio=0.05, run_time=0.5),
                   LaggedStartMap(FadeIn, b, lag_ratio=0.05, run_time=0.5),
                   FadeIn(stag2, run_time=0.5), run_time=1.0)
@@ -774,23 +795,26 @@ class TucC1Act6(Scene):
         self.wait(2.6)
 
         # but far apart across the whole genome
-        axis = Line([-4.6, -1.25, 0], [4.6, -1.25, 0], stroke_width=2.5, color=INK)
+        # RAISED 2026-09-17 from -1.25. The two verdict lines below could not both
+        # clear the source note at the old height; measured, the budget was 0.04
+        # units short.
+        axis = Line([-4.6, -1.12, 0], [4.6, -1.12, 0], stroke_width=2.5, color=INK)
         axl = Body("distance across the whole genome", font_size=21, color=INK
-                   ).next_to(axis, DOWN, buff=0.26)
-        ma = small_dot(0.085, TEAL_DK).move_to([-3.05, -1.25, 0])
-        mb = small_dot(0.085, TEAL_DK).move_to([3.05, -1.25, 0])
-        gap = Line([-2.9, -1.25, 0], [2.9, -1.25, 0], stroke_width=3.5, color=RUST)
+                   ).next_to(axis, DOWN, buff=0.22)
+        ma = small_dot(0.085, TEAL_DK).move_to([-3.05, -1.12, 0])
+        mb = small_dot(0.085, TEAL_DK).move_to([3.05, -1.12, 0])
+        gap = Line([-2.9, -1.12, 0], [2.9, -1.12, 0], stroke_width=3.5, color=RUST)
         self.play(Create(axis, run_time=0.6), FadeIn(axl, run_time=0.5),
                   FadeIn(ma, run_time=0.4), FadeIn(mb, run_time=0.4),
                   run_time=0.8)
         self.play(Create(gap, run_time=0.8), run_time=0.8)
         p1 = Body("Sharing a sequence type will not answer it.",
-                  font_size=24, color=RUST).move_to([0, -2.05, 0])
+                  font_size=24, color=RUST).move_to([0, -1.88, 0])
         self.play(FadeIn(p1, run_time=0.6), run_time=0.6)
         self.wait(3.2)
 
         p2 = Body("Core-genome distance is what the question needs.",
-                  font_size=24, color=TEAL_TXT).move_to([0, -2.62, 0])
+                  font_size=24, color=TEAL_TXT).move_to([0, -2.31, 0])
         self.play(FadeIn(p2, run_time=0.8))
         self.wait(4.4)
 

@@ -268,3 +268,82 @@ Narration. Its note records that the brief was not on that disk, so its on-scree
 figures were carried from the previous pass's header rather than re-verified. That
 gap is covered: the figures were checked against `NUMBERS.tsv` earlier in this
 document.
+
+---
+
+# Review round 2: four more defects, and the checks that now catch them
+
+The reviewer's note was "some overlapping texts of varying degrees, example
+attached", so the screenshot was one instance of a class. Contact sheets were
+built at all 94 reveals across the seven acts and read. Four more defects came
+out of it, in three different classes, and **only one of them was of the class
+the collision checker could see.**
+
+## The worst one put a wrong number on screen
+
+Act 2's bar label was the whole sentence, **in white**, centred on `seg_a`, which
+is 4.49 units wide. It overflowed left onto the white page, so "219 of" was
+invisible and the bar read:
+
+> 312 carry no predicted determinant at all
+
+which is wrong. The figure is 219 of 312. Nothing flagged it: it is not text
+touching text, it is text leaving its own fill.
+
+Fixed to the pattern act 5's bar already used: a short value inside, the sentence
+underneath in INK. Now reads "219 of 312" inside, "carry no predicted determinant
+at all" below, "seventy percent" below that.
+
+## PURPLE was in use, and clip 4 needs it
+
+Act 6 drew "same sequence type" and its bracket in `PURPLE`, which the house
+system reserves for geography and which clip 4 uses for regions and countries.
+Purple would have meant two things inside one series, which is the exact defect
+the merge spec exists to prevent. Both moved to `SRCGRAY`, which also reads
+correctly: that bracket is the weaker evidence being set aside, and the rust line
+below carries the verdict. **`PURPLE` is now an unused token again.**
+
+## Two near misses that an overlap test cannot see
+
+Act 5's conclusion clipped the source note by 3% of its area, and its in-window
+line sat 0.011 units off it. Act 6's two verdict lines sat 0.05 and 0.07 units
+apart and the schematic tag sat directly above the note. None of this
+"overlapped" in a way a 12% threshold would report, and all of it reads as
+collided text on screen.
+
+## Fixed by measuring, after two failed passes of fixing by eye
+
+The first attempt raised act 5's in-window line and act 6's rust line and made
+both worse: the first went into the line above it, the second into the axis
+label. A probe was then used to print every real bounding box, and the budget
+turned out to be **0.04 units short** in act 6, which is why nothing fitted. The
+axis moved up 0.13 to make room, and the schematic tag left the bottom entirely,
+because the only genuinely empty space in that act is the right margin between
+the strips and the axis.
+
+Act 5's bar block moved up 0.13 and its in-window line became relative to the
+line above it rather than absolutely placed, so the clearance is now structural.
+
+Act 1 also had a 0.12 gap between the drops list and the 312 chip's label; the
+chip moved right 0.28.
+
+## What the checker does now
+
+`check_text_collisions.py` gained two checks and a tighter threshold, and all
+three were validated by running them against the pre-fix source and confirming
+they fire:
+
+| check | catches | validated on |
+|---|---|---|
+| overlap, threshold 0.12 to **0.02** | text intersecting text | act 5 conclusion, 3% |
+| **clearance 0.12** | text abutting text without touching | act 5 in-window, act 6 both lines |
+| **white text off its fill** | a white label wider than the shape behind it | act 2's wrong number |
+
+The white-text check needed a second pass itself. It first reported act 2 clean
+because it read the colour of the first family member of the `Text`, which is the
+parent and carries the default ink; a white label therefore looked dark. It now
+checks every glyph.
+
+**All seven acts are clean under all four checks.** Frame counts are unchanged in
+every re-rendered act, so no narration timing moved, and the film reassembles at
+291.021 s with no line boundary under 0.29 s and every line still audibly present.
