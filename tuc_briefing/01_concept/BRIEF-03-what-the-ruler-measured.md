@@ -44,8 +44,8 @@ schematic curves, which are labeled as such in their own frames.
 
 One render per act. Each names its entry and exit state; the exit of act N is the
 entry of act N+1. Word budgets are spoken words; runtime follows from word count
-at the chosen voice's measured rate, not from the seconds below, which assume 132
-words per minute with a fifth of the act silent.
+at the chosen voice's measured rate. The seconds below are stated at Justin's
+measured 168 words per minute with a fifth of the act silent.
 
 **Continuity object: the 85 analysis units.** They arrive in act 1 as 85
 undifferentiated marks and stay on screen, in the same style, for the whole clip.
@@ -55,7 +55,7 @@ lights up the ones the funded isolates built. In clip 4 the continuity object
 changes to the 46 validation genomes; the visual system carries across, the object
 does not.
 
-### Act 1. Eighty-five units, one ruler (~55 words, ~31 s)
+### Act 1. Eighty-five units, one ruler (~70 words, ~31 s)
 *Entry:* black. *Exit:* 85 marks placed on the diversity axis, unclassified.
 
 Recall the instrument from clip 2 in one sentence, then point it. Eighty-five
@@ -64,7 +64,7 @@ Establish that the window is about to be applied to them and that the window was
 measured before any of these numbers were looked at, which is what makes this a
 test rather than a selection.
 
-### Act 2. The split, and the contrast (~115 words, ~65 s)
+### Act 2. The split, and the contrast (~145 words, ~65 s)
 *Entry:* 85 unclassified marks. *Exit:* three classes, each with its median.
 
 The central act. Show the naive number first and name it as the thing being
@@ -80,7 +80,7 @@ measurements with detection failures and is not a result. Then apply the window:
 In-window IQR is **5.72 to 9.41**. Pooled outside the window, 38 units, the median
 is **1.99**. The contrast between 7.70 and 1.99 is the whole act.
 
-### Act 3. The reversal (~85 words, ~48 s)
+### Act 3. The reversal (~110 words, ~48 s)
 *Entry:* three classes. *Exit:* the same three classes, re-read.
 
 Nothing new appears. The same picture is read the other way round, and this is the
@@ -91,7 +91,7 @@ above the ceiling has so much that the estimate collapses. **A low r/m is a
 detection failure, not a quiet genome.** Say it plainly and let it sit.
 
 ### Act 4. First silent failure: a correct split that costs the measurement
-*Lead-in ~25 words, ~14 s, then the revised* `7.07_recursive_subdivision` *(~35.7 s)*
+*Lead-in ~30 words, ~14 s, then the revised* `7.07_recursive_subdivision` *(~35.7 s)*
 *Entry:* the three classes. *Exit:* as the reused clip leaves it.
 
 Lead-in frames why this is coming: the classes are not permanent, and a decision
@@ -99,7 +99,7 @@ taken for good reasons elsewhere in the pipeline can move a unit out of the
 measurable set without anyone noticing.
 
 ### Act 5. Second silent failure: the tree builder underneath
-*Lead-in ~25 words, ~14 s, then the revised* `7.09_tree_builder_paired` *(~26.6 s)*
+*Lead-in ~30 words, ~14 s, then the revised* `7.09_tree_builder_paired` *(~26.6 s)*
 *Entry:* as act 4 leaves it. *Exit:* the twelve comparisons resolved.
 
 Lead-in frames the question: r/m is estimated on a tree, so does the choice of
@@ -107,7 +107,7 @@ tree builder change the answer? Maximum-likelihood builders agree with each othe
 median ratio 0.988, sign test p = 0.77. The distance-based default does not:
 median ratio 0.922, eleven of twelve below parity, p = 0.0063.
 
-### Act 6. Is the window itself arbitrary? (~50 words, ~28 s)
+### Act 6. Is the window itself arbitrary? (~65 words, ~28 s)
 *Entry:* twelve comparisons. *Exit:* 7.70 restated, now with its bracket.
 
 Anticipate the obvious objection. Both bounds are brackets, not points: the floor
@@ -115,7 +115,7 @@ is bracketed to (588, 755]. Recompute the in-window median at four candidate
 floors, 588, 700, 755 and 840, and it reads **7.70, 7.70, 7.74, 7.78**. The
 headline does not depend on where in the bracket the floor is placed.
 
-### Act 7. Whose measurement this is (~65 words, ~37 s)
+### Act 7. Whose measurement this is (~85 words, ~37 s)
 *Entry:* 85 marks, classified. *Exit:* the funded isolates lit within them, handing
 off to clip 4.
 
@@ -215,8 +215,8 @@ them and this clip assumes only what clip 2 established. Define nothing twice.
 - **1920x1080, 60 fps**, matching the existing clips. Deliver at these settings,
   not preview quality.
 - **Seven separate renders, concatenated.** Acts 4 and 5 are the revised reuses.
-- **Target about 5 minutes**, roughly 420 spoken words of new narration plus the
-  two reused clips at 35.7 s and 26.6 s.
+- **Target about 5 minutes**, roughly 530 spoken words of new narration at 168 wpm,
+  plus the two reused clips at 35.7 s and 26.6 s.
 - **An animated step for every sentence.** Act 3 is the exception and is
   deliberately still: it re-reads act 2's picture without adding to it, and that
   stillness is the point. Budget it as narration over a held frame.
@@ -224,12 +224,13 @@ them and this clip assumes only what clip 2 established. Define nothing twice.
 - **The bottom eighth of the frame is reserved** for captions. No axis labels, no
   legend, no source line there.
 - **Narrated, not presenter-led.** Every caveat lives in the visual.
-- **Voice: ElevenLabs "Justin", voice ID `uFIXVu9mmnDZ7dTKCBTX`**, the same voice
-  across all four clips. Every word budget here assumes 132 words per minute,
-  which is the rate the earlier narration pack was timed at and **not a measured
-  property of this voice**. Measure Justin's real rate on a sample first, then
-  re-derive each act's seconds from its own word count. A faster voice buys more
-  words at the same length; it does not shorten the clip.
+- **Voice: ElevenLabs "Justin", `uFIXVu9mmnDZ7dTKCBTX`, at default speed**, the
+  same voice across all four clips. **Measured at 168.0 words per minute** on
+  act-length passages, with only a 2.5% penalty on number-dense text
+  (`VOICE_MEASUREMENT_2026-09-17.md`). Every word budget below is stated at that
+  measured rate with a fifth of each act silent. Re-measure if the voice, the
+  model or the speed changes, because any of the three moves every runtime
+  downstream.
 - **Two-pass render expected.** Silent preview accepted on content and layout
   only, then narration, then one timing-only lengthen note per act, then the
   delivery re-render.

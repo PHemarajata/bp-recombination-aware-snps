@@ -49,15 +49,15 @@ framework on screen.
 
 One render per act. Each names its entry and exit state. Word budgets are spoken
 words; runtime follows from word count at the chosen voice's measured rate, not
-from the seconds below, which assume 132 words per minute with a fifth of the act
-silent.
+from the seconds below, which are stated at Justin's measured 168 words per minute
+with a fifth of the act silent.
 
 **Continuity object: the 312 funded isolates.** They arrive in act 1 and are on
 screen, in the same style, for the entire series. Clip 3 act 7 lights them inside
 the 85 units; clip 4 act 7 closes the accounting on them. This clip establishes
 the mark that the other three pay off.
 
-### Act 1. What this project built (~60 words, ~34 s)
+### Act 1. What this project built (~75 words, ~34 s)
 *Entry:* black. *Exit:* 312 marks, one province.
 
 Open on the closeout, not on the science. Three hundred and twenty six isolates
@@ -71,7 +71,7 @@ distance.
 That third finding is the hinge of the whole series. It is the previous work
 naming the question this work answers.
 
-### Act 2. Resistance, asked and closed (~90 words, ~51 s)
+### Act 2. Resistance, asked and closed (~115 words, ~51 s)
 *Entry:* 312 marks. *Exit:* the resistance question visibly set aside.
 
 **Purpose is to settle a live funder question early and then leave it.** Emerging
@@ -93,7 +93,7 @@ project.** That is the closeout's own recommendation and it is already scheduled
 Close the act by setting the topic aside explicitly, so the viewer knows it is not
 coming back. The rest of the series is about a different question.
 
-### Act 3. Two frameworks, reconciled (~70 words, ~40 s)
+### Act 3. Two frameworks, reconciled (~90 words, ~40 s)
 *Entry:* 312 marks. *Exit:* both panel sizes on screen, related.
 
 Own the discrepancy before anyone finds it. The closeout placed these genomes in a
@@ -105,7 +105,7 @@ cleanest evidence of that.
 
 Fifteen seconds spent here removes the only obvious line of attack on the series.
 
-### Act 4. Where the 312 went (~95 words, ~54 s)
+### Act 4. Where the 312 went (~120 words, ~54 s)
 *Entry:* both panels. *Exit:* 312 marks distributed across 56 units.
 
 The central act. The partition already exists: 2,340 genomes in 85 analysis units.
@@ -118,7 +118,7 @@ for a measurable unit to form around them. That is a finding about the panel, no
 a defect in the isolates, and clip 4 returns to it as the case for what to fund
 next.
 
-### Act 5. Patient and environment, at a second scale (~90 words, ~51 s)
+### Act 5. Patient and environment, at a second scale (~115 words, ~51 s)
 *Entry:* 312 across 56 units. *Exit:* the mixed units marked.
 
 The closeout found environmental isolates interspersed among patient isolates
@@ -131,7 +131,7 @@ where.
 holds a patient isolate. Twenty mixed units, 16 of them in-window.** Same answer,
 different instrument, at eight times the scale.
 
-### Act 6. The question this makes askable (~75 words, ~43 s)
+### Act 6. The question this makes askable (~95 words, ~43 s)
 *Entry:* the mixed units. *Exit:* the question on screen, unanswered.
 
 Turn to the applied problem. A patient presents with no travel history. The
@@ -141,7 +141,7 @@ core-genome distance is required. So: with core genomes in a global frame, how
 far can you actually get? Do not hint at the answer. The remaining clips are the
 answer and this act's job is to make the viewer want it.
 
-### Act 7. What the rest of this takes (~32 words, ~18 s)
+### Act 7. What the rest of this takes (~40 words, ~18 s)
 *Entry:* the question. *Exit:* three titles, handing off to clip 2.
 
 A roadmap in three lines. Before that question can be answered, the measuring
@@ -211,17 +211,18 @@ closeout already covered. Assume all of it. What is new to her starts at act 2.
 
 - **1920x1080, 60 fps**, matching the existing clips.
 - **Seven separate renders, concatenated.** No reuse in this clip.
-- **Target about 5 minutes**, roughly 510 spoken words.
+- **Target about 5 minutes**, roughly 670 spoken words at 168 wpm.
 - **An animated step for every sentence.**
 - **Title card holds 1 to 2 seconds.**
 - **The bottom eighth of the frame is reserved** for captions.
 - **Narrated, not presenter-led.** Every caveat lives in the visual.
-- **Voice: ElevenLabs "Justin", voice ID `uFIXVu9mmnDZ7dTKCBTX`**, the same voice
-  across all four clips. Every word budget here assumes 132 words per minute,
-  which is the rate the earlier narration pack was timed at and **not a measured
-  property of this voice**. Measure Justin's real rate on a sample first, then
-  re-derive each act's seconds from its own word count. A faster voice buys more
-  words at the same length; it does not shorten the clip.
+- **Voice: ElevenLabs "Justin", `uFIXVu9mmnDZ7dTKCBTX`, at default speed**, the
+  same voice across all four clips. **Measured at 168.0 words per minute** on
+  act-length passages, with only a 2.5% penalty on number-dense text
+  (`VOICE_MEASUREMENT_2026-09-17.md`). Every word budget below is stated at that
+  measured rate with a fifth of each act silent. Re-measure if the voice, the
+  model or the speed changes, because any of the three moves every runtime
+  downstream.
 - **This clip sets the visual system for the series.** Colors, type, the mark for
   a genome, the mark for a unit and the treatment that distinguishes schematic
   from measured are all established here and reused unchanged in clips 2 to 4.

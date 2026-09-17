@@ -52,7 +52,7 @@ it: the detector's behavior in act 3, the null in act 4, the recovery sweep in a
 5. Both reused clips already live on this axis, which is why it is the right
 object. In clip 3 the 85 units are placed on the same axis, so it carries across.
 
-### Act 1. Why the obvious approach fails (~85 words, ~48 s)
+### Act 1. Why the obvious approach fails (~110 words, ~48 s)
 *Entry:* clip 1's closing question. *Exit:* r/m defined, and one number refused.
 
 Establish the process before the measurement. In this species DNA moves between
@@ -64,7 +64,7 @@ Then the trap. Computing one r/m for the species returns a number, and the numbe
 is meaningless. Do not show its value here. Clip 3 shows the naive number in its
 proper place, as the thing being corrected.
 
-### Act 2. Partition first, because the biology says so (~95 words, ~54 s)
+### Act 2. Partition first, because the biology says so (~120 words, ~54 s)
 *Entry:* r/m defined. *Exit:* the diversity axis drawn, window not yet placed.
 
 This is the act that most needs to land and is most often heard as a technicality.
@@ -78,7 +78,7 @@ State the caveat in the same breath: that result comes from 106 strains in one
 restricted Asian locale, and whether it holds globally has not been tested.
 
 ### Act 3. How the detector actually works
-*Lead-in ~30 words, ~17 s, then the revised* `7.03_detection_window` *(47.8 s)*
+*Lead-in ~40 words, ~17 s, then the revised* `7.03_detection_window` *(47.8 s)*
 *Entry:* the diversity axis. *Exit:* three anchor groups placed, window visible.
 
 Lead-in sets up what to watch: the detector looks for a local excess of SNP
@@ -86,14 +86,14 @@ density, and whether that excess is visible depends entirely on how diverse the
 background is.
 
 ### Act 4. Does it invent recombination?
-*Lead-in ~30 words, ~17 s, then the revised* `7.01_negative_control` *(41.5 s)*
+*Lead-in ~40 words, ~17 s, then the revised* `7.01_negative_control` *(41.5 s)*
 *Entry:* as act 3 leaves it. *Exit:* the null and the real groups, separated.
 
 Lead-in frames it as the control any laboratory would demand: run the identical
 pipeline on populations simulated with zero recombination and see what comes back.
 1,519 replicates over 62 unit-replicons, 20 returning any call at all.
 
-### Act 5. Does it find what is really there? (~80 words, ~45 s)
+### Act 5. Does it find what is really there? (~100 words, ~45 s)
 *Entry:* the null result. *Exit:* the recovery sweep complete.
 
 The other half of the control, and the half the earlier deliverable never had a
@@ -112,7 +112,7 @@ At the divergence this organism actually shows, recovery is 91%. Below it,
 detection falls away, which is the floor of the window arriving from a second
 direction.
 
-### Act 6. What you now have (~51 words, ~29 s)
+### Act 6. What you now have (~65 words, ~29 s)
 *Entry:* the sweep. *Exit:* the window with both bounds, handing off to clip 3.
 
 Close the instrument. A detector that returns essentially nothing when there is
@@ -216,20 +216,21 @@ define none of it again.
 
 - **1920x1080, 60 fps**, matching the existing clips.
 - **Six separate renders, concatenated.** Acts 3 and 4 are the revised reuses.
-- **Target about 5 minutes**, roughly 370 spoken words of new narration plus the
-  two reused clips at 47.8 s and 41.5 s.
+- **Target about 5 minutes**, roughly 470 spoken words of new narration at 168 wpm,
+  plus the two reused clips at 47.8 s and 41.5 s.
 - **An animated step for every sentence.**
 - **Title card holds 1 to 2 seconds.**
 - **The bottom eighth of the frame is reserved** for captions.
 - **Narrated, not presenter-led.**
 - **The visual system is inherited from clip 1 unchanged**, including the
   treatment that distinguishes schematic from measured. Do not re-invent it here.
-- **Voice: ElevenLabs "Justin", voice ID `uFIXVu9mmnDZ7dTKCBTX`**, the same voice
-  across all four clips. Every word budget here assumes 132 words per minute,
-  which is the rate the earlier narration pack was timed at and **not a measured
-  property of this voice**. Measure Justin's real rate on a sample first, then
-  re-derive each act's seconds from its own word count. A faster voice buys more
-  words at the same length; it does not shorten the clip.
+- **Voice: ElevenLabs "Justin", `uFIXVu9mmnDZ7dTKCBTX`, at default speed**, the
+  same voice across all four clips. **Measured at 168.0 words per minute** on
+  act-length passages, with only a 2.5% penalty on number-dense text
+  (`VOICE_MEASUREMENT_2026-09-17.md`). Every word budget below is stated at that
+  measured rate with a fifth of each act silent. Re-measure if the voice, the
+  model or the speed changes, because any of the three moves every runtime
+  downstream.
 - **Two-pass render expected.**
 - **If text is rendered with manim on Linux, guard glyph spacing** by laying out
   at a larger requested size and scaling down.

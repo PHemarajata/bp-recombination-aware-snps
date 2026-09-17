@@ -53,15 +53,15 @@ labeled with its own framework on screen. Do not present the two as one dataset.
 Build one render per act. Each act names its entry and exit state; the exit of act
 N is the entry of act N+1. Word budgets are spoken words, and each act's runtime
 follows from its word count at the chosen voice's measured rate, not from the
-seconds below, which are an estimate at 132 words per minute with a fifth of the
-act silent.
+seconds below, which are stated at Justin's measured 168 words per minute with a
+fifth of the act silent.
 
 **Continuity object: the 46 scorable validation genomes.** They appear in act 2
 as an undifferentiated set and are re-asked at every scale that follows. The same
 46 marks, the same style, every act. In act 7 they hand off to the 312 funded
 isolates. This is the thread that makes seven renders one film.
 
-### Act 1. Two questions, one shape (~70 words, ~40 s)
+### Act 1. Two questions, one shape (~90 words, ~40 s)
 *Entry:* black. *Exit:* the two questions side by side, both unanswered.
 
 A genome arrives and two questions get asked of it. Did this patient and this soil
@@ -69,7 +69,7 @@ sample share a source? Where was this infection acquired? They look like differe
 questions and they are the same question: how close is close enough to claim a
 link? Establish that both will be answered, and that the answers differ.
 
-### Act 2. The linkage scale, set up (~40 words, ~23 s)
+### Act 2. The linkage scale, set up (~50 words, ~23 s)
 *Entry:* the two questions. *Exit:* the near-identical distance band, empty, ready
 for act 3.
 
@@ -107,7 +107,7 @@ rule act 6 is held to below, which is why the two acts must be styled
 consistently: schematic and measured have to be distinguishable the same way in
 both.
 
-### Act 4. The geography scale, set up (~95 words, ~54 s)
+### Act 4. The geography scale, set up (~120 words, ~54 s)
 *Entry:* the 46 marks arrive. *Exit:* 46 marks, each with a true exposure label.
 
 Forty-six genomes whose exposure country is independently known, out of 48
@@ -116,7 +116,7 @@ leave-group-out plainly: the whole outbreak or submission group is held out, not
 just the one genome, because sibling isolates from the same event would otherwise
 hand the answer back. State what counts as correct before any score appears.
 
-### Act 5. The ladder (~150 words, ~85 s)
+### Act 5. The ladder (~190 words, ~85 s)
 *Entry:* 46 labeled marks. *Exit:* five rungs, each with its kappa and baseline.
 
 The core act. Five rungs, each scored on the same 46 genomes:
@@ -135,7 +135,7 @@ Asia versus non-Asia is perfect on this set. And **the ladder does not climb
 monotonically**: SEA versus non-SEA is a two-class question that scores 0.461,
 well below the five-class region question. Coarser is not automatically better.
 
-### Act 6. One mechanism, both ceilings (~135 words, ~77 s)
+### Act 6. One mechanism, both ceilings (~170 words, ~77 s)
 *Entry:* the five rungs. *Exit:* the rungs re-read as an erosion gradient.
 
 The payoff. Recombination moves DNA between lineages within a population while
@@ -149,7 +149,7 @@ decade 0.581, isolation source 0.710 and Thai province 0.721 are well mixed. Low
 means more structured. A different panel and a different method, pointing the same
 way.
 
-### Act 7. The accounting (~70 words, ~40 s)
+### Act 7. The accounting (~90 words, ~40 s)
 *Entry:* the 46 marks. *Exit:* the 312, and one line about what to fund.
 
 The continuity object hands off. 312 confirmed genomes sequenced by this project,
@@ -226,8 +226,8 @@ Kawang deck has been seen.
   these settings, not at preview quality.
 - **Seven separate renders, concatenated.** Act 3 is the existing
   `7.12_outbreak_threshold.mp4` inserted unchanged.
-- **Target about 7 minutes**, roughly 660 spoken words of new narration plus act
-  3's existing 44.9 seconds. Runtime follows the narration, not the reverse.
+- **Target about 7 minutes**, roughly 840 spoken words of new narration at 168 wpm,
+  plus act 3's existing 44.9 seconds. Runtime follows the narration, not the reverse.
 - **An animated step for every sentence.** Not one reveal per paragraph. This is
   what keeps seven minutes honest rather than padded.
 - **Title card holds 1 to 2 seconds.** Not five.
@@ -235,12 +235,13 @@ Kawang deck has been seen.
   source line there. Captions are drawn in that band.
 - **Narrated, not presenter-led.** It must stand alone, so every caveat lives in
   the visual.
-- **Voice: ElevenLabs "Justin", voice ID `uFIXVu9mmnDZ7dTKCBTX`**, the same voice
-  across all four clips. Every word budget here assumes 132 words per minute,
-  which is the rate the earlier narration pack was timed at and **not a measured
-  property of this voice**. Measure Justin's real rate on a sample first, then
-  re-derive each act's seconds from its own word count. A faster voice buys more
-  words at the same length; it does not shorten the clip.
+- **Voice: ElevenLabs "Justin", `uFIXVu9mmnDZ7dTKCBTX`, at default speed**, the
+  same voice across all four clips. **Measured at 168.0 words per minute** on
+  act-length passages, with only a 2.5% penalty on number-dense text
+  (`VOICE_MEASUREMENT_2026-09-17.md`). Every word budget below is stated at that
+  measured rate with a fifth of each act silent. Re-measure if the voice, the
+  model or the speed changes, because any of the three moves every runtime
+  downstream.
 - **Two-pass render expected.** Silent preview at reading pace first, accepted on
   content and layout only. Narration written to each act's word budget, voice
   generated and measured, then one timing-only lengthen note per act, then the
