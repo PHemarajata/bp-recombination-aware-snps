@@ -58,7 +58,47 @@ Not everything in the corpus earns animation. Explicitly out of scope:
 - **The full grouping ladder beyond five rungs.** Clip 4 shows five. More rungs
   make the non-monotonicity harder to see, not easier.
 
+## Motion: the acceptance gate every clip has to pass
+
+Added 2026-09-17, after clip 2 and clip 3 both came back as slides that hold.
+Clip 3's new acts sit between 81% and 99% of their runtime in holds of three
+seconds or more; one fourteen-second lead-in changes once, at 0.43 s, and then
+freezes. `RecursiveSubdivision`, reused from the earlier deliverable and built
+in this same house style, sits at **22%**, so the target is known to be
+reachable.
+
+**The per-act seconds in a brief are an output of the word budget, not a target
+to hit.** Both builders hit them to the frame by holding a finished frame, and
+both said so in their delivery notes as though it were a feature. A brief should
+state the words and let the runtime follow.
+
+Four rules, all measurable on the delivered mp4 rather than from the scene
+source:
+
+1. **No act above 40% of its runtime in holds of three seconds or more.**
+2. **No single hold longer than about four seconds.**
+3. **Roughly one animated step per sentence of the act's word budget.** If the
+   script needs more room, add steps; do not lengthen a hold.
+4. **The builder ships the measurement, not the assurance.** Paste the per-act
+   hold table and the frame audit, run on the delivered files, into the note.
+
+Rule 4 exists because both notes claimed checks that the renders fail. Clip 2's
+claimed every figure carried its denominator, and act 6 carries two without
+either. Clip 3's claimed zero text overlaps, and act 3 holds its conclusion over
+the measured unit marks for most of the act. Both harnesses read the scene graph
+at animation boundaries, so they check what was asked for rather than what was
+drawn, and neither measures how long anything sits still.
+
 ## Decisions taken
+
+- **On screen they are "isolates this project sequenced", never "funded".** Clip
+  1's narration dropped the funding opening on purpose so the work carries the
+  story. Clip 3's act 7 then put "funded units" back on screen as a legend and a
+  source note, beside its own sentence using the better phrase, so one concept
+  had two names in one frame. Use the brief's wording everywhere, including
+  legends and source notes. The underlying set is unambiguous either way: the
+  `IP-` and `IE-` identifiers, which `generate_numbers.py` now registers as
+  `funded.*` keys because that is what the code has always called them.
 
 - **Two framework sizes are reconciled on screen**, in clip 1 act 2, rather than
   avoided. Kawang 2,773 and 35 countries; ours 2,976 panel, 2,340 analysed, 50
@@ -98,12 +138,35 @@ classifier to catch, and that an older model often has looser classifiers.
 
 ## Open
 
-- ~~The voice is not chosen.~~ **Settled.** ElevenLabs Justin
-  `uFIXVu9mmnDZ7dTKCBTX` on `eleven_multilingual_v2` at speed 1.0,
-  **measured at 168.0 words per minute** on act-length text. Every budget in
-  these briefs is stated at that rate. See `VOICE_MEASUREMENT_2026-09-17.md`.
+- ~~The voice is not chosen.~~ ~~**Settled.** ElevenLabs Justin on
+  `eleven_multilingual_v2` at speed 1.0, measured at 168.0 words per minute.~~
+  **Superseded 2026-09-17 on both counts. Read the next bullet before budgeting
+  anything.**
+
+- **The voice, as actually delivered.** ElevenLabs Justin
+  `uFIXVu9mmnDZ7dTKCBTX` on **`eleven_v3`**, with a **fixed seed** (clip 1 used
+  20260917), two-pass EBU R128 per line. `eleven_v3` is the house model and
+  should not be swapped back to `v2` to make a line fit. Synthesis is not
+  deterministic unseeded, so always pass the seed.
+
+  **The 168.0 wpm figure in `VOICE_MEASUREMENT_2026-09-17.md` is not the rate to
+  budget on.** It was measured on a 174-word passage that happened to contain
+  few numbers. These scripts are dense with spelled-out figures, which cost far
+  more time per word, and the rate was refit downward from clip 1's delivered
+  audio to about **148 wpm of speech**.
+
+  **Budget on runtime density, not on a speaking rate.** Clip 1 is the only
+  finished clip in the series: **611 words over 291.02 s, which is 126 words per
+  minute of runtime**, silence included. That single number is what a brief
+  should size an act against, because it is the only one measured end to end on
+  a real clip with real pauses.
+
   The APHL film runs the same voice on `eleven_turbo_v2_5` at 0.9, so anything
   shared between the films regenerates rather than re-times.
+
+- **Both delivered pictures were budgeted on the superseded 168, and both came
+  back padded.** Against 126 wpm of runtime, clip 2's word budgets are about 8%
+  hot and clip 3's about 7%. Trim the words rather than the runtimes.
 - ~~The narration source for the existing clips is unsettled.~~ **Settled by the
   merge.** The reused acts are narrated fresh at the TUC settings against the
   merged renders. `7.09` is already done. The other four have corrected text in

@@ -104,11 +104,15 @@ divergence, then ask how many come back:
 |---|---|---|
 | 0.0005 | 2.4 | 4 of 20, 20% |
 | 0.001 | 4.2 | 8 of 20, 40% |
-| **0.002, the measured value** | **9.0** | **19 of 21, 91%** |
+| **0.002, the measured value** | **9.0** | **19 of 21, 90%** |
 | 0.005 | 25.0 | 19 of 19, 100% |
 | 0.01 | 45.0 | 19 of 21, 90% |
 
-At the divergence this organism actually shows, recovery is 91%. Below it,
+At the divergence this organism actually shows, recovery is 90%, nineteen of
+twenty-one implanted tracts. It was stated as 91% until 2026-09-17; that figure
+was a mean of three per-replicate rates sitting next to a pooled fraction that
+does not produce it, and the two rows carrying the identical fraction 19 of 21
+now agree. Below it,
 detection falls away, which is the floor of the window arriving from a second
 direction.
 
@@ -184,12 +188,20 @@ does." is the claim that beat exists to make checkable. Write lines for both.
 
 ## Number collision in this clip
 
-**Two different 91%-shaped quantities sit two acts apart.** Act 5's headline
-recovery is 91% at the measured divergence. Act 4's negative control reports 1.32%
-of replicates returning any call, and its separation figures run 427-fold to
-2,234-fold. None of these is a percentage of the same thing. Label each with its
-denominator on screen, every time, and never place a recovery share and a false
-positive rate in the same frame without both denominators visible.
+**Two unrelated percentages sit two acts apart.** Act 5's headline recovery is
+90% at the measured divergence, nineteen of twenty-one. Act 4's negative control
+reports 1.32% of replicates returning any call, and its separation figures run
+427-fold to 2,234-fold. None of these is a percentage of the same thing. Label
+each with its denominator on screen, every time, and never place a recovery
+share and a false positive rate in the same frame without both denominators
+visible.
+
+**This rule was broken in the first render.** Act 6 put "1.32%" and "91%" in one
+frame with neither denominator, and the delivery note claimed the opposite. The
+summary act is where it will happen again, because that act exists to restate
+figures earned elsewhere. If a number has to appear there without room for its
+denominator, use words instead: "nine tenths of what is there", "essentially
+nothing when there is nothing".
 
 ## Audience
 

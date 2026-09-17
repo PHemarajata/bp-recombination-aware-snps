@@ -907,7 +907,7 @@ excluded from the denominator rather than scored. Three replicates per divergenc
 |---|---|---|
 | 0.0005 | 2.4 | 4/20 = **20%** |
 | 0.001 | 4.2 | 8/20 = **40%** |
-| **0.002 — our measured value** | **9.0** | **19/21 = 91%** |
+| **0.002 — our measured value** | **9.0** | **19/21 = 90%** |
 | 0.005 | 25.0 | 19/19 = **100%** |
 | 0.01 | 45.0 | 19/21 = **90%** |
 

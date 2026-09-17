@@ -438,7 +438,7 @@ manufacturing recombination.
 
 **The positive control.** A spike-in. Plant **21 pieces of DNA, 5,000 bases each**,
 into real genomes, copied from a donor at **nu = 0.002**, the divergence actually
-observed between strains in this collection. **19 of 21 recovered, 91%.** Recovery
+observed between strains in this collection. **19 of 21 recovered, 90%.** Recovery
 stays between 90 and 100% for any donor more distant.
 
 **Why this framing.** Every laboratory technologist in the audience runs a

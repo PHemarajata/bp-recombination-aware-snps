@@ -709,7 +709,7 @@ which is what makes the rapidnj panel mean something.
 
 **Finding.** Plant 21 pieces of DNA, 5,000 bases each, into real genomes, copied
 from a donor at nu = 0.002, the divergence actually observed between strains in
-this collection. 19 of 21 recovered, 91 percent. Recovery stays between 90 and 100
+this collection. 19 of 21 recovered, 90 percent. Recovery stays between 90 and 100
 percent for any more distant donor.
 
 **Data.** `data/SPIKEIN_RESULT.txt`, five divergence levels with counts and rates.

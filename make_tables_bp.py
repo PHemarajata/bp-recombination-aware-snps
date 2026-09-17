@@ -258,16 +258,29 @@ def main():
                      r"([\d.]+)", ln)
         if m:
             nu, reps, imp, snps, pre, rec, rate = m.groups()
-            # The rate comes from the file, not from these integers. The
-            # nu = 0.002 and nu = 0.01 rows print identical counts (24 implants,
-            # 3 pre-detected, 19 recovered) and different rates, 0.91 and 0.90,
-            # so the printed integers are rounded summaries across replicates
-            # and do not determine the rate. Recomputing 19/21 would silently
-            # change the reported 91% to 90%.
+            # The rate is now RECOMPUTED from the counts, which changes the
+            # reported recovery at nu = 0.002 from 91% to 90%. Decided
+            # 2026-09-17, reversing the earlier choice to take the rate from
+            # the file.
+            #
+            # Why. SPIKEIN_RESULT.txt prints identical counts for nu = 0.002 and
+            # nu = 0.01 (24 implants, 3 pre-detected, 19 recovered) but rates of
+            # 0.91 and 0.90, because spikein_sensitivity_bp.py sums the counts
+            # across the three replicates while taking the rate as the MEAN OF
+            # PER-REPLICATE RATES. The two are different estimators. Printing
+            # "19 of 21, 91%" put a percentage next to a fraction that does not
+            # produce it: 19/21 is 90.5%.
+            #
+            # It reached a clip before it was caught. TUC clip 2 act 5 drew the
+            # same fraction twice, once as 91% and once as 90%, as two bars five
+            # pixels apart in height. The table is the pooled share throughout,
+            # so the label always follows from its own numerator and
+            # denominator. If the replicate mean is ever wanted, report it
+            # separately and never beside the fraction.
             den = int(imp) - int(pre)
             spikes.append({"nu": float(nu), "snps": float(snps),
                            "rec": int(rec), "den": den,
-                           "pct": 100.0 * float(rate)})
+                           "pct": 100.0 * int(rec) / den if den else float("nan")})
     out += [
         "\n## Table 4. Spike-in recovery\n",
         "| Donor divergence | SNPs per 5 kb tract | Recovered |",
@@ -284,7 +297,12 @@ def main():
         "45 SNPs can be split into two called blocks, neither covering 50% of "
         "it.*\n")
     m2 = [s for s in spikes if abs(s["nu"] - 0.002) < 1e-9][0]
-    check("Table 4 recovery at nu=0.002", round(m2["pct"]), 91)
+    # 19/21 = 90.5%. Was 91 until 2026-09-17, when the rate stopped being read
+    # from the file; see the note above the parse.
+    check("Table 4 recovery at nu=0.002", round(m2["pct"]), 90)
+    check("Table 4 rows 0.002 and 0.01 agree, being the same fraction",
+          round(m2["pct"]),
+          round([s for s in spikes if abs(s["nu"] - 0.01) < 1e-9][0]["pct"]))
 
     # ---------------- Table 5 ----------------
     iq, nj = parse_eq(EQ_IQ), parse_eq(EQ_NJ)
