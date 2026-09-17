@@ -59,25 +59,36 @@ B has the fewest findings and the only frame drift, and the drift is 33 ms on a
 mechanical evidence cannot see whether a build explains the ladder better.** That
 needs watching, and it is the project lead's call.
 
-## The word budgets are all short, because 168 wpm was wrong
+## CORRECTED: the budgets are fine. 168 versus 179 costs five points of silence
 
-Every clip was cut at Justin's assumed **168 wpm**. He reads these scripts at
-**179** on `eleven_v3`, so each picture is longer than its budget supports.
-Measured on new content only, excluding the reused clips that already carry
-narration:
+An earlier version of this section said clips 2 to 4 were short by about 244
+words and that clip 2 at 38% silence would be refused. **That was wrong, and the
+error was mine, not the briefs'.** I extracted word budgets with a pattern that
+only matched `(~N words` in an act heading, which silently missed the two lead-in
+budgets in clip 2 and the two in clip 3, each stated mid-paragraph as
+`*Lead-in ~40 words*`. Clip 2's budget is 475, not 395; clip 3's is 535, not 475.
 
-| clip | new content | brief budget | speech at 179 | silence | words to reach 22% |
-|---|---|---|---|---|---|
-| 1 | 291 s | 650 | 218 s | 25% | +27 (done, act 7 got 5) |
-| 2 | 215 s | 395 | 132 s | **38%** | **+105** |
-| 3 | 237 s | 475 | 159 s | 33% | +76 |
-| 4 | 381 s | 850 | 285 s | 25% | +36 |
+Measured properly, on new content only:
 
-**Clip 2 at 38% would be refused by the toolchain**, which holds acts between 10
-and 35%. It needs about 105 more words, the same operation act 7 of clip 1 needed.
-Clips 3 and 4 are inside the band but at its top.
+| clip | new content | budget | speech at 179 | silence |
+|---|---|---|---|---|
+| 1 | 291 s | 650 | 218 s | 25% |
+| 2 | 215 s | 475 | 159 s | 26% |
+| 3 | 237 s | 535 | 179 s | 24% |
+| 4 | 381 s | 850 | 285 s | 25% |
 
-About 244 extra words across clips 2 to 4. That is a writing job, not a rebuild.
+**All four sit inside the 10 to 35% band at the budgets the briefs already
+specify.** Nothing needs padding. The 168 against 179 difference is real but its
+whole effect is about five points of silence, from a planned 20% to an actual 25%,
+which is comfortable rather than a problem.
+
+Clip 1's act 7 did need five more words, but that was one short act breaching the
+ceiling on its own, not a series-wide shortfall.
+
+**The lesson is the one this project keeps relearning:** a total assembled by a
+regex over prose is a measurement with no denominator check. Count the acts the
+pattern matched against the acts that exist. Here it found 4 of 6 in clip 2 and 5
+of 7 in clip 3 and reported a total anyway.
 
 ## Next, in order
 
