@@ -54,18 +54,29 @@ FAULT 2: default output carries a cue setting: line:94%
 After: `ALL PASS`. Verified again on a real spec, the TUC acts 3 and 5 narration,
 which now emits at most 42 characters per line and no cue settings.
 
-## The thing to worry about
+## The skill is now under version control
 
-**The skill is not version controlled.** `~/skills/narrated-clip-production` is
-not a git repository and has no remote, so this fix exists in exactly one place
-on one machine. That is the failure mode this project has already paid for twice,
-with the fourteen untracked scripts before the Mac migration and the four rival
-narration texts.
+**Resolved 2026-09-17.** `~/skills` is a git repository pushed to
+`PHemarajata/skills`, **private**, seventeen tracked files and no bytecode.
+Private rather than public because the skill carries no license and no stated
+author, so republishing it would assert a right to redistribute that the files do
+not establish.
 
-The test is committed here precisely because it is the durable half: if the skill
-is ever reinstalled or updated, running
+History is two commits on purpose:
+
+| commit | state | the test says |
+|---|---|---|
+| `5bace68` import as received | the skill exactly as it arrived | **RED**, both faults verbatim |
+| `3d41496` the caption fix | this change | **GREEN** |
+
+The first commit was reconstructed by reverse-applying the fix, and the test
+verified the reconstruction: it reproduced both original faults with identical
+messages. So the diff at `3d41496` is exactly what changed, and nothing else.
+
+The test stays committed here rather than beside the skill because it is the
+durable half across reinstalls: running
 `python3 test_build_narration_captions.py` says in one line whether the bug is
-back. The fix itself should be pushed somewhere with a remote.
+back, whatever version of the skill is installed.
 
 ## Consequence for the reserved caption band
 
