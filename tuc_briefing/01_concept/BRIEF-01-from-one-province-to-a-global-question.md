@@ -5,8 +5,8 @@ renders and concatenated. All new visuals, no reuse.
 
 **The claim.** The 312 genomes this project sequenced in Nakhon Phanom are not a
 provincial dataset that happens to sit in a global panel. They are distributed
-through two thirds of the global population structure, which is what makes them
-able to answer questions no single province could.
+through fifty six of the eighty five global analysis units, which is what makes
+them able to answer questions no single province could.
 
 **The quantity that carries it.** The share of the global partition that the
 funded isolates reach: 56 of 85 analysis units. The claim is coverage of a
@@ -110,7 +110,13 @@ Fifteen seconds spent here removes the only obvious line of attack on the series
 
 The central act. The partition already exists: 2,340 genomes in 85 analysis units.
 Drop the 312 into it. **276 enter the analysed set and land in 56 of the 85
-units.** Not a cluster, not a corner. Two thirds of the global structure.
+units.** Not a cluster, not a corner.
+
+**Do not put "two thirds" on screen here.** Clip 4 act 6 uses that phrase for a
+different quantity, two thirds of the analysed genomes coming from one country,
+which is a limitation where this is a strength. Two different two-thirds in one
+series reads as an error. Say **fifty six of eighty five units**, which is more
+precise anyway.
 
 Then the 36 that did not enter, stated plainly and without apology: every one has
 a nearest unit, so none is lost. Their lineages are too rare in the global panel

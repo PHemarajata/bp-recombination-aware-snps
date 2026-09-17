@@ -1,6 +1,7 @@
 # TUC briefing series: scope
 
-Decided 2026-09-16. Four clips, about 21 minutes total, shown in succession.
+Decided 2026-09-16, revised 2026-09-17. Four clips, about 23 minutes total,
+shown in succession.
 
 ## Audience and purpose
 
@@ -26,7 +27,7 @@ costed next investment drawn from the funder's own isolates.
 | 1 | From one province to a global question | ~4 min | none |
 | 2 | A ruler you can trust | ~5 min | `7.03`, `7.01` |
 | 3 | What the ruler measured | ~5 min | `7.07`, `7.09` |
-| 4 | How close is close enough? | ~7 min | `7.12` |
+| 4 | How close is close enough? | ~8 min | `7.12`, `Act4NotSeparable` |
 
 **Build clip 1 first** even though 3 and 4 were briefed first. Clip 1 establishes
 the visual system every other clip inherits.
@@ -69,6 +70,10 @@ Not everything in the corpus earns animation. Explicitly out of scope:
   five delivered clips are pre-revision. See each brief's "Reused clips" section.
 - **Narrated, not presenter-led.** The clips must stand alone, so every caveat
   lives in the visual.
+- **Clip 4 reuses the APHL film's `Act4NotSeparable` whole**, as act 6. It fills
+  this series' one content gap, that country and collection history are not
+  separable in a collection assembled this way. Its narration regenerates rather
+  than re-times, because the two films run different models and speeds.
 
 ## Open
 

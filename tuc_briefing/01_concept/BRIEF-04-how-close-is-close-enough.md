@@ -1,6 +1,6 @@
 # Clip 4: How close is close enough?
 
-Fourth and final clip of the TUC briefing series. Long-form, eight acts, built as
+Fourth and final clip of the TUC briefing series. Long-form, nine acts, built as
 separate renders and concatenated. Act 3 is an existing accepted clip dropped in
 whole.
 
@@ -16,7 +16,7 @@ because raw accuracy is not comparable across groupings: a two-class split with 
 59% majority scores 59% while saying nothing. Every rung must show its own
 baseline next to it or the comparison is meaningless.
 
-Secondary quantity, act 5: trait association index by the scale of the trait,
+Secondary quantity, act 7: trait association index by the scale of the trait,
 which is the mechanism read directly off a phylogeny.
 
 **Why motion.** The whole argument is a quantity changing as the question changes
@@ -48,7 +48,7 @@ labeled with its own framework on screen. Do not present the two as one dataset.
 
 ---
 
-## The eight acts
+## The nine acts
 
 Build one render per act. Each act names its entry and exit state; the exit of act
 N is the entry of act N+1. Word budgets are spoken words, and each act's runtime
@@ -58,16 +58,22 @@ fifth of the act silent.
 
 **Continuity object: the 46 scorable validation genomes.** They appear in act 2
 as an undifferentiated set and are re-asked at every scale that follows. The same
-46 marks, the same style, every act. In act 8 they hand off to the 312 funded
-isolates. This is the thread that makes eight renders one film.
+46 marks, the same style, every act. In act 9 they hand off to the 312 funded
+isolates. This is the thread that makes nine renders one film.
 
-### Act 1. Two questions, one shape (~90 words, ~40 s)
+### Act 1. Two questions, one shape (~100 words, ~45 s)
 *Entry:* black. *Exit:* the two questions side by side, both unanswered.
 
 A genome arrives and two questions get asked of it. Did this patient and this soil
 sample share a source? Where was this infection acquired? They look like different
 questions and they are the same question: how close is close enough to claim a
 link? Establish that both will be answered, and that the answers differ.
+
+**Name the Americas here.** The applied goal behind this whole project is placing
+cases in the United States and the wider Americas that have no travel history, and
+this series currently names that region nowhere. It belongs in the opening
+question rather than arriving unannounced, and act 6 depends on it having been
+said.
 
 ### Act 2. The linkage scale, set up (~70 words, ~31 s)
 *Entry:* the two questions. *Exit:* the near-identical distance band, empty, ready
@@ -135,13 +141,51 @@ Asia versus non-Asia is perfect on this set. And **the ladder does not climb
 monotonically**: SEA versus non-SEA is a two-class question that scores 0.461,
 well below the five-class region question. Coarser is not automatically better.
 
-### Act 6. One mechanism, both ceilings (~170 words, ~77 s)
+### Act 6. Existing act `Act4NotSeparable`, reused whole (51.0 s)
+*Entry:* the five rungs, country's failure standing. *Exit:* the question narrowed,
+handing to the mechanism.
+
+Built for the APHL film to `ANIMO_ACT4_REVISION_2026-09-17.md`, reviewed and
+accepted in `REVIEW_ACT4_2026-09-17.md`. It is house act D in the shared library
+and it fills the one gap this series had: **nothing else here covers the fact that
+country and collection history are not separable in a collection assembled this
+way**, which is the manuscript's actual reported geographic conclusion, as opposed
+to the unit count it declines to report.
+
+Three beats and a pivot: two thirds of the analysed genomes come from one country;
+113 of 119 sequencing projects sampled a single country, so a study and a place
+are very nearly one variable at Cramer's V 0.857; all five Americas-dominated
+units fall outside the detection window; then the pivot, that none of this makes
+the genome uninformative, it means country is not the question this collection can
+settle.
+
+**Placed here deliberately.** Act 5 shows country failing. This act says the
+collection could not have settled it anyway. Act 7 then says neither could a
+better collection, because of ST92. Practical limit, then structural limit, and
+the order is the argument.
+
+**Its narration must be regenerated, not re-timed.** The delivered audio is Justin
+at `eleven_turbo_v2_5` speed 0.9 for the APHL room. This series runs
+`eleven_multilingual_v2` at 1.0 and 168 wpm, and a seven percent rate difference
+reintroduces exactly the line-four overrun that
+`NARRATION_ACT4_2026-09-17.md` records fixing.
+
+**One line also needs re-authoring, not just regenerating.** Line six opens "And
+for the region this whole question was asked about", which lands in the APHL film
+because its act 1 establishes a case with no travel history. **In this series the
+Americas are named nowhere**, so that antecedent does not exist. Either act 1 of
+this clip names the Americas as the region the applied question concerns, which it
+should anyway since that is the funder's actual goal, or line six is re-authored
+to introduce them.
+
+### Act 7. One mechanism, both ceilings (~170 words, ~77 s)
 *Entry:* the five rungs. *Exit:* the rungs re-read as an erosion gradient.
 
 The payoff. Recombination moves DNA between lineages within a population while
 leaving between-population structure largely intact. Fine scale erased, coarse
 scale preserved. One cause explains both the linkage ceiling from act 3 and the
-country ceiling from act 5.
+country ceiling from act 5, and act 6 has just shown the collection could not
+have settled country regardless.
 
 Corroboration from the Kawang framework, labeled as such: association index by
 trait, region 0.193 and country 0.236 are strongly structured, while collection
@@ -149,7 +193,7 @@ decade 0.581, isolation source 0.710 and Thai province 0.721 are well mixed. Low
 means more structured. A different panel and a different method, pointing the same
 way.
 
-### Act 7. Knowing when not to answer (~100 words, ~45 s)
+### Act 8. Knowing when not to answer (~100 words, ~45 s)
 *Entry:* the five rungs, re-read. *Exit:* the retained and declined sets, separated.
 
 Its own act now rather than two compressed sentences, because "the method knows
@@ -165,7 +209,7 @@ errors.
 accuracy equals its retained-majority baseline exactly, so the rule found an
 easier subset rather than a signal.
 
-### Act 8. The accounting (~90 words, ~40 s)
+### Act 9. The accounting (~90 words, ~40 s)
 *Entry:* the retained set. *Exit:* the 312, and one line about what to fund.
 
 The continuity object hands off. 312 confirmed genomes sequenced by this project,
@@ -237,8 +281,8 @@ Kawang deck has been seen.
   these settings, not at preview quality.
 - **Seven separate renders, concatenated.** Act 3 is the existing
   `7.12_outbreak_threshold.mp4` inserted unchanged.
-- **Target about 7 minutes**, roughly 840 spoken words of new narration at 168 wpm,
-  plus act 3's existing 44.9 seconds. Runtime follows the narration, not the reverse.
+- **Target about 8 minutes**, roughly 840 spoken words of new narration at 168 wpm,
+  plus two reused acts, act 3 at 44.9 s and act 6 at 51.0 s. Total about 471 s. Runtime follows the narration, not the reverse.
 - **An animated step for every sentence.** Not one reveal per paragraph. This is
   what keeps seven minutes honest rather than padded.
 - **Title card holds 1 to 2 seconds.** Not five.
