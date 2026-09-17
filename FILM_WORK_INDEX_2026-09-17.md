@@ -13,7 +13,7 @@ continuity. Read them in this order.
 |---|---|---|
 | audience | APHL Global Health all-country call, many second-language listeners | one funder, technical, has seen the closeout deck |
 | length | ~4 minutes, six clips, 235.0 s | ~21 minutes, four clips |
-| state | picture rendered, not frozen, no narration | briefs only, nothing built |
+| state | Act 4 done and narrated, four acts pending one pass | briefs only, nothing built |
 | voice speed | Justin on `turbo_v2_5` at 0.9, 157.8 wpm | Justin on `multilingual_v2` at 1.0, 168 wpm |
 
 They are not competing drafts. The TUC series is the long cut and the APHL film
@@ -41,11 +41,16 @@ Justin measured at 168.0 wpm. Every word budget in both films was written agains
 Resolves the APHL speed decision and the picture trim that follows from it. Only
 affects that film. Read straight after the voice note.
 
-**6. `tuc_briefing/02_review/REVIEW-reused-clips.md`**
+**6. `ANIMO_ACTS_1235_2026-09-17.md`**
+Everything the four remaining APHL acts need, in one pass: trims, the Act 3
+collision, the em dash sweep and one content fix. Act 4 is done, reviewed in
+`REVIEW_ACT4_2026-09-17.md` and narrated in `NARRATION_ACT4_2026-09-17.md`.
+
+**7. `tuc_briefing/02_review/REVIEW-reused-clips.md`**
 Measured beats against narration for the five legacy clips. Explains why `7.09`'s
 narration has to be re-authored rather than retimed.
 
-**7. `tuc_briefing/01_concept/`**
+**8. `tuc_briefing/01_concept/`**
 `SHORTLIST.md` first for the scope decision, then the four briefs. Build order is
 **clip 1 first**, even though clips 3 and 4 were briefed first, because clip 1
 establishes the visual system the others inherit.
