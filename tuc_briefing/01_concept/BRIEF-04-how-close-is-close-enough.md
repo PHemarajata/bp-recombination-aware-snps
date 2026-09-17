@@ -93,25 +93,22 @@ most consequential at exactly the tight SNP distances where linkage claims are
 made. This is the mechanistic answer to the household result, and placing it
 immediately after act 2 is the whole point of the reuse.
 
-**Apply its two pending revisions first.** `ANIMO_BRIEF_2026-09-09.md` section 11.2
-specified both on 2026-09-10, costed each as a re-render, and neither was
-executed. The delivered file is the pre-revision version.
+**Its revisions are already applied**, rendered 2026-09-10, so use the merged
+render at `~/Downloads/TUC_LEGACY_MERGED_2026-09-17/OutbreakThreshold.mp4`, 44.9 s.
+A stale pre-revision copy sits in the APHL package's `legacy_mp4/`; do not use it.
+This brief previously said the revisions were outstanding; see
+`CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
 
-1. **The decision band reads as an edge case.** Zero to fifteen SNPs is where every
-   outbreak call happens, and on a log axis it is a sliver at the far left. Invert
-   the emphasis by dimming outside the band, or add a second panel zoomed to it.
-2. **The most visually dominant object is the least real one.** The field between
-   the two curves fills the frame and both curves are schematic, while the four
-   published anchor points are the only measured values in the clip and arrive as
-   thin dashed verticals in the last third. Render the schematic curves in a
-   visibly sketchy style, reserve solid rendering for the anchors, and make the
-   anchors the spine.
+What those revisions did, kept here because the merge has to preserve them: the
+four published anchors became the spine, the two schematic curves are rendered
+visibly sketchy so the most dominant object is no longer the least real one, and
+the zero to fifteen SNP decision band is given weight rather than reading as an
+edge case. **Do not "fix" the curves by making them look more like data.** They
+are schematic and the on-screen label saying so stays.
 
-Do not fix the second by making the curves look more like data. They are schematic
-and must stay schematic, and the on-screen label saying so stays. This is the same
-rule act 6 is held to below, which is why the two acts must be styled
-consistently: schematic and measured have to be distinguishable the same way in
-both.
+The merge also moved this act's detection curve off purple, which the house
+system reserves for geography, onto the second teal step. Its axis stays
+logarithmic: the act spans four orders of magnitude.
 
 ### Act 4. The geography scale, set up (~130 words, ~58 s)
 *Entry:* the 46 marks arrive. *Exit:* 46 marks, each with a true exposure label.
@@ -303,6 +300,19 @@ Kawang deck has been seen.
   delivery re-render.
 - **If text is rendered with manim on Linux, guard glyph spacing** by laying out
   at a larger requested size and scaling down.
+
+## Narration conventions, settled 2026-09-17
+
+- **Voice:** Justin `uFIXVu9mmnDZ7dTKCBTX` on `eleven_multilingual_v2` at speed
+  1.0, **measured at 168.0 words per minute** on act-length text.
+- **`say_as` map**, so the caption keeps the written form and the engine gets the
+  spoken one: `SNPs` to `snips`, `SNP` to `snip`, `isolates` to `isolits`.
+- **"unit", never "group"**, for an analysis unit. The statistical senses stay:
+  grouping ladder, leave-group-out, groupings.
+- **Measure every line against its own audio file.** Synthesis is not
+  deterministic: the same text re-synthesized varies up to sixteen percent in
+  duration. A line that fits is a fact about a file, not about a sentence, so
+  never re-generate a line that already fits.
 
 ## You may refuse this brief
 

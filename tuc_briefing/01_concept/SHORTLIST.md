@@ -66,8 +66,13 @@ Not everything in the corpus earns animation. Explicitly out of scope:
 - **cgMLST is not named anywhere in the series**, continuing the instruction that
   applied to the earlier deliverable. Describe what the method does, not what it
   is called.
-- **Every reused clip gets its pending section 11 revision applied first.** All
-  five delivered clips are pre-revision. See each brief's "Reused clips" section.
+- ~~Every reused clip gets its pending section 11 revision applied first.~~
+  **Wrong, corrected 2026-09-17.** The revisions were already applied and
+  rendered. The reused acts now come from the **merged** renders in
+  `~/Downloads/TUC_LEGACY_MERGED_2026-09-17/`, built from
+  `tuc_legacy_scenes_merged.py`. A stale pre-revision copy sits in the APHL
+  package's `legacy_mp4/`; do not use it. See
+  `CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
 - **Narrated, not presenter-led.** The clips must stand alone, so every caveat
   lives in the visual.
 - **Clip 4 reuses the APHL film's `Act4NotSeparable` whole**, as act 6. It fills
@@ -83,6 +88,9 @@ Not everything in the corpus earns animation. Explicitly out of scope:
   these briefs is stated at that rate. See `VOICE_MEASUREMENT_2026-09-17.md`.
   The APHL film runs the same voice on `eleven_turbo_v2_5` at 0.9, so anything
   shared between the films regenerates rather than re-times.
-- **The narration source for the existing clips is unsettled.** Four rival texts
-  exist for the five delivered clips and `voice/` is the oldest of them. Settle
-  before synthesizing anything.
+- ~~The narration source for the existing clips is unsettled.~~ **Settled by the
+  merge.** The reused acts are narrated fresh at the TUC settings against the
+  merged renders. `7.09` is already done. The other four have corrected text in
+  `~/Downloads/TUC_LEGACY_MERGED_2026-09-17/narration_corrected/`, with "unit"
+  applied, ready to be voiced. The four rival versions are superseded and
+  `voice/` remains the oldest of them.

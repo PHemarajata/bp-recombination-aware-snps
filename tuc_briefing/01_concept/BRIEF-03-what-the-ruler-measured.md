@@ -127,34 +127,37 @@ and representative at the same time, not a biased corner.
 
 ---
 
-## Reused clips: apply the pending revisions first
+## Reused acts: use the merged renders
 
-> **CORRECTED 2026-09-17.** The section 11 revisions below were already applied and rendered; the clips in `~/Downloads/ANIMO_DELIVERABLES_2026-09-09/video/` are the revised set. Treat this section as the record of what was fixed, not as work outstanding. What remains is that `7.09`'s narration still describes the superseded picture. See `CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
+**Both revisions are already applied**, rendered 2026-09-10. This brief previously
+said otherwise; see `CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
 
+**Use the merged renders, not the delivered clips.**
 
-`7.07`, `7.09` and `7.12` all carry revisions specified in `ANIMO_BRIEF_2026-09-09.md`
-section 11 on 2026-09-10, each costed as a re-render, none of which was executed.
-The delivered files are the pre-revision versions. Do not drop them into a
-technical briefing unrevised. Two of the three defects are exactly the kind this
-audience will notice.
+| act | file |
+|---|---|
+| 4 | `~/Downloads/TUC_LEGACY_MERGED_2026-09-17/RecursiveSubdivision.mp4`, 35.7 s |
+| 5 | `~/Downloads/TUC_LEGACY_MERGED_2026-09-17/TreeBuilderPaired.mp4`, 26.6 s |
 
-**`7.09`, section 11.1, the largest payoff.** It plots absolute r/m for both
-builders and connects the pairs. Seven of twelve comparisons sit below r/m 5, so
-the lines are short, overlapping and nearly flat, and **the finding is carried
-entirely by the text caption. The picture does not show it.** Plot the ratio
-instead: one dot per comparison, one reference line at 1.0, eleven dots below it
-and one above. The worst case becomes the lowest dot rather than a label. Keep
-both panels and the sign test annotations. Per-comparison values are on disk in
-`TREEBUILDER_EQ_RESULT.txt` and `RAPIDNJ_EQ_RESULT.txt`.
+Source: `tuc_legacy_scenes_merged.py` at the repo root, semantic merge only, both
+frame-for-frame identical in length to the delivered clips. **A stale pre-revision
+copy** of both sits in the APHL package's `legacy_mp4/`. Do not use it.
 
-**`7.07`, section 11.2.** Two fixes. The bar and the plot are two views of the same
-three objects with nothing linking them until a color flip at 27 s, so drop each
-bar segment onto its position on the diversity axis. And the eighteen-fold drop
-from the parent at 1,310 to its own child at 72 is not drawn: on a log axis it
-reads as a small step, and it is the trap this project keeps hitting. Annotate it
-explicitly.
+**`7.09`'s narration is already rewritten**, in
+`~/Downloads/TUC_LEGACY_MERGED_2026-09-17/narration_709/`, voiced at the TUC
+settings. The shipped narration for that clip described the superseded encoding,
+calling dots "lines" that "scatter" and "fall". Do not reuse it.
 
----
+**`7.07`'s axis stays logarithmic.** An earlier spec called for adopting the house
+linear axis. That was withdrawn: the act plots 72, 123, 1,310 and 1,477, and on a
+linear axis 72 and 123 collapse together at the left edge, which destroys the
+act's subject. The eighteen-fold drop is annotated instead, which is the right
+answer and is already drawn.
+
+**One gap to close when this is narrated.** `7.07`'s eighteen-fold drop annotation
+has no line. The existing narration says "Two of the three fall below the floor",
+which is true but never names the size of the fall, which is the thing the
+revision drew.
 
 ## What would be a fabrication
 
@@ -239,6 +242,19 @@ them and this clip assumes only what clip 2 established. Define nothing twice.
   delivery re-render.
 - **If text is rendered with manim on Linux, guard glyph spacing** by laying out
   at a larger requested size and scaling down.
+
+## Narration conventions, settled 2026-09-17
+
+- **Voice:** Justin `uFIXVu9mmnDZ7dTKCBTX` on `eleven_multilingual_v2` at speed
+  1.0, **measured at 168.0 words per minute** on act-length text.
+- **`say_as` map**, so the caption keeps the written form and the engine gets the
+  spoken one: `SNPs` to `snips`, `SNP` to `snip`, `isolates` to `isolits`.
+- **"unit", never "group"**, for an analysis unit. The statistical senses stay:
+  grouping ladder, leave-group-out, groupings.
+- **Measure every line against its own audio file.** Synthesis is not
+  deterministic: the same text re-synthesized varies up to sixteen percent in
+  duration. A line that fits is a fact about a file, not about a sentence, so
+  never re-generate a line that already fits.
 
 ## You may refuse this brief
 

@@ -79,7 +79,7 @@ restricted Asian locale, and whether it holds globally has not been tested.
 
 ### Act 3. How the detector actually works
 *Lead-in ~40 words, ~17 s, then the revised* `7.03_detection_window` *(47.8 s)*
-*Entry:* the diversity axis. *Exit:* three anchor groups placed, window visible.
+*Entry:* the diversity axis. *Exit:* three anchor units placed, window visible.
 
 Lead-in sets up what to watch: the detector looks for a local excess of SNP
 density, and whether that excess is visible depends entirely on how diverse the
@@ -87,7 +87,7 @@ background is.
 
 ### Act 4. Does it invent recombination?
 *Lead-in ~40 words, ~17 s, then the revised* `7.01_negative_control` *(41.5 s)*
-*Entry:* as act 3 leaves it. *Exit:* the null and the real groups, separated.
+*Entry:* as act 3 leaves it. *Exit:* the null and the real units, separated.
 
 Lead-in frames it as the control any laboratory would demand: run the identical
 pipeline on populations simulated with zero recombination and see what comes back.
@@ -122,45 +122,31 @@ brackets rather than points. That is a ruler, and clip 3 points it at the data.
 
 ---
 
-## Reused clips: apply the pending revisions first
+## Reused acts: use the merged renders
 
-> **CORRECTED 2026-09-17.** The section 11 revisions below were already applied and rendered; the clips in `~/Downloads/ANIMO_DELIVERABLES_2026-09-09/video/` are the revised set. Treat this section as the record of what was fixed, not as work outstanding. What remains is that `7.09`'s narration still describes the superseded picture. See `CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
+**Both revisions are already applied.** `ANIMO_BRIEF_2026-09-09.md` section 11.2
+specified them and they were rendered on 2026-09-10, so the clips are the revised
+set. This brief previously said otherwise; see
+`CORRECTION_CLIPS_WERE_REVISED_2026-09-17.md`.
 
+**Use the merged renders, not the delivered clips.**
 
-Both carry revisions specified in `ANIMO_BRIEF_2026-09-09.md` section 11.2 on
-2026-09-10, costed, and never executed. The delivered files are the pre-revision
-versions.
+| act | file |
+|---|---|
+| 3 | `~/Downloads/TUC_LEGACY_MERGED_2026-09-17/DetectionWindowSweep.mp4`, 47.8 s |
+| 4 | `~/Downloads/TUC_LEGACY_MERGED_2026-09-17/NegativeControlZoom.mp4`, 41.5 s |
 
-**`7.03`, and this is the sharper of the two.** The brief's own verdict is that
-this clip *"has the best idea in the set and buries it"*. Three fixes.
+Source: `tuc_legacy_scenes_merged.py` at the repo root. The merge is semantic
+only, so both render frame-for-frame identical in length to the delivered clips.
+It reserves purple for geography, reserves rust for adverse outcomes, and renames
+"group" to "unit" on screen. **There is a stale copy** of both clips in the APHL
+package's `legacy_mp4/`, which is the pre-revision 13:51 set. Do not use it.
 
-1. **Promote the counted-as bars to co-star with the genome track.** The bars going
-   0/100, then 43/57, then back to 0/100 are recombination moving out of the
-   numerator and into the denominator, made visible. That is the mechanism the
-   whole series rests on and it is currently a low-contrast footnote.
-2. **Dwell on the three anchors, move fast between them.** The diversity readout
-   climbs through about 44 values when only three matter, at 243, 1,284 and 5,819.
-   Continuous ticking trains the eye to ignore the number.
-3. **At the above-ceiling state, hide the outline of the imported piece** and let
-   the viewer try to find it and fail. The clip asserts the imported piece never
-   changes but the viewer cannot check it. This is the finding experienced rather
-   than watched, and it is a re-conception rather than a re-render. It is worth it.
-
-**`7.01`, three fixes, in order of cost.**
-
-1. **Cut the seven seconds of empty zoom** from 20 to 27 s, where only a corner
-   readout changes. In a 41 second clip that is the most expensive stretch and it
-   carries nothing. Or slide a marker in from the right edge so something is
-   visibly approaching.
-2. **Keep an inset showing the null at its own scale.** By 26 s the null is a
-   hairline at zero, so at the moment the clip claims 427-fold separation, one of
-   the two compared objects is no longer on screen.
-3. **Two names for one thing in the first six seconds**, "the no-template control"
-   then "the negative control". Lower priority for this audience than for the
-   second-language room the note was written for, but still worth one fix: pick
-   one name, or show the equivalence once and deliberately.
-
----
+**One gap to close when these are narrated.** `7.03`'s counted-as bars have no
+narration line pointing at them, and the brief that promoted them calls that beat
+the mechanism the whole series rests on. Its hide-the-outline beat is unnarrated
+too, although the existing line "It never changes. Only the background around it
+does." is the claim that beat exists to make checkable. Write lines for both.
 
 ## What would be a fabrication
 
@@ -237,6 +223,19 @@ define none of it again.
 - **Two-pass render expected.**
 - **If text is rendered with manim on Linux, guard glyph spacing** by laying out
   at a larger requested size and scaling down.
+
+## Narration conventions, settled 2026-09-17
+
+- **Voice:** Justin `uFIXVu9mmnDZ7dTKCBTX` on `eleven_multilingual_v2` at speed
+  1.0, **measured at 168.0 words per minute** on act-length text.
+- **`say_as` map**, so the caption keeps the written form and the engine gets the
+  spoken one: `SNPs` to `snips`, `SNP` to `snip`, `isolates` to `isolits`.
+- **"unit", never "group"**, for an analysis unit. The statistical senses stay:
+  grouping ladder, leave-group-out, groupings.
+- **Measure every line against its own audio file.** Synthesis is not
+  deterministic: the same text re-synthesized varies up to sixteen percent in
+  duration. A line that fits is a fact about a file, not about a sentence, so
+  never re-generate a line that already fits.
 
 ## You may refuse this brief
 

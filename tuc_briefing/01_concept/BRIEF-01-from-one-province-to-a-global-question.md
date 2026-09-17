@@ -240,6 +240,19 @@ closeout already covered. Assume all of it. What is new to her starts at act 2.
 - **If text is rendered with manim on Linux, guard glyph spacing** by laying out
   at a larger requested size and scaling down.
 
+## Narration conventions, settled 2026-09-17
+
+- **Voice:** Justin `uFIXVu9mmnDZ7dTKCBTX` on `eleven_multilingual_v2` at speed
+  1.0, **measured at 168.0 words per minute** on act-length text.
+- **`say_as` map**, so the caption keeps the written form and the engine gets the
+  spoken one: `SNPs` to `snips`, `SNP` to `snip`, `isolates` to `isolits`.
+- **"unit", never "group"**, for an analysis unit. The statistical senses stay:
+  grouping ladder, leave-group-out, groupings.
+- **Measure every line against its own audio file.** Synthesis is not
+  deterministic: the same text re-synthesized varies up to sixteen percent in
+  duration. A line that fits is a fact about a file, not about a sentence, so
+  never re-generate a line that already fits.
+
 ## You may refuse this brief
 
 If the material does not support the claim or the quantity, say so and propose
