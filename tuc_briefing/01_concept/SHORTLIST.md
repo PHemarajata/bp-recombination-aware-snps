@@ -24,7 +24,7 @@ costed next investment drawn from the funder's own isolates.
 
 | | clip | runtime | reuse |
 |---|---|---|---|
-| 1 | From one province to a global question | ~4 min | none |
+| 1 | From one province to a global question | ~5 min | none |
 | 2 | A ruler you can trust | ~5 min | `7.03`, `7.01` |
 | 3 | What the ruler measured | ~5 min | `7.07`, `7.09` |
 | 4 | How close is close enough? | ~8 min | `7.12`, `Act4NotSeparable` |
@@ -77,9 +77,12 @@ Not everything in the corpus earns animation. Explicitly out of scope:
 
 ## Open
 
-- **The voice is not chosen.** It must be, before any runtime is committed:
-  clip length follows the voice's measured rate, and changing it later forces a
-  retime of every act.
+- ~~The voice is not chosen.~~ **Settled.** ElevenLabs Justin
+  `uFIXVu9mmnDZ7dTKCBTX` on `eleven_multilingual_v2` at speed 1.0,
+  **measured at 168.0 words per minute** on act-length text. Every budget in
+  these briefs is stated at that rate. See `VOICE_MEASUREMENT_2026-09-17.md`.
+  The APHL film runs the same voice on `eleven_turbo_v2_5` at 0.9, so anything
+  shared between the films regenerates rather than re-times.
 - **The narration source for the existing clips is unsettled.** Four rival texts
   exist for the five delivered clips and `voice/` is the oldest of them. Settle
   before synthesizing anything.
