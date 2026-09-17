@@ -94,10 +94,48 @@ still the wrong one.** It has not been overwritten, because that pack is the
 APHL-flavored delivery and this rewrite is voiced for TUC. Anyone using that pack
 for 7.09 is using narration that describes a superseded picture.
 
-**The other four clips need the same check for a gap rather than a contradiction**,
-for example whether 7.03's hide-the-outline beat has a line pointing at it. Their
-existing narration is not wrong about its picture, which is why this one was
-first.
+## The check on the other four, done
+
+No contradictions. Their narration is not wrong about its picture. But two things
+came out of it, and the first is mine.
+
+### The merge broke four narration lines, and it is the same class of fault
+
+Renaming "group" to "unit" on screen desynchronised the narration, which still
+says "group" four times:
+
+| clip | line |
+|---|---|
+| 7.01 | "It widens until the real analysis **groups** appear." |
+| 7.01 | "These are real **groups** of genomes from the collection." |
+| 7.03 | "This is a real **group** from the collection. Nothing gets marked." |
+| 7.07 | "This **group** sat comfortably inside the working window." |
+
+**The delivered pack is still internally consistent**, because its clips and its
+narration both say "group". The hazard is pairing the **merged** clips with the
+**delivered** narration, which is exactly the accident this session keeps finding.
+
+For the TUC series this costs nothing, since those clips get narrated fresh at
+168 wpm and the new lines simply say "unit". **It is a constraint on that
+narration, not a repair.** Anyone reusing the existing audio with the merged
+picture has to re-record those four lines, and per the non-determinism finding a
+re-recorded line comes back a different length and needs re-fitting.
+
+### Two gaps, pre-existing, worth closing in the TUC narration
+
+**7.03's counted-as bars have no line pointing at them.** Revision 1 promoted
+them to co-star because they are recombination moving out of the numerator and
+into the denominator, made visible, and the brief calls that the mechanism the
+whole series rests on. The narration never mentions them. Its "hide the outline"
+beat is also unnarrated, although the line "It never changes. Only the background
+around it does." is the claim that beat exists to make checkable.
+
+**7.07's eighteen-fold drop annotation has no line.** The narration says "Two of
+the three fall below the floor", which is true but does not name the size of the
+fall, which is the thing the revision drew.
+
+Neither is a defect in the delivered clip. Both are lines worth writing when
+these scenes are narrated for TUC.
 
 **What remains of the merge is cosmetic**: splitting the file into the house
 layout and importing `aphl_common.py` rather than carrying its own token block.
