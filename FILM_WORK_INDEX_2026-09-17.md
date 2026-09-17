@@ -35,7 +35,7 @@ report. Replaces the act rather than patching it.
 
 **4. `VOICE_MEASUREMENT_2026-09-17.md`**
 Justin measured at 168.0 wpm. Every word budget in both films was written against
-132, so this changes all of them. Also carries the APHL speed decision.
+132, so this changes all of them. Poses the APHL speed problem, which document 5 resolves.
 
 **5. `ANIMO_APHL_TIGHTEN_2026-09-17.md`**
 Resolves the APHL speed decision and the picture trim that follows from it. Only
