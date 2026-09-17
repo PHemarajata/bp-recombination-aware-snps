@@ -104,3 +104,84 @@ from this `scene.py` here, so the fix does not need Animo.
 stays useful only if clip 1 ever has to be rebuilt from scratch.
 
 Animo's remaining work is clips 2, 3 and 4.
+
+---
+
+# Both defects fixed, 2026-09-17
+
+Source: `tuc_clip1_scenes.py` at the repo root. Complete set in
+`~/Downloads/TUC_CLIP1_SALVAGE_2026-09-17/clips_fixed/`, 291.000 s, all
+1920x1080 at 60 fps. Acts 1, 2, 6 and 7 are the delivered files unchanged; 3, 4
+and 5 are re-rendered here.
+
+## The durations were right; only the distribution was wrong
+
+Checked before cutting anything: at the brief's word budgets and Justin's
+measured 168 wpm, every act's runtime is already correct at about 20% silence
+(75 w in 34 s, 120 w in 54 s, and so on). So the terminal waits were redistributed
+into the body rather than trimmed, and all three acts land on their original
+duration to the frame.
+
+| act | longest still, before | after | duration |
+|---|---|---|---|
+| 3 | 13.1 s, 33% | **4.0 s, 10%** | 40.000 s, 2400 frames |
+| 4 | 18.6 s, 34% | **4.5 s, 8%** | 54.000 s, 3240 frames |
+| 5 | 18.8 s, 37% | **5.6 s, 11%** | 51.000 s, 3060 frames |
+
+No new content was written. The existing reveals were spread out, act 3's
+two-line explanation now lands a line at a time, and act 3 clears that
+explanation at the end so the 2,976 / 2,340 / 85 summary stands alone.
+
+## The act 4 overprint
+
+`p2` flowed down from `p1` while `p3` was placed at an absolute y inside it. The
+stack is now relative throughout and raised to y = -1.05, which is the lowest
+position that clears both the source note (y -2.61 to -2.83) and the reserved
+bottom eighth. Verified by rendering, not by arithmetic.
+
+## A render trap that cost most of the time here
+
+Midway through, the fixed act 4 started rendering with `p2` wrapped and
+overlapping itself. It was not the edit. **The same file renders clean from one
+directory and wrapped from another**, and clearing `media/texts` fixes it:
+
+| where | `media/texts` | p2 |
+|---|---|---|
+| repo, after my probe scripts had run | 187 svg | **wrapped** |
+| scratchpad | 51 svg | clean |
+| repo, after `rm -rf media/texts` | rebuilt | clean |
+
+Manim caches rendered text as SVG keyed by a hash. The probe scripts I used to
+measure the layout constructed the same strings at other sizes and keyword
+combinations into the same media directory, and afterwards the real render picked
+up geometry that was not its own. It is silent, it is deterministic once poisoned,
+and it changes text metrics, so a render can be wrong without anything in the
+source being wrong.
+
+**Clear `media/texts` before any render whose output will be delivered, and keep
+measurement scripts out of the media directory a film renders into.** The three
+acts above were rendered from a cleared cache.
+
+## The audit gap is now closed
+
+`check_text_collisions.py` at the repo root walks the live scene graph at every
+animation boundary and reports overlapping text and anything crossing into the
+reserved bottom eighth. It works on the scene graph rather than on pixels, which
+is why it does not mistake a grid of filled squares for a line of text, as a
+density test does.
+
+Validated against the known defect, then run over everything:
+
+| act | original | fixed |
+|---|---|---|
+| 1, 2, 3, 5, 6, 7 | clean | not re-rendered / clean |
+| 4 | **overlap 61%, t 31.6 to 54.3 s** | clean |
+
+Act 4 was the only collision in the clip, so acts 1, 2, 6 and 7 are safe to ship
+as delivered.
+
+## Still open
+
+Narration for all seven acts. The beat map in `beats/` was measured against the
+old acts 3, 4 and 5 and must be re-run on `clips_fixed/` before narration is
+written against it.
