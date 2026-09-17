@@ -224,7 +224,12 @@ them and this clip assumes only what clip 2 established. Define nothing twice.
 - **The bottom eighth of the frame is reserved** for captions. No axis labels, no
   legend, no source line there.
 - **Narrated, not presenter-led.** Every caveat lives in the visual.
-- **The voice is chosen before the runtime is committed.**
+- **Voice: ElevenLabs "Justin", voice ID `uFIXVu9mmnDZ7dTKCBTX`**, the same voice
+  across all four clips. Every word budget here assumes 132 words per minute,
+  which is the rate the earlier narration pack was timed at and **not a measured
+  property of this voice**. Measure Justin's real rate on a sample first, then
+  re-derive each act's seconds from its own word count. A faster voice buys more
+  words at the same length; it does not shorten the clip.
 - **Two-pass render expected.** Silent preview accepted on content and layout
   only, then narration, then one timing-only lengthen note per act, then the
   delivery re-render.

@@ -256,6 +256,9 @@ tuc_briefing/01_concept/*
 !tuc_briefing/01_concept/BRIEF-02-a-ruler-you-can-trust.md
 !tuc_briefing/01_concept/BRIEF-03-what-the-ruler-measured.md
 !tuc_briefing/01_concept/BRIEF-04-how-close-is-close-enough.md
+!tuc_briefing/02_review/
+tuc_briefing/02_review/*
+!tuc_briefing/02_review/REVIEW-reused-clips.md
 
 # rapid ID sketches (regenerable in ~1 min from paths.txt)
 rapid_id_*/panel*.msh

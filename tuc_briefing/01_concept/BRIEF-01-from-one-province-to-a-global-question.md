@@ -1,6 +1,6 @@
 # Clip 1: From one province to a global question
 
-First clip of the TUC briefing series. Long-form, six acts, built as separate
+First clip of the TUC briefing series. Long-form, seven acts, built as separate
 renders and concatenated. All new visuals, no reuse.
 
 **The claim.** The 312 genomes this project sequenced in Nakhon Phanom are not a
@@ -12,7 +12,7 @@ able to answer questions no single province could.
 funded isolates reach: 56 of 85 analysis units. The claim is coverage of a
 structure, so the quantity is a count against the whole, not a count on its own.
 
-Secondary quantity, act 4: the share of environmental isolates whose analysis unit
+Secondary quantity, act 5: the share of environmental isolates whose analysis unit
 also holds a patient isolate, 34 of 42.
 
 **Why motion.** The point is a set of genomes dispersing through a structure that
@@ -29,12 +29,13 @@ All measured.
 |---|---|
 | Isolate reconciliation, 326 to 312 | Kawang closeout deck, slide 8 |
 | The three recapped findings | Kawang closeout deck, slides 15, 17 and 18 |
+| Resistance results, act 2 | Kawang closeout deck, slides 10, 11, 12 and 13 |
 | Kawang framework composition | Kawang closeout deck, slides 25 and 26 |
 | Our panel and partition | `TABLES.md` Table 1 |
 | Placement of the 312 | `FINAL_BASIS_2026-08-22/FINAL_PANEL.tsv` joined to `FINAL_PARTITION.tsv` |
 | Patient and environment co-occurrence | as above, computed per unit |
 
-**The two frameworks are different panels and act 2 exists to say so.** Kawang's
+**The two frameworks are different panels and act 3 exists to say so.** Kawang's
 is 2,773 genomes and 35 countries. Ours is a 2,976-genome panel, 2,959 after
 duplicate correction, 50 countries, of which 2,340 enter analysis across 85 units.
 Thailand is 1,754 in hers and 1,753 in ours, which is the evidence they are the
@@ -44,7 +45,7 @@ framework on screen.
 
 ---
 
-## The six acts
+## The seven acts
 
 One render per act. Each names its entry and exit state. Word budgets are spoken
 words; runtime follows from word count at the chosen voice's measured rate, not
@@ -70,7 +71,29 @@ distance.
 That third finding is the hinge of the whole series. It is the previous work
 naming the question this work answers.
 
-### Act 2. Two frameworks, reconciled (~70 words, ~40 s)
+### Act 2. Resistance, asked and closed (~90 words, ~51 s)
+*Entry:* 312 marks. *Exit:* the resistance question visibly set aside.
+
+**Purpose is to settle a live funder question early and then leave it.** Emerging
+resistance was one of the things this sequencing was meant to detect, and the
+answer is that there is none. Say so cleanly rather than omitting it.
+
+Three beats. **No acquired resistance genes were detected**; the determinants
+present are intrinsic to the species and are the baseline for the province.
+Seventy percent of genomes carry no predicted determinant at all. First-line
+therapy is unaffected: ceftazidime and trimethoprim were each tested on 258
+patient isolates with 253 susceptible.
+
+Then the honest loose end, stated as a plan rather than a caveat. Eleven isolates
+were non-susceptible on the laboratory panel with no concordant determinant in the
+genome, so genomic prediction did not explain the phenotype in a single case.
+**Those isolates get repeat AST with MIC determination in the next phase of the
+project.** That is the closeout's own recommendation and it is already scheduled.
+
+Close the act by setting the topic aside explicitly, so the viewer knows it is not
+coming back. The rest of the series is about a different question.
+
+### Act 3. Two frameworks, reconciled (~70 words, ~40 s)
 *Entry:* 312 marks. *Exit:* both panel sizes on screen, related.
 
 Own the discrepancy before anyone finds it. The closeout placed these genomes in a
@@ -82,7 +105,7 @@ cleanest evidence of that.
 
 Fifteen seconds spent here removes the only obvious line of attack on the series.
 
-### Act 3. Where the 312 went (~95 words, ~54 s)
+### Act 4. Where the 312 went (~95 words, ~54 s)
 *Entry:* both panels. *Exit:* 312 marks distributed across 56 units.
 
 The central act. The partition already exists: 2,340 genomes in 85 analysis units.
@@ -95,7 +118,7 @@ for a measurable unit to form around them. That is a finding about the panel, no
 a defect in the isolates, and clip 4 returns to it as the case for what to fund
 next.
 
-### Act 4. Patient and environment, at a second scale (~90 words, ~51 s)
+### Act 5. Patient and environment, at a second scale (~90 words, ~51 s)
 *Entry:* 312 across 56 units. *Exit:* the mixed units marked.
 
 The closeout found environmental isolates interspersed among patient isolates
@@ -108,7 +131,7 @@ where.
 holds a patient isolate. Twenty mixed units, 16 of them in-window.** Same answer,
 different instrument, at eight times the scale.
 
-### Act 5. The question this makes askable (~75 words, ~43 s)
+### Act 6. The question this makes askable (~75 words, ~43 s)
 *Entry:* the mixed units. *Exit:* the question on screen, unanswered.
 
 Turn to the applied problem. A patient presents with no travel history. The
@@ -118,7 +141,7 @@ core-genome distance is required. So: with core genomes in a global frame, how
 far can you actually get? Do not hint at the answer. The remaining clips are the
 answer and this act's job is to make the viewer want it.
 
-### Act 6. What the rest of this takes (~32 words, ~18 s)
+### Act 7. What the rest of this takes (~32 words, ~18 s)
 *Entry:* the question. *Exit:* three titles, handing off to clip 2.
 
 A roadmap in three lines. Before that question can be answered, the measuring
@@ -140,6 +163,17 @@ the answer, and its limit.
 - **Carrying a Kawang value without its framework label.**
 - **Drawing the 56 units as a majority claim about the species.** 56 of 85 is
   coverage of this panel's structure, not of global *B. pseudomallei* diversity.
+- **Reading act 2 as "no resistance risk".** The finding is that no *acquired*
+  resistance genes were detected and that the determinants present are intrinsic.
+  It is a baseline, not a guarantee, and the province now has that baseline
+  precisely so a future change is visible against it. Say that.
+- **Omitting the two gyrA T83I isolates**, or presenting them as resistance. They
+  are the only quinolone-associated determinant found, no fluoroquinolone is on
+  the laboratory panel, and they need MIC confirmation. One clause is enough.
+- **Drawing the eleven discordant isolates as a method failure.** Genomic
+  prediction and phenotypic AST are complementary, not interchangeable, and the
+  discordance is what triggers the repeat testing rather than what invalidates
+  either method.
 - **Any suggestion that the environmental co-occurrence result shows transmission
   from a specific source.** It is a population-level overlap. The closeout's own
   household result, which clip 4 uses, says the source-level claim failed.
@@ -176,14 +210,18 @@ closeout already covered. Assume all of it. What is new to her starts at act 2.
 ## Production constraints
 
 - **1920x1080, 60 fps**, matching the existing clips.
-- **Six separate renders, concatenated.** No reuse in this clip.
-- **Target about 4 minutes**, roughly 420 spoken words.
+- **Seven separate renders, concatenated.** No reuse in this clip.
+- **Target about 5 minutes**, roughly 510 spoken words.
 - **An animated step for every sentence.**
 - **Title card holds 1 to 2 seconds.**
 - **The bottom eighth of the frame is reserved** for captions.
 - **Narrated, not presenter-led.** Every caveat lives in the visual.
-- **The voice is chosen before the runtime is committed**, and it is the same
-  voice across all four clips.
+- **Voice: ElevenLabs "Justin", voice ID `uFIXVu9mmnDZ7dTKCBTX`**, the same voice
+  across all four clips. Every word budget here assumes 132 words per minute,
+  which is the rate the earlier narration pack was timed at and **not a measured
+  property of this voice**. Measure Justin's real rate on a sample first, then
+  re-derive each act's seconds from its own word count. A faster voice buys more
+  words at the same length; it does not shorten the clip.
 - **This clip sets the visual system for the series.** Colors, type, the mark for
   a genome, the mark for a unit and the treatment that distinguishes schematic
   from measured are all established here and reused unchanged in clips 2 to 4.
@@ -198,7 +236,7 @@ closeout already covered. Assume all of it. What is new to her starts at act 2.
 ## You may refuse this brief
 
 If the material does not support the claim or the quantity, say so and propose
-what it does support. In particular, act 2 is a reconciliation of two numbers and
+what it does support. In particular, act 3 is a reconciliation of two numbers and
 risks being the dullest 40 seconds in the series. If you can carry it in less
-time, or fold it into act 3's dispersal, propose that. It cannot be cut, but it
+time, or fold it into act 4's dispersal, propose that. It cannot be cut, but it
 does not have to be a table.

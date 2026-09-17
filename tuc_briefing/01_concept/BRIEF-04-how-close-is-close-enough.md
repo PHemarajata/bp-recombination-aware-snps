@@ -235,8 +235,12 @@ Kawang deck has been seen.
   source line there. Captions are drawn in that band.
 - **Narrated, not presenter-led.** It must stand alone, so every caveat lives in
   the visual.
-- **The voice is chosen before the runtime is committed.** Clip length follows the
-  voice's measured rate. Do not commission seconds against a nominal rate.
+- **Voice: ElevenLabs "Justin", voice ID `uFIXVu9mmnDZ7dTKCBTX`**, the same voice
+  across all four clips. Every word budget here assumes 132 words per minute,
+  which is the rate the earlier narration pack was timed at and **not a measured
+  property of this voice**. Measure Justin's real rate on a sample first, then
+  re-derive each act's seconds from its own word count. A faster voice buys more
+  words at the same length; it does not shorten the clip.
 - **Two-pass render expected.** Silent preview at reading pace first, accepted on
   content and layout only. Narration written to each act's word budget, voice
   generated and measured, then one timing-only lengthen note per act, then the

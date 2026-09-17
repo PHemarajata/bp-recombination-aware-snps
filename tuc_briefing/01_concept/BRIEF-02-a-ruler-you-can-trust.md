@@ -224,7 +224,12 @@ define none of it again.
 - **Narrated, not presenter-led.**
 - **The visual system is inherited from clip 1 unchanged**, including the
   treatment that distinguishes schematic from measured. Do not re-invent it here.
-- **The voice is chosen before the runtime is committed**, same voice as clip 1.
+- **Voice: ElevenLabs "Justin", voice ID `uFIXVu9mmnDZ7dTKCBTX`**, the same voice
+  across all four clips. Every word budget here assumes 132 words per minute,
+  which is the rate the earlier narration pack was timed at and **not a measured
+  property of this voice**. Measure Justin's real rate on a sample first, then
+  re-derive each act's seconds from its own word count. A faster voice buys more
+  words at the same length; it does not shorten the clip.
 - **Two-pass render expected.**
 - **If text is rendered with manim on Linux, guard glyph spacing** by laying out
   at a larger requested size and scaling down.
