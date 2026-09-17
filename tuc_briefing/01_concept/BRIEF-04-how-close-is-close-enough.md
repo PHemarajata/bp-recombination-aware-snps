@@ -1,6 +1,6 @@
 # Clip 4: How close is close enough?
 
-Fourth and final clip of the TUC briefing series. Long-form, seven acts, built as
+Fourth and final clip of the TUC briefing series. Long-form, eight acts, built as
 separate renders and concatenated. Act 3 is an existing accepted clip dropped in
 whole.
 
@@ -48,7 +48,7 @@ labeled with its own framework on screen. Do not present the two as one dataset.
 
 ---
 
-## The seven acts
+## The eight acts
 
 Build one render per act. Each act names its entry and exit state; the exit of act
 N is the entry of act N+1. Word budgets are spoken words, and each act's runtime
@@ -58,8 +58,8 @@ fifth of the act silent.
 
 **Continuity object: the 46 scorable validation genomes.** They appear in act 2
 as an undifferentiated set and are re-asked at every scale that follows. The same
-46 marks, the same style, every act. In act 7 they hand off to the 312 funded
-isolates. This is the thread that makes seven renders one film.
+46 marks, the same style, every act. In act 8 they hand off to the 312 funded
+isolates. This is the thread that makes eight renders one film.
 
 ### Act 1. Two questions, one shape (~90 words, ~40 s)
 *Entry:* black. *Exit:* the two questions side by side, both unanswered.
@@ -69,7 +69,7 @@ sample share a source? Where was this infection acquired? They look like differe
 questions and they are the same question: how close is close enough to claim a
 link? Establish that both will be answered, and that the answers differ.
 
-### Act 2. The linkage scale, set up (~50 words, ~23 s)
+### Act 2. The linkage scale, set up (~70 words, ~31 s)
 *Entry:* the two questions. *Exit:* the near-identical distance band, empty, ready
 for act 3.
 
@@ -107,7 +107,7 @@ rule act 6 is held to below, which is why the two acts must be styled
 consistently: schematic and measured have to be distinguishable the same way in
 both.
 
-### Act 4. The geography scale, set up (~120 words, ~54 s)
+### Act 4. The geography scale, set up (~130 words, ~58 s)
 *Entry:* the 46 marks arrive. *Exit:* 46 marks, each with a true exposure label.
 
 Forty-six genomes whose exposure country is independently known, out of 48
@@ -149,8 +149,24 @@ decade 0.581, isolation source 0.710 and Thai province 0.721 are well mixed. Low
 means more structured. A different panel and a different method, pointing the same
 way.
 
-### Act 7. The accounting (~90 words, ~40 s)
-*Entry:* the 46 marks. *Exit:* the 312, and one line about what to fund.
+### Act 7. Knowing when not to answer (~100 words, ~45 s)
+*Entry:* the five rungs, re-read. *Exit:* the retained and declined sets, separated.
+
+Its own act now rather than two compressed sentences, because "the method knows
+its own edge" is half the reason this result is usable at all.
+
+A rule that declines rather than guesses. Below a distance threshold the region
+call stands; above it the genome is reported as unattributable. Out of sample,
+with the threshold chosen on the other forty five genomes, it holds **94.3%
+selective accuracy at 76.1% coverage**. It declines both Sub-Saharan attractor
+errors.
+
+**It does not rescue country, and the act must say so.** Country's selective
+accuracy equals its retained-majority baseline exactly, so the rule found an
+easier subset rather than a signal.
+
+### Act 8. The accounting (~90 words, ~40 s)
+*Entry:* the retained set. *Exit:* the 312, and one line about what to fund.
 
 The continuity object hands off. 312 confirmed genomes sequenced by this project,
 276 entering the analysed set, landing in 56 of 85 units and 34 of the 47
@@ -159,11 +175,6 @@ r/m of 7.74 against 7.70 overall. Then the 36 that did not enter: their lineages
 are too rare in the global panel for a measurable unit to form. Close on what
 moves the ceiling, which is references in the right lineages, not more sequencing
 volume.
-
-Abstention belongs here, compressed to two sentences: the region rule declines
-what it cannot answer and holds 94.3% selective accuracy out of sample at 76.1%
-coverage. It is the difference between a method that guesses and one that knows
-its own edge.
 
 ---
 
