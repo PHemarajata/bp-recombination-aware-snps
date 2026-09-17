@@ -249,6 +249,7 @@ collaborator/*
 # lands there later. Each new brief costs one line here, deliberately.
 !tuc_briefing/
 tuc_briefing/*
+!tuc_briefing/PLAN_2026-09-17.md
 !tuc_briefing/01_concept/
 tuc_briefing/01_concept/*
 !tuc_briefing/01_concept/SHORTLIST.md
@@ -262,6 +263,7 @@ tuc_briefing/02_review/*
 !tuc_briefing/02_review/REVIEW-reused-clips.md
 !tuc_briefing/02_review/QA-two-panels-explained.md
 !tuc_briefing/02_review/REVIEW-clip-02.md
+!tuc_briefing/02_review/REVIEW-clip-03.md
 !tuc_briefing/03_narration/
 tuc_briefing/03_narration/*
 !tuc_briefing/03_narration/NARRATION-CLIP-01.md
