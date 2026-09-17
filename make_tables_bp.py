@@ -191,7 +191,7 @@ def main():
         "\n*The panel is 2,976 assemblies as submitted to PopPUNK and 2,959 "
         "after removing 17 duplicate BioSamples; both appear in the Results and "
         "they are different stages, not a discrepancy. The analysed set is "
-        "smaller again because a unit must reach n >= 5 to be analysed.*\n",
+        "smaller again because a unit must reach n >= 7 to be analysed.*\n",
     ]
 
     # ---------------- Table 2 ----------------
