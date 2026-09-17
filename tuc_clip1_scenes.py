@@ -376,7 +376,10 @@ class TucC1Act2(Scene):
         self.wait(1.2)                                                   # -> 21.2
 
         eleven = dot_grid(11, 11, lambda i: funded_dot("patient", r=0.085), buff=0.14)
-        eleven.move_to([-1.6, 0.62, 0])
+        # MOVED 2026-09-18 from -1.6. The row's left edge sat at -3.235 and the
+        # 312-mark grid's right edge is -3.167, so the first of the eleven dots
+        # was drawn on top of the grid's last column. Now clears by 0.23.
+        eleven.move_to([-1.30, 0.62, 0])
         el_l = Body("11 isolates were non-susceptible on the laboratory panel\n"
                     "with no concordant determinant in the genome.",
                     font_size=23, color=INK, line_spacing=0.8
@@ -440,11 +443,10 @@ class TucC1Act2(Scene):
 #  ACT 3. Two frameworks, reconciled          target ~40 s
 #  Entry: 312 marks.   Exit: both panel sizes on screen, related.
 #
-#  The brief invited a refusal here: a reconciliation of two numbers risks being
-#  the dullest 40 seconds in the series, and it offered "carry it in less time or
-#  fold it into act 4". Kept at length but built as one collection drawn twice
-#  rather than as a table: a shared Thailand core with two curations around it,
-#  so the one-genome difference is the payoff rather than a row.
+#  The brief invited a refusal here and offered "carry it in less time". That is
+#  now what happens: 28.1 s, not 40. The act states that the panel expanded and
+#  moves on. It no longer argues the two panels are one collection, because the
+#  project lead's instruction is to state the expansion and not defend it.
 # ============================================================================
 class TucC1Act3(Scene):
     def construct(self):
@@ -470,35 +472,19 @@ class TucC1Act3(Scene):
         self.play(FadeIn(ours, shift=LEFT * 0.2, run_time=0.8))          # -> 5.5
         self.wait(3.0)   # 2.0 -> 3.0, tail redistributed
 
-        warn = Body("Same underlying collection, curated twice for different questions.",
+        warn = Body("The panel was expanded to cover more countries, and the clustering refined.",
                     font_size=24, color=INK).move_to([0, -0.62, 0])
         self.play(FadeIn(warn, run_time=0.8))                            # -> 8.3
         self.wait(3.4)   # 2.4 -> 3.4, tail redistributed
 
-        # --- the evidence: Thailand differs by one genome ------------------
-        self.play(FadeOut(warn, run_time=0.5))                           # -> 11.2
-        th_l = VGroup(Body("Thailand", font_size=22, color=INK),
-                      Body("1,754", font_size=34, color=SRCGRAY, font=FONT_TITLE)
-                      ).arrange(DOWN, buff=0.14).move_to([-3.35, -0.85, 0])
-        th_r = VGroup(Body("Thailand", font_size=22, color=INK),
-                      Body("1,753", font_size=34, color=TEAL_TXT, font=FONT_TITLE)
-                      ).arrange(DOWN, buff=0.14).move_to([3.35, -0.85, 0])
-        self.play(FadeIn(th_l, run_time=0.6), FadeIn(th_r, run_time=0.6))  # -> 11.8
-        self.wait(2.5)   # 1.6 -> 2.5, tail redistributed
-        span = Line([-2.25, -0.85, 0], [2.25, -0.85, 0], stroke_width=2, color=INK)
-        one = Body("one genome apart", font_size=23, color=TEAL_TXT
-                   ).move_to([0, -0.5, 0])
-        self.play(Create(span, run_time=0.7))                            # -> 14.1
-        self.play(FadeIn(one, run_time=0.6))                             # -> 14.7
-        self.wait(3.2)   # 2.2 -> 3.2, tail redistributed
-
-        ev = Body("That is the evidence they are one collection\nrather than two datasets.",
-                  font_size=23, color=INK, line_spacing=0.8).move_to([0, -1.85, 0])
-        self.play(FadeIn(ev, run_time=0.7))                              # -> 17.6
-        self.wait(3.6)   # 2.6 -> 3.6, tail redistributed
-
-        # --- what enters analysis, and why it is fewer --------------------
-        self.play(FadeOut(VGroup(th_l, th_r, span, one, ev, kaw, lead), run_time=0.7),
+        # --- straight to what enters analysis ------------------------------
+        # THAILAND JUSTIFICATION REMOVED 2026-09-18, at the project lead's
+        # instruction: state that the dataset expanded, do not defend it. This
+        # dropped the 1,754 against 1,753 comparison, the "one genome apart"
+        # span and the "evidence they are one collection" line, which is 11.9 s.
+        # The act is 28.1 s now rather than 40.0.
+        self.play(FadeOut(warn, run_time=0.5))
+        self.play(FadeOut(VGroup(kaw, lead), run_time=0.7),
                   ours.animate.move_to([-3.4, 1.15, 0]))                 # -> 20.9
         arrow = Arrow([-1.55, 1.15, 0], [-0.35, 1.15, 0], buff=0, stroke_width=3,
                       color=INK, max_tip_length_to_length_ratio=0.22)

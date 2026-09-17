@@ -1,136 +1,139 @@
-# TUC clip 1 narration, voiced on eleven_v3
+# TUC clip 1 narration, v2: one line per visible event
 
 **Film: `~/Downloads/TUC_CLIP1_2026-09-17/final_v3/TUC_CLIP1_NARRATED_v3.mp4`**,
-291.02 s. Justin, `eleven_v3`, seed 20260917, two-pass EBU R128 per line.
+279.12 s. Justin, `eleven_v3`, seed 20260917, two-pass EBU R128 per line.
 
-## Two defects found in review, both fixed
+## What the review found, and what was actually wrong
 
-**Acts 3, 4 and 5 were rendered before the `Txt()` wrap fix and were never
-re-rendered.** Animo repaired the helper and re-audited the source, reporting zero
-wraps, but its own note says acts 3 to 5 were *carried over* from an earlier run.
-The source was clean and the delivered files were stale, which is why act 5's
-opening line still printed "among" on top of "patient". Re-rendered here from the
-current source with the text cache cleared. Frame counts are identical, so no
-timing moved.
+The note was that acts 1 and 2 were "all over the place and do not hit the beats".
+Measured, the line **starts** were fine: every one sat within 1.2 s of a visible
+event. The real fault was **coverage**. There were 11 events and 4 lines in act 1,
+and 15 events and 6 lines in act 2, so each line ran six to nine seconds across two
+or three picture changes while the screen moved on underneath it.
 
-**Act 5 implied a pairing that does not exist.** Corrected against the closeout
-deck rather than from memory.
+That is the same fault as the separate note that act 2 has on-screen text nobody
+mentions. One cause, two symptoms: **too few lines, each too long.**
 
-## What the closeout actually says about patient and environmental isolates
+| | before | after |
+|---|---|---|
+| lines | 39 | **54** |
+| act 1 | 4 lines, 11 events | 7 lines |
+| act 2 | 6 lines, 15 events | 10 lines |
+| act 4 | 7 lines, 13 events | 10 lines |
+| act 6 | 5 lines, 10 events | 9 lines |
+| **events with nothing said** | **32 of 72** | **2 of 72** |
 
-This is the part the narration had to get right, and it is sharper than it looked.
+## Two picture fixes in the same pass
 
-- The two sets are **not matched collections**. 259 clinical against 53
-  environmental, and slide 20 says outright that the clinical-only count is
-  inflated by sampling effort.
-- A household pairing sub-study **does** exist: slide 22, nine nominated pairs
-  from five patients, six evaluable after three B. thailandensis exclusions.
-- **It found nothing.** Slide 23: "Household sampling did not recover the
-  infecting strain", and none of the six linked patients fall inside the
-  near-identical range. The deck calls this a useful negative result.
-- Slide 21 makes the point directly: IE-0044 and IP-0196 are the closest
-  environmental-patient pair in the whole collection, and **they are not from the
-  same household**. "Proximity on the tree is not the same as a confirmed
-  transmission event."
+**The eleven-dot row overlapped the 312-mark grid.** Its left edge sat at -3.235
+and the grid's right edge is -3.167, so the first of the eleven dots was drawn on
+top of the grid's last column. Moved right; it clears by 0.23 now. **The collision
+checker could not see this**, because it compares text against text and this was a
+shape against a shape. Third blind spot found by eye, not by tooling.
 
-So an act that says "34 of 42 environmental isolates share a unit with a patient
-isolate" without qualification does not merely overstate. Read quickly, it sounds
-like it overturns their negative result. It does not, because a unit is coarse and
-their test was for near-identity, but the narration has to say so.
+**Act 3 no longer defends itself.** At the project lead's instruction the Thailand
+comparison is gone: the 1,754 against 1,753 counts, the "one genome apart" span,
+and the "evidence they are one collection rather than two datasets" line. The act
+now states that the panel expanded and moves on. That removed 11.9 s, so act 3 is
+28.1 s rather than 40.0 and **the clip is 279.12 s rather than 291.02.**
 
-Act 5 now carries an explicit line at 28.65 s:
+## Rate is per-act, not per-voice
 
-> A unit is coarse. Sharing one means one population, not a link from patient to
-> source.
+Two acts had to be rebalanced after hearing them, because the engine does not read
+at one rate. Act 2 came back at **153 wpm** and act 6 at **195**, against a planned
+179. Act 2's numbers are the cause: "two hundred nineteen of three hundred twelve"
+costs far more time per word than prose.
 
-and closes on "Same answer as the closeout, at a different scale: one population",
-which is the deck's own conclusion 2 rather than a new claim.
+At the planned rate act 2 landed at 6.8% silence, under the 10% floor, and act 6 at
+36.9%, over the 35% ceiling. Fourteen words came out of act 2 and nineteen went
+into act 6. **All seven acts are now inside the band**, 14.7% to 34.5%.
 
-## Still open, and worth a decision
+## Checks on the finished audio
 
-**The two panels are one line of work, and act 3 now says so.** Corrected by the
-project lead: there is no rival clustering to retire. The initial clustering placed
-the study isolates in a global tree, which is where the 2,773-genome framework
-comes from, and the work then added isolates to cover more countries, refined the
-clustering algorithm, and determined the detection window. The two panel sizes are
-two points on one progression.
-
-Act 3 line 2 previously said the second panel "was expanded for a different
-question", which named only one of the three changes. It now reads:
-
-> That is one line of work, not two datasets. The panel grew to cover more
-> countries, and the clustering was refined.
-
-If anyone asks what "refined" means: the first clustering leaned heavily on the
-mash distance matrix with every cluster silently capped at 200 members, so counts
-and memberships from that stage are artifacts of the cap. No clip presents them,
-and nothing load-bearing depends on them. Full note in
-`tuc_briefing/02_review/QA-two-panels-explained.md`.
-
-**The household negative result is already in clip 4, and has been strengthened.**
-An earlier version of this note said it was in none of the four briefs. That was
-wrong: `BRIEF-04` act 2 covers the nine nominated pairs and the six evaluable ones,
-and act 3 reuses `7.12` as its mechanism. What it lacked was closeout slide 21,
-the sharpest item in the deck: the closest environmental-to-patient pair in the
-whole collection, IE-0044 and IP-0196, same sequence type and same district, is
-**not** from the same household. Added.
+- All 54 lines fit. No boundary under 0.29 s.
+- Every line audibly present: 66% speech minimum in its own window, 94% median.
+- Loudness spread 1.3 LU across all 54.
+- All seven acts clean on the four collision checks after the source edits.
 
 ## Lines as heard
 
+
 ### Act 1. What this project built
 
-**  2.20**  Three hundred twenty six isolates were sequenced for this project, and three hundred twelve were confirmed.
+**  0.70**  Three hundred twenty six isolates were sequenced, and three hundred twelve confirmed.
 
-**  9.10**  Two hundred fifty nine came from patients. Fifty three came from soil and water.
+**  6.10**  Two hundred fifty nine from patients, fifty three from the environment.
 
-** 14.84**  The first two describe the population: extraordinarily diverse, and a single population.
+** 10.90**  Three findings carried forward. The population there is extraordinarily diverse.
 
-** 21.60**  And the third, which is why this series exists. A shared sequence type is not enough to claim a link.
+** 16.16**  Clinical and environmental isolates are drawn from one population.
+
+** 20.38**  And the third, which this series is about.
+
+** 23.08**  A shared sequence type is not enough to claim a link.
+
+** 28.00**  Attribution needs core-genome distance. All of it from one province.
 
 
 ### Act 2. Resistance, asked and closed
 
-**  2.20**  Emerging resistance was one of the things this sequencing was meant to find. There was none.
+**  0.50**  Emerging resistance was one of the things this sequencing was meant to find.
 
-**  9.13**  Seventy percent carry no predicted determinant, and what is present is intrinsic to the species.
+**  5.30**  No acquired resistance genes were detected.
 
-** 15.47**  First line therapy is unaffected. Ceftazidime and trimethoprim were each tested on two hundred fifty eight patient isolates, two hundred fifty three susceptible.
+**  8.50**  What is present is intrinsic to the species.
 
-** 25.07**  One loose end. Eleven isolates were non-susceptible in the laboratory with nothing in the genome to explain it.
+** 12.90**  Two hundred nineteen of three hundred twelve carry no determinant, seventy percent.
 
-** 34.29**  Those get repeat testing, with MIC determination, in the next phase. The closeout recommended it and it is scheduled.
+** 18.70**  First line therapy is unaffected. Ceftazidime and trimethoprim: two hundred fifty three susceptible of two hundred fifty eight.
 
-** 43.57**  The province has a baseline now, so a future change will be visible against it.
+** 26.84**  That leaves one loose end, and it is already scheduled.
+
+** 30.35**  Eleven isolates were non-susceptible in the laboratory with no matching determinant in the genome.
+
+** 36.09**  They get repeat testing, with MIC determination, in the next phase.
+
+** 40.39**  Two isolates carry the only quinolone determinant found.
+
+** 44.05**  The province has a baseline now. Resistance: asked, answered, set aside.
 
 
 ### Act 3. Two frameworks, one collection
 
-**  2.10**  These genomes have been placed in a global panel twice, and the two panels are different sizes.
+**  1.00**  These genomes have been placed in a global panel twice.
 
-** 11.15**  That is one line of work, not two datasets. The panel grew to cover more countries, and the clustering was refined.
+**  4.65**  The closeout used two thousand seven hundred seventy three.
 
-** 19.20**  Here is how you can tell. Count the Thai genomes in each panel: seventeen hundred fifty four, and seventeen hundred fifty three.
+**  8.31**  This work uses two thousand nine hundred seventy six.
 
-** 27.55**  Two separately built datasets would never agree that closely.
+** 12.05**  The panel was expanded to cover more countries, and the clustering was refined.
 
-** 31.13**  Of those, two thousand three hundred forty enter analysis, because a unit needs a minimum size. That gives eighty five units.
+** 19.18**  Of those, two thousand three hundred forty enter analysis.
+
+** 23.24**  A unit needs a minimum size, which leaves eighty five analysis units.
 
 
 ### Act 4. Where the 312 went
 
-**  2.00**  The partition already exists, built from two thousand three hundred forty genomes.
+**  2.10**  The partition already exists, built from two thousand three hundred forty genomes.
 
-**  7.77**  Now drop the three hundred twelve into it, and watch where they land.
+**  7.36**  Now drop the three hundred twelve into it, and watch where they land.
 
 ** 13.60**  Two hundred seventy six enter the analysed set.
 
-** 18.03**  They land in fifty six of the eighty five units. Not a cluster, and not a corner of the tree.
+** 17.89**  They land in fifty six of the eighty five units.
 
-** 27.45**  A provincial collection reaching across a global panel is what lets it answer questions no single province could.
+** 22.70**  Not a cluster, and not a corner of the tree.
 
-** 34.79**  Thirty six did not enter. Every one has a nearest unit recorded, so none of them is lost.
+** 27.40**  A provincial collection reaching across a global panel is what lets it answer questions no single province could.
 
-** 44.20**  Their lineages are too rare in the panel for a measurable unit to form. That is a finding about the panel.
+** 33.73**  Thirty six did not enter.
+
+** 36.27**  Every one has a nearest unit recorded, so none of them is lost.
+
+** 40.36**  Their lineages are too rare in the panel for a measurable unit to form.
+
+** 45.36**  That is a finding about the panel, not a defect in the isolates.
 
 
 ### Act 5. The same answer, a second time
@@ -147,22 +150,30 @@ whole collection, IE-0044 and IP-0196, same sequence type and same district, is
 
 ** 35.51**  Thirty four of the forty two environmental isolates sit in one of those mixed units.
 
-** 40.54**  Sixteen of those twenty units sit inside the measurable range.
+** 40.83**  Sixteen of those twenty units sit inside the measurable range.
 
 ** 45.98**  Same answer as the closeout, at a different scale: one population.
 
 
 ### Act 6. The question this makes askable
 
-**  2.29**  Here is the problem this now makes it possible to ask, and it is the applied one.
+**  1.00**  Here is the problem this now makes it possible to ask.
 
-** 10.00**  A patient presents with no travel history. No exposure, no source. The genome is the only evidence of where the infection was acquired.
+**  5.20**  A patient presents with severe sepsis and no travel history at all.
 
-** 19.32**  The closeout already settled two things about that, and both still hold.
+**  9.69**  No exposure, no source. The genome is the only evidence of where it came from.
 
-** 24.60**  Sharing a sequence type will not answer it. The question needs distance measured across the whole core genome, not a handful of loci.
+** 15.02**  The closeout already settled two things about that.
 
-** 33.36**  So, with core genomes and a global frame, the question becomes how far you can actually get.
+** 18.89**  Two isolates can share a sequence type, the same broad genetic family.
+
+** 23.52**  Measured across the whole genome, they can still be far apart.
+
+** 27.20**  So sharing a sequence type is not enough to answer the question.
+
+** 31.53**  It needs distance measured across the whole core genome, not a handful of loci.
+
+** 36.55**  So with core genomes, in a global frame, how far can you get?
 
 
 ### Act 7. What the rest of this takes
@@ -171,11 +182,11 @@ whole collection, IE-0044 and IP-0196, same sequence type and same district, is
 
 **  5.80**  First, the measuring instrument has to be shown to work.
 
-**  9.42**  Then it has to be pointed at the data.
+**  9.45**  Then it has to be pointed at the data.
 
 ** 13.12**  Then the answer, and just as important, the point where it stops working.
 
 
 ---
 
-**611 words**, voiced on eleven_v3.
+**619 words**, 54 lines, voiced on eleven_v3.
