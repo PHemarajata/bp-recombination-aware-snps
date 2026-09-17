@@ -347,3 +347,67 @@ checks every glyph.
 **All seven acts are clean under all four checks.** Frame counts are unchanged in
 every re-rendered act, so no narration timing moved, and the film reassembles at
 291.021 s with no line boundary under 0.29 s and every line still audibly present.
+
+---
+
+# Disposition of every clip 1 defect, audited 2026-09-18
+
+Asked directly, so verified rather than recalled.
+
+## In the delivered film, fixed and checked
+
+| defect | act | how it was fixed |
+|---|---|---|
+| p2 and p3 overprinted, held 22.7 s | 4 | stack made relative, raised to clear the note and the reserved band |
+| bar label showed **the wrong number** | 2 | short value inside the bar, sentence beneath in ink |
+| `PURPLE` used for "same sequence type" | 6 | moved to gray; purple is an unused token again |
+| opening line printed "among" over "patient" | 5 | re-rendered from current source; the file was stale, not the code |
+| conclusion clipped the source note | 5 | bar block raised 0.13 |
+| in-window line 0.011 from the note | 5 | placed relative to the line above it |
+| verdict lines 0.05 and 0.07 apart | 6 | axis raised 0.13, schematic tag moved off the bottom |
+| drops list 0.12 from the 312 chip | 1 | chip moved right 0.28 |
+| terminal holds of 33, 34 and 37% | 3,4,5 | re-paced; a later Animo build had done the same independently |
+| implied patient and environment were paired sets | 5 | explicit guard line, written against the closeout deck |
+| "expanded for a different question" named one of three changes | 3 | rewritten to the real progression |
+
+## In tooling, so they cannot recur
+
+`Txt()` width guard, `check_text_collisions.py` (overlap, clearance, white-on-fill,
+reserved band), `map_beats.py --floor`, `generate_elevenlabs.py --seed`, v3
+conditioning drop, `build_narration.py` caption wrapping. All tested.
+
+**The `Txt()` guard propagated.** Clips 2, 3 and 4 all carry it, which is why none
+of them has a wrap.
+
+## Fixed today
+
+**The analysis floor said n >= 5 and it is n >= 7.** `TABLES.md` and
+`make_tables_bp.py` both carried it; README and `REDO_DECISION_2026-08-21.md` both
+say 7, and `FINAL_PARTITION.tsv` has a minimum unit size of exactly 7 with zero
+units below. Fixed in the generator as well as the output. Flagged at the start of
+this session and left sitting until now.
+
+## The one outstanding port is bookkeeping, not a live defect
+
+`aphl_common.py` still lacks the width guard, so the APHL film's source is
+unprotected against the wrap for future edits. **The film itself is clean**: seven
+multi-line strings were tested and none wraps.
+
+**That test needed a second pass, and it exposes a limit of the check.** The 0.95
+width-ratio rule flagged five of the seven. All five are short two-line labels
+like `real\nsignal` and `two below\nthe floor`, and a line that is one or two words
+cannot wrap far, so pixel snapping dominates the ratio: they measured 0.92 to 0.95
+where a real wrap measured 0.78. Comparing **line counts** settled it, and all five
+have the same number of visual lines as a plain `Text` of the same string.
+
+**So: use the width ratio to shortlist and the line count to decide.** A width
+ratio alone over-reports on short strings.
+
+## Still open, none of it clip 1
+
+- `aphl_common.py` width guard port, above.
+- `7.03`'s counted-as bars and hide-the-outline beat have no narration line. Needed
+  for clip 2, and the brief calls the first of those the mechanism the series rests
+  on.
+- The APHL caption band: two-line captions exceed the reserved bottom eighth.
+- APHL acts 3, 4 and 5 sit at 26 to 30% silence, which needs the picture shortened.
