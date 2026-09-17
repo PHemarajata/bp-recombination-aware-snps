@@ -185,3 +185,86 @@ as delivered.
 Narration for all seven acts. The beat map in `beats/` was measured against the
 old acts 3, 4 and 5 and must be re-run on `clips_fixed/` before narration is
 written against it.
+
+---
+
+# Superseded the same evening: Animo delivered a better clip 1
+
+Render `340a15a4`, continued from `88f4dbee`, not from the run that died. It is
+the clip 1 to use. Copied to `~/Downloads/TUC_CLIP1_2026-09-17/`, and
+`tuc_clip1_scenes.py` at the repo root is now its `scene.py`.
+
+Seven acts plus `TUC_CLIP1.mp4`, **291.000 s**, every act on its brief target to
+the frame, `h264 1920x1080 60/1 yuv420p` throughout, concat verified by stream
+copy.
+
+## The work above was duplicated, and then some
+
+Its acts 3, 4 and 5 were carried from `88f4dbee`, which had **already** made both
+fixes recorded above: `p3` is placed relative to `p2`, and the source carries the
+comment "1.6 -> 3.6, tail redistributed". Measured still stretches are 3.8 / 4.5
+/ 4.8 s against the 4.0 / 4.5 / 5.6 s reached here independently.
+
+It then fixed five defects this session missed. The one that matters:
+
+**Act 2's opening line was overprinted in the set assembled above**, with
+"sequencing" printed on top of "was meant". Verified by cropping t = 2 s from both
+copies. Three more were geometry in acts 1 and 2: a line sitting 0.003 units clear
+of the dot grid, two lines running over the grid, and a band border running through
+its own text.
+
+## The Txt() helper had a real bug
+
+The K-scaling wrap detector compared only height. A wrap that reflows into the
+**same line box** holds height constant, measured at a ratio of 0.9998, which
+passes the 1.3 test, while width collapses from 8.360 to 6.520 scene units, 78%
+of the K=1 layout. Width is the reliable signal because a wrap always reflows
+narrower:
+
+```python
+if m.height / K <= base_h * 1.3 and m.width / K >= base_w * 0.95:
+```
+
+Re-auditing all 59 distinct strings with the corrected helper reports zero wraps.
+**This belongs in `aphl_common.py` before the next clip is built.**
+
+This is the same failure class as the `media/texts` trap recorded above, reached
+from the other end: there a poisoned cache made a correct string wrap, here a
+blind detector let a wrapping string through.
+
+## The collision checker's blind spot, stated
+
+`check_text_collisions.py` compares bounding boxes **between** Text objects, so a
+wrap **inside** one object is invisible to it. That is exactly why it passed act 2
+as clean. The `Txt()` width guard catches that class at the source. The two are
+complementary and both are needed: the checker reports Animo's build clean across
+all seven acts, which is how that build was verified here.
+
+## Beat map, re-run
+
+`~/Downloads/TUC_CLIP1_2026-09-17/beats/`, at `--floor 0.05`.
+
+| act | dur | beats | largest gap | words | lines at ~19 w |
+|---|---|---|---|---|---|
+| 1 | 34.0 s | 12 | 5.9 s | 75 | 4 |
+| 2 | 51.0 s | 19 | 7.4 s | 115 | 6 |
+| 3 | 40.0 s | 12 | 4.6 s | 90 | 5 |
+| 4 | 54.0 s | 15 | 5.9 s | 120 | 6 |
+| 5 | 51.0 s | 18 | 5.9 s | 115 | 6 |
+| 6 | 43.0 s | 13 | 4.7 s | 95 | 5 |
+| 7 | 18.0 s | 5 | 4.4 s | 40 | 2 |
+
+94 moments against 41 from the delivered map, because `map_beats.py` clamped its
+threshold with a hardcoded `max(thr, 0.25)` that no `--sensitivity` value could
+reach. Fixed in the skill with a `--floor` option, default unchanged. Every act is
+anchored throughout, so no narration line has to land on a still frame.
+
+**650 words is 232 s of speech at Justin's 168 wpm into 291 s of picture, 20%
+silence.** The brief's budgets fit the delivered picture without adjustment.
+
+## Still open
+
+Narration. Its note records that the brief was not on that disk, so its on-screen
+figures were carried from the previous pass's header rather than re-verified. That
+gap is covered: the figures were checked against `NUMBERS.tsv` earlier in this
+document.

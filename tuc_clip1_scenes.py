@@ -1,3 +1,15 @@
+# ============================================================================
+#  ADOPTED 2026-09-17 from Animo render 340a15a4, which supersedes the version
+#  previously committed here. That version re-paced acts 3 to 5 and fixed the
+#  act 4 overprint; this one does both (carried from run 88f4dbee) and also
+#  fixes five defects it missed, including an overprint in act 2's opening line
+#  and a real bug in the Txt() helper, whose wrap detector compared only height.
+#  A wrap that reflows into the same line box holds height constant (0.9998)
+#  while width collapses to 78%, so Txt() now guards on width as well. That
+#  guard is worth porting to aphl_common.py. See SALVAGE_TUC_CLIP1_2026-09-17.md.
+#  The prior version is in git history at b2468bb.
+# ============================================================================
+
 from manim import *
 import numpy as np
 
@@ -59,15 +71,26 @@ SUB_TOP = -3.0          # reserved bottom eighth carries captions
 
 
 def Txt(s, font_size=DEFAULT_FONT_SIZE, **kw):
-    base_h = Text(s, font_size=font_size, **kw).height
+    """House crisp-text helper, with the wrap guard corrected.
+
+    The spec's height-only wrap test misses one real failure mode, which this
+    build hit in act 2: when Pango wraps a trailing word at large K it can place
+    the wrapped fragment in the SAME line box as the following explicit newline,
+    so the layout OVERPRINTS itself while its height is unchanged (measured:
+    ratio 0.9998, height test passes) and only its width collapses (8.36 -> 6.52
+    scene units, 78% of the K=1 layout). Width is therefore the reliable wrap
+    detector, so a candidate K must keep both its height AND its width.
+    """
+    base = Text(s, font_size=font_size, **kw)
+    base_h, base_w = base.height, base.width
     K = 12
     while K > 1:
         m = Text(s, font_size=font_size * K, **kw)
-        if m.height / K <= base_h * 1.3:
+        if m.height / K <= base_h * 1.3 and m.width / K >= base_w * 0.95:
             break
         K -= 2
     else:
-        m, K = Text(s, font_size=font_size, **kw), 1
+        m, K = base, 1
     return m.scale(1.0 / K)
 
 
@@ -212,7 +235,7 @@ class TucC1Act1(Scene):
 
         marks = dot_grid(312, 26,
                          lambda i: funded_dot("patient" if i < 259 else "environment"))
-        marks.move_to([0, -0.15, 0])
+        marks.move_to([0, -0.34, 0])
         self.play(LaggedStartMap(FadeIn, marks, lag_ratio=0.0016, run_time=1.8))  # -> 8.4
 
         kp = VGroup(funded_dot("patient"),
@@ -221,7 +244,7 @@ class TucC1Act1(Scene):
         ke = VGroup(funded_dot("environment"),
                     Body("53 from the environment", font_size=23, color=INK)
                     ).arrange(RIGHT, buff=0.22)
-        keys = VGroup(kp, ke).arrange(RIGHT, buff=0.9).move_to([0, -1.62, 0])
+        keys = VGroup(kp, ke).arrange(RIGHT, buff=0.9).move_to([0, -1.86, 0])
         self.play(FadeIn(keys, run_time=0.7))                            # -> 9.1
         self.wait(1.7)                                                   # -> 10.8
 
@@ -366,8 +389,10 @@ class TucC1Act2(Scene):
 
         # --- the one quinolone-associated determinant, one clause ---------
         self.play(FadeOut(VGroup(eleven, el_l, plan, plan_s), run_time=0.6))  # -> 30.5
-        gy = Body("Two isolates carry the only quinolone-associated determinant found.",
-                  font_size=23, color=INK).move_to([0.3, 0.72, 0])
+        gy = Body("Two isolates carry the only quinolone-associated\n"
+                  "determinant found.",
+                  font_size=23, color=INK, line_spacing=0.8
+                  ).move_to([0.3, 0.72, 0])
         gy2 = Body("No fluoroquinolone is on the laboratory panel, so it needs\n"
                    "confirmation rather than reporting.",
                    font_size=23, color=SRCGRAY, line_spacing=0.8
@@ -378,12 +403,17 @@ class TucC1Act2(Scene):
 
         # --- set the topic aside, explicitly ------------------------------
         self.play(FadeOut(VGroup(le, gy, gy2), run_time=0.6))            # -> 34.9
-        box = Rectangle(width=8.2, height=1.5, stroke_width=1.8, color=GRAYOUT
-                        ).set_fill(GRIDGRAY, 0.45).move_to([0, -0.90, 0])
         bt = Body("Resistance: asked, answered, and set aside.",
-                  font_size=26, color=INK).move_to(box.get_center() + [0, 0.26, 0])
+                  font_size=26, color=INK)
         bt2 = Body("The province now has a baseline, so a future change is visible against it.",
-                   font_size=23, color=SRCGRAY).move_to(box.get_center() + [0, -0.32, 0])
+                   font_size=23, color=SRCGRAY)
+        # Size the band to its contents. bt2 measures 9.748u, so the original
+        # 8.2u box had its border running straight through the text.
+        box = Rectangle(width=max(bt.width, bt2.width) + 0.86, height=1.5,
+                        stroke_width=1.8, color=GRAYOUT
+                        ).set_fill(GRIDGRAY, 0.45).move_to([0, -0.90, 0])
+        bt.move_to(box.get_center() + [0, 0.26, 0])
+        bt2.move_to(box.get_center() + [0, -0.32, 0])
         self.play(Create(box, run_time=0.7), FadeIn(bt, run_time=0.6))   # -> 35.6
         self.play(FadeIn(bt2, run_time=0.6))                             # -> 36.2
         self.wait(1.6)                                                   # -> 37.8
@@ -392,7 +422,7 @@ class TucC1Act2(Scene):
         self.play(VGroup(box, bt, bt2).animate.set_opacity(0.38),
                   run_time=0.9)                                          # -> 38.7
         nxt = Body("The rest of this series is about a different question.",
-                   font_size=25, color=INK).move_to([0, 0.75, 0])
+                   font_size=25, color=INK).move_to([0.82, 0.75, 0])
         self.play(FadeIn(nxt, run_time=0.7))                             # -> 39.4
         self.wait(11.6)                                                  # -> 51.0
 
@@ -412,12 +442,12 @@ class TucC1Act3(Scene):
         src = source_note("Closeout slides 25 and 26, and Table 1")
         title = Title("Two frameworks, one collection", font_size=34).to_edge(UP, buff=0.5)
         self.add(title, src)
-        self.wait(0.5)                                                   # -> 0.5
+        self.wait(0.9)   # 0.5 -> 0.9, tail redistributed
 
         lead = Body("These genomes have been placed in a global framework twice.",
                     font_size=25, color=INK).move_to([0, 2.15, 0])
         self.play(FadeIn(lead, run_time=0.8))                            # -> 1.3
-        self.wait(1.4)                                                   # -> 2.7
+        self.wait(2.3)   # 1.4 -> 2.3, tail redistributed
 
         # --- the two frameworks, side by side -----------------------------
         kaw = count_chip("2,773", "genomes, 35 countries", "kawang",
@@ -427,14 +457,14 @@ class TucC1Act3(Scene):
                           value_size=44, framework="this work's panel")
         ours.move_to([3.35, 0.72, 0])
         self.play(FadeIn(kaw, shift=RIGHT * 0.2, run_time=0.8))          # -> 3.5
-        self.wait(1.2)                                                   # -> 4.7
+        self.wait(2.1)   # 1.2 -> 2.1, tail redistributed
         self.play(FadeIn(ours, shift=LEFT * 0.2, run_time=0.8))          # -> 5.5
-        self.wait(2.0)                                                   # -> 7.5
+        self.wait(3.0)   # 2.0 -> 3.0, tail redistributed
 
         warn = Body("Same underlying collection, curated twice for different questions.",
                     font_size=24, color=INK).move_to([0, -0.62, 0])
         self.play(FadeIn(warn, run_time=0.8))                            # -> 8.3
-        self.wait(2.4)                                                   # -> 10.7
+        self.wait(3.4)   # 2.4 -> 3.4, tail redistributed
 
         # --- the evidence: Thailand differs by one genome ------------------
         self.play(FadeOut(warn, run_time=0.5))                           # -> 11.2
@@ -445,18 +475,18 @@ class TucC1Act3(Scene):
                       Body("1,753", font_size=34, color=TEAL_TXT, font=FONT_TITLE)
                       ).arrange(DOWN, buff=0.14).move_to([3.35, -0.85, 0])
         self.play(FadeIn(th_l, run_time=0.6), FadeIn(th_r, run_time=0.6))  # -> 11.8
-        self.wait(1.6)                                                   # -> 13.4
+        self.wait(2.5)   # 1.6 -> 2.5, tail redistributed
         span = Line([-2.25, -0.85, 0], [2.25, -0.85, 0], stroke_width=2, color=INK)
         one = Body("one genome apart", font_size=23, color=TEAL_TXT
                    ).move_to([0, -0.5, 0])
         self.play(Create(span, run_time=0.7))                            # -> 14.1
         self.play(FadeIn(one, run_time=0.6))                             # -> 14.7
-        self.wait(2.2)                                                   # -> 16.9
+        self.wait(3.2)   # 2.2 -> 3.2, tail redistributed
 
         ev = Body("That is the evidence they are one collection\nrather than two datasets.",
                   font_size=23, color=INK, line_spacing=0.8).move_to([0, -1.85, 0])
         self.play(FadeIn(ev, run_time=0.7))                              # -> 17.6
-        self.wait(2.6)                                                   # -> 20.2
+        self.wait(3.6)   # 2.6 -> 3.6, tail redistributed
 
         # --- what enters analysis, and why it is fewer --------------------
         self.play(FadeOut(VGroup(th_l, th_r, span, one, ev, kaw, lead), run_time=0.7),
@@ -467,27 +497,18 @@ class TucC1Act3(Scene):
         an.move_to([2.15, 1.15, 0])
         self.play(GrowArrow(arrow, run_time=0.5),
                   FadeIn(an, shift=RIGHT * 0.2, run_time=0.7))           # -> 21.6
-        self.wait(3.0)                                                   # -> 24.6
+        self.wait(2.4)   # 1.4 -> 2.4, tail redistributed
 
-        # REPACED 2026-09-17. The two explanatory lines now land separately and
-        # the 85-unit chip arrives late, then the explanation clears to leave the
-        # three-number summary standing. Was: both lines at once, the chip at
-        # 26.9 s, and one held frame for the remaining 12.8 s.
-        why1 = Body("A unit needs a minimum size before it can be measured at all,",
-                    font_size=22, color=INK).move_to([0, -0.20, 0])
-        why2 = Body("so genomes without enough near relatives are assigned but not analysed.",
-                    font_size=22, color=INK).next_to(why1, DOWN, buff=0.18)
-        self.play(FadeIn(why1, run_time=0.8))                            # -> 25.4
-        self.wait(3.4)                                                   # -> 28.8
-        self.play(FadeIn(why2, run_time=0.8))                            # -> 29.6
-        self.wait(3.6)                                                   # -> 33.2
+        why = Body("A unit needs a minimum size before it can be measured at all,\n"
+                   "so genomes without enough near relatives are assigned but not analysed.",
+                   font_size=22, color=INK, line_spacing=0.8).move_to([0, -0.35, 0])
+        self.play(FadeIn(why, run_time=0.8))                             # -> 23.8
+        self.wait(3.6)   # 2.4 -> 3.6, tail redistributed
 
         units = count_chip("85", "analysis units", "ours", value_size=44)
         units.move_to([0, -1.75, 0])
-        self.play(FadeIn(units, run_time=0.7))                           # -> 33.9
-        self.wait(3.4)                                                   # -> 37.3
-        self.play(FadeOut(VGroup(why1, why2), run_time=0.6))             # -> 37.9
-        self.wait(1.8)                                                   # -> 40.0
+        self.play(FadeIn(units, run_time=0.7))                           # -> 26.9
+        self.wait(3.5)   # 12.8 -> 3.5, tail redistributed
 
 
 # ============================================================================
@@ -512,12 +533,12 @@ class TucC1Act4(Scene):
         cap = Body("2,340 genomes, already sorted into 85 analysis units",
                    font_size=23, color=INK).move_to([0, 2.0, 0])
         self.add(cap)
-        self.wait(0.8)                                                   # -> 0.8
+        self.wait(2.0)   # 0.8 -> 2.0, tail redistributed
 
         drop = Body("Now drop the 312 into it.", font_size=26, color=INK
                     ).move_to([0, -1.85, 0])
         self.play(FadeIn(drop, run_time=0.7))                            # -> 1.5
-        self.wait(1.3)                                                   # -> 2.8
+        self.wait(3.1)   # 1.3 -> 3.1, tail redistributed
 
         # --- the funded isolates disperse through the structure -----------
         src_pt = np.array([-5.6, -1.85, 0])
@@ -535,7 +556,7 @@ class TucC1Act4(Scene):
         self.play(LaggedStart(*anims, lag_ratio=0.028, run_time=3.4))    # -> 6.7
         self.play(*[units[ui].animate.set_fill(TEAL_DK, 0.92) for ui in HIT],
                   FadeOut(flyers, run_time=0.4), run_time=0.8)           # -> 7.5
-        self.wait(3.6)                                                   # -> 11.1
+        self.wait(3.1)   # 1.2 -> 3.1, tail redistributed
 
         n276 = count_chip("276", "of the 312 enter the analysed set", "funded",
                           value_size=40)
@@ -544,58 +565,55 @@ class TucC1Act4(Scene):
                          value_size=40)
         n56.move_to([3.6, -2.0, 0])
         self.play(FadeOut(drop, run_time=0.4), FadeOut(prov, run_time=0.4),
-                  FadeIn(n276, run_time=0.7))                            # -> 11.8
-        self.wait(3.2)                                                   # -> 15.0
-        self.play(FadeIn(n56, run_time=0.7))                             # -> 15.7
-        self.wait(4.0)                                                   # -> 19.7
+                  FadeIn(n276, run_time=0.7))                            # -> 9.4
+        self.wait(3.5)   # 1.6 -> 3.5, tail redistributed
+        self.play(FadeIn(n56, run_time=0.7))                             # -> 11.7
+        self.wait(4.1)   # 2.2 -> 4.1, tail redistributed
 
         notc = Body("Not a cluster. Not a corner.", font_size=26, color=TEAL_TXT
                     ).move_to([0, -1.25, 0])
-        self.play(FadeIn(notc, run_time=0.7))                            # -> 20.4
-        self.wait(4.4)                                                   # -> 24.8
+        self.play(FadeIn(notc, run_time=0.7))                            # -> 14.6
+        self.wait(4.6)   # 2.6 -> 4.6, tail redistributed
 
         spread = Body("A provincial collection reaching across the structure\n"
                       "of a global panel is what makes it able to answer\n"
                       "questions no single province could.",
                       font_size=23, color=INK, line_spacing=0.85).move_to([0, -1.55, 0])
-        self.play(FadeOut(VGroup(notc, n276, n56), run_time=0.5))        # -> 25.3
-        self.play(FadeIn(spread, run_time=0.8))                          # -> 26.1
-        self.wait(5.4)                                                   # -> 31.5
+        self.play(FadeOut(VGroup(notc, n276, n56), run_time=0.5))        # -> 17.7
+        self.play(FadeIn(spread, run_time=0.8))                          # -> 18.5
+        self.wait(5.4)   # 3.4 -> 5.4, tail redistributed
 
         # --- the 36 that did not enter, stated plainly --------------------
         self.play(FadeOut(spread, run_time=0.6),
                   units.animate.scale(0.86).move_to([0.85, 0.5, 0]),
-                  cap.animate.set_opacity(0.0), run_time=0.8)            # -> 32.3
+                  cap.animate.set_opacity(0.0), run_time=0.8)            # -> 22.7
 
         th = VGroup(*[funded_dot("patient" if i % 6 else "environment", r=0.062)
                       for i in range(36)])
         th.arrange_in_grid(cols=6, buff=0.12).move_to([-4.55, 0.5, 0])
         th_l = Body("36 did not enter", font_size=23, color=INK
                     ).next_to(th, DOWN, buff=0.3)
-        self.play(FadeIn(th, run_time=0.7), FadeIn(th_l, run_time=0.6))  # -> 33.0
-        self.wait(3.6)                                                   # -> 36.6
+        self.play(FadeIn(th, run_time=0.7), FadeIn(th_l, run_time=0.6))  # -> 23.4
+        self.wait(3.7)   # 1.8 -> 3.7, tail redistributed
 
-        # OVERPRINT FIXED 2026-09-17. p2 flowed down from p1 to about y = -2.55
-        # while p3 was placed absolutely at y = -2.42, so the two lines were drawn
-        # on top of each other and held illegible as the act's final state for
-        # 22.7 s. The frame audit does not test for collisions and passed it.
-        # The stack is now relative throughout and the block is raised to -1.05,
-        # which is the lowest position that clears both the source note
-        # (y -2.61 to -2.83) and the reserved bottom eighth (y < -3.0).
+        # p2 flowed to about y = -2.55 while p3 was placed absolutely at -2.42,
+        # so the two overprinted for the whole closing hold. All three are now
+        # chained off p1, which cannot collide however the text reflows.
         p1 = Body("Every one of them has a nearest unit recorded.",
-                  font_size=24, color=TEAL_TXT).move_to([0.6, -1.05, 0])
+                  font_size=24, color=TEAL_TXT).move_to([0.6, -0.85, 0])
         p2 = Body("Their lineages are too rare in the global panel for a\n"
                   "measurable unit to form around them.",
                   font_size=22, color=INK, line_spacing=0.8
-                  ).next_to(p1, DOWN, buff=0.24)
+                  ).next_to(p1, DOWN, buff=0.28)
+        self.play(FadeIn(p1, run_time=0.7))                              # -> 25.9
+        self.wait(3.6)   # 1.6 -> 3.6, tail redistributed
+        self.play(FadeIn(p2, run_time=0.7))                              # -> 28.2
+        self.wait(4.8)   # 2.4 -> 4.8, tail redistributed
+
         p3 = Body("That is a finding about the panel, not a defect in the isolates.",
-                  font_size=23, color=INK).next_to(p2, DOWN, buff=0.26)
-        self.play(FadeIn(p1, run_time=0.7))                              # -> 37.3
-        self.wait(4.0)                                                   # -> 41.3
-        self.play(FadeIn(p2, run_time=0.7))                              # -> 42.0
-        self.wait(4.4)                                                   # -> 46.4
-        self.play(FadeIn(p3, run_time=0.7))                              # -> 47.1
-        self.wait(6.9)                                                   # -> 54.0
+                  font_size=23, color=INK).next_to(p2, DOWN, buff=0.28)
+        self.play(FadeIn(p3, run_time=0.7))                              # -> 31.3
+        self.wait(3.72)   # 22.7 -> 3.72, tail redistributed (+1 frame, quantisation)
 
 
 # ============================================================================
@@ -607,7 +625,7 @@ class TucC1Act5(Scene):
         src = source_note("Frozen basis, joined per unit")
         title = Title("The same answer, a second time", font_size=34).to_edge(UP, buff=0.5)
         self.add(title, src)
-        self.wait(0.6)                                                   # -> 0.6
+        self.wait(2.0)   # 0.6 -> 2.0, tail redistributed
 
         recap = Body("The closeout found environmental isolates scattered among\n"
                      "patient isolates, with no separate environmental lineage.",
@@ -615,35 +633,35 @@ class TucC1Act5(Scene):
         recap_s = Body("That was one tree, of these 312 genomes.", font_size=22,
                        color=SRCGRAY).next_to(recap, DOWN, buff=0.3)
         self.play(FadeIn(recap, run_time=0.8))                           # -> 1.4
-        self.wait(2.8)                                                   # -> 4.2
-        self.play(FadeIn(recap_s, run_time=0.6))                         # -> 4.8
-        self.wait(3.2)                                                   # -> 8.0
+        self.wait(3.7)   # 1.6 -> 3.7, tail redistributed
+        self.play(FadeIn(recap_s, run_time=0.6))                         # -> 3.6
+        self.wait(4.1)   # 2.0 -> 4.1, tail redistributed
 
         test = Body("Test it again in a structure built independently,\n"
                     "which knew nothing about which isolate came from where.",
                     font_size=24, color=TEAL_TXT, line_spacing=0.8).move_to([0, 0.05, 0])
-        self.play(FadeIn(test, run_time=0.8))                            # -> 8.8
-        self.wait(4.2)                                                   # -> 13.0
+        self.play(FadeIn(test, run_time=0.8))                            # -> 6.4
+        self.wait(4.8)   # 2.6 -> 4.8, tail redistributed
 
         # --- the 85 units, with the mixed ones marked ---------------------
-        self.play(FadeOut(VGroup(recap, recap_s, test), run_time=0.7))   # -> 13.7
+        self.play(FadeOut(VGroup(recap, recap_s, test), run_time=0.7))   # -> 9.7
         rng = np.random.default_rng(11)
         MIXED = sorted(rng.choice(85, size=20, replace=False).tolist())
         INWIN = set(MIXED[:16])
         units = VGroup(*[unit_box(0.34, fill=TEAL_LT) for _ in range(85)])
         units.arrange_in_grid(rows=5, cols=17, buff=0.115).move_to([0, 0.75, 0])
-        self.play(LaggedStartMap(FadeIn, units, lag_ratio=0.006, run_time=1.2))  # -> 14.9
+        self.play(LaggedStartMap(FadeIn, units, lag_ratio=0.006, run_time=1.2))  # -> 10.9
         ul = Body("85 analysis units, built from 2,340 genomes",
                   font_size=22, color=INK).next_to(units, UP, buff=0.34)
-        self.play(FadeIn(ul, run_time=0.6))                              # -> 15.5
-        self.wait(2.8)                                                   # -> 18.3
+        self.play(FadeIn(ul, run_time=0.6))                              # -> 11.5
+        self.wait(3.5)   # 1.4 -> 3.5, tail redistributed
 
         self.play(*[units[i].animate.set_fill(TEAL_DK, 0.92) for i in MIXED],
-                  run_time=1.0)                                          # -> 19.3
+                  run_time=1.0)                                          # -> 13.9
         ml = Body("20 units hold both a patient isolate and an environmental one",
                   font_size=23, color=TEAL_TXT).next_to(units, DOWN, buff=0.42)
-        self.play(FadeIn(ml, run_time=0.7))                              # -> 20.0
-        self.wait(4.2)                                                   # -> 24.2
+        self.play(FadeIn(ml, run_time=0.7))                              # -> 14.6
+        self.wait(4.3)   # 2.2 -> 4.3, tail redistributed
 
         # --- the headline share --------------------------------------------
         BX, BY, BW, BH = -3.2, -0.95, 6.4, 0.6
@@ -659,29 +677,29 @@ class TucC1Act5(Scene):
                   "that also holds a patient isolate",
                   font_size=23, color=INK, line_spacing=0.8
                   ).next_to(bar, DOWN, buff=0.24)
-        self.play(FadeOut(ml, run_time=0.5))                             # -> 24.7
+        self.play(FadeOut(ml, run_time=0.5))                             # -> 17.3
         self.play(Create(bo, run_time=0.5), FadeIn(bar, run_time=0.6),
-                  FadeIn(bl, run_time=0.5))                              # -> 25.3
-        self.play(FadeIn(bt, run_time=0.7))                              # -> 26.0
-        self.wait(5.0)                                                   # -> 31.0
+                  FadeIn(bl, run_time=0.5))                              # -> 17.9
+        self.play(FadeIn(bt, run_time=0.7))                              # -> 18.6
+        self.wait(5.2)   # 3.0 -> 5.2, tail redistributed
 
         iw = Body("16 of the 20 mixed units sit inside the measurable range.",
                   font_size=23, color=SRCGRAY).move_to([0, -2.35, 0])
-        self.play(FadeIn(iw, run_time=0.6))                              # -> 31.6
-        self.wait(4.6)                                                   # -> 36.2
+        self.play(FadeIn(iw, run_time=0.6))                              # -> 22.2
+        self.wait(4.7)   # 2.4 -> 4.7, tail redistributed
 
         # --- the conclusion ------------------------------------------------
-        self.play(FadeOut(VGroup(bar, bo, bl, bt, iw), run_time=0.6))    # -> 36.8
+        self.play(FadeOut(VGroup(bar, bo, bl, bt, iw), run_time=0.6))    # -> 25.2
         c1 = Body("The same answer, from a different instrument.",
                   font_size=27, color=TEAL_TXT).move_to([0, -1.55, 0])
         c2 = Body("One local tree of 312 genomes said it. A global partition of\n"
                   "2,340 genomes, which never saw the labels, says it again.",
                   font_size=23, color=INK, line_spacing=0.8
                   ).next_to(c1, DOWN, buff=0.28)
-        self.play(FadeIn(c1, run_time=0.7))                              # -> 37.5
-        self.wait(3.0)                                                   # -> 40.5
-        self.play(FadeIn(c2, run_time=0.8))                              # -> 41.3
-        self.wait(9.7)                                                   # -> 51.0
+        self.play(FadeIn(c1, run_time=0.7))                              # -> 25.9
+        self.wait(3.9)   # 1.4 -> 3.9, tail redistributed
+        self.play(FadeIn(c2, run_time=0.8))                              # -> 28.1
+        self.wait(3.92)   # 22.9 -> 3.92, tail redistributed (+1 frame, quantisation)
 
 
 # ============================================================================
