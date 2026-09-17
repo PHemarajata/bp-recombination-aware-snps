@@ -48,20 +48,34 @@ which is the deck's own conclusion 2 rather than a new claim.
 
 ## Still open, and worth a decision
 
-**Three cluster definitions are now in circulation.** Slide 39 warns about two of
-them already: SNP clusters (45, of which 19 hold both arms) and clonal groups (57,
-of which 6 hold both arms), "not interchangeable and should be labelled explicitly
-wherever quoted". Our 85 analysis units are a third, and act 5 says **20** hold
-both. Anyone who has seen the closeout may hear 20 as a correction of 19 or 6. The
-screen labels ours "analysis units" throughout, which is probably enough, but it
-is worth knowing before the room asks.
+**The two panels are one line of work, and act 3 now says so.** Corrected by the
+project lead: there is no rival clustering to retire. The initial clustering placed
+the study isolates in a global tree, which is where the 2,773-genome framework
+comes from, and the work then added isolates to cover more countries, refined the
+clustering algorithm, and determined the detection window. The two panel sizes are
+two points on one progression.
 
-**The household negative result is in none of the four briefs.** It is closeout
-conclusion 3 and it is a strong moment for a funder: the obvious experiment was
-run and it failed honestly. There is no room for it in act 5 as cut.
+Act 3 line 2 previously said the second panel "was expanded for a different
+question", which named only one of the three changes. It now reads:
+
+> That is one line of work, not two datasets. The panel grew to cover more
+> countries, and the clustering was refined.
+
+If anyone asks what "refined" means: the first clustering leaned heavily on the
+mash distance matrix with every cluster silently capped at 200 members, so counts
+and memberships from that stage are artifacts of the cap. No clip presents them,
+and nothing load-bearing depends on them. Full note in
+`tuc_briefing/02_review/QA-two-panels-explained.md`.
+
+**The household negative result is already in clip 4, and has been strengthened.**
+An earlier version of this note said it was in none of the four briefs. That was
+wrong: `BRIEF-04` act 2 covers the nine nominated pairs and the six evaluable ones,
+and act 3 reuses `7.12` as its mechanism. What it lacked was closeout slide 21,
+the sharpest item in the deck: the closest environmental-to-patient pair in the
+whole collection, IE-0044 and IP-0196, same sequence type and same district, is
+**not** from the same household. Added.
 
 ## Lines as heard
-
 
 ### Act 1. What this project built
 
@@ -93,9 +107,9 @@ run and it failed honestly. There is no room for it in act 5 as cut.
 
 **  2.10**  These genomes have been placed in a global panel twice, and the two panels are different sizes.
 
-** 10.95**  That is one collection curated twice, not two collections. The second is larger because it was expanded for a different question.
+** 11.15**  That is one line of work, not two datasets. The panel grew to cover more countries, and the clustering was refined.
 
-** 19.41**  Here is how you can tell. Count the Thai genomes in each panel: seventeen hundred fifty four, and seventeen hundred fifty three.
+** 19.20**  Here is how you can tell. Count the Thai genomes in each panel: seventeen hundred fifty four, and seventeen hundred fifty three.
 
 ** 27.55**  Two separately built datasets would never agree that closely.
 

@@ -110,3 +110,35 @@ classifier to catch, and that an older model often has looser classifiers.
   `~/Downloads/TUC_LEGACY_MERGED_2026-09-17/narration_corrected/`, with "unit"
   applied, ready to be voiced. The four rival versions are superseded and
   `voice/` remains the oldest of them.
+
+## Series guard: the two panels are one line of work, not two clusterings
+
+**Set 2026-09-17 by the project lead, correcting an earlier note here that framed
+this as retiring a rival clustering. There is no separate closeout clustering to
+retire.**
+
+**What actually happened, and this is the version to tell.** The initial
+clustering placed the study isolates in a global tree. That is where the
+2,773-genome framework comes from. The work then moved on in three ways:
+
+1. **More isolates**, added specifically to represent more countries.
+2. **A refined clustering algorithm.**
+3. **A determined detection window**, which is clip 2's whole subject.
+
+So the two panel sizes are two points on one progression, not two competing
+datasets. The later panel exists because the first one had been built.
+
+**Why the first clustering is superseded.** It leaned heavily on the mash
+distance matrix, and **every cluster was silently capped at 200 members**. Cluster
+counts and memberships from that stage are artifacts of the cap. This is the
+answer if anyone asks what "refined" means.
+
+**No clip presents cluster results from that stage.** Checked as built: clip 1
+references them nowhere, on screen or in narration. Clip 1 act 5 corroborates the
+closeout's conclusion 2 using **our own 85 analysis units**, and that conclusion
+does not depend on any clustering: it rests on 19 shared sequence types and on
+environmental genomes sitting throughout the phylogeny.
+
+**What to watch for.** Do not reach for "six clonal groups contain both" as
+supporting evidence because it sounds like our "20 units hold both". Quote our
+units, or quote shared sequence types.

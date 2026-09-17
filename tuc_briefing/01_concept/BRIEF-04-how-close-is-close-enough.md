@@ -85,6 +85,18 @@ exclusions. None of the six linked patients fell inside the near-identical range
 that genuine matches elsewhere in the collection occupy. State it as a finding,
 not a disappointment.
 
+**Close with the fact from closeout slide 21, which is the sharpest thing in the
+deck for this clip.** The closest environmental-to-patient pair in the entire
+collection is IE-0044 and IP-0196: same sequence type, same district, Na Kae,
+near-identical genomes. **They are not from the same household.** The deck says it
+plainly, and the line is worth keeping close to verbatim: proximity on the tree is
+not the same as a confirmed transmission event.
+
+That pairing does the act's work in one object. The six real household pairs are
+far apart on the tree, and the one pair that looks like a match was never
+epidemiologically linked at all. Genomic closeness and epidemiological linkage
+came apart in both directions in the same collection.
+
 ### Act 3. Existing clip `7.12_outbreak_threshold`, revised then dropped in whole (44.9 s)
 *Entry and exit as built.* Narration as delivered, do not re-author.
 
