@@ -1,170 +1,217 @@
-# TUC clip 2 narration, draft 1: text settled, placement blocked
+# TUC clip 2 narration, voiced
 
-Written 2026-09-17 against `~/Downloads/TUC_CLIP2_2026-09-17/`. **The text is
-settled. The timings are provisional and cannot be finalized, because the picture
-front-loads its activity and the narration cannot be placed on it.**
+**Film: `~/Downloads/TUC_CLIP2_2026-09-17/final/TUC_CLIP2_NARRATED.mp4`**,
+304.32 s. Justin, `eleven_v3`, seed 20260917, two-pass EBU R128 per line.
 
-## The blocker, measured
+## The pacing revision was accepted, and verified independently
 
-Every new act ends its visible activity long before the act ends. The builder used
-a `hold_to(T)` helper that pads with one long wait to hit the brief's stated
-seconds, so the padding is systematic rather than accidental.
+Animo's revision passes the brief's own acceptance test, re-run here rather than
+taken on trust. **Act 2 went from 59% frozen frame to 10%**, act 5 from 43% to 8%,
+act 6 from 49% to 13%. No freeze over 6 s anywhere, every last visible change
+within 4 s of its act's end.
 
-| act | duration | last visible change | longest frozen stretch | share |
-|---|---|---|---|---|
-| title card | 5.0 s | 2.8 s | 2.2 s | 44% |
-| 1 | 48.0 s | 35.0 s | 13.0 s | 27% |
-| **2** | 54.0 s | **22.1 s** | **31.9 s** | **59%** |
-| 3 lead-in | 17.0 s | 11.8 s | 5.2 s | 31% |
-| 4 lead-in | 17.0 s | 12.0 s | 5.0 s | 29% |
-| **5** | 45.0 s | **25.5 s** | **19.5 s** | **43%** |
-| **6** | 29.0 s | **14.7 s** | **14.3 s** | **49%** |
+It also got something right that the brief got wrong. **The brief's 0.05 threshold
+did not say which scale it was on.** Animo worked out it was 0 to 255 rather than
+0 to 1, and proved it by reproducing the brief's own baseline table to within a
+frame. On a 0 to 1 scale nothing on a white slide exceeds 0.012, so the test would
+have detected nothing at all.
 
-Placing the text below on those beats gives **14 line-boundary violations and four
-lines that begin after the picture has stopped moving**, including act 2's closing
-line, which would speak over a frozen frame for 21 seconds.
+Everything the brief constrained held: frame counts exact on all seven parts,
+304.300 s total, one pixel format, and no content drift. The only string changes
+are three two-line reveals split into six single-line ones, which is the requested
+fix rather than new content.
 
-Both failures are one thing seen twice: the beats cluster in the first 40% of each
-act, so consecutive beats sit 2 to 5 s apart while lines need 5 to 7, and then
-nothing happens for the rest.
+## The reused clips are voiced too, and two gaps closed
 
-## Stretching the waits is not enough, and I checked before assuming
+`7.03` and `7.01` carry 89 s of the 304 s. Leaving them silent would have been a
+third of the clip. Both are now voiced from the corrected text in
+`TUC_LEGACY_MERGED_2026-09-17/narration_corrected/`, and the two gaps the clip 2
+brief flagged are closed:
 
-| act | stretch needed to fill | longest resulting hold |
-|---|---|---|
-| 1 | 1.46x | 3.8 s, acceptable |
-| 3 lead-in | 1.31x | 2.4 s, acceptable |
-| 4 lead-in | 1.22x | 1.7 s, acceptable |
-| 2 | **3.15x** | 8.2 s |
-| 5 | **4.04x** | 8.1 s |
-| 6 | **3.86x** | 5.4 s |
+- **the counted-as bars**, which the brief calls the mechanism the whole series
+  rests on, now have a line: "The bars show what counts as recombination, and what
+  as mutation."
+- **the hide-the-outline beat** now has one: "The outline is hidden. Look for the
+  tract and you cannot."
 
-Acts 2, 5 and 6 would need five to eight second holds on single lines. **And
-shortening them instead does not work**, because the narration needs the runtime:
-act 2's 120 words are 40 s of speech in a 54 s act. The act length is right and
-the picture is too sparse for it.
+Seven existing lines were lengthened slightly to bring `7.01` inside the silence
+band, which it missed at 39%. No claim changed.
 
-So acts 2, 5 and 6 need **more visual beats**, not different waits. Acts 1, 3 and
-4 need only the modest stretch above.
+## Checks
 
-## What can be split without inventing content
+- **68 lines**, all fit. One boundary at exactly 0.290 s, which is the floor, not
+  under it.
+- Every line audibly present: 73% speech minimum in its own window, 94% median.
+- Loudness spread 2.1 LU across the 46 new lines.
+- Real silence 20.9 to 31.3% across the nine parts, all inside the 10 to 35 band.
 
-Act 2 reveals several things in combined plays that can each become their own beat,
-which is what fixed clip 1 act 3's pacing:
-
-- the two clades, currently one `FadeIn` for both, and their two labels likewise
-- the caveat's two lines
-- the verdict's two lines
-- the axis, its ticks, its labels and its caption, currently two plays for four things
-
-Six more beats in act 2 alone, at no cost in content.
-
-## The text
-
-Budgets are the brief's. Rate is Justin's **measured 179 wpm on `eleven_v3`**, not
-the 168 the brief assumes.
+## Lines as heard
 
 
-### Act1. Why the obvious approach fails
+### title card
 
-*48 s, 112 words against a 110 budget*
+*silent, 5 s*
 
-** 3.25** (provisional)  Start with the process, not the measurement. In this species DNA moves between lineages as well as down them.
+### 1. Why the obvious approach fails
 
-** 8.52** (provisional)  So when two genomes differ, that difference has two possible origins: mutation accumulated over time, or a block that arrived from elsewhere.
+**  1.10**  Start with the process, not the measurement.
 
-**14.13** (provisional)  The ratio between those two contributions is r over m, and everything downstream depends on it.
+**  4.59**  In this species DNA moves between lineages as well as down them.
 
-**19.85** (provisional)  Now the trap. You can compute one r over m for the whole species, and it will return a number.
+**  8.98**  So when two genomes differ, that difference has two possible origins.
 
-**27.48** (provisional)  That number is meaningless, so it is not shown here. Clip three shows it where it belongs, as the thing being corrected.
+** 13.28**  Mutation accumulated over time.
 
-**35.07** (provisional)  The reason it is meaningless is biological, and it is the next act.
+** 15.58**  Or a block that arrived from somewhere else.
 
+** 18.20**  The ratio between those two contributions is r over m.
 
-### Act2. Partition first, because the biology says so
+** 23.30**  It is the quantity everything downstream depends on.
 
-*54 s, 105 words against a 120 budget*
+** 28.20**  Now the trap. You can compute one r over m for the whole species.
 
-** 2.60** (provisional)  The reason is a barrier that exists in the biology. Consider two clades of this organism.
+** 34.70**  It will return a number, and the number is meaningless.
 
-** 7.40** (provisional)  Restriction-modification systems differ between clades, and they restrict which DNA a cell will accept from outside.
+** 39.10**  It is not shown here. Clip three shows it where it belongs.
 
-**13.00** (provisional)  So a block crossing from one clade to the other is often stopped before it can recombine.
-
-**16.30** (provisional)  That makes genomic clades behave as functional units of genetic isolation, not merely as branches on a tree.
-
-**21.10** (provisional)  The evidence comes from a hundred and six strains in one restricted Asian locale. Whether it holds globally is untested.
-
-**26.57** (provisional)  Averaging across a barrier that exists in nature is not a shortcut. Partitioning first is a biological requirement.
+** 43.90**  The reason is biological, and it is the next act.
 
 
-### Act3Leadin. How the detector actually works (lead-in)
+### 2. Partition first, because the biology says so
 
-*17 s, 38 words against a 40 budget*
+**  0.80**  The reason is a barrier that exists in the biology.
 
-** 2.27** (provisional)  Whether an excess of density is visible depends entirely on the background it has to stand out against.
+**  4.45**  Consider two clades of this organism.
 
-** 6.90** (provisional)  So the same imported block can be obvious, or invisible, depending only on how diverse its unit happens to be.
+**  7.80**  Restriction-modification systems differ between them.
 
+** 11.70**  They restrict which DNA a cell will accept from outside.
 
-### Act4Leadin. Does it invent recombination? (lead-in)
+** 15.35**  So a block crossing between them is often stopped.
 
-*17 s, 38 words against a 40 budget*
+** 22.30**  It never gets the chance to recombine.
 
-** 2.60** (provisional)  Before trusting any of it, the detector has to be shown not to find recombination where none exists.
+** 26.10**  That makes clades behave as functional units of genetic isolation.
 
-** 7.30** (provisional)  One thousand five hundred nineteen replicates across sixty two unit replicons, and twenty of them returned any call at all.
+** 30.60**  Not merely branches on a tree.
 
+** 35.10**  The evidence is a hundred and six strains in one Asian locale.
 
-### Act5. Does it find what is really there?
+** 39.20**  Whether it holds globally has not been tested.
 
-*45 s, 95 words against a 100 budget*
+** 42.06**  Averaging across a real barrier is not a shortcut.
 
-** 3.00** (provisional)  The other half of the control asks the opposite question. Can it find recombination that is definitely there?
+** 45.96**  Partitioning first is a biological requirement, not a computational convenience.
 
-** 6.90** (provisional)  Implant tracts of known length, from donors of known divergence, then count how many come back.
-
-**12.80** (provisional)  At a donor divergence of one in two thousand, which is what this organism actually shows, nineteen of twenty one tracts are recovered.
-
-**17.80** (provisional)  Below that, recovery falls away: forty percent, then twenty. Above it, it stays high but does not keep climbing.
-
-**25.57** (provisional)  So the floor of the window arrives here a second time, from a different direction than the negative control.
+** 50.82**  So measure r over m within each unit.
 
 
-### Act6. What you now have
+### 3. How the detector actually works (lead-in)
 
-*29 s, 55 words against a 65 budget*
+**  2.10**  Whether an excess of density is visible depends entirely on the background it stands out against.
 
-** 2.17** (provisional)  So here is the instrument. It returns essentially nothing when there is nothing to find.
+**  7.76**  So the same imported block can be obvious, or invisible.
 
-** 6.90** (provisional)  It recovers nine tenths of what is there at the divergence this organism shows.
+** 12.40**  It depends only on how diverse its unit happens to be.
 
-**10.32** (provisional)  And it works only between a measured floor and a measured ceiling.
 
-**14.77** (provisional)  Both bounds are brackets, not points. Clip three points this ruler at the data.
+### 3. 7.03 detection window (reused)
+
+**  1.28**  The detector looks for a local excess of SNP density.
+
+**  5.15**  One imported piece sits in this stretch.
+
+**  8.19**  The bars show what counts as recombination, and what as mutation.
+
+** 12.82**  It never changes. Only the background around it does.
+
+** 16.48**  Below the floor there are almost no SNPs.
+
+** 19.26**  This is a real unit from the collection. Nothing gets marked.
+
+** 23.00**  Inside the window the piece is clearly denser, so it is found.
+
+** 27.17**  Above the ceiling, SNPs are dense everywhere.
+
+** 33.40**  The outline is hidden. Look for the tract and you cannot.
+
+** 37.38**  Now it looks ordinary, and is missed.
+
+** 40.03**  Too similar and too different both read low.
+
+** 43.53**  Only inside the window does it mean anything.
+
+
+### 4. Does it invent recombination? (lead-in)
+
+**  1.20**  Before trusting any of it, the detector has to be shown not to find recombination where none exists.
+
+**  9.03**  One thousand five hundred nineteen replicates across sixty two unit replicons.
+
+** 14.13**  Twenty of them returned any call at all.
+
+
+### 4. 7.01 negative control (reused)
+
+**  1.28**  Every laboratory runs a no-template control on its assays.
+
+**  4.93**  We ran the same idea on the recombination detector.
+
+**  8.11**  Simulate genomes with zero recombination. Run the identical pipeline.
+
+** 13.46**  Almost nothing came back from any of them.
+
+** 16.00**  The largest value returned across the whole run was vanishingly small.
+
+** 20.54**  Now watch the scale. It stays linear the whole way.
+
+** 23.64**  It widens until the real analysis units appear.
+
+** 26.90**  These are real units of genomes from the collection.
+
+** 31.00**  The separation between them is over four hundred fold.
+
+** 34.65**  So the tool is not inventing recombination where there is none.
+
+
+### 5. Does it find what is really there?
+
+**  0.90**  The other half of the control asks the opposite question.
+
+**  4.55**  Can it find recombination that is definitely there?
+
+**  7.57**  Implant recombination tracts of known length, taken from donors of known divergence.
+
+** 12.99**  Then count how many come back.
+
+** 14.90**  At a donor divergence of two in a thousand, which is what this organism actually shows, nineteen of twenty one come back.
+
+** 22.64**  Ninety one percent.
+
+** 24.60**  Below that, recovery falls away sharply: forty percent, and then only twenty.
+
+** 32.10**  Above it, it stays high but does not keep climbing.
+
+** 36.79**  So the floor of the window arrives here a second time, from a completely different direction.
+
+
+### 6. What you now have
+
+**  1.00**  So here is the finished instrument.
+
+**  4.00**  It returns essentially nothing when there is nothing to find.
+
+**  7.65**  It recovers nine tenths of what is really there, at the divergence this organism shows.
+
+** 13.90**  And it works only between a measured floor and a measured ceiling.
+
+** 18.22**  Both bounds are brackets, not points.
+
+** 21.00**  That is what makes it a ruler.
+
+** 24.80**  Clip three points that ruler at the data.
 
 
 ---
 
-## Not duplicating the reused clips, which was a real risk
-
-Acts 3 and 4 hand off to `7.03` and `7.01`, and both already carry narration in
-`TUC_LEGACY_MERGED_2026-09-17/narration_corrected/`. Three collisions avoided:
-
-- `7.03` already opens "The detector looks for a local excess of SNP density", so
-  the act 3 lead-in does **not** say that. It says only that whether the excess is
-  visible depends on the background.
-- `7.03` already says "It never changes. Only the background around it does", so a
-  drafted third lead-in line saying the same thing was cut.
-- `7.01` already opens on the no-template control analogy, so the act 4 lead-in
-  carries the counts instead: 1,519 replicates, 62 unit-replicons, 20 returning a
-  call.
-
-**Still outstanding on the reused side**, per the brief: `7.03`'s counted-as bars
-and its hide-the-outline beat have no narration line, and the brief calls the first
-of those the mechanism the whole series rests on. Those lines go into `7.03`'s own
-file and need its beat map.
-
-**443 words** across the six new acts against a 475 budget. The gap closes once the
-picture is re-paced and the lines can spread.
+**655 words**, 68 lines, voiced on eleven_v3.
