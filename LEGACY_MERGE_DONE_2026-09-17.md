@@ -140,3 +140,43 @@ these scenes are narrated for TUC.
 **What remains of the merge is cosmetic**: splitting the file into the house
 layout and importing `aphl_common.py` rather than carrying its own token block.
 That buys consistency, not behavior.
+
+## Nomenclature and pronunciation, applied 2026-09-17
+
+**The four "group" lines are corrected**, in
+`~/Downloads/TUC_LEGACY_MERGED_2026-09-17/narration_corrected/`. Zero "group"
+survives across all five.
+
+They were written beside the merged clips rather than into
+`ANIMO_DELIVERABLES_2026-09-09/`, deliberately. That pack has a verified
+`MANIFEST.sha256`, it has no audio, and its clips and narration are internally
+consistent with each other at "group". Editing it would break a checksum to fix a
+mismatch that does not exist inside it.
+
+**Pronunciation is handled by `say_as`, which is what it is for.** The spoken form
+and the written form differ, and `build_narration.py` emits the spoken form to CSV
+and TXT while the SRT and VTT keep the written one.
+
+| written, in captions | spoken, to the engine |
+|---|---|
+| `SNPs` | `snips` |
+| `SNP` | `snip` |
+| `isolates` | `isolits` |
+
+Verified on the rebuilt Act 2: the caption reads "Take two **isolates** and line
+their genomes up", the TXT handed to the engine reads "Take two **isolits**".
+
+**Only one synthesized line contained either word**, Act 2 line 1, so that line
+was re-recorded and Act 2 re-fitted. It still fits at 5.67 s against a 6.75 s
+slot, and the act holds at 88 words, 21.7% silence, density 126.6, all six lines
+fitting. The film was re-concatenated and re-delivered at 213.12 s; the caption
+track did not change, because the written form did not.
+
+**The `SNPs` mapping may be redundant.** "SNPs" and "snips" synthesized 2.69 s and
+2.60 s on the same sentence, and an initialism read as "ess-en-pees" would run
+about 0.4 s longer, so the engine was probably already saying "snips". The mapping
+costs nothing and removes the doubt.
+
+**None of the five clips' narration has been re-recorded**, only corrected as
+text. They carry no audio yet and will be voiced fresh for TUC at 168 wpm, where
+these corrections are inputs rather than repairs.
