@@ -120,8 +120,8 @@ headline does not depend on where in the bracket the floor is placed.
 off to clip 4.
 
 The continuity object pays off. Of the 47 in-window units, **34 contain isolates
-this project sequenced**. Six of those 34 fall below the minimum analysis size
-without them and would not exist as measurements at all. Their median r/m is
+this project sequenced**. Ten of those 34 fall below the minimum unit size of
+seven without them and would not exist as measurements at all. Their median r/m is
 **7.74** against **7.70** for all in-window units, which is the point: load-bearing
 and representative at the same time, not a biased corner.
 

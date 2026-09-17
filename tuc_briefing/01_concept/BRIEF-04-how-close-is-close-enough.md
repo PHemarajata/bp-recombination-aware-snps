@@ -154,7 +154,7 @@ way.
 
 The continuity object hands off. 312 confirmed genomes sequenced by this project,
 276 entering the analysed set, landing in 56 of 85 units and 34 of the 47
-in-window units, with 6 in-window units existing only because of them and a median
+in-window units, with 10 in-window units existing only because of them and a median
 r/m of 7.74 against 7.70 overall. Then the 36 that did not enter: their lineages
 are too rare in the global panel for a measurable unit to form. Close on what
 moves the ceiling, which is references in the right lineages, not more sequencing
