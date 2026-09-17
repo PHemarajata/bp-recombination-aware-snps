@@ -1,61 +1,64 @@
 # TUC clip 1 narration, voiced on eleven_v3
 
 **Film: `~/Downloads/TUC_CLIP1_2026-09-17/final_v3/TUC_CLIP1_NARRATED_v3.mp4`**,
-291.02 s, 1920x1080 60 fps. Captions in `narration_v3/`.
+291.02 s. Justin, `eleven_v3`, seed 20260917, two-pass EBU R128 per line.
 
-Justin (`uFIXVu9mmnDZ7dTKCBTX`), **`eleven_v3`**, seed 20260917, then two-pass EBU
-R128 per line at I -20, TP -1.5, LRA 11.
+## Two defects found in review, both fixed
 
-## Why there is also a v2 cut, and why it is not the one to use
+**Acts 3, 4 and 5 were rendered before the `Txt()` wrap fix and were never
+re-rendered.** Animo repaired the helper and re-audited the source, reporting zero
+wraps, but its own note says acts 3 to 5 were *carried over* from an earlier run.
+The source was clean and the delivered files were stale, which is why act 5's
+opening line still printed "among" on top of "patient". Re-rendered here from the
+current source with the text cache cleared. Frame counts are identical, so no
+timing moved.
 
-The first pass went out on `eleven_multilingual_v2`. That was a bad call, made on
-the reasoning that the word budgets were fitted at a rate measured on v2 and the
-models read at different speeds. The reasoning collapsed on contact with the
-audio: the 168 wpm the fit was built on was wrong anyway, and once the schedule is
-refitted from measured audio the model's rate stops mattering to the fit at all.
-v3 was the stated preference and it should not have been quietly overridden.
+**Act 5 implied a pairing that does not exist.** Corrected against the closeout
+deck rather than from memory.
 
-The v2 cut survives at `final/` for comparison. It is not the deliverable.
+## What the closeout actually says about patient and environmental isolates
 
-## Measured, both models, same script and seed
+This is the part the narration had to get right, and it is sharper than it looked.
 
-| | v2 | v3 |
-|---|---|---|
-| rate, mean | 151 wpm | **179 wpm** |
-| rate, per line | 106 to 206 | 127 to 293 |
-| lines overrunning their slot | 14 of 39 | **3 of 39** |
-| loudness spread, before normalization | 7.4 LU | **5.2 LU** |
-| loudness spread, after | 0.9 LU | 1.2 LU |
-| lines held on their written beat | 25 of 39 | **33 of 39** |
-| real silence, whole film | **17%** | 28% |
-| speech present in each line's window | 65% min, 82% median | **70% min, 91% median** |
+- The two sets are **not matched collections**. 259 clinical against 53
+  environmental, and slide 20 says outright that the clinical-only count is
+  inflated by sampling effort.
+- A household pairing sub-study **does** exist: slide 22, nine nominated pairs
+  from five patients, six evaluable after three B. thailandensis exclusions.
+- **It found nothing.** Slide 23: "Household sampling did not recover the
+  infecting strain", and none of the six linked patients fall inside the
+  near-identical range. The deck calls this a useful negative result.
+- Slide 21 makes the point directly: IE-0044 and IP-0196 are the closest
+  environmental-patient pair in the whole collection, and **they are not from the
+  same household**. "Proximity on the tree is not the same as a confirmed
+  transmission event."
 
-**v3 is better on everything except silence**, and it holds far more lines on the
-beat they were written for, which is what keeps the words matched to the picture.
+So an act that says "34 of 42 environmental isolates share a unit with a patient
+isolate" without qualification does not merely overstate. Read quickly, it sounds
+like it overturns their negative result. It does not, because a unit is coarse and
+their test was for near-identity, but the narration has to say so.
 
-**Its one real cost is dead air.** v3 reads about 19% faster, so the same script
-leaves about eleven more points of the runtime empty. **The fix for that is more
-words, not a different model.** Act 7 breached the toolchain's 35% ceiling at
-37.3% and was given five more words rather than having the gate relaxed.
+Act 5 now carries an explicit line at 28.65 s:
 
-## The nominal rate was wrong, and it matters for clips 2 to 4
+> A unit is coarse. Sharing one means one population, not a link from patient to
+> source.
 
-The briefs budget at 168 wpm. Neither model reads that: v2 came in at 151 and v3
-at 179, with spelled-out numbers the main cause. "Two thousand nine hundred
-seventy six" costs far more time per word than prose, and this script is full of
-them.
+and closes on "Same answer as the closeout, at a different scale: one population",
+which is the deck's own conclusion 2 rather than a new claim.
 
-**Budget clips 2 to 4 at about 179 wpm for v3**, roughly 6% more words than 168
-gives for the same runtime, and expect to refit from the audio regardless.
+## Still open, and worth a decision
 
-## Checks on the finished v3 audio
+**Three cluster definitions are now in circulation.** Slide 39 warns about two of
+them already: SNP clusters (45, of which 19 hold both arms) and clonal groups (57,
+of which 6 hold both arms), "not interchangeable and should be labelled explicitly
+wherever quoted". Our 85 analysis units are a third, and act 5 says **20** hold
+both. Anyone who has seen the closeout may hear 20 as a correction of 19 or 6. The
+screen labels ours "analysis units" throughout, which is probably enough, but it
+is worth knowing before the room asks.
 
-- **All 39 lines fit**, measured from the audio.
-- **No line boundary under 0.29 s.**
-- **Every line audibly present at its cue**: 70% speech minimum inside its own
-  window, 91% median, none under 30%.
-- **Loudness spread 1.2 LU**, and normalization changed no duration.
-- Real silence 17.6 to 33.5% per act, all inside the 10 to 35 gate.
+**The household negative result is in none of the four briefs.** It is closeout
+conclusion 3 and it is a strong moment for a funder: the obvious experiment was
+run and it failed honestly. There is no room for it in act 5 as cut.
 
 ## Lines as heard
 
@@ -126,13 +129,13 @@ gives for the same runtime, and expect to refit from the audio regardless.
 
 ** 22.78**  Twenty of the eighty five units hold both a patient isolate and an environmental one.
 
-** 30.27**  So count the environmental isolates that share a unit with a patient isolate.
+** 28.65**  A unit is coarse. Sharing one means one population, not a link from patient to source.
 
-** 35.78**  Thirty four of the forty two in the analysed set.
+** 35.51**  Thirty four of the forty two environmental isolates sit in one of those mixed units.
 
-** 40.54**  Sixteen of those twenty mixed units sit inside the measurable range.
+** 40.54**  Sixteen of those twenty units sit inside the measurable range.
 
-** 46.28**  The same answer, from a different instrument, at eight times the scale.
+** 45.98**  Same answer as the closeout, at a different scale: one population.
 
 
 ### Act 6. The question this makes askable
@@ -161,4 +164,4 @@ gives for the same runtime, and expect to refit from the audio regardless.
 
 ---
 
-**605 words**, voiced on eleven_v3.
+**611 words**, voiced on eleven_v3.
