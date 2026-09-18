@@ -1,15 +1,11 @@
 # Clip 2 narration: A ruler you can trust
 
-Revised 2026-09-18. 70 lines, 302.9 s. Written forms below; the engine gets the
-spoken forms through the say_as map in `beats/spec_v2.json`.
+Revised 2026-09-18. Captions (the SRT and VTT) are shown here; the engine is
+given respelled forms through the say_as map so it pronounces them correctly:
+pseudomallei as su-do-MA-lee-eye, Nakhon Phanom as Na-kon Pa-nom, and SNP
+spelled out rather than read as "snip".
 
-Every start time is set against the measured on-screen text timeline, so each
-line is spoken while the thing it names is actually up. The previous cut laid
-them out on their own schedule and ran up to eight seconds behind the picture.
-Vocabulary matches clip 3: below the window, above the window, lower and upper
-edge. See `02_review/REVISION-CLIP-02-2026-09-18.md`.
-
-## Act 1. Why the obvious approach fails
+## Clip2Act1
 
 1. Start with the process, not the measurement.
 2. In this species DNA also moves between lineages.
@@ -22,7 +18,7 @@ edge. See `02_review/REVISION-CLIP-02-2026-09-18.md`.
 9. One number averages across all that structure, and hides it.
 10. It is not shown here. Clip three shows it where it belongs.
 
-## Act 2. Partition first, because the biology says so
+## Clip2Act2
 
 1. The reason is a barrier that exists in the biology.
 2. Consider two clades of this organism.
@@ -38,13 +34,13 @@ edge. See `02_review/REVISION-CLIP-02-2026-09-18.md`.
 12. Every unit in the next two clips sits somewhere on it.
 13. So measure r over m within each unit.
 
-## Act 3 lead-in. How the detector actually works
+## Clip2Act3Leadin
 
 1. The detector scans for a local excess of SNP density.
 2. Whether that excess is visible depends entirely on the background it sits against.
 3. So the same block is obvious in one unit and invisible in another.
 
-## Act 3. The detection window (reused render)
+## DetectionWindowSweep
 
 1. The detector looks for a local excess of SNP density.
 2. One imported piece sits in this stretch, and it never changes.
@@ -58,14 +54,14 @@ edge. See `02_review/REVISION-CLIP-02-2026-09-18.md`.
 10. Too similar and too different both read low.
 11. Only inside the window does it mean anything.
 
-## Act 4 lead-in. Does it invent recombination?
+## Clip2Act4Leadin
 
 1. Before trusting it, the detector has to be shown finding nothing where there is nothing.
 2. The identical pipeline on zero-recombination simulations.
 3. Fifteen hundred nineteen replicates.
 4. Twenty returned any call at all.
 
-## Act 4. The negative control (reused render)
+## NegativeControlZoom
 
 1. Every laboratory runs a no-template control.
 2. We ran the same idea: genomes simulated with zero recombination, identical pipeline.
@@ -79,7 +75,7 @@ edge. See `02_review/REVISION-CLIP-02-2026-09-18.md`.
 10. A separation of four hundred fold and more.
 11. So the tool is not manufacturing recombination.
 
-## Act 5. Does it find what is really there?
+## Clip2Act5
 
 1. The other half of the control asks the opposite question.
 2. Implant recombination tracts of known length, taken from donors of known divergence.
@@ -91,7 +87,7 @@ edge. See `02_review/REVISION-CLIP-02-2026-09-18.md`.
 8. Nine SNPs is what this organism actually shows.
 9. Below it detection falls away. The lower edge again.
 
-## Act 6. What you now have
+## Clip2Act6
 
 1. So here is the finished instrument.
 2. It returns essentially nothing when nothing is there.

@@ -679,7 +679,10 @@ class C3Act6(Scene):
         restate = Body("7.70 stands, across the whole range.", font_size=25, color=INK
                        ).move_to([0, -2.10, 0])
         self.play(FadeIn(restate, run_time=0.7), run_time=0.7)           # 24.7
-        self.wait(3.3)                                                    # 28.0
+        # 2026-09-18: was 3.3 s. This act was the least silent in the clip at
+        # 9.4% and left no room to say the sensitivity result plainly instead of
+        # reciting four near-identical numbers.
+        self.wait(5.3)                                                    # 30.0
 
 
 class C3Act7(Scene):

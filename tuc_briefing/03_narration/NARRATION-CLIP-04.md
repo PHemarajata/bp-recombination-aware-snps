@@ -1,11 +1,9 @@
 # Clip 4 narration: How close is close enough
 
-Revised 2026-09-18. 472.8 s, 99 lines. Written forms below; the engine gets the spoken
-forms through the say_as map in `beats/spec_v2.json`.
-
-Start times are set against the measured on-screen text timeline, so each
-line is spoken while the thing it names is actually up. See
-`02_review/REVISION-SYNC-ALL-CLIPS-2026-09-18.md`.
+Revised 2026-09-18. Captions (the SRT and VTT) are shown here; the engine is
+given respelled forms through the say_as map so it pronounces them correctly:
+pseudomallei as su-do-MA-lee-eye, Nakhon Phanom as Na-kon Pa-nom, and SNP
+spelled out rather than read as "snip".
 
 ## C4Act1
 
@@ -32,14 +30,14 @@ line is spoken while the thing it names is actually up. See
 
 ## OutbreakThreshold
 
-1. In an outbreak, a snip threshold suggests two genomes share a source.
+1. In an outbreak, an SNP threshold suggests two genomes share a source.
 2. Published thresholds for this organism are very tight.
 3. The upper bound rests on one small study.
 4. This curve is the recombination share.
 5. This one is what the filter actually detects.
 6. The field between them passes through unremoved.
 7. At the edge of the band, detection is close to nothing.
-8. One published outbreak spanned a thousand snips.
+8. One published outbreak spanned a thousand SNPs.
 9. Almost none of it survived recombination filtering.
 10. So the correction matters most exactly where it is detected least.
 11. That is why the linkage question has a ceiling of its own.
@@ -55,7 +53,7 @@ line is spoken while the thing it names is actually up. See
 6. Scoring them needs one precaution, and it is not optional.
 7. A genome from a known outbreak has siblings sitting in the same panel.
 8. So hold out the whole group, not just the one genome.
-9. Sibling isolits from the same event would otherwise hand the answer straight back.
+9. Sibling isolates from the same event would otherwise hand the answer straight back.
 10. The call is then made from the rest of the panel.
 11. Correct means the predicted label equals the known one, stated before any score appears.
 

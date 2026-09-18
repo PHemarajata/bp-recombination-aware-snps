@@ -70,3 +70,33 @@ timeline before acting on it; a lead of under about 1.5 s is correct and wanted.
 **Manim returns `Text.text` with the spaces stripped.** Tokenizing it finds
 nothing, which is why the first version of the check reported zero defects on a
 film with known ones. Match by substring.
+
+## Pronunciation and a misread number, 2026-09-18 (second pass)
+
+Three review notes, all acted on.
+
+**pseudomallei and Nakhon Phanom.** The engine read both wrong in clip 1. The
+say_as map now carries `pseudomallei` to `su-do-MA-lee-eye` and `Nakhon Phanom`
+to `Na-kon Pa-nom`. The spec text holds the respelling, so the engine says it and
+the captions still print the real spelling.
+
+**SNP spelled out, not "snip".** Ten lines in clip 2 and, for series
+consistency, the two in clip 4's reused outbreak clip. `SNP` now goes to
+"ess enn pee" and `SNPs` to "ess enn peez". Clip 4's change was not asked for;
+reverse it if "snip" is wanted there. One knock-on: "a SNP threshold" became
+"an SNP threshold", because the article follows how the abbreviation is said.
+
+**The floor-sensitivity beat read as an error.** The line recited the four
+absolute medians, "seven point seven, seven point seven, seven point seven four,
+seven point seven eight", while the screen plotted DEVIATIONS from 7.70. Hearing
+7.7 twice sounded like a stutter and invited the reading that 588 was a value of
+the same quantity.
+
+It is not. **588, 700, 755 and 840 are candidate positions for the window's
+lower edge, in mean pairwise core SNPs. 7.70, 7.70, 7.74 and 7.78 are the
+in-window median r/m recomputed at each of them.** Two being identical is the
+result: moving the edge from 588 to 700 changes the median by nothing.
+
+The line now says what is drawn: "Against seven point seven zero: nothing,
+nothing, four hundredths, eight hundredths." Act 6 went 28.0 to 30.0 s to give
+it room; it had been the least silent act in the clip at 9.4%.
