@@ -274,7 +274,10 @@ class TucC1Act1(Scene):
                      ).align_to(fs, LEFT)
         self.play(Create(rule, run_time=0.6))                            # -> 18.5
         self.play(FadeIn(hinge, run_time=0.7))                           # -> 19.2
-        self.wait(2.2)                                                   # -> 21.4
+        # 2026-09-18: was 2.2 s. Four findings are on screen here and 2.2 s is
+        # not long enough to say them, so the narration finished describing them
+        # after they had been wiped. The time comes out of the closing hold.
+        self.wait(7.2)                                                   # -> 26.4
 
         self.play(FadeOut(VGroup(fs, rule, hinge), run_time=0.8))        # -> 22.2
         conf.move_to([0, 1.88, 0])
@@ -282,8 +285,8 @@ class TucC1Act1(Scene):
                   FadeIn(conf, run_time=0.8), run_time=0.8)              # -> 23.0
         prov = Body("One province. Nakhon Phanom.", font_size=24, color=INK
                     ).move_to([0, 1.12, 0])
-        self.play(FadeIn(prov, run_time=0.7))                            # -> 23.7
-        self.wait(10.1)                                                  # -> 34.0
+        self.play(FadeIn(prov, run_time=0.7))                            # -> 28.7
+        self.wait(5.1)                                                   # -> 33.8
 
 
 # ============================================================================
@@ -397,7 +400,7 @@ class TucC1Act2(Scene):
         self.play(FadeIn(plan, run_time=0.7))                            # -> 25.6
         self.wait(1.0)                                                   # -> 26.6
         self.play(FadeIn(plan_s, run_time=0.7))                          # -> 27.3
-        self.wait(2.6)                                                   # -> 29.9
+        self.wait(6.6)                                                   # -> 33.9
 
         # --- the one quinolone-associated determinant, one clause ---------
         self.play(FadeOut(VGroup(eleven, el_l, plan, plan_s), run_time=0.6))  # -> 30.5
@@ -410,8 +413,8 @@ class TucC1Act2(Scene):
                    font_size=23, color=SRCGRAY, line_spacing=0.8
                    ).next_to(gy, DOWN, buff=0.28).align_to(gy, LEFT)
         self.play(FadeIn(gy, run_time=0.7))                              # -> 31.2
-        self.play(FadeIn(gy2, run_time=0.7))                             # -> 31.9
-        self.wait(2.4)                                                   # -> 34.3
+        self.play(FadeIn(gy2, run_time=0.7))                             # -> 35.9
+        self.wait(4.4)                                                   # -> 40.3
 
         # --- set the topic aside, explicitly ------------------------------
         self.play(FadeOut(VGroup(le, gy, gy2), run_time=0.6))            # -> 34.9

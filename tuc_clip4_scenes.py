@@ -882,7 +882,10 @@ class C4Act7(Scene):
         self.play(Indicate(VGroup(rows[0], rows[1]), color=TEAL_TXT,
                            scale_factor=1.02, run_time=1.0), run_time=1.0)  # 69.0
         self.wait(3.0)                                                      # 72.0
-        self.wait(5.8)                                                      # 77.0
+        # 2026-09-18: was 5.8 s. The act closed on 8.8 s of held frame, and the
+        # narration had been stretched backwards to cover it, which put four
+        # lines up to eight seconds behind their own slides.
+        self.wait(1.5)                                                      # 72.7
 
 
 # ============================================================================

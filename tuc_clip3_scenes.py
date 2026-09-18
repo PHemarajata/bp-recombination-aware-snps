@@ -365,7 +365,10 @@ class C3Act2(Scene):
         iqr = Body("Half of them fall between 5.72 and 9.41.", font_size=23,
                    color=TEAL_TXT).move_to([-3.55, ROW_BELOW, 0], aligned_edge=LEFT)
         self.play(FadeIn(iqr, run_time=0.6), run_time=0.6)              # 27.6
-        self.wait(3.4)                                                   # 31.0
+        # EXTENDED 2026-09-18 from 3.4 s. Five measured facts are on screen here
+        # and 3.4 s is not long enough to say them, so the narration finished
+        # describing the rows well after they had been wiped.
+        self.wait(8.4)                                                   # 36.0
 
         # --- the contrast, which is the whole act ----------------------
         # Values live in the top band, never over a mark, so a number can never
@@ -436,7 +439,7 @@ class C3Act3(Scene):
         self.wait(1.0)                                                    # 1.0
 
         # the single most important idea in the series, stated slowly
-        l1 = Body("A unit below the floor does not have little recombination.",
+        l1 = Body("A unit below the window is not a unit with little recombination.",
                   font_size=26, color=INK).move_to([0, 2.55, 0])
         # the picture is held but recedes: dim the marks so the re-reading text
         # is legible over them. Nothing new appears, which the stillness keeps.
