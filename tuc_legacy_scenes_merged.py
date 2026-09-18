@@ -548,9 +548,9 @@ A7L, A7R, A7Y = -2.00, 3.05, -2.55
 R7P, R7_1, R7_2, R7_3 = -0.15, -0.85, -1.45, -2.05
 PFX7, NAME7, NUM7, RM7, CLS7 = -6.30, -5.32, -3.10, 3.95, 5.40
 PAR7 = ("strain_1_L1_26", 153, 1310, 4.47, "in window")
-KID7 = [("strain_1_L1_26", 98, 72, 1.07, "below floor", R7_1),
+KID7 = [("strain_1_L1_26", 98, 72, 1.07, "below window", R7_1),
         ("strain_1_L1_36", 47, 1477, 6.68, "in window", R7_2),
-        ("strain_1_L1_37", 8, 123, 2.63, "below floor", R7_3)]
+        ("strain_1_L1_37", 8, 123, 2.63, "below window", R7_3)]
 sxd7 = lambda d: A7L + (math.log10(d) - 1.0) / (math.log10(3000.0) - 1.0) * (A7R - A7L)
 
 
@@ -622,8 +622,8 @@ class RecursiveSubdivision(Scene):
         axcap.move_to([A7R, A7Y - 0.74, 0]).align_to([A7R, 0, 0], RIGHT)
         fl = DashedLine([sxd7(700), A7Y, 0], [sxd7(700), R7P + 0.42, 0], color=INK,
                         stroke_width=2, dash_length=0.10)
-        flb = L("floor 700", 20, INK, emph=True).next_to(fl, UP, buff=0.10)
-        blb = L("below the floor", 20, GRAY).move_to([(A7L + sxd7(700)) / 2, R7P + 0.50, 0])
+        flb = L("edge 700", 20, INK, emph=True).next_to(fl, UP, buff=0.10)
+        blb = L("below the window", 20, GRAY).move_to([(A7L + sxd7(700)) / 2, R7P + 0.50, 0])
         self.play(Create(axis), FadeIn(ticks, lag_ratio=0.15), FadeIn(axcap),
                   Create(grid, lag_ratio=0.18), run_time=1.1)              # 19.4
         self.play(Create(fl), FadeIn(flb), FadeIn(blb), run_time=0.8)      # 20.5
@@ -681,7 +681,7 @@ class RecursiveSubdivision(Scene):
         self.play(Create(arc), FadeIn(dlab), run_time=1.0)                 # 30.2
         self.wait(1.2)                                                     # 31.2
 
-        c = L("No rate can be interpreted for the two that fell below the floor.", 21)
+        c = L("No rate can be interpreted for the two that fell below the window.", 21)
         c.move_to([0, 1.00, 0])
         self.play(FadeIn(c, shift=UP * 0.2), run_time=0.9)                 # 32.4
         self.wait(2.4)                                                     # 33.3

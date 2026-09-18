@@ -166,6 +166,40 @@ class CollisionCheck:
                 REPORT.append((t, m.text[:46],
                                "<drawn over %d marks>" % hits, 1.0))
 
+        # text must not be cut by the edge of a shaded zone. THE BAND BLIND SPOT:
+        # the marks check above deliberately ignores any shape bigger than the
+        # text, because sitting inside a background panel is normal. A shaded
+        # band is exactly such a shape, so a line laid across its boundary --
+        # half on the tint, half on the page -- passed every check while looking
+        # broken on screen. Clip 3 shipped four of these. Inside is fine, outside
+        # is fine, straddling is the defect.
+        for m in texts:
+            tb = _box(m)
+            for other in self.mobjects:
+                for sub in other.get_family():
+                    if id(sub) in glyphs or len(sub.points) == 0:
+                        continue
+                    try:
+                        op = float(sub.get_fill_opacity())
+                        r, g, b = sub.get_fill_color().to_rgb()
+                    except Exception:
+                        continue
+                    # any tint distinguishable from the white page, however pale.
+                    # The house band is #E2E9EC, which the white-text test calls
+                    # white; that threshold is wrong for this question.
+                    if op < 0.5 or (1.0 - min(r, g, b)) < 0.03:
+                        continue
+                    ob = _box(sub)
+                    if (ob[1]-ob[0]) * (ob[3]-ob[2]) <= (tb[1]-tb[0]) * (tb[3]-tb[2]):
+                        continue          # not a zone, handled as a mark
+                    if _overlap(tb, ob) <= 0:
+                        continue          # fully outside
+                    inside = (ob[0] <= tb[0] and ob[1] >= tb[1]
+                              and ob[2] <= tb[2] and ob[3] >= tb[3])
+                    if not inside:
+                        REPORT.append((t, m.text[:46],
+                                       "<cut by the edge of a shaded zone>", 1.0))
+
         # white text has to sit entirely on something dark, or it disappears
         for m in texts:
             if not _is_white(m):

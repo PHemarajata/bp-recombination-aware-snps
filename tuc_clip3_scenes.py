@@ -145,6 +145,17 @@ UNITS = [
 ]
 
 
+# The band is 1.9 tall about UY, so it reaches 1.05 at the top and -0.85 at the
+# bottom. Text laid across either edge is half on the tint and half on the page
+# and reads as broken. Clip 3 shipped ten of these because "the gap above the
+# axis" was taken to start at -0.75. Exactly one text row fits above the band
+# and exactly one fits below it; put every line on one of them.
+BAND_TOP  =  1.05
+BAND_BOT  = -0.85
+ROW_ABOVE =  1.36
+ROW_BELOW = -1.18
+
+
 # ---- unit-mark helpers -----------------------------------------------------
 ORANGE = "#E37C1D"                  # above-ceiling class only
 UY = 0.10                          # baseline y for the unit strip
@@ -300,7 +311,7 @@ class C3Act2(Scene):
         # --- apply the window ------------------------------------------
         band = window_band()
         b_lab = Body("the measured window", font_size=21, color=INK)
-        b_lab.move_to([(div_x(FLOOR) + div_x(CEIL)) / 2, 1.28, 0])
+        b_lab.move_to([(div_x(FLOOR) + div_x(CEIL)) / 2, ROW_ABOVE, 0])
         self.play(FadeOut(VGroup(naive, nv, corr), run_time=0.5),
                   run_time=0.5)                                           # 8.5
         self.play(FadeIn(band, run_time=0.8), FadeIn(b_lab, run_time=0.6),
@@ -318,15 +329,17 @@ class C3Act2(Scene):
 
         # --- three class rows, each with count, median, genome count ---
         ROWS = [
-            ("In-window",     "47 units",  "7.70", "1,388 genomes", TEAL_TXT),
-            ("Below floor",   "12 units",  "1.32", "349 genomes",   RUST),
-            ("Above ceiling", "26 units",  "2.14", "603 genomes",   ORANGE),
+            ("In the window",    "47 units",  "7.70", "1,388 genomes", TEAL_TXT),
+            ("Below the window", "12 units",  "1.32", "349 genomes",   RUST),
+            ("Above the window", "26 units",  "2.14", "603 genomes",   ORANGE),
         ]
         LX = -6.05
-        head_u = Body("units", font_size=20, color=SRCGRAY).move_to([-0.05, 2.62, 0])
-        head_m = Body("median r/m", font_size=20, color=SRCGRAY).move_to([1.75, 2.62, 0])
-        head_g = Body("genomes", font_size=20, color=SRCGRAY).move_to([3.75, 2.62, 0])
-        RY = [2.15, 1.65, 1.15]
+        head_u = Body("units", font_size=20, color=SRCGRAY).move_to([-0.05, 2.82, 0])
+        head_m = Body("median r/m", font_size=20, color=SRCGRAY).move_to([1.75, 2.82, 0])
+        head_g = Body("genomes", font_size=20, color=SRCGRAY).move_to([3.75, 2.82, 0])
+        # RAISED 2026-09-18 from [2.15, 1.65, 1.15]: the third row sat at 1.15 and
+        # its median and genome count were cut by the top edge of the band.
+        RY = [2.36, 1.86, ROW_ABOVE]
         built = []
         for i, (nm, un, md, gn, col) in enumerate(ROWS):
             sw = Square(side_length=0.20, stroke_width=0).set_fill(col, 1.0
@@ -346,9 +359,11 @@ class C3Act2(Scene):
         self.play(FadeIn(built[2], run_time=0.8), run_time=0.8)          # 23.8
         self.wait(3.2)                                                   # 27.0
 
-        # MOVED 2026-09-18 from y 0.62, the top edge of the unit strip.
-        iqr = Body("In-window IQR is 5.72 to 9.41.", font_size=23, color=TEAL_TXT
-                   ).move_to([-3.55, -0.95, 0], aligned_edge=LEFT)
+        # MOVED 2026-09-18 from y 0.62, the top edge of the unit strip, then to
+        # ROW_BELOW because -0.95 still clipped the band. "IQR" is the last piece
+        # of statistical shorthand on screen in this clip; it says the same thing.
+        iqr = Body("Half of them fall between 5.72 and 9.41.", font_size=23,
+                   color=TEAL_TXT).move_to([-3.55, ROW_BELOW, 0], aligned_edge=LEFT)
         self.play(FadeIn(iqr, run_time=0.6), run_time=0.6)              # 27.6
         self.wait(3.4)                                                   # 31.0
 
@@ -361,7 +376,7 @@ class C3Act2(Scene):
         dim = [d.animate.set_opacity(0.32) for d in strip if d.unit_c != "i"]
         self.play(*dim, run_time=0.8)                                    # 32.4
         inw = Body("Inside the window", font_size=24, color=TEAL_TXT
-                   ).move_to([-3.35, 2.45, 0])
+                   ).move_to([-3.35, 2.62, 0])
         inw_v = Body("7.70", font_size=38, color=TEAL_TXT, font=FONT_TITLE
                      ).next_to(inw, DOWN, buff=0.20)
         self.play(FadeIn(inw, run_time=0.5), FadeIn(inw_v, run_time=0.6),
@@ -369,20 +384,22 @@ class C3Act2(Scene):
         self.wait(3.9)                                                   # 37.0
 
         out = Body("Pooled outside it, 38 units", font_size=24, color=INK
-                   ).move_to([3.15, 2.45, 0])
+                   ).move_to([3.15, 2.62, 0])
         out_v = Body("1.99", font_size=38, color=INK, font=FONT_TITLE
                      ).next_to(out, DOWN, buff=0.20)
         self.play(FadeIn(out, run_time=0.5), FadeIn(out_v, run_time=0.6),
                   run_time=0.7)                                          # 37.7
         self.wait(4.3)                                                   # 42.0
 
+        # MOVED 2026-09-18 from y -0.80, which was cut by the band's lower edge.
+        # Only one text row fits below the band and the closing line needs it.
         vs = Body("Same arithmetic. Two populations of units.",
-                  font_size=25, color=INK).move_to([0, -0.80, 0])
+                  font_size=25, color=INK).move_to([0, 1.40, 0])
         self.play(FadeIn(vs, run_time=0.7), run_time=0.7)               # 42.7
         self.wait(4.3)                                                   # 47.0
 
         point = Body("The contrast between 7.70 and 1.99 is the finding.",
-                     font_size=26, color=TEAL_TXT).move_to([0, -1.24, 0])
+                     font_size=26, color=TEAL_TXT).move_to([0, ROW_BELOW, 0])
         self.play(FadeIn(point, run_time=0.7), run_time=0.7)           # 47.7
         self.wait(4.3)                                                   # 52.0
 
@@ -394,7 +411,12 @@ class C3Act2(Scene):
         settle = Body("Three classes. One of them is the measurement.",
                       font_size=24, color=INK).move_to([0, 2.55, 0])
         self.play(FadeIn(settle, run_time=0.7), run_time=0.7)          # 53.5
-        self.wait(11.5)                                                  # 65.0
+        # SHORTENED 2026-09-18 from 11.5 s. The act was padded to a stated
+        # 65 s target, so it ended with an eleven-second hold on a still frame
+        # that nothing was said over. With act 3's own lead-in that produced
+        # twelve and a half seconds of dead air, which is what a viewer hears
+        # as the audio dropping out.
+        self.wait(4.5)                                                   # 58.0
 
 
 # ============================================================================
@@ -423,19 +445,21 @@ class C3Act3(Scene):
         self.wait(4.2)                                                    # 6.0
 
         # point at the below-floor cloud
-        b_note = Body("below floor: too little diversity to find any",
-                      font_size=22, color=RUST).move_to([-3.55, 0.95, 0])
+        b_note = Body("below the window: too little diversity to find any",
+                      font_size=22, color=RUST).move_to([-3.40, ROW_ABOVE, 0])
         self.play(FadeIn(b_note, run_time=0.7), run_time=0.7)           # 6.7
         self.wait(4.3)                                                    # 11.0
 
         l2 = Body("The detector returns a small number, and the small number "
-                  "means nothing.", font_size=25, color=INK).move_to([0, 1.75, 0])
+                  "means nothing.", font_size=25, color=INK).move_to([0, 1.86, 0])
         self.play(FadeIn(l2, run_time=0.8), run_time=0.8)               # 11.8
         self.wait(4.2)                                                    # 16.0
 
         # point at the above-ceiling cloud
-        a_note = Body("above ceiling: so much the estimate collapses",
-                      font_size=22, color=ORANGE).move_to([3.35, 0.95, 0])
+        # MOVED 2026-09-18. At y 0.95 this label was printed across the shaded
+        # window itself, which is the one thing on screen it is not about.
+        a_note = Body("above the window: the estimate falls apart",
+                      font_size=22, color=ORANGE).move_to([3.15, ROW_ABOVE, 0])
         self.play(FadeIn(a_note, run_time=0.7), run_time=0.7)           # 16.7
         self.wait(4.3)                                                    # 21.0
 
@@ -447,20 +471,25 @@ class C3Act3(Scene):
         rule = Line([-4.6, 1.55, 0], [4.6, 1.55, 0], stroke_width=2.0, color=TEAL)
         big = Body("A low ratio is a detection failure, not a quiet genome.",
                    font_size=30, color=TEAL_TXT).move_to([0, 2.10, 0])
-        self.play(FadeOut(VGroup(l1, l2), run_time=0.6),
+        # the two pointers have been read by now and the rule would cross them
+        self.play(FadeOut(VGroup(l1, l2, b_note, a_note), run_time=0.6),
                   Create(rule, run_time=0.7), run_time=0.7)             # 21.7
         self.play(FadeIn(big, run_time=0.9), run_time=0.9)              # 22.6
         self.wait(5.4)                                                    # 28.0
 
         # let it sit, then one closing clause
+        # MOVED 2026-09-18 from -0.82 and -1.26. There is room for exactly one
+        # line between the band and the axis, so these two take it in turn
+        # rather than one of them being cut by the band's lower edge.
         close = Body("Only the units inside the window are quiet or loud on purpose.",
-                     font_size=24, color=INK).move_to([0, -0.82, 0])
+                     font_size=24, color=INK).move_to([0, ROW_BELOW, 0])
         self.play(FadeIn(close, run_time=0.8), run_time=0.8)            # 28.8
         self.wait(4.2)                                                    # 33.0
 
         keep = Body("Every number outside the window is the ruler running out of range.",
-                    font_size=24, color=INK).move_to([0, -1.26, 0])
-        self.play(FadeIn(keep, run_time=0.8), run_time=0.8)             # 33.8
+                    font_size=24, color=INK).move_to([0, ROW_BELOW, 0])
+        self.play(FadeOut(close, run_time=0.5),
+                  FadeIn(keep, run_time=0.8), run_time=0.8)             # 33.8
         self.wait(6.2)                                                    # 40.0
         self.wait(8.0)                                                    # 48.0
 
@@ -487,7 +516,7 @@ class C3Act4Lead(Scene):
         self.wait(2.5)                                                    # 4.0
 
         l2 = Body("A decision taken for good reasons elsewhere in the pipeline",
-                  font_size=25, color=INK).move_to([0, 1.80, 0])
+                  font_size=25, color=INK).move_to([0, 1.86, 0])
         self.play(FadeIn(l2, run_time=0.7), run_time=0.7)               # 4.7
         self.wait(2.3)                                                    # 7.0
 
@@ -501,21 +530,27 @@ class C3Act4Lead(Scene):
                       [div_x(300), UY + 0.35, 0], buff=0.1, stroke_width=3,
                       color=INK, max_tip_length_to_length_ratio=0.12)
         l3 = Body("can move a unit out of the measurable set,",
-                  font_size=25, color=INK).move_to([0, 1.15, 0])
+                  font_size=25, color=INK).move_to([0, ROW_ABOVE, 0])
         self.play(FadeIn(l3, run_time=0.6), run_time=0.6)               # 7.6
         self.play(target.animate.move_to([div_x(300), UY + 0.35, 0]).set_color(RUST),
                   GrowArrow(arrow, run_time=0.9), run_time=0.9)          # 8.5
         self.wait(1.5)                                                    # 10.0
 
-        # MOVED 2026-09-18 from y 0.50, which was inside the unit strip.
+        # MOVED 2026-09-18 from y 0.50 (inside the unit strip), then to
+        # ROW_BELOW because -0.95 still clipped the band's lower edge.
         l4 = Body("with no one noticing the cost.", font_size=25, color=RUST
-                  ).move_to([0, -0.95, 0])
+                  ).move_to([0, ROW_BELOW, 0])
         self.play(FadeIn(l4, run_time=0.7), run_time=0.7)               # 10.7
         self.wait(1.3)                                                    # 12.0
 
+        # MOVED 2026-09-18 from y -0.30, which was inside the band AND on top of
+        # the unit marks. The opening line has been read, so it gives up its row.
         nxt = Body("Watch one real unit divide.", font_size=24, color=INK
-                   ).move_to([0, -0.30, 0])
-        self.play(FadeIn(nxt, run_time=0.7), run_time=0.7)              # 12.7
+                   ).move_to([0, 2.55, 0])
+        # The whole sentence has been read, so it clears: leaving it up while
+        # the hand-off line sits above it puts the two in the wrong reading order.
+        self.play(FadeOut(VGroup(l1, l2, l3, l4), run_time=0.5),
+                  FadeIn(nxt, run_time=0.7), run_time=0.7)              # 12.7
         self.wait(1.3)                                                    # 14.0
 
 
@@ -575,17 +610,17 @@ class C3Act5Lead(Scene):
 #  because the absolute value never appears here.
 # ============================================================================
 class C3Act6(Scene):
-    # floor candidate, in-window median at that floor
+    # lower-edge candidate, in-window median at that edge
     FLOORS = [(588, 7.70), (700, 7.70), (755, 7.74), (840, 7.78)]
 
     def construct(self):
         head = title_block("Is the window itself arbitrary?")
-        src = source_note("Floor sensitivity. In-window median at four candidate floors")
+        src = source_note("Where the lower edge sits. In-window median at four candidates")
         self.play(FadeIn(head, run_time=0.6), FadeIn(src, run_time=0.6),
                   run_time=0.6)                                           # 0.6
         self.wait(0.4)                                                    # 1.0
 
-        l1 = Body("The floor is a bracket, not a point: 588 to 755.",
+        l1 = Body("The lower edge is a range, not a point: 588 to 755.",
                   font_size=25, color=INK).move_to([0, 2.35, 0])
         self.play(FadeIn(l1, run_time=0.7), run_time=0.7)                # 1.7
         self.wait(3.3)                                                    # 5.0
@@ -607,7 +642,7 @@ class C3Act6(Scene):
                   run_time=0.5)                                           # 6.2
         self.wait(1.8)                                                    # 8.0
 
-        l2 = Body("Recompute the median at four candidate floors.",
+        l2 = Body("Recompute the median at four candidate edges.",
                   font_size=25, color=INK).move_to([0, 2.35, 0])
         self.play(FadeIn(l2, run_time=0.7), run_time=0.7)                # 8.7
         self.wait(2.3)                                                    # 11.0
@@ -618,7 +653,7 @@ class C3Act6(Scene):
             dev = med - 7.70
             y = AXY + dev * 2.0
             dot = Dot(radius=0.09, color=TEAL_DK).set_fill(TEAL_DK, 1.0).move_to([x, y, 0])
-            fl_l = Body(f"floor {fl}", font_size=20, color=INK).move_to([x, AXY - 1.45, 0])
+            fl_l = Body(f"edge {fl}", font_size=20, color=INK).move_to([x, AXY - 1.45, 0])
             dv_l = Body(f"+{dev:.2f}", font_size=21, color=TEAL_TXT
                         ).move_to([x, y + 0.32, 0])
             dots.add(dot); labs.add(VGroup(fl_l, dv_l))
@@ -633,12 +668,12 @@ class C3Act6(Scene):
                   run_time=0.7)                                           # 15.7
         self.wait(3.3)                                                    # 19.0
 
-        verdict = Body("The headline does not depend on where the floor sits.",
+        verdict = Body("The headline does not depend on where that edge sits.",
                        font_size=27, color=TEAL_TXT).move_to([0, 1.55, 0])
         self.play(FadeIn(verdict, run_time=0.8), run_time=0.8)           # 19.8
         self.wait(4.2)                                                    # 24.0
 
-        restate = Body("7.70 stands, bracket and all.", font_size=25, color=INK
+        restate = Body("7.70 stands, across the whole range.", font_size=25, color=INK
                        ).move_to([0, -2.10, 0])
         self.play(FadeIn(restate, run_time=0.7), run_time=0.7)           # 24.7
         self.wait(3.3)                                                    # 28.0
@@ -671,15 +706,15 @@ class C3Act7(Scene):
                 rings.add(Circle(radius=0.12, color=TEAL_DK, stroke_width=2.6
                                  ).move_to(d.get_center()))
         l2 = Body("Thirty-four of them contain isolates this project sequenced.",
-                  font_size=25, color=INK).move_to([0, 1.85, 0])
+                  font_size=25, color=INK).move_to([0, 1.86, 0])
         self.play(FadeOut(l1, run_time=0.4), FadeIn(l2, run_time=0.6),
                   run_time=0.6)                                           # 4.6
         self.play(LaggedStartMap(Create, rings, lag_ratio=0.05, run_time=1.4),
                   run_time=1.4)                                           # 6.0
         self.wait(3.0)                                                    # 9.0
 
-        l3 = Body("Ten of those thirty-four fall below the minimum unit size of "
-                  "seven without them.", font_size=24, color=INK).move_to([0, 2.55, 0])
+        l3 = Body("Without them, ten of those thirty-four would hold fewer than "
+                  "seven genomes.", font_size=24, color=INK).move_to([0, 2.55, 0])
         self.play(FadeOut(l2, run_time=0.4), FadeIn(l3, run_time=0.7),
                   run_time=0.7)                                           # 9.7
         self.wait(3.3)                                                    # 13.0
@@ -691,18 +726,25 @@ class C3Act7(Scene):
 
         # the two medians, in the gap above the axis
         self.play(FadeOut(VGroup(l3, l4), run_time=0.5), run_time=0.5)   # 17.5
-        fA = Body("funded units", font_size=22, color=TEAL_DK).move_to([-3.30, -0.92, 0])
-        fV = Body("7.74", font_size=32, color=TEAL_DK, font=FONT_TITLE
+        # MOVED 2026-09-18 from y -0.92. The comment above said the gap above
+        # the axis starts at -0.75; it starts at -0.85, where the band ends, so
+        # "all in-window 7.70" was cut by the band's lower edge.
+        fA = Body("the 34 funded units", font_size=22, color=TEAL_DK
+                  ).move_to([-3.55, ROW_BELOW, 0])
+        fV = Body("7.74", font_size=28, color=TEAL_DK, font=FONT_TITLE
                   ).next_to(fA, RIGHT, buff=0.26)
-        aA = Body("all in-window", font_size=22, color=TEAL_TXT).move_to([1.55, -0.92, 0])
-        aV = Body("7.70", font_size=32, color=TEAL_TXT, font=FONT_TITLE
+        aA = Body("all 47 in-window units", font_size=22, color=TEAL_TXT
+                  ).move_to([1.75, ROW_BELOW, 0])
+        aV = Body("7.70", font_size=28, color=TEAL_TXT, font=FONT_TITLE
                   ).next_to(aA, RIGHT, buff=0.26)
         self.play(FadeIn(VGroup(fA, fV), run_time=0.7), run_time=0.7)    # 18.2
         self.wait(1.8)                                                   # 20.0
         self.play(FadeIn(VGroup(aA, aV), run_time=0.7), run_time=0.7)    # 20.7
         self.wait(3.3)                                                   # 24.0
 
-        point = Body("Load-bearing and representative at the same time.",
+        # REWORDED 2026-09-18. "Load-bearing and representative" is a phrase
+        # from the grant, not a sentence anyone hears once and understands.
+        point = Body("Ten units depend on them. The number does not.",
                      font_size=26, color=TEAL_TXT).move_to([0, 2.55, 0])
         self.play(FadeIn(point, run_time=0.8), run_time=0.8)             # 24.8
         self.wait(4.2)                                                   # 29.0
@@ -710,4 +752,6 @@ class C3Act7(Scene):
         nxt = Body("Clip four asks what this ruler can place, and what it cannot.",
                    font_size=24, color=INK).move_to([0, 1.90, 0])
         self.play(FadeIn(nxt, run_time=0.8), run_time=0.8)               # 29.8
-        self.wait(7.2)                                                   # 37.0
+        # 2026-09-18: the closing line was rewritten longer, and the film ends
+        # here, so the last words need somewhere to land.
+        self.wait(8.7)                                                   # 38.5
