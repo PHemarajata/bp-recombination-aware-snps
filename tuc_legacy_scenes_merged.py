@@ -333,9 +333,9 @@ TR_A, TR_B = 0.615, 0.775
 AX3_Y, AX3L, AX3R = -2.42, -5.30, 5.30
 FLOOR, CEIL = 700.0, 4700.0
 D3MIN = 15.0
-ANCH3 = [(243.3, "strain_4_L1_1", 1.25, "below the floor"),
+ANCH3 = [(243.3, "strain_4_L1_1", 1.25, "below the window"),
          (1284.1, "strain_1_L1_23", 7.70, "in the window"),
-         (5818.9, "strain_1_L1_11", 2.04, "above the ceiling")]
+         (5818.9, "strain_1_L1_11", 2.04, "above the window")]
 U3 = [(15.4,'below'),(40.6,'below'),(42.8,'below'),(113.9,'below'),(121.5,'below'),(211.0,'below'),(243.3,'below'),(285.6,'below'),(405.0,'below'),(511.2,'below'),(535.0,'below'),(587.6,'below'),(754.8,'in'),(797.0,'in'),(840.1,'in'),(852.2,'in'),(909.4,'in'),(1032.9,'in'),(1120.5,'in'),(1121.3,'in'),(1284.1,'in'),(1310.3,'in'),(1334.7,'in'),(1348.8,'in'),(1355.2,'in'),(1433.8,'in'),(1513.6,'in'),(1573.9,'in'),(1595.7,'in'),(1610.4,'in'),(1676.1,'in'),(1828.5,'in'),(1908.8,'in'),(1949.9,'in'),(1996.3,'in'),(2010.3,'in'),(2014.6,'in'),(2109.1,'in'),(2211.5,'in'),(2259.7,'in'),(2298.9,'in'),(2449.1,'in'),(2738.6,'in'),(3020.5,'in'),(3020.7,'in'),(3079.6,'in'),(3363.0,'in'),(3374.8,'in'),(3402.6,'in'),(3417.2,'in'),(3424.0,'in'),(3452.1,'in'),(3759.3,'in'),(3903.0,'in'),(4011.6,'in'),(4247.0,'in'),(4463.1,'in'),(4524.9,'in'),(4631.8,'in'),(4731.6,'above'),(4750.2,'above'),(4923.3,'above'),(5168.5,'above'),(5198.0,'above'),(5721.1,'above'),(5818.9,'above'),(6094.2,'above'),(6213.6,'above'),(6361.8,'above'),(6364.6,'above'),(6386.6,'above'),(6531.6,'above'),(6629.2,'above'),(6796.8,'above'),(6839.4,'above'),(6909.7,'above'),(7207.9,'above'),(7430.6,'above'),(7775.7,'above'),(8197.2,'above'),(8342.7,'above'),(8541.1,'above'),(8648.0,'above'),(8756.6,'above'),(9131.1,'above')]
 
 _r3 = random.Random(20260909)
@@ -511,9 +511,9 @@ class DetectionWindowSweep(Scene):
         self.play(FadeIn(s1), run_time=0.9)                                 # 38.5
         self.wait(3.6)                                                      # 39.4
         meds = VGroup(
-            L("below floor    median r/m 1.32", 22, RUST),
+            L("below window   median r/m 1.32", 22, RUST),
             L("in window      median r/m 7.70", 22, TEAL_D, emph=True),
-            L("above ceiling  median r/m 2.14", 22, RUST),
+            L("above window   median r/m 2.14", 22, RUST),
         ).arrange(DOWN, buff=0.16, aligned_edge=LEFT).move_to([0, 0.06, 0])
         self.play(FadeOut(s1), run_time=0.4)                                # 43.0
         self.remove(bar_r, bar_m, pct)
