@@ -58,7 +58,12 @@ import math, random
 #   weight is selected by family name and weight= is never passed.
 # ---------------------------------------------------------------------------
 
-config.background_color = "#FFFFFF"
+# Pale neutral page, matching tuc_clip3_scenes.py. PAGE is separate from WHITE
+# on purpose: WHITE is still a real ink here, used for filled boxes and for
+# white text sitting on a teal or rust fill, and repointing it would silently
+# tint those.
+PAGE = "#F0F4F5"
+config.background_color = PAGE
 
 TEAL_D = "#006E79"      # text-safe teal
 TEAL   = "#00A0AF"      # fills / strokes / marks only
@@ -66,7 +71,9 @@ TEAL_X = "#005057"
 RUST   = "#B42E34"
 PURPLE = "#9960A7"
 INK    = "#404040"
-RULE   = "#E2E9EC"
+RULE   = "#D7DEE1"      # shaded zones and gridlines. Darkened with the page:
+                        # #E2E9EC read only against pure white and loses 52% of
+                        # its contrast on #F0F4F5. See tuc_clip3_scenes.py.
 GRAY   = "#6E6E6E"
 WHITE  = "#FFFFFF"
 
@@ -143,7 +150,7 @@ INL, INR, INY = 3.30, 6.15, 2.02          # the inset, at its own fixed scale
 
 class NegativeControlZoom(Scene):
     def construct(self):
-        self.camera.background_color = WHITE
+        self.camera.background_color = PAGE
 
         t0 = T("The no-template control", 42)
         s0 = L("Every laboratory runs one. You load the reaction with no template\n"
@@ -355,7 +362,7 @@ sxd3 = lambda d: AX3L + (math.log10(d) - 1.0) / 3.0 * (AX3R - AX3L)
 
 class DetectionWindowSweep(Scene):
     def construct(self):
-        self.camera.background_color = WHITE
+        self.camera.background_color = PAGE
         d = ValueTracker(D3MIN)
         rev = ValueTracker(1.0)          # 1 = piece outlined, 0 = outline hidden
 
@@ -556,7 +563,7 @@ sxd7 = lambda d: A7L + (math.log10(d) - 1.0) / (math.log10(3000.0) - 1.0) * (A7R
 
 class RecursiveSubdivision(Scene):
     def construct(self):
-        self.camera.background_color = WHITE
+        self.camera.background_color = PAGE
         title = T("What dividing a unit costs you", 36)
         title.to_edge(UP, buff=0.42).to_edge(LEFT, buff=0.82)
         sub = L("One analysis unit, divided once, on real data", 22)
@@ -733,7 +740,7 @@ def px9(L, R, i):
 
 class TreeBuilderPaired(Scene):
     def construct(self):
-        self.camera.background_color = WHITE
+        self.camera.background_color = PAGE
         title = T("Does the tree builder change the answer?", 36)
         title.to_edge(UP, buff=0.42).to_edge(LEFT, buff=0.82)
         sub = L("Each dot is one comparison, as a ratio against RAxML. "
@@ -835,7 +842,7 @@ ANCH12 = [(404, "404", "a genuinely clonal pair"),
 
 class OutbreakThreshold(Scene):
     def construct(self):
-        self.camera.background_color = WHITE
+        self.camera.background_color = PAGE
         t0 = T("Why this reaches the outbreak call", 40)
         s0 = L("In an outbreak investigation a SNP threshold says that two genomes\n"
                "fewer than N SNPs apart probably share a source.", 24)
