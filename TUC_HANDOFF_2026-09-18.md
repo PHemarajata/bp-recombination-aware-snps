@@ -345,26 +345,32 @@ already exists, not adding to runtime.
 
 ### The delivered audio treatment, settled 2026-09-19
 
-**Current delivery: `~/Downloads/TUC_FILMS_2026-09-19_FINAL/`.** Stereo, with the
-lab's own music bed at -35 dBFS. Everything before it on disk is superseded but
-kept, so any step is revertible by swapping folders.
+**Current delivery: `~/Downloads/TUC_FILMS_2026-09-19_DELIVERY/`.** Stereo, with
+the lab's own music bed, ducked so it blooms in the pauses. Everything before it
+on disk is superseded but kept, so any step is revertible by swapping folders.
 
 ```bash
 python3 add_room_tone.py --in FILM.mp4 --out OUT.mp4 \
     --bed "~/Downloads/Softer Background Mix.mp3" \
     --bed-trim-head 3.5 --bed-trim-tail 8.0 --bed-xfade 5 \
-    --compress --stereo --level -35
+    --compress --stereo --level -32 --duck --duck-release 1500
 ```
 
 All four verified: duration held to 0.000 s, video stream bit-identical, audio
 `aac / 48000 / 2 ch`, zero windows below -60 dBFS, clean decode on both streams,
-narration moved at most 0.18 dB. The music measures -34.5 to -37.1 dBFS inside
-each film's widest narration gap, against digital zero before.
+narration moved at most 0.19 dB. The music measures **-32.0 to -34.1 dBFS inside
+each film's widest narration gap**, against digital zero before, and the achieved
+duck is 6.37 to 6.96 dB across the four.
 
--35 was chosen by ear from a ladder at -45, -41, -38 and -35, on the brief that
-the music should be **audible in the gaps** rather than merely present. At -35
-the proportion of each film below -40 dBFS is 0.0 percent, so the films are now
-continuously scored rather than speech over silence.
+How it got here. A flat ladder at -45, -41, -38 and -35 settled the level by ear
+at -35, on the brief that the music be **audible in the gaps** rather than merely
+present. Ducking then went further in the same direction: the base sits at -32 so
+the pauses are louder still, while the duck takes it to about -39 under speech,
+which is quieter than the flat build was. The films are continuously scored, with
+0.0 percent of runtime below -40 dBFS.
+
+A flat -35 build of all four is kept at `~/Downloads/TUC_FILMS_2026-09-19_FINAL/`
+if the ducking is ever unwanted.
 
 The sections below record how each piece was arrived at and what to re-measure
 if the bed is ever changed.
