@@ -215,14 +215,24 @@ def window_band(soft=False):
                      ).set_fill(GRIDGRAY, 1.0)
     band.move_to([(x0 + x1) / 2, UY, 0])
     if soft:
-        # both bounds are brackets: show the floor and ceiling as bands, not lines
-        fb = Rectangle(width=div_x(FLOOR_BR[1]) - div_x(FLOOR_BR[0]), height=1.9,
-                       stroke_width=0).set_fill(TEAL_LT, 0.7)
-        fb.move_to([(div_x(FLOOR_BR[0]) + div_x(FLOOR_BR[1])) / 2, UY, 0])
-        cb = Rectangle(width=div_x(CEIL_BR[1]) - div_x(CEIL_BR[0]), height=1.9,
-                       stroke_width=0).set_fill(TEAL_LT, 0.7)
-        cb.move_to([(div_x(CEIL_BR[0]) + div_x(CEIL_BR[1])) / 2, UY, 0])
-        return VGroup(band, fb, cb)
+        # Both bounds are brackets: show the floor and ceiling as bands, not
+        # lines. The two are wildly different widths and that is the honest
+        # picture: (588, 755] spans 0.109 of a log decade and renders about 54
+        # px, while (4632, 4732] spans 0.0093 and renders about 4.6 px.
+        #
+        # At 4.6 px a fill alone is not a bracket, it is nothing. A fill at
+        # 1.28 contrast on the band disappeared entirely, so the narration said
+        # "both bounds are ranges" over a picture showing one. Both brackets
+        # therefore carry a stroke, which survives at any width. The WIDTHS stay
+        # true: do not put a floor on them, because the upper bound really is
+        # about twelve times tighter and that is information.
+        def bracket(lo, hi):
+            r = Rectangle(width=div_x(hi) - div_x(lo), height=1.9,
+                          stroke_width=1.6, stroke_color=TEAL_TXT
+                          ).set_fill(TEAL_LT, 0.85)
+            r.move_to([(div_x(lo) + div_x(hi)) / 2, UY, 0])
+            return r
+        return VGroup(band, bracket(*FLOOR_BR), bracket(*CEIL_BR))
     return VGroup(band)
 
 
@@ -572,20 +582,60 @@ class C3Act4Lead(Scene):
 #  Entry: as act 4 leaves it.  Exit: hands to TreeBuilderPaired.mp4 (26.6 s).
 # ============================================================================
 class C3Act5Lead(Scene):
+    """2026-09-19 rewrite. This act used to open on an empty page, a title
+    fading up over nothing, straight after RecursiveSubdivision's dense full
+    frame. The screen went from full to blank in one cut, which is most of why
+    the seam read as a slide change rather than a continuation.
+
+    It now opens on the clip's own continuity object, the 85 units on the
+    diversity axis, already there at frame one with nothing to fade. The bridge
+    to the tree is then literally true rather than decorative: one in-window
+    unit lights up and the tree GROWS OUT OF IT, because that is what an r/m
+    estimate is, a tree built from that unit's alignment. The stage leaves only
+    once it has handed over.
+
+    Total stays 14.0 s and every beat still lands before its narration line
+    (1.10, 6.76, 9.94), so nothing downstream moves.
+    """
+
     def construct(self):
         head = title_block("The tree underneath the number")
         src = source_note("r/m is estimated on a tree")
-        self.play(FadeIn(head, run_time=0.6), FadeIn(src, run_time=0.6),
-                  run_time=0.6)                                           # 0.6
-        self.wait(0.4)                                                    # 1.0
+        axis = axis_line()
+        strip = unit_strip(states="class")
+        band = window_band()
+        band.set_z_index(-1)
+        # Instant, not a fade. The previous part ends on a full frame; this one
+        # has to start on one.
+        self.add(head, src, axis, band, strip)
+        self.wait(0.5)                                                    # 0.5
+
+        # Pick one real in-window unit to carry the handover. Chosen by data,
+        # the in-window unit nearest the middle of the window, so it is a unit
+        # the viewer has been looking at rather than an invented mark.
+        target = min((d for d in strip if d.unit_c == "i"),
+                     key=lambda d: abs(d.unit_d - 2000.0))
+        ring = Circle(radius=0.20, color=TEAL_DK, stroke_width=2.6
+                      ).move_to(target.get_center())
+        self.play(target.animate.scale(1.9), FadeIn(ring, run_time=0.5),
+                  run_time=0.6)                                           # 1.1
 
         l1 = Body("Every ratio was estimated on a tree.", font_size=27, color=INK
-                  ).move_to([0, 2.10, 0])
-        self.play(FadeIn(l1, run_time=0.7), run_time=0.7)               # 1.7
-        self.wait(2.3)                                                    # 4.0
+                  ).move_to([0, 2.25, 0])
+        self.play(FadeIn(l1, run_time=0.6), run_time=0.6)                # 1.7
+        self.wait(0.6)                                                    # 2.3
 
-        # a small schematic tree
+        # The stage hands over: it leaves, the chosen unit stays and becomes the
+        # root of its own tree.
         root = [-0.2, 1.15, 0]
+        rest = VGroup(*[d for d in strip if d is not target])
+        self.play(FadeOut(rest, run_time=0.9), FadeOut(band, run_time=0.9),
+                  FadeOut(axis, run_time=0.9),
+                  target.animate.move_to(root),
+                  ring.animate.move_to(root),
+                  run_time=1.0)                                           # 3.3
+        self.wait(0.2)                                                    # 3.5
+
         a = [-1.7, -0.35, 0]; b = [-0.55, -0.35, 0]; c = [1.35, -0.35, 0]
         mid = [0.4, 0.42, 0]
         tree = VGroup(
@@ -597,19 +647,24 @@ class C3Act5Lead(Scene):
         )
         tips = VGroup(*[Dot(radius=0.07, color=TEAL).set_fill(TEAL, 1.0)
                         .move_to(p) for p in (a, b, c)])
-        self.play(Create(tree, run_time=0.9), FadeIn(tips, run_time=0.6),
-                  run_time=0.9)                                           # 4.9
-        self.wait(1.1)                                                    # 6.0
+        self.play(Create(tree, run_time=1.0), run_time=1.0)               # 4.5
+        self.play(FadeIn(tips, run_time=0.5), run_time=0.5)               # 5.0
+        # Waits are frame-exact at 60 fps. 1.76 and 2.38 are not multiples of
+        # 1/60, and Manim truncating each of them cost two frames, which turns
+        # a 14.000 s part into 13.967 and shortens the film the narration was
+        # laid against.
+        self.wait(106 / 60)                                               # 6.767
 
         q = Body("Does the choice of tree builder change the answer?",
                  font_size=26, color=TEAL_TXT).move_to([0, -1.35, 0])
-        self.play(FadeIn(q, run_time=0.8), run_time=0.8)                # 6.8
-        self.wait(3.2)                                                    # 10.0
+        self.play(FadeIn(q, run_time=0.8), run_time=0.8)                # 7.567
+        self.wait(142 / 60)                                               # 9.933
 
+        # Six units by two replicons is 12 comparisons. TABLES.md Table 5.
         setup = Body("Six units, two replicons, twelve comparisons.",
                      font_size=24, color=INK).move_to([0, -2.05, 0])
-        self.play(FadeIn(setup, run_time=0.7), run_time=0.7)            # 10.7
-        self.wait(3.3)                                                    # 14.0
+        self.play(FadeIn(setup, run_time=0.7), run_time=0.7)            # 10.633
+        self.wait(202 / 60)                                               # 14.000
 
 
 # ============================================================================
@@ -627,38 +682,84 @@ class C3Act6(Scene):
     FLOORS = [(588, 7.70), (700, 7.70), (755, 7.74), (840, 7.78)]
 
     def construct(self):
+        """2026-09-19 rewrite. Like the act 5 lead-in, this used to open on an
+        empty page after a dense legacy part. Worse, an act whose entire subject
+        is "the lower edge is a range, not a point" drew no window at all and
+        asserted it in a line of text, while `window_band(soft=True)` -- written
+        to draw exactly that, both bounds as brackets -- sat unused in this file.
+
+        It now opens on the band itself, because the band IS the window being
+        questioned. The bounds visibly become brackets, the lower bracket is
+        singled out, and then that bracket TRANSFORMS into the deviation axis
+        the sensitivity is read on. The handover is the argument: this edge,
+        moved, is what we are about to test.
+
+        Total stays 30.0 s. Every beat leads its narration line (1.10, 3.40,
+        6.45, 10.86, 15.00, 22.60, 26.80) by under 1.5 s, which is the wanted
+        direction; a beat landing AFTER its line is the defect.
+        Waits are in frames at 60 fps so the part stays exactly 1800 frames.
+        """
         head = title_block("Is the window itself arbitrary?")
         src = source_note("Where the lower edge sits. In-window median at four candidates")
-        self.play(FadeIn(head, run_time=0.6), FadeIn(src, run_time=0.6),
-                  run_time=0.6)                                           # 0.6
-        self.wait(0.4)                                                    # 1.0
+        axis = axis_line()
+        strip = unit_strip(states="class")
+        band = window_band()
+        band.set_z_index(-1)
+        self.add(head, src, axis, band, strip)
+        self.wait(30 / 60)                                                # 0.500
 
+        # The two bounds, drawn as hard lines first. This is the picture the
+        # rest of the clip has been using.
+        edges = VGroup(*[
+            Line([div_x(v), BAND_BOT, 0], [div_x(v), BAND_TOP, 0],
+                 stroke_width=2.4, color=TEAL_TXT) for v in (FLOOR, CEIL)])
+        self.play(FadeIn(edges, run_time=0.6), run_time=0.6)              # 1.100
+        self.wait(102 / 60)                                               # 2.800
+
+        # ...and then as what they really are. Both bounds are brackets.
+        soft = window_band(soft=True)
+        brackets = VGroup(soft[1], soft[2])
+        lower_br, upper_br = soft[1], soft[2]
         l1 = Body("The lower edge is a range, not a point: 588 to 755.",
                   font_size=25, color=INK).move_to([0, 2.35, 0])
-        self.play(FadeIn(l1, run_time=0.7), run_time=0.7)                # 1.7
-        self.wait(3.3)                                                    # 5.0
+        self.play(FadeOut(edges, run_time=0.5), FadeIn(brackets, run_time=0.6),
+                  FadeIn(l1, run_time=0.6), run_time=0.6)                 # 3.400
+        self.wait(117 / 60)                                               # 5.350
 
-        # a deviation axis centered on 7.70; a tight scale makes flatness the point
+        # Single out the lower bracket: it is the one the sensitivity moves.
+        br_lab = Body("588 to 755", font_size=21, color=TEAL_TXT).move_to(
+            [lower_br.get_center()[0], ROW_BELOW, 0])
+        self.play(upper_br.animate.set_opacity(0.25),
+                  FadeIn(br_lab, run_time=0.5), run_time=0.6)             # 5.950
+        self.wait(93 / 60)                                                # 7.500
+
+        # The handover, and the argument. The lower edge becomes the axis the
+        # recomputed medians are read on.
         AXL, AXR, AXY = -3.4, 3.4, -0.15
         base = Line([AXL, AXY, 0], [AXR, AXY, 0], stroke_width=2.4, color=TEAL)
         base_lab = Body("median 7.70", font_size=22, color=TEAL_TXT
                         ).move_to([4.45, AXY, 0])
+        self.play(FadeOut(strip, run_time=1.0), FadeOut(band, run_time=1.0),
+                  FadeOut(axis, run_time=1.0), FadeOut(upper_br, run_time=1.0),
+                  FadeOut(br_lab, run_time=0.8),
+                  ReplacementTransform(lower_br, base, run_time=1.4),
+                  FadeIn(base_lab, run_time=0.8),
+                  run_time=1.4)                                           # 8.900
         gtop = DashedLine([AXL, AXY + 1.0, 0], [AXR, AXY + 1.0, 0],
                           stroke_width=1.2, color=GRIDGRAY, dash_length=0.08)
         gtop_l = Body("+0.5", font_size=20, color=SRCGRAY).next_to(gtop, LEFT, buff=0.16)
         gbot = DashedLine([AXL, AXY - 1.0, 0], [AXR, AXY - 1.0, 0],
                           stroke_width=1.2, color=GRIDGRAY, dash_length=0.08)
         gbot_l = Body("-0.5", font_size=20, color=SRCGRAY).next_to(gbot, LEFT, buff=0.16)
-        self.play(FadeOut(l1, run_time=0.4), Create(base, run_time=0.7),
-                  FadeIn(base_lab, run_time=0.6), run_time=0.7)           # 5.7
         self.play(FadeIn(VGroup(gtop, gtop_l, gbot, gbot_l), run_time=0.5),
-                  run_time=0.5)                                           # 6.2
-        self.wait(1.8)                                                    # 8.0
+                  run_time=0.5)                                           # 9.400
+        self.wait(88 / 60)                                                # 10.867
 
         l2 = Body("Recompute the median at four candidate edges.",
                   font_size=25, color=INK).move_to([0, 2.35, 0])
-        self.play(FadeIn(l2, run_time=0.7), run_time=0.7)                # 8.7
-        self.wait(2.3)                                                    # 11.0
+        self.play(FadeOut(l1, run_time=0.4), FadeIn(l2, run_time=0.7),
+                  run_time=0.7)                                           # 11.567
+        self.wait(74 / 60)                                                # 12.800
 
         xs = [-2.5, -0.85, 0.85, 2.5]
         dots = VGroup(); labs = VGroup()
@@ -672,27 +773,28 @@ class C3Act6(Scene):
             dots.add(dot); labs.add(VGroup(fl_l, dv_l))
         for i in range(4):
             self.play(FadeIn(dots[i], run_time=0.4), FadeIn(labs[i], run_time=0.4),
-                      run_time=0.5)                                       # 13.0
-        self.wait(2.0)                                                    # 15.0
+                      run_time=0.5)                                       # 14.800
+        self.wait(12 / 60)                                                # 15.000
 
         read = Body("The four medians deviate by at most eight hundredths.",
                     font_size=25, color=INK).move_to([0, 2.35, 0])
+        self.wait(240 / 60)                                               # 19.000
         self.play(FadeOut(l2, run_time=0.4), FadeIn(read, run_time=0.7),
-                  run_time=0.7)                                           # 15.7
-        self.wait(3.3)                                                    # 19.0
+                  run_time=0.7)                                           # 19.700
 
         verdict = Body("The headline does not depend on where that edge sits.",
                        font_size=27, color=TEAL_TXT).move_to([0, 1.55, 0])
-        self.play(FadeIn(verdict, run_time=0.8), run_time=0.8)           # 19.8
-        self.wait(4.2)                                                    # 24.0
+        self.wait(126 / 60)                                               # 21.800
+        self.play(FadeIn(verdict, run_time=0.8), run_time=0.8)           # 22.600
+        self.wait(210 / 60)                                               # 26.100
 
         restate = Body("7.70 stands, across the whole range.", font_size=25, color=INK
                        ).move_to([0, -2.10, 0])
-        self.play(FadeIn(restate, run_time=0.7), run_time=0.7)           # 24.7
-        # 2026-09-18: was 3.3 s. This act was the least silent in the clip at
-        # 9.4% and left no room to say the sensitivity result plainly instead of
-        # reciting four near-identical numbers.
-        self.wait(5.3)                                                    # 30.0
+        self.play(FadeIn(restate, run_time=0.7), run_time=0.7)           # 26.800
+        # 2026-09-18: the tail was 3.3 s. This act was the least silent in the
+        # clip at 9.4% and left no room to say the sensitivity result plainly
+        # instead of reciting four near-identical numbers.
+        self.wait(192 / 60)                                               # 30.000
 
 
 class C3Act7(Scene):
