@@ -63,7 +63,18 @@ there is stale and does **not** match the delivered film; `narration_v3` was the
 last good one before this round.
 
 ### Toolchain
-- Manim Community **v0.21.0** in `/tmp/manimenv` (Python 3.13). Not a repo venv.
+- Manim Community **v0.21.0**, a user-site install for the python.org framework
+  Python 3.13.7. **Not a venv, and not in `/tmp`.**
+  - interpreter `/Library/Frameworks/Python.framework/Versions/3.13/bin/python3`
+  - CLI `~/Library/Python/3.13/bin/manim`
+  - manimpango 0.6.1. SoX is absent, so Manim prints a warning on every
+    invocation. It is noise; all our audio goes through ffmpeg.
+  - **An earlier version of this handoff said `/tmp/manimenv`. That directory was
+    cleared on reboot 2026-09-19 and never held the only copy.** Do not recreate
+    a toolchain under `/tmp`.
+  - **Animo has its own, and it is not interchangeable.** `~/.agi/venvs/manimvtk`
+    holds `manimvtk 0.19.0.post6`, a VTK fork at a different version. Rendering
+    our scenes through it risks silent layout drift. Use the paths above.
 - Pipeline scripts: `~/skills/narrated-clip-production/scripts/` —
   `map_beats.py`, `build_narration.py`, `generate_elevenlabs.py`,
   `assemble_voice.py`, `retime_from_audio.py`, `audit_frames.py`, `deliver.py`.
@@ -116,7 +127,7 @@ Render one scene (always clear the text cache first — see §7):
 ```bash
 cd ~/bp-recombination-aware-snps
 rm -rf media/texts
-/tmp/manimenv/bin/manim -qh --fps 60 -r 1920,1080 --disable_caching \
+~/Library/Python/3.13/bin/manim -qh --fps 60 -r 1920,1080 --disable_caching \
     tuc_clip3_scenes.py C3Act2
 cp media/videos/tuc_clip3_scenes/1080p60/C3Act2.mp4 \
    ~/Downloads/TUC_CLIP3_2026-09-18/parts/
@@ -127,11 +138,11 @@ Then rebuild narration and film:
 ```bash
 cd ~/Downloads/TUC_CLIP3_2026-09-18
 S=~/skills/narrated-clip-production/scripts
-/tmp/manimenv/bin/python $S/build_narration.py beats/spec_v2.json \
+/Library/Frameworks/Python.framework/Versions/3.13/bin/python3 $S/build_narration.py beats/spec_v2.json \
     --out narration --max-silence 45
-/tmp/manimenv/bin/python $S/generate_elevenlabs.py --csv narration --out voice \
+/Library/Frameworks/Python.framework/Versions/3.13/bin/python3 $S/generate_elevenlabs.py --csv narration --out voice \
     --voice-id uFIXVu9mmnDZ7dTKCBTX --model eleven_v3 --seed 20260917
-/tmp/manimenv/bin/python $S/assemble_voice.py --csv narration --voice voice \
+/Library/Frameworks/Python.framework/Versions/3.13/bin/python3 $S/assemble_voice.py --csv narration --voice voice \
     --video parts --out final --force
 cd final && ffmpeg -y -v error -f concat -safe 0 -i concat.txt -c copy \
     TUC_CLIP3_NARRATED.mp4
@@ -251,7 +262,7 @@ Run all of these before delivering anything.
 ### Text layout
 ```bash
 rm -rf media/texts
-CLIP_SOURCE=tuc_clip3_scenes.py /tmp/manimenv/bin/manim -ql \
+CLIP_SOURCE=tuc_clip3_scenes.py ~/Library/Python/3.13/bin/manim -ql \
     --disable_caching check_text_collisions.py C3Act2
 ```
 Six checks: text-on-text overlap, near-miss clearance (0.12), white text off its
@@ -265,8 +276,8 @@ invisible to everything.
 ```bash
 rm -rf media/texts
 TRACE_OUT=/tmp/trace.json CLIP_SOURCE=tuc_clip3_scenes.py \
-  /tmp/manimenv/bin/manim -ql --disable_caching trace_onscreen_text.py C3Act2
-/tmp/manimenv/bin/python check_narration_sync.py /tmp/trace.json \
+  ~/Library/Python/3.13/bin/manim -ql --disable_caching trace_onscreen_text.py C3Act2
+/Library/Frameworks/Python.framework/Versions/3.13/bin/python3 check_narration_sync.py /tmp/trace.json \
   ~/Downloads/TUC_CLIP3_2026-09-18/narration
 ```
 Flags any line spoken while the on-screen string it paraphrases is gone. **Every
@@ -331,6 +342,57 @@ wiped, all seven/nine acts clean on the collision checker.**
 **Every one of the largest remaining gaps is a seam.** That is directly relevant
 to the transitions task: a transition placed there would be filling silence that
 already exists, not adding to runtime.
+
+### The room tone bed, applied 2026-09-19
+
+Those gaps were not quiet, they were **digital zero**. Measured in half-second
+windows by full decode, the delivered films spent this much of their runtime
+below -60 dBFS:
+
+| film | before | after |
+|---|---|---|
+| 1 | 18.2% | 0.0% |
+| 2 | 15.2% | 0.0% |
+| 3 | 14.6% | 0.0% |
+| 4 | 20.5% | 0.0% |
+
+Two reference films in the same genre (Harvard/Broad, US Pathogen Genomics
+Centers of Excellence) measured 0.3% and 2.9%. They never go silent because a
+low bed runs underneath throughout. That dropout, not the cutting, is most of
+why a concatenation reads as a slideshow.
+
+`add_room_tone.py` lays band-limited pink noise under a **finished** film:
+
+```bash
+python3 add_room_tone.py --in FILM.mp4 --out OUT.mp4          # default -45 dBFS
+python3 add_room_tone.py --in FILM.mp4 --check                # measure only
+```
+
+Defaults are -45 dBFS RMS, highpass 80 Hz, lowpass 4000 Hz. The lowpass matters:
+speech intelligibility lives at 1 to 4 kHz, so a bed that stops below it can
+never eat a consonant. There is deliberately **no sidechain ducking**, because at
+23 dB of headroom it is unnecessary and it pumps at every line boundary, which is
+the same artifact being removed. The level is reached by generating a probe and
+measuring it, so changing the filters cannot silently move the level.
+
+**Why this is safe.** It is mixed under the concatenated film, so no part is
+re-rendered, no narration line moves, and the video stream is copied bit for bit.
+The script verifies all three plus the aac/48000/mono rule and fails loudly.
+
+Measured effect at clip 4's worst seam (dead air 259.63 to 266.05 s):
+
+| | before | after |
+|---|---|---|
+| inside the seam | -330.31 dBFS | **-45.0 dBFS** |
+| mid-narration control | -20.13 dBFS | -20.13 dBFS |
+
+Output: **`~/Downloads/TUC_FILMS_2026-09-19_BED/`**. The 2026-09-18 folder is
+untouched, so the bed is revertible by swapping folders.
+
+This is room tone, not music, on purpose. The series' central finding is that a
+low number is a detection failure, and a bed with a mood would editorialize a
+deliberately unglamorous result. Music can layer on top later without redoing
+this.
 
 Known, accepted, documented:
 - One deliberate 3.6 s pause in clip 3 act 3, right after "A low ratio is a
