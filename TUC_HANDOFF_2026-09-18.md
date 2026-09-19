@@ -490,6 +490,35 @@ The voice images dead center, and the clean way to show it is that the **side
 signal sits at about -54 dB whether or not anyone is speaking**. Voice
 contributes to mid only, so its side contribution is zero.
 
+### Ducking, and the earlier advice against it
+
+`--duck` ducks the bed under the narration so it blooms in the pauses. Two
+earlier claims in this handoff argued against it and both have changed: the bed
+now sits about 13 dB under the voice rather than 23, where ducking buys
+something, and this mix keeps 17.4 dB of itself out of the speech band, so there
+is room to move it.
+
+**Pumping is controlled by the release, not the depth.** A release near 1.5 s
+holds the bed still across the short pauses between lines and lets it rise only
+across an act seam, because a seam is several times longer. Measured on clip 3,
+81 pauses of 0.3 s or more:
+
+| release | bed in gaps | under speech | duck | lift, pause under 1 s | lift, pause over 2 s |
+|---|---|---|---|---|---|
+| 600 ms | -32.05 | -37.50 | 5.45 dB | +2.0 dB | +4.3 dB |
+| 900 ms | -32.17 | -38.48 | 6.30 dB | +2.9 dB | +5.9 dB |
+| **1500 ms** | **-32.69** | **-39.65** | **6.96 dB** | **+2.9 dB** | **+7.7 dB** |
+| 2500 ms | -34.59 | -40.94 | 6.35 dB | +2.2 dB | +9.0 dB |
+| 4000 ms | -37.26 | -41.72 | 4.45 dB | +1.8 dB | +9.4 dB |
+
+Past about 2 s the gradient keeps steepening but the bed stops recovering even
+in real gaps, so the gap level falls away and the point is lost.
+
+**The bed under speech cannot be measured from the finished mix**, because the
+voice buries it. `apply_duck` measures it on the bed alone, classifying each
+window by what the original narration was doing at that moment, and prints the
+achieved duck. Trust that number, not one taken off the mix.
+
 ### Choosing the bed level, and how much room there is
 
 `--level` sets the bed's median. How high it can go is set by the bed's spectrum,

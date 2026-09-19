@@ -29,14 +29,26 @@ The defaults, and why:
   lowpass 4000 Hz      speech intelligibility lives at 1 to 4 kHz. Keeping the
                        bed's top below that means it can never eat a consonant.
 
-No sidechain ducking. At 23 dB of headroom it is not needed, and ducking pumps
-at every line boundary, which is the same artifact being removed.
+Ducking is off by default and pointless for room tone, which should not move.
+It earns its place only with a music bed that has been brought up loud enough to
+be heard in the pauses. See --duck, and note that the release time, not the
+depth, is what decides whether it pumps.
 
 The level is reached by measurement, not by a hardcoded constant: a short probe
 of the bed is generated and measured, and the amplitude is solved from it. So
 changing the filters cannot silently move the level.
 
+  # synthesized room tone
   python3 add_room_tone.py --in FILM.mp4 --out OUT.mp4 [--level -45]
+
+  # the lab's music bed, stereo, as delivered
+  python3 add_room_tone.py --in FILM.mp4 --out OUT.mp4 --bed MIX.mp3 \
+      --bed-trim-head 3.5 --bed-trim-tail 8.0 --bed-xfade 5 \
+      --compress --stereo --level -35
+
+  # same, but blooming in the pauses
+  ... --level -32 --duck --duck-release 1500
+
   python3 add_room_tone.py --in FILM.mp4 --check     # measure only, write nothing
 """
 import argparse
@@ -225,6 +237,52 @@ def build_looped_bed(bed_path, target_duration, out_wav, trim_head, trim_tail,
     return {"min": w2[0], "range": p90 - p10, "stride": stride}
 
 
+def apply_duck(bed_wav, film, out_wav, threshold, ratio, attack, release,
+               channels, src_windows):
+    """Duck the bed under the narration, and MEASURE what the duck did.
+
+    Earlier advice in this file was not to duck at all, on the grounds that at
+    23 dB of headroom it is unnecessary and it pumps at every line boundary.
+    Both halves of that changed. The bed now sits about 13 dB under the voice,
+    where ducking buys something real, and this mix keeps 17.4 dB of itself out
+    of the speech band, so there is room to move it.
+
+    Pumping is still the thing to avoid, and the control is the RELEASE, not the
+    depth. A release near 1.5 s leaves the bed almost still across the short
+    pauses between lines while letting it bloom across an act seam, because a
+    seam is several times longer. Measured on clip 3: pauses under 1 s lift
+    2.9 dB, pauses over 2 s lift 7.7 dB.
+
+    The bed under speech cannot be measured from the finished mix, because the
+    voice buries it. So it is measured HERE, on the bed alone, classifying each
+    window by what the original narration was doing at that moment.
+    """
+    r = run(["ffmpeg", "-y", "-v", "error", "-i", bed_wav, "-i", film,
+             "-filter_complex",
+             "[1:a]aresample=%d,aformat=channel_layouts=%s[sc];"
+             "[0:a][sc]sidechaincompress=threshold=%s:ratio=%s:attack=%s:"
+             "release=%s:makeup=1:detection=rms[out]"
+             % (OUT_RATE, "stereo" if channels == 2 else "mono",
+                threshold, ratio, attack, release),
+             "-map", "[out]", "-c:a", "pcm_s16le",
+             "-ar", str(OUT_RATE), "-ac", str(channels), out_wav])
+    if r.returncode != 0:
+        sys.exit("FATAL: ducking failed\n%s" % r.stderr.decode()[:600])
+
+    gaps = [i for i, v in enumerate(src_windows) if v < -60]
+    speech = [i for i, v in enumerate(src_windows) if v > -28]
+    w = decode_windows(out_wav)
+    def med(idx):
+        v = sorted(w[i] for i in idx if i < len(w))
+        return v[len(v) // 2] if v else float("nan")
+    g, s = med(gaps), med(speech)
+    print("  duck                   release %s ms, %d gap windows and %d speech "
+          "windows measured" % (release, len(gaps), len(speech)))
+    print("  duck effect            bed sits %.2f dB in the gaps and %.2f dB "
+          "under speech, a %.2f dB duck" % (g, s, g - s))
+    return {"gap": g, "speech": s, "depth": g - s}
+
+
 def video_md5(path):
     r = run(["ffmpeg", "-v", "error", "-i", path, "-map", "0:v:0",
              "-c", "copy", "-f", "md5", "-"])
@@ -255,6 +313,17 @@ def main():
     ap.add_argument("--compress", action="store_true",
                     help="flatten the bed's working range so it sits still "
                          "under narration")
+    ap.add_argument("--duck", action="store_true",
+                    help="duck the bed under the narration so it blooms in the "
+                         "pauses. Only sensible with a music bed.")
+    ap.add_argument("--duck-release", default="1500",
+                    help="release in ms (default 1500). This, not the depth, is "
+                         "what decides whether it pumps: a long release holds "
+                         "the bed still across the short pauses between lines "
+                         "and lets it rise only across an act seam.")
+    ap.add_argument("--duck-threshold", default="0.05")
+    ap.add_argument("--duck-ratio", default="4")
+    ap.add_argument("--duck-attack", default="50")
     ap.add_argument("--stereo", action="store_true",
                     help="stereo final: keeps a supplied bed's width and "
                          "duplicates the mono narration to both channels, "
@@ -268,6 +337,9 @@ def main():
         sys.exit("FATAL: %s not found." % a.inp)
     if not a.check and not a.out:
         sys.exit("FATAL: --out is required unless --check is given.")
+    if a.duck and not a.bed:
+        sys.exit("FATAL: --duck needs --bed. Ducking synthesized room tone "
+                 "would only make the silence come back.")
 
     name = os.path.basename(a.inp)
     print("\n%s" % name)
@@ -279,7 +351,8 @@ def main():
              meta["video"]["height"], meta["video"]["fps"],
              meta["audio"]["codec"], meta["audio"]["rate"], meta["audio"]["channels"]))
 
-    before = describe(decode_windows(a.inp), "before")
+    src_windows = decode_windows(a.inp)
+    before = describe(src_windows, "before")
 
     if a.check and not a.bed:
         solve_amplitude(a.level, a.highpass, a.lowpass)
@@ -307,6 +380,12 @@ def main():
                                  a.bed_trim_head, a.bed_trim_tail,
                                  a.bed_xfade, a.compress, a.level,
                                  channels=out_ch)
+        if a.duck:
+            ducked = tmp_bed + ".duck.wav"
+            apply_duck(tmp_bed, a.inp, ducked, a.duck_threshold, a.duck_ratio,
+                       a.duck_attack, a.duck_release, out_ch, src_windows)
+            os.remove(tmp_bed)
+            tmp_bed = ducked
         if a.check:
             os.remove(tmp_bed)
             print("  check only, nothing written")
