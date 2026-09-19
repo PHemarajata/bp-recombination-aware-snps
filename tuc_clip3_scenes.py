@@ -42,7 +42,11 @@ import numpy as np
 #      child, in the reused act 4). Units and genomes are labeled distinctly.
 # ============================================================================
 
-config.background_color = "#FFFFFF"     # never dark theme
+# Pale neutral rather than pure white. White read as clinical against the
+# illustrated reference films the lab wants this to feel like, and a page with
+# a slight cool cast sits inside the APHL family without inventing a colour.
+# Never dark theme.
+config.background_color = "#F0F4F5"
 
 TEAL      = "#00A0AF"   # genomic / the measured signal (fills, marks)
 TEAL_TXT  = "#006E79"   # text-safe teal (any teal carrying a glyph)
@@ -51,7 +55,13 @@ TEAL_LT   = "#A3CCCC"   # light teal. background / unclassified
 PURPLE    = "#9960A7"   # geography (not used in this clip)
 RUST      = "#B42E34"   # a limit or a failure, adverse outcome ONLY
 INK       = "#404040"   # default ink
-GRIDGRAY  = "#E2E9EC"   # gridlines / neutral shaded zones
+GRIDGRAY  = "#D7DEE1"   # gridlines / neutral shaded zones (the window band)
+# The band IS the measured window, and text straddling its edge has shipped as a
+# defect, so its edge has to stay findable. It used to read only because it sat
+# on pure white: #E2E9EC against #FFFFFF is a 1.228 contrast ratio, and on the
+# pale page that falls to 1.109, losing 52 percent of its weight. #D7DEE1 on
+# #F0F4F5 gives 1.229, so the band carries exactly the weight it had when the
+# films were reviewed. Recompute this if either the page or the band moves.
 SRCGRAY   = "#6E6E6E"   # source-line gray
 GRAYOUT   = "#6E6E6E"
 
