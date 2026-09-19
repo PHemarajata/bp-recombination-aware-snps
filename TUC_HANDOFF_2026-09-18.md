@@ -432,6 +432,38 @@ The beat is a real editorial choice, not a neutral one. Act seams fall at times
 set by animation length, not by music, so every hard cut lands mid bar. That is
 a reason to prefer a sustained texture, not a reason the file cannot be used.
 
+### Stereo finals
+
+`--stereo` keeps a supplied bed's width and centers the mono narration.
+
+**This does not break trap 6.** That rule binds the parts feeding the concat,
+which must all be `aac, 48000 Hz, 1 channel`. This tool runs after the concat,
+so the final can be stereo while every part stays mono.
+
+**The trap inside the trap.** Do not reach a stereo final with
+`aformat=channel_layouts=stereo` on a mono narration. ffmpeg converts mono to
+stereo by attenuating each channel 3 dB to hold total power constant, so the
+voice comes out 3 dB quieter than the mono build of the same film and nothing
+announces it. Use `pan=stereo|c0=c0|c1=c0`, which duplicates at unity. The first
+stereo build of clip 3 measured a median of -24.84 dB against the mono build's
+-21.84 and **passed every check**, because the level test only looked for the
+level rising. It now tests both directions.
+
+Measured on clip 3, stereo against mono: median identical to 0.00 dB, duration
+held, video bit-identical, 0.0 percent below -60 dBFS.
+
+Width survives the loop, compress and level chain. Measured as side minus mid:
+
+| | side minus mid |
+|---|---|
+| `Softer Background Mix.mp3`, source | -9.78 dB |
+| stereo build, inside a narration gap | -9.65 dB |
+| stereo build, inside another gap | -11.11 dB |
+
+The voice images dead center, and the clean way to show it is that the **side
+signal sits at about -54 dB whether or not anyone is speaking**. Voice
+contributes to mid only, so its side contribution is zero.
+
 Known, accepted, documented:
 - One deliberate 3.6 s pause in clip 3 act 3, right after "A low ratio is a
   detection failure, not a quiet genome." Do not "fix" it.

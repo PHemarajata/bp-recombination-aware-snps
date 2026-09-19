@@ -57,9 +57,13 @@ PROBE_AMPLITUDE = 0.03
 # each fade-out lands on the next fade-in. This is the same adelay-plus-amix
 # pattern assemble_voice.py uses to place narration lines.
 DEFAULT_XFADE = 4.0
-# Output must stay aac / 48000 Hz / 1 channel. A film whose parts disagree on
+# Output defaults to aac / 48000 Hz / 1 channel. A film whose PARTS disagree on
 # channel count plays silent after a concat that copies streams, and that bug
 # measured as fine on every check that did not decode the audio.
+#
+# That rule binds the parts feeding the concat. This tool runs AFTER the concat,
+# so a stereo final is safe: --stereo keeps a supplied bed's width and duplicates
+# the mono narration to both channels, which leaves the voice centered.
 OUT_RATE = 48000
 OUT_CHANNELS = 1
 
@@ -140,7 +144,7 @@ def solve_amplitude(target_db, hp, lp):
 
 
 def build_looped_bed(bed_path, target_duration, out_wav, trim_head, trim_tail,
-                     xfade, compress, target_db):
+                     xfade, compress, target_db, channels=OUT_CHANNELS):
     """Turn a supplied audio file into a seamless bed of exactly the length
     wanted, at exactly the level wanted.
 
@@ -194,7 +198,7 @@ def build_looped_bed(bed_path, target_duration, out_wav, trim_head, trim_tail,
     r = run(["ffmpeg", "-y", "-v", "error", "-i", bed_path,
              "-filter_complex", ";".join(parts),
              "-map", "[bed]", "-c:a", "pcm_s16le",
-             "-ar", str(OUT_RATE), "-ac", str(OUT_CHANNELS), out_wav])
+             "-ar", str(OUT_RATE), "-ac", str(channels), out_wav])
     if r.returncode != 0:
         sys.exit("FATAL: could not build the looped bed\n%s"
                  % r.stderr.decode()[:600])
@@ -205,7 +209,7 @@ def build_looped_bed(bed_path, target_duration, out_wav, trim_head, trim_tail,
     gain = target_db - med
     r = run(["ffmpeg", "-y", "-v", "error", "-i", out_wav,
              "-af", "volume=%.3fdB" % gain,
-             "-c:a", "pcm_s16le", "-ar", str(OUT_RATE), "-ac", str(OUT_CHANNELS),
+             "-c:a", "pcm_s16le", "-ar", str(OUT_RATE), "-ac", str(channels),
              out_wav + ".lvl.wav"])
     if r.returncode != 0:
         sys.exit("FATAL: could not level the bed\n%s" % r.stderr.decode()[:600])
@@ -251,6 +255,11 @@ def main():
     ap.add_argument("--compress", action="store_true",
                     help="flatten the bed's working range so it sits still "
                          "under narration")
+    ap.add_argument("--stereo", action="store_true",
+                    help="stereo final: keeps a supplied bed's width and "
+                         "duplicates the mono narration to both channels, "
+                         "leaving the voice centered. Safe because this runs "
+                         "after the concat, not on the parts feeding it.")
     a = ap.parse_args()
 
     if not which("ffmpeg") or not which("ffprobe"):
@@ -277,6 +286,17 @@ def main():
         print("  check only, nothing written")
         return
 
+    out_ch = 2 if a.stereo else OUT_CHANNELS
+    layout = "stereo" if a.stereo else "mono"
+    # A mono narration going to a stereo final must be DUPLICATED, not converted.
+    # ffmpeg's mono to stereo conversion attenuates each channel by 3 dB to hold
+    # total power constant, which leaves the voice 3 dB quieter than the mono
+    # build of the same film. pan duplicates at unity, so the two builds match
+    # and the voice still images dead center.
+    if a.stereo and meta["audio"]["channels"] == 1:
+        voice_up = "pan=stereo|c0=c0|c1=c0"
+    else:
+        voice_up = "aformat=channel_layouts=%s" % layout
     os.makedirs(os.path.dirname(os.path.abspath(a.out or ".")) or ".", exist_ok=True)
     tmp_bed = None
     if a.bed:
@@ -285,7 +305,8 @@ def main():
         tmp_bed = (a.out or a.inp) + ".bed.wav"
         stats = build_looped_bed(a.bed, meta["duration"], tmp_bed,
                                  a.bed_trim_head, a.bed_trim_tail,
-                                 a.bed_xfade, a.compress, a.level)
+                                 a.bed_xfade, a.compress, a.level,
+                                 channels=out_ch)
         if a.check:
             os.remove(tmp_bed)
             print("  check only, nothing written")
@@ -300,13 +321,14 @@ def main():
     cmd = ["ffmpeg", "-y", "-v", "error",
            "-i", a.inp] + bed_in + [
            "-filter_complex",
-           "[0:a]aresample=%d[v];[1:a]aresample=%d[b];"
+           "[0:a]aresample=%d,%s[v];"
+           "[1:a]aresample=%d,aformat=channel_layouts=%s[b];"
            "[v][b]amix=inputs=2:duration=first:normalize=0,"
-           "aformat=sample_rates=%d:channel_layouts=mono[aout]"
-           % (OUT_RATE, OUT_RATE, OUT_RATE),
+           "aformat=sample_rates=%d:channel_layouts=%s[aout]"
+           % (OUT_RATE, voice_up, OUT_RATE, layout, OUT_RATE, layout),
            "-map", "0:v:0", "-c:v", "copy",
-           "-map", "[aout]", "-c:a", "aac", "-b:a", "160k",
-           "-ar", str(OUT_RATE), "-ac", str(OUT_CHANNELS),
+           "-map", "[aout]", "-c:a", "aac", "-b:a", "160k" if out_ch == 1 else "224k",
+           "-ar", str(OUT_RATE), "-ac", str(out_ch),
            "-movflags", "+faststart", a.out]
     r = run(cmd)
     if tmp_bed and os.path.isfile(tmp_bed):
@@ -321,9 +343,9 @@ def main():
         problems.append("duration moved: %.3f -> %.3f"
                         % (meta["duration"], out_meta["duration"]))
     oa = out_meta["audio"]
-    if oa["rate"] != OUT_RATE or oa["channels"] != OUT_CHANNELS or oa["codec"] != "aac":
+    if oa["rate"] != OUT_RATE or oa["channels"] != out_ch or oa["codec"] != "aac":
         problems.append("audio is %s %d Hz %d ch, must be aac %d Hz %d ch"
-                        % (oa["codec"], oa["rate"], oa["channels"], OUT_RATE, OUT_CHANNELS))
+                        % (oa["codec"], oa["rate"], oa["channels"], OUT_RATE, out_ch))
     if video_md5(a.inp) != video_md5(a.out):
         problems.append("video stream changed; it must be a bit-identical copy")
 
@@ -331,9 +353,12 @@ def main():
     if after["pct_below_60"] > 0.5:
         problems.append("still %.1f%% of windows below -60 dB; the bed did not take"
                         % after["pct_below_60"])
-    if after["median"] - before["median"] > 1.5:
-        problems.append("median rose %.2f dB; the bed is too loud"
-                        % (after["median"] - before["median"]))
+    drift = after["median"] - before["median"]
+    if drift > 1.5:
+        problems.append("median rose %.2f dB; the bed is too loud" % drift)
+    if drift < -1.0:
+        problems.append("median fell %.2f dB; the narration was attenuated, "
+                        "which a channel-layout conversion does silently" % drift)
 
     print("  wrote                  %s" % a.out)
     if problems:
@@ -342,7 +367,7 @@ def main():
             print("    - %s" % p)
         sys.exit(1)
     print("  verified               duration held, video bit-identical, "
-          "audio aac/%d/mono, silence removed" % OUT_RATE)
+          "audio aac/%d/%s, silence removed" % (OUT_RATE, layout))
 
 
 if __name__ == "__main__":
