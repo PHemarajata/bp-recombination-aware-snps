@@ -394,6 +394,44 @@ low number is a detection failure, and a bed with a mood would editorialize a
 deliberately unglamorous result. Music can layer on top later without redoing
 this.
 
+### Using a supplied music bed instead
+
+`--bed FILE` loops an audio file in place of the synthesized noise. A supplied
+mix normally needs all three of these, so they are options rather than defaults:
+
+```bash
+python3 add_room_tone.py --in FILM.mp4 --out OUT.mp4 \
+    --bed "Softer Background Mix.mp3" \
+    --bed-trim-head 3.5 --bed-trim-tail 8.0 --bed-xfade 5 --compress
+```
+
+- **Trim the fades.** A music bed fades in and out. Those fades are the loudest
+  argument against looping it, so the faded ends are cut and only full-level
+  material is looped. Find the fade lengths by measuring, not by guessing.
+- **Crossfade the loop.** Copies are placed every (body minus crossfade) seconds
+  and summed, so each fade out lands on the next fade in. Butt-joining leaves a
+  hole at every loop point, which is the defect this tool exists to remove.
+  The **first** copy has nothing before it to sum with, so the bed is built one
+  crossfade longer and that opening fade is trimmed off. Without that, t=0 sat
+  19.7 dB under the median.
+- **Compress.** `Softer Background Mix.mp3` had an 11.06 dB working range
+  (p10 to p90), which surges and recedes under narration. `--compress` took it
+  to 2.18 dB.
+
+**Check any supplied bed for these before using it**, because they decide whether
+it can work at all:
+
+| what to measure | why | `Softer Background Mix.mp3` |
+|---|---|---|
+| energy in 1 to 4 kHz vs the full mix | that is the speech band; a bed with energy there eats consonants | **-17.4 dB**, good |
+| working range p10 to p90 | a wide range surges under narration | 11.06 dB, needed compression |
+| envelope autocorrelation | a beat sets up an expectation our seams cannot meet | **0.73 at 107 BPM, it has a beat** |
+| level at the first and last second | decides whether it can loop | fades at both ends, so trim |
+
+The beat is a real editorial choice, not a neutral one. Act seams fall at times
+set by animation length, not by music, so every hard cut lands mid bar. That is
+a reason to prefer a sustained texture, not a reason the file cannot be used.
+
 Known, accepted, documented:
 - One deliberate 3.6 s pause in clip 3 act 3, right after "A low ratio is a
   detection failure, not a quiet genome." Do not "fix" it.
