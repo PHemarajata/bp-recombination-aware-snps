@@ -464,6 +464,39 @@ The voice images dead center, and the clean way to show it is that the **side
 signal sits at about -54 dB whether or not anyone is speaking**. Voice
 contributes to mid only, so its side contribution is zero.
 
+### Choosing the bed level, and how much room there is
+
+`--level` sets the bed's median. How high it can go is set by the bed's spectrum,
+not by taste alone, and for this mix there is far more room than -45 suggests.
+
+Measured on clip 3:
+
+| | full band | 1 to 4 kHz | how much is speech band |
+|---|---|---|---|
+| voice, 150 to 158 s | -21.80 dB | -31.92 dB | -10.12 dB |
+| `Softer Background Mix.mp3` | -16.28 dB | -33.69 dB | **-17.41 dB** |
+
+The bed puts 17.4 dB less of itself in the speech band than the voice does, so it
+is over 7 dB more out of the way than a flat signal would be. Masking margin in
+the 1 to 4 kHz band by bed level:
+
+| bed level | under the voice | margin in the speech band |
+|---|---|---|
+| -45 dB | 23.2 dB | 30.5 dB |
+| -41 dB | 19.2 dB | 26.5 dB |
+| -38 dB | 16.2 dB | 23.5 dB |
+| -35 dB | 13.2 dB | 20.5 dB |
+| -30 dB | 8.2 dB | 15.5 dB, getting tight |
+
+So anything down to about -35 is free of intelligibility cost and the choice is
+purely how present the music should be. **Measure a new bed's speech-band offset
+before assuming this range carries over**, because a mix with energy at 2 kHz
+would run out of room far sooner.
+
+A ladder built for clip 3 at -41, -38 and -35 moved the voice by 0.12 dB in total
+and left width unchanged at -9.66 dB, so the level can be chosen by ear without
+anything else shifting underneath it.
+
 Known, accepted, documented:
 - One deliberate 3.6 s pause in clip 3 act 3, right after "A low ratio is a
   detection failure, not a quiet genome." Do not "fix" it.
