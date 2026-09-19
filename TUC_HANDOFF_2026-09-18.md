@@ -78,7 +78,18 @@ last good one before this round.
 - Pipeline scripts: `~/skills/narrated-clip-production/scripts/` —
   `map_beats.py`, `build_narration.py`, `generate_elevenlabs.py`,
   `assemble_voice.py`, `retime_from_audio.py`, `audit_frames.py`, `deliver.py`.
-- `ELEVENLABS_API_KEY` is in the environment.
+- `ELEVENLABS_API_KEY` is **not** in the environment as of 2026-09-19, whatever
+  an earlier draft of this file said. Export it in the session before
+  synthesizing. Exporting it in an interactive shell does not reach a tool's
+  shell; pass it explicitly.
+- **The python.org Python has no CA bundle**, so synthesis dies with
+  `CERTIFICATE_VERIFY_FAILED: unable to get local issuer certificate`. Its
+  `ssl.get_default_verify_paths().cafile` is `None`. `certifi` is installed, so:
+
+  ```bash
+  export SSL_CERT_FILE="$(/Library/Frameworks/Python.framework/Versions/3.13/bin/python3 \
+      -c 'import certifi;print(certifi.where())')"
+  ```
 
 ---
 
@@ -166,8 +177,19 @@ cp TUC_CLIP3_NARRATED.mp4 ~/Downloads/TUC_FILMS_2026-09-18/3_What_the_ruler_meas
 ```
 
 **Voice, fixed:** ElevenLabs "Justin" `uFIXVu9mmnDZ7dTKCBTX`, model `eleven_v3`,
-**seed 20260917**. With the seed fixed, identical text regenerates
-bit-identically, so re-synthesis costs credits but never changes a fit.
+**seed 20260917**.
+
+**What the seed actually guarantees, measured 2026-09-19.** Not bit-identity.
+Re-synthesizing two unchanged lines gave **different md5s** but **identical
+durations to the microsecond** (5.360000 and 2.800000 s) and **RMS envelope
+correlation of 0.996 and 0.994** against the originals. So the performance,
+phrasing and timing reproduce; the bytes do not. Raw sample correlation is near
+zero and is the wrong test, because a sub-millisecond offset plus mp3
+re-encoding destroys it. **Compare envelopes, not bytes, and never conclude
+from an md5 that a take changed.**
+
+Re-synthesis therefore costs credits but never changes a fit, which is what
+matters.
 Do not substitute v2; v3 also rejects neighbour conditioning.
 
 **say_as map** (in each `spec_v2.json`). Keys are the WRITTEN form, values the
@@ -358,6 +380,33 @@ wiped, all seven/nine acts clean on the collision checker.**
 **Every one of the largest remaining gaps is a seam.** That is directly relevant
 to the transitions task: a transition placed there would be filling silence that
 already exists, not adding to runtime.
+
+### Clip 3 was corrected and rebuilt, 2026-09-19
+
+**A factual error shipped in the delivered narration.** Clip 3's act 5 lead-in
+said "**Twelve** units, three builders, run on exactly the same alignments."
+Twelve is the number of COMPARISONS. `TABLES.md` Table 5 reads "Six units by two
+replicons, 12 comparisons", and the on-screen line in that same act already read
+"Six units, two replicons, twelve comparisons", so the picture was right and only
+the voice was wrong. The spoken line doubled the size of the experiment.
+
+Fixed to "Six units, three builders, run on exactly the same alignments." One
+word. "three builders" was always correct (RAxML, IQ-TREE, rapidnj). The new
+take is 3.92 s in a 4.06 s slot.
+
+Every other number in clip 3's narration was checked against the source list in
+`tuc_clip3_scenes.py`'s header and against `TABLES.md`: 5.51, 47 units, 7.70,
+1,388 genomes, 12 at 1.32, 26 at 2.14, 38 at 1.99, the 5.72 to 9.41 spread, the
+four deviations, 34 of 47, 7 of 12. **All correct. This was the only one.**
+
+**Corrected clip 3: `~/Downloads/TUC_CLIP3_2026-09-19_FINAL/`.** Build directory
+is `~/Downloads/TUC_CLIP3_2026-09-19/`. It carries the pale page, the two
+rewritten acts, and the delivered audio treatment, and it runs 300.821354 s,
+identical to the delivered film to the microsecond.
+
+Clips 1, 2 and 4 in `TUC_FILMS_2026-09-19_DELIVERY/` are still on the white page
+and have not been rewritten, so **the series is mid-change and must not ship as
+a set until they follow.**
 
 ### The delivered audio treatment, settled 2026-09-19
 
