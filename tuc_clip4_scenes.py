@@ -38,10 +38,18 @@ import numpy as np
 #                                                smallest unit is 7 members
 #    median r/m 7.7394 funded vs 7.6988 all .... GATE1_ALIGNMENT rm_corrected
 #
-#  CITED, NOT COMPUTED HERE, and labeled with its framework on screen:
+#  CITED, NOT COMPUTED HERE, and labeled with its framework on screen.
+#  ON SCREEN THE FRAMEWORK IS "the curated comparison framework", which is
+#  what the deck calls itself. It is NOT "the Kawang framework": Kawang is
+#  the deck author's surname, not the name of anything, and this film goes
+#  to the funder. The narration says the same words.
 #    association index by trait ................ Kawang closeout deck slide 25,
 #                                                2,773 genomes, 35 countries
-#    nine nominated pairs, six evaluable ....... Kawang closeout deck slide 23
+#    nine nominated pairs ....................... Kawang closeout deck slide 22
+#    six of them evaluable ..................... Kawang closeout deck slide 23
+#      (evaluable = the environmental isolate is B. pseudomallei, so it sits
+#       on the BP core-SNP alignment. 3 pairs excluded as B. thailandensis,
+#       2 pending sequencing.)
 # ============================================================================
 
 config.background_color = "#FFFFFF"     # never dark theme
@@ -818,8 +826,8 @@ class C4Act7(Scene):
         # --- corroboration, on a different panel, labeled as such -----
         self.play(FadeOut(ce1, ce2, one, plus, tag, run_time=0.6),
                   run_time=0.6)                                             # 41.6
-        fw = Body("A second reading, on the Kawang framework: 2,773 genomes, "
-                  "35 countries.", font_size=22, color=SRCGRAY)
+        fw = Body("A second reading, on the curated comparison framework: "
+                  "2,773 genomes, 35 countries.", font_size=22, color=SRCGRAY)
         fw.move_to([0, 2.58, 0])
         BX0, BW, AXY2 = -1.90, 3.50, -1.52
         axis = Line([BX0, AXY2, 0], [BX0 + BW, AXY2, 0], stroke_width=1.8,
