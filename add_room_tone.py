@@ -38,6 +38,20 @@ The level is reached by measurement, not by a hardcoded constant: a short probe
 of the bed is generated and measured, and the amplitude is solved from it. So
 changing the filters cannot silently move the level.
 
+HOW REPRODUCIBLE THIS IS, measured 2026-09-21. The same command run five times
+on the same film produced four distinct outputs, and two of the five were
+bit-identical to the shipped master. But the variation is not spread through the
+mix: comparing every pair sample by sample, all 27,389,440 samples agree for the
+first 99.87 percent of the file, and every difference falls in the last 0.35
+seconds, which is bed-only tail after the narration ends. Peak difference there
+is -23.7 dBFS against tail content at -37 dBFS RMS; not one 0.5 s window
+anywhere in the film differs by more than -60 dBFS.
+
+So the recipe is exact for the whole body of the film and varies only in how the
+music tail lands at the final fade. Do not chase bit-identity, and do not
+conclude from a differing md5 that a mix was made differently. Compare sample
+ranges.
+
   # synthesized room tone
   python3 add_room_tone.py --in FILM.mp4 --out OUT.mp4 [--level -45]
 

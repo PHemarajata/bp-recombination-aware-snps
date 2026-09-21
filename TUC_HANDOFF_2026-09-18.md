@@ -491,6 +491,26 @@ low number is a detection failure, and a bed with a mood would editorialize a
 deliberately unglamorous result. Music can layer on top later without redoing
 this.
 
+### Is the mix reproducible? Yes, for the whole body of the film.
+
+Asked because a second session concluded the shipped ffmpeg command was lost and
+proposed reconstructing it. **It was never ad hoc.** The recipe is
+`add_room_tone.py`, committed, with the exact command line recorded above.
+
+Measured 2026-09-21 by rebuilding an unchanged delivered film five times:
+
+- four distinct outputs across five runs, and **two were bit-identical to the
+  shipped master**
+- comparing every pair sample by sample, all 27,389,440 samples agree across the
+  first **99.87 percent** of the file
+- every difference falls in the **last 0.35 s**, which is bed-only tail after
+  the narration ends, at a -23.7 dBFS peak against -37 dBFS tail content
+- **zero** 0.5 s windows anywhere in the film differ by more than -60 dBFS
+
+A film rebuilt with this command will match the others. Do not chase bit
+identity and do not read a differing md5 as evidence that a mix was made
+differently; the container mux alone guarantees that. Compare sample ranges.
+
 ### Using a supplied music bed instead
 
 `--bed FILE` loops an audio file in place of the synthesized noise. A supplied
