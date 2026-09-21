@@ -12,7 +12,8 @@ import numpy as np
 #  ANIMO_MERGE_SPEC_2026-09-17.md section 5 (aphl_common.py line 63).
 # ============================================================================
 
-config.background_color = "#FFFFFF"     # never dark theme
+# Pale neutral page, matching the rest of the series. Never dark theme.
+config.background_color = "#F0F4F5"
 
 # --- palette, by MEANING, never decorative -----------------------------------
 TEAL      = "#00A0AF"   # genomic / sequence / the measured signal (fills/marks)
@@ -22,7 +23,11 @@ TEAL_LT   = "#A3CCCC"   # light teal ramp
 PURPLE    = "#9960A7"   # geography / place (regions and countries)
 RUST      = "#B42E34"   # a limit or a failure, adverse outcome ONLY
 INK       = "#404040"   # default ink (labels/body)
-GRIDGRAY  = "#E2E9EC"   # gridlines / neutral shaded zones
+GRIDGRAY  = "#D7DEE1"   # gridlines / neutral shaded zones. Darkened with
+                        # the page: #E2E9EC read only against pure white and
+                        # loses 52% of its contrast on #F0F4F5. The value is
+                        # computed to hold the shipped 1.228 ratio. See
+                        # tuc_clip3_scenes.py.
 SRCGRAY   = "#6E6E6E"   # source-line gray
 GRAYOUT   = "#6E6E6E"   # not measured / set aside (outline-only, no fill)
 AMBER     = "#EBAB21"
