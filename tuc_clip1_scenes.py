@@ -46,7 +46,11 @@ import numpy as np
 #        GATE1_ALIGNMENT_2026-08-21.tsv
 # ============================================================================
 
-config.background_color = "#FFFFFF"     # never dark theme
+# Pale neutral rather than pure white, matching the rest of the series.
+# White read as clinical against the illustrated reference films, and a
+# page with a slight cool cast sits inside the APHL family without
+# inventing a colour. Never dark theme.
+config.background_color = "#F0F4F5"
 
 # --- palette, by MEANING, never decorative -----------------------------------
 TEAL      = "#00A0AF"   # genomic / sequence / the measured signal (fills/marks)
@@ -56,7 +60,12 @@ TEAL_LT   = "#A3CCCC"   # light teal ramp. SERIES: public / background genomes
 PURPLE    = "#9960A7"   # geography / place (regions and countries)
 RUST      = "#B42E34"   # a limit or a failure, adverse outcome ONLY
 INK       = "#404040"   # default ink (labels/body)
-GRIDGRAY  = "#E2E9EC"   # gridlines / neutral shaded zones
+GRIDGRAY  = "#D7DEE1"   # gridlines / neutral shaded zones
+# Darkened with the page. #E2E9EC against #FFFFFF is a 1.228 contrast
+# ratio; on #F0F4F5 it falls to 1.109, losing 52 percent of its weight.
+# #D7DEE1 on #F0F4F5 gives 1.229, so shaded zones carry exactly the
+# weight they had when the films were reviewed. Recompute if either
+# colour moves.
 SRCGRAY   = "#6E6E6E"   # source-line gray
 GRAYOUT   = "#6E6E6E"   # not measured / set aside (outline-only, no fill)
 AMBER     = "#EBAB21"
