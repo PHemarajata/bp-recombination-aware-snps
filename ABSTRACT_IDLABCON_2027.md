@@ -32,7 +32,7 @@ online form imposes its own, per field. Taken from the form itself.
 |---|---|---|---|
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 392 | 108 |
-| Methodology | 750 chars | 563 | 187 |
+| Methodology | 750 chars | 638 | 112 |
 | Results | 1,250 chars | 1042 | 208 |
 | Conclusions | 500 chars | 311 | 189 |
 
@@ -128,9 +128,9 @@ excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
 Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Exposure origin is both a clinical and an epidemiologic question, and without a travel history it is assigned from the genome. Locally acquired cases in Mississippi and a presumptive focus in Georgia have made it a domestic question for United States laboratories. Its accuracy below continental scale is not well established. We measured it at sub-national, country and regional scales.
 
-### Methodology — 563 / 750 characters (raw 657)
+### Methodology — 638 / 750 characters (raw 744)
 
-We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: public assemblies where available, read sets assembled locally where they were not, and 312 in-house isolates absent from public archives. Attribution was scored on a published core-genome multilocus sequence typing scheme of 4,221 loci, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure country in 16 countries, and is reported per estimator, because the estimator is part of the number.
+We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing genomic study now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator, because the estimator is part of the number. Recombination detection was calibrated on this collection in separate work, not included here.
 
 ### Results — 1042 / 1250 characters (raw 1245)
 
@@ -204,6 +204,17 @@ not well established", which motivates the work without claiming to be first.
 In Results, "the only estimator to beat its baseline in every stratum" reads as
 absolute and is bounded to "the only one of four tested", which is what the
 specification curve actually shows.
+
+**The recombination work gets one clause, and no number.** "Recombination
+detection was calibrated on this collection in separate work, not included
+here." It does two jobs: it signals the workstream exists, and it stops a
+reviewer assuming the attribution is recombination-corrected, which it is not,
+since cgMLST allele calls are not Gubbins-filtered.
+
+**r/m 7.70 was tried and does not fit.** Carrying the figure needs the operating
+window to be explained, or the number is meaningless, and that version runs 783
+of 750 characters even on the space-excluding count. The clause above is what
+fits.
 
 **Left out on purpose.** The recombination operating range and r/m 7.70 are
 load-bearing for the methods paper, not for this audience. The abstention rule
