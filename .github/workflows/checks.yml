@@ -19,6 +19,12 @@ jobs:
           python-version: "3.12"
       - name: phylogeography test suite
         run: python3 test_phylogeography_bp.py
+      - name: attribution significance selftest
+        # The Clopper-Pearson upper bound was wrong on first write and still
+        # printed a plausible interval: 10.9-12.6% for 10/46, where the answer
+        # is 10.9-36.4%. Nothing would have caught that except checking it
+        # against published values, so that check runs here.
+        run: python3 attribution_significance_bp.py --selftest
 
   syntax:
     name: syntax and shell parse
