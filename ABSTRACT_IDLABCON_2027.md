@@ -237,11 +237,17 @@ was calibrated separately, and the SNP distances here use that output", which
 signals the workstream, explains where the SNP distances come from, and no
 longer disclaims a result the abstract goes on to give.
 
-⚠ **The recurrence data is ours, not the closeout deck's.**
-`RESULTS_DRAFT_2026-08-23.md` §R3.1 states that for 16 of the 20 pairs the
-distances "are the production per-unit Gubbins output itself". The deck
-(`BurkGenome_close_KK260812_final.pptx`) does not mention relapse, reinfection
-or recurrence anywhere. Our pipeline, their isolates.
+**The recurrence result is independently reproduced.** On 2026-09-10 Yuyi
+produced a recurrence analysis "built with the reported pipeline's method", and
+every structural figure matches: 13 patients, 20 pairs, 29 isolates, 19 relapse
+and 1 reinfection, patient 9 as the reinfection with its ancestor subtending 35
+genomes and 81 SNPs against 1,102, 12 of 13 exclusive clades, and patient 8's
+14-against-30 margin. `RECURRENCE_CROSSCHECK_2026-09-24.md` has the comparison,
+including three discrepancies that do not touch the abstract.
+
+⚠ **An earlier version of this file said no such analysis existed.** That was
+based on searching the closeout deck, which has none. This work postdates the
+deck by a month and the conclusion was wrong.
 
 ⚠ **The deck's own tree may not be recombination-filtered.** Its appendix says
 "whether recombination was filtered before tree inference is not yet confirmed",
