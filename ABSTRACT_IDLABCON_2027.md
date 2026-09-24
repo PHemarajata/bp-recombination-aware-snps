@@ -21,7 +21,7 @@ online form imposes its own, per field. Taken from the form itself.
 |---|---|---|---|
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 414 | 86 |
-| Methodology | 750 chars | 583 | 167 |
+| Methodology | 750 chars | 641 | 109 |
 | Results | 1,250 chars | 950 | 300 |
 | Conclusions | 500 chars | 268 | 232 |
 
@@ -42,11 +42,20 @@ committee may consider the abstract for a poster if it is not taken for an oral
 February 10, 2027 and $800 late, plus travel from Bangkok, and speakers must
 attend in person. Worth settling before submission rather than after acceptance.
 
-**Scope note.** This abstract covers the *global attribution* work tracked in
-this repository: 2,959 genomes, 85 recombination-aware analysis units, and
+**Scope note, corrected 2026-09-24.** This abstract covers the *global
+attribution* work: 2,959 genomes, 85 recombination-aware analysis units, and
 accuracy measured against 46 documented-exposure cases. It is **not** the
-Nakhon Phanom paired human and residential isolate study. That dataset does not
-appear anywhere in this repository, and the two should not be conflated.
+Nakhon Phanom paired human and residential analysis, which is a separate study
+on its own 2,773-genome framework.
+
+⚠ **An earlier version of this file said that dataset "does not appear anywhere
+in this repository". That was wrong.** The paired-household *analysis* is not
+here, but the *isolates* are: **312 in-house Nakhon Phanom genomes (259 `IP-`,
+53 `IE-`) sit inside this panel**, 276 of them in the analysis basis
+(`METHODS_DRAFT_2026-08-19.md` §2.1, `BIOPROJECT_COUNTERFACTUAL_2026-09-02.md`
+§4, `SUBMISSION_TODO.md` B2). They are unpublished and undeposited, all
+carrying `bioproject = unknown` or blank. This changes the clearance position,
+see open item 6.
 
 Source of every number: `ABSTRACT_DRAFT_2026-08-23.md`, which draws from
 `NUMBERS.tsv` on the frozen basis `FINAL_BASIS_2026-08-22/`. `NUMBERS.tsv` is
@@ -108,9 +117,9 @@ excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
 Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Where a patient was exposed is both a clinical and an epidemiologic question, and when travel history is absent the genome is the remaining evidence. Locally acquired cases on the Mississippi Gulf Coast and a presumptive focus in Georgia have made it a domestic question for United States laboratories. No study has reported how often the genome is correct. We measured it at country, regional and sub-national scale.
 
-### Methodology — 583 / 750 characters (raw 677)
+### Methodology — 641 / 750 characters (raw 746)
 
-We assembled 2,959 B. pseudomallei genomes, 41% of publicly archived isolates carrying a recorded country, and partitioned them into 85 recombination-aware analysis units. Attribution was scored on core-genome multilocus sequence typing (4,221 loci), so the result does not depend on the lineage partition. Accuracy was measured against 46 cases from 45 individuals with independently documented exposure country, drawn from 16 countries. The holdout removed both same-country reference genomes and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Estimators were nearest neighbor and the modal label among the 20 closest genomes.
+We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: public assemblies where available, read sets assembled locally where they were not, and 312 in-house isolates absent from public archives. These were partitioned into 85 recombination-aware analysis units, and attribution was scored on core-genome multilocus sequence typing (4,221 loci), so the result does not depend on the partition. Accuracy was measured against 46 cases from 45 individuals with documented exposure country in 16 countries. The holdout removed same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Estimators were nearest neighbor and modal label among the 20 closest.
 
 ### Results — 950 / 1250 characters (raw 1134)
 
@@ -195,20 +204,35 @@ closing slide for the same reason.
 5. **"41% of publicly archived isolates with a recorded country"** is the
    careful phrasing. Read as "41% of all public *B. pseudomallei* genomes" it is
    wrong, and the correct figure there is 36.8%.
-6. **Select agent and metadata clearance.** `PUBLICATION_STRATEGY_2026-09-02.md`
-   flags data availability as the highest-risk item across all three papers,
-   because the metadata joins accession to location, date and exposure label.
-   A conference abstract is lower stakes than a manuscript, but this is an APHL
-   meeting and internal clearance should happen before submission, not after.
+6. **Select agent and partner clearance. Reassessed, and it is heavier than
+   this file first claimed.** `PUBLICATION_STRATEGY_2026-09-02.md` flags data
+   availability as the highest-risk item across all three papers, because the
+   metadata joins accession to location, date and exposure label.
 
-   The lift here is lighter than for a partner-isolate abstract, and that is
-   the main practical argument for this submission over the Nakhon Phanom one
-   with eight days left. Per `METHODS_DRAFT_2026-08-19.md` §2.12.11a.2, the 48
-   exposure-labelled genomes (46 scorable) are CDC submissions carrying an
-   explicit `ex <country>` label, older assemblies with the exposure country in
-   the assembly name, and cases documented in the published literature. No
-   partner institution has to release unpublished isolates for this abstract to
-   go out.
+   ⚠ **An earlier version of this item argued that "no partner institution has
+   to release unpublished isolates for this abstract to go out". That was
+   wrong**, and it was the main practical reason given for preferring this
+   submission over the Nakhon Phanom one. The panel contains **312 unpublished
+   in-house Nakhon Phanom isolates**, undeposited, and they are part of the
+   2,959 the abstract reports. Whoever owns those isolates has standing here.
+
+   Two things soften it but do not remove it. `MANUSCRIPT_OUTLINE_2026-08-21.md`
+   records that the epidemiology team handled the IRB for all 312. And the
+   abstract reports no isolate-level result from them: they are panel
+   background, not the finding. That is a much easier conversation than
+   presenting paired household distances, but it is still a conversation to
+   have before October 2 rather than after.
+
+   **One discrepancy to settle on the Mac.** `METHODS_DRAFT_2026-08-19.md`
+   §2.12.11a.2 describes the 48 exposure-labelled genomes as CDC submissions,
+   named older assemblies and published cases, all public.
+   `BIOPROJECT_COUNTERFACTUAL_2026-09-02.md` §3 instead says "the in-house
+   isolates that make up much of the validation set carry `bioproject =
+   unknown`". Those cannot both be right, and which is true decides whether
+   partner isolates are in the **headline 46** or only in the reference panel.
+   Check `EXPOSURE_OVERRIDES.tsv` against the `IP-`/`IE-` list before
+   submitting.
+
 7. **Relationship to the manuscripts.** This is the attribution work, listed as
    Paper 3 in the publication strategy and the least finished of the three. The
    abstract cites calibration work that is still unpublished. That is normal for
