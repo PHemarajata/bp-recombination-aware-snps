@@ -44,11 +44,56 @@ not in this repo (it is generated, and the working copy moved to the Mac on
 
 ## Title
 
-**When genomics cannot tell you where a melioidosis patient was exposed: a
-measured accuracy floor for country attribution, and what to report instead**
+**Recommended.** Short, carries the finding, and a lab director remembers it.
 
-Alternate, shorter: **Country attribution of melioidosis exposure does not
-exceed chance, and regional attribution does**
+> **Right region, wrong country: measured limits of genomic exposure
+> attribution in melioidosis** *(12 words)*
+
+**Alternates, by what they lead with.**
+
+*The reporting rule, which is the part the audience acts on:*
+
+> Report the region, not the country: what a melioidosis genome says about
+> exposure origin *(14 words)*
+
+> What a melioidosis genome can and cannot tell you about exposure origin
+> *(12 words)*
+
+*The question a clinician actually asks:*
+
+> Where was this patient exposed? What the melioidosis genome answers, and what
+> it does not *(15 words)*
+
+*The numbers, for a committee that rewards specificity:*
+
+> 89% by region, no better than chance by country: genomic exposure attribution
+> in melioidosis *(13 words)*
+
+*The cause, which is the more technical framing:*
+
+> Absent signal, not insufficient resolution: the limit of country-level
+> exposure attribution in melioidosis *(13 words)*
+
+*Bolder, and a judgement call:*
+
+> A select agent with no return address: measuring exposure attribution in
+> melioidosis *(12 words)*
+
+**Two notes on wording.**
+
+Avoid "continent". The regional result is a **7-way** split, not a continental
+one, and a reviewer who checks will find the mismatch. "Region" is the accurate
+word and costs nothing.
+
+Avoid "cannot be determined" or "is impossible". We measured our estimators on
+this panel, not every possible method, and the Discussion was already softened
+once for exactly this reason. "Limits", "measured" and "does not exceed chance"
+all stay inside what the data support.
+
+**Retired.** The first draft's title, kept here so it is not reinvented:
+*"When genomics cannot tell you where a melioidosis patient was exposed: a
+measured accuracy floor for country attribution, and what to report instead"*
+(23 words, too long for a program listing).
 
 ## Authors
 
