@@ -10,19 +10,33 @@ supplied 2026-09-24), not from the event webpage.
 | **Accept or reject notice** | November 18, 2026 |
 | **Presentation types** | oral or poster (no plenary abstract, see below) |
 | **Category** | Pathogen Genomics, also considered for the AMD Workshop |
-| **Word limit** | **none stated in the call** |
+| **Submission** | `abstractscorecard.com`, EventKey `JZTEGVTP` |
 | **Contact** | Kelly Wroblewski, MPH, MT(ASCP), `id.conference@aphl.org` |
 
-**Required content**, quoted from the call. Abstracts must accurately and
-briefly describe the problem studied and/or objectives, the methodology,
-significant results including statistical significance where applicable, and
-conclusions and/or implications. Abstracts must report the results of original
-findings. The Background / Methods / Results / Conclusions layout below covers
-all four.
+**The submission is four separate fields with character caps, not one block.**
+The call for abstracts PDF states no word limit, and that is a red herring: the
+online form imposes its own, per field. Taken from the form itself.
 
-**No word limit appears anywhere in the call.** "Briefly" is the only guidance,
-so the versions below are sized at 346 and 205 words and the online form may
-still impose a cap. Check the form before pasting.
+| field | cap | this draft (form count) | margin |
+|---|---|---|---|
+| Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
+| Objectives | 500 chars | 386 | 114 |
+| Methodology | 750 chars | 583 | 167 |
+| Results | 1,250 chars | 950 | 300 |
+| Conclusions | 500 chars | 268 | 232 |
+
+**The form counts characters excluding spaces.** It reported the chosen title as
+75 characters where a raw count gives 89, and the difference is exactly the 14
+inter-word spaces. Both counts are given below, so the drafts fit either way.
+The *word* count does include every word.
+
+**The title must contain no abbreviations.** The chosen one has none. Keep it
+that way if you edit it.
+
+**Three form questions to answer** beyond the text: the topic (pick Pathogen
+Genomics), whether to be considered for the AMD Workshop (yes), and whether the
+committee may consider the abstract for a poster if it is not taken for an oral
+(yes, and the call already says this happens anyway).
 
 **Presenters pay their own way.** Registration is $750 early through
 February 10, 2027 and $800 late, plus travel from Bangkok, and speakers must
@@ -44,56 +58,18 @@ not in this repo (it is generated, and the working copy moved to the Mac on
 
 ## Title
 
-**Recommended.** Short, carries the finding, and a lab director remembers it.
+**Chosen, 2026-09-24.** Confirmed against the form at 75 characters and 15
+words, inside the 10-200 character and 1-75 word limits, and containing no
+abbreviations.
 
-> **Right region, wrong country: measured limits of genomic exposure
-> attribution in melioidosis** *(12 words)*
+> **Where was this patient exposed? What the melioidosis genome answers, and
+> what it does not**
 
-**Alternates, by what they lead with.**
-
-*The reporting rule, which is the part the audience acts on:*
-
-> Report the region, not the country: what a melioidosis genome says about
-> exposure origin *(14 words)*
-
-> What a melioidosis genome can and cannot tell you about exposure origin
-> *(12 words)*
-
-*The question a clinician actually asks:*
-
-> Where was this patient exposed? What the melioidosis genome answers, and what
-> it does not *(15 words)*
-
-*The numbers, for a committee that rewards specificity:*
-
-> 89% by region, no better than chance by country: genomic exposure attribution
-> in melioidosis *(13 words)*
-
-*The cause, which is the more technical framing:*
-
-> Absent signal, not insufficient resolution: the limit of country-level
-> exposure attribution in melioidosis *(13 words)*
-
-*Bolder, and a judgement call:*
-
-> A select agent with no return address: measuring exposure attribution in
-> melioidosis *(12 words)*
-
-**Two notes on wording.**
-
-Avoid "continent". The regional result is a **7-way** split, not a continental
-one, and a reviewer who checks will find the mismatch. "Region" is the accurate
-word and costs nothing.
-
-Avoid "cannot be determined" or "is impossible". We measured our estimators on
-this panel, not every possible method, and the Discussion was already softened
-once for exactly this reason. "Limits", "measured" and "does not exceed chance"
-all stay inside what the data support.
-
-**Retired.** The first draft's title, kept here so it is not reinvented:
-*"When genomics cannot tell you where a melioidosis patient was exposed: a
-measured accuracy floor for country attribution, and what to report instead"*
-(23 words, too long for a program listing).
+The six alternates considered are in git history at `b5755c9`. Two wording
+constraints still apply to any edit. **Avoid "continent"**, because the regional
+result is a 7-way split and a reviewer who checks will find the mismatch.
+**Avoid "cannot be determined" or "impossible"**, because we measured our own
+estimators on this panel rather than every possible method.
 
 ## Authors
 
@@ -124,68 +100,27 @@ better fit and carries the AMD consideration, so it is the one to pick.
 
 ---
 
-## Version A, structured, 346 words
+## Submission text, field by field
+Paste each block into its own box. Counts are given as *form count* (spaces
+excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
-**Background.** *Burkholderia pseudomallei* causes melioidosis across the
-tropics and is a Tier 1 select agent. Locally acquired cases on the Mississippi
-Gulf Coast and a presumptive focus in Georgia have made exposure origin a
-domestic question for US laboratories. When a patient has no travel history,
-clinicians ask the laboratory to name the place of exposure from the genome. No
-published study reports how often that answer is right. We measured it, at
-country, regional and sub-national scale.
+### Objectives — 386 / 500 characters (raw 457)
 
-**Methods.** We assembled 2,959 *B. pseudomallei* genomes, 41% of publicly
-archived isolates carrying a recorded country, and partitioned them into
-recombination-aware analysis units. Accuracy was measured against 46 cases from
-45 individuals with independently documented exposure, under a holdout removing
-both same-country reference genomes and same-source outbreak isolates.
+Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Locally acquired cases on the Mississippi Gulf Coast and a presumptive focus in Georgia have made exposure origin a domestic question for United States laboratories. With no travel history, clinicians ask the laboratory to name the place of exposure from the genome. No study has reported how often that answer is correct. We measured it at country, regional and sub-national scale.
 
-**Results.** Country attribution did not exceed chance, at 10 of 46 (22%, 95% CI
-11 to 36) against a 26% majority baseline, kappa 0.19, exact binomial p = 0.80.
-Regional attribution reached 41 of 46 (89%, 95% CI 76 to 96) against a 46%
-baseline, kappa 0.83, p < 0.001, and the Asia versus elsewhere split was
-recovered without error. Among the 14 cases with a close relative in the
-panel, region was correct 14 of 14 and country 2 of 14. Country accuracy stayed
-flat across a 584-fold range of genomic resolution, from 7 MLST loci to
-whole-genome recombination-filtered SNPs, while regional accuracy rose from 50%
-to 82%. The same pipeline separated 19 relapses from one reinfection across 20
-recurrence pairs (1 to 14 versus 1,102 SNPs), so the limit is not the assay.
-Seven of 16 exposure countries have no public genome, all of them in Latin
-America and the Caribbean, and some lineages span continents. A published US
-autochthonous cluster differs from a Viet Nam-acquired case by one cgMLST locus
-in 4,221.
+### Methodology — 583 / 750 characters (raw 677)
 
-**Conclusions.** Report exposure attribution by geographic scale, with region
-stated and country withheld. A laboratory can say a case is consistent with
-acquisition in South Asia. It cannot yet say which country. Closing the
-reference gap in the Americas is a prerequisite for anything finer.
+We assembled 2,959 B. pseudomallei genomes, 41% of publicly archived isolates carrying a recorded country, and partitioned them into 85 recombination-aware analysis units. Attribution was scored on core-genome multilocus sequence typing (4,221 loci), so the result does not depend on the lineage partition. Accuracy was measured against 46 cases from 45 individuals with independently documented exposure country, drawn from 16 countries. The holdout removed both same-country reference genomes and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Estimators were nearest neighbor and the modal label among the 20 closest genomes.
 
----
+### Results — 950 / 1250 characters (raw 1134)
 
-## Version B, structured, 205 words (if the limit is tighter)
+Country attribution did not exceed chance: 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority baseline, kappa 0.19, exact binomial p = 0.80. The interval contains the baseline. Sub-national attribution failed outright, at 0 of 5. Regional attribution reached 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, kappa 0.83, p < 0.001, and the Asia versus elsewhere split was recovered without error. Among the 14 cases with a close relative in the panel, region was correct 14 of 14 and country 2 of 14. Country accuracy stayed flat across a 584-fold range of genomic resolution, from 7 loci to whole-genome recombination-filtered variants, while regional accuracy rose from 50% to 82%. The same pipeline separated 19 relapses from one reinfection across 20 recurrence pairs (1 to 14 versus 1,102 variants), so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean, and some lineages span continents: a published United States autochthonous cluster differs from a Vietnam-acquired case by one locus in 4,221.
 
-**Background.** Melioidosis increasingly presents without a travel history,
-including locally acquired cases in the continental United States, and
-laboratories are asked to name the place of exposure from the genome. No
-published study reports how often that answer is right.
+### Conclusions — 268 / 500 characters (raw 320)
 
-**Methods.** We assembled 2,959 *Burkholderia pseudomallei* genomes and scored
-attribution against 46 cases from 45 individuals with documented exposure, under
-a holdout removing same-country and same-source reference isolates.
+Genomic exposure attribution should be reported by geographic scale. A laboratory can state that a case is consistent with acquisition in South Asia. It cannot yet name the country, and these data do not support doing so. Closing the reference gap in Latin America and the Caribbean is a prerequisite for anything finer.
 
-**Results.** Country attribution did not exceed chance, at 10 of 46 (22%, 95% CI
-11 to 36) against a 26% baseline, kappa 0.19, exact binomial p = 0.80. Regional
-attribution reached 89% (kappa 0.83, p < 0.001), and the Asia versus elsewhere
-split was recovered without error. Among
-the 14 cases with a close relative available, region was correct 14 of 14 and
-country 2 of 14. Country accuracy was flat across a 584-fold range of genomic
-resolution, which points to absent signal rather than insufficient resolution.
-Seven of 16 exposure countries have no public genome, all of them in Latin
-America and the Caribbean, and some lineages span continents.
-
-**Conclusions.** Report exposure attribution by geographic scale. Region is
-defensible today, country is not, and the reference gap in the Americas has to
-close before that changes.
+Total across the four fields: 2187 form characters, 2588 raw, against a 3,000 character ceiling.
 
 ---
 
@@ -200,9 +135,15 @@ costs four words and answers the question before it is asked.
 **The recurrence clause earns its space.** The first objection to any negative
 result is that a better method would have worked. The relapse and reinfection
 separation answers it with the pipeline's own output rather than with an
-argument. It is the sentence to protect if the word limit bites.
+argument. It is the sentence to protect if the Results box gets tight.
 
-**The one-locus US and Viet Nam clause.** Without it the work reads as "we did
+**Sub-national is now reported, at 0 of 5.** It was cut from the earlier drafts
+because n = 5 invites a question the data cannot answer well. It goes back in
+because Objectives promises three scales and Results has to deliver three, and
+because the Results box has 300 characters spare. Quote the denominator with it
+every time.
+
+**The one-locus US and Vietnam clause.** Without it the work reads as "we did
 not have enough reference genomes", which is only half the story and the weaker
 half. With it, the ceiling is a property of the organism as well as of the
 collection.
@@ -243,8 +184,9 @@ closing slide for the same reason.
    per-genome assignments would be the better instrument and needs the holdout
    output rather than these counts. Worth doing before the manuscript, not
    before October 2.
-2. **Word limit.** The call states none. Confirm against the online form before
-   pasting, since the form may cap it independently.
+2. **Field limits. Settled.** The form caps each field separately at 500, 750,
+   1,250 and 500 characters, counting characters without spaces. Every field
+   above fits with margin under both counting conventions. Nothing to do.
 3. **Author list and order.** Not drafted. [AUTHORS] is a placeholder.
 4. **Revalidate every number** against `NUMBERS.tsv` on the current frozen
    basis. The panel figure in particular: 2,959 is the deduplicated panel and
