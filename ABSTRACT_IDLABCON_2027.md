@@ -34,47 +34,56 @@ exceed chance, and regional attribution does**
 
 [AUTHORS]. Association of Public Health Laboratories, [AFFILIATION LINE].
 
+## Submission type
+
+**Plenary or oral.** The finding is a single measured result that changes what a
+laboratory reports, which is what that format is for, and a negative result needs
+the speaking time to establish that the instrument works before the absence lands.
+Poster is the fallback if the plenary slots go elsewhere. Roundtable is the wrong
+fit here, because the abstract answers a question rather than opening one.
+
 ---
 
-## Version A, structured, ~300 words
+## Version A, structured, 323 words
 
 **Background.** *Burkholderia pseudomallei* causes melioidosis across the
-tropics, and cases now appear in patients with no travel history. Clinicians and
-health departments ask the laboratory to name the place of exposure from the
-genome. No published study reports how often that answer is right, at any
-geographic scale.
+tropics and is a Tier 1 select agent. Locally acquired cases on the Mississippi
+Gulf Coast and a presumptive focus in Georgia have made exposure origin a
+domestic question for US laboratories. When a patient has no travel history,
+clinicians ask the laboratory to name the place of exposure from the genome. No
+published study reports how often that answer is right, at any geographic scale.
 
 **Methods.** We assembled 2,959 *B. pseudomallei* genomes, 41% of publicly
 archived isolates carrying a recorded country, and partitioned them into
-analysis units before recombination correction. Accuracy was measured against 46
-cases from 45 individuals with independently documented exposure. The holdout
-removed both same-country reference genomes and same-source outbreak isolates,
-so no case was scored against its own epidemiological neighbors.
+recombination-aware analysis units. Accuracy was measured against 46 cases from
+45 individuals with independently documented exposure, under a holdout removing
+both same-country reference genomes and same-source outbreak isolates.
 
 **Results.** Country attribution did not exceed chance, at 10 of 46 (22%)
 against a 26% majority baseline, kappa 0.19. Regional attribution reached 41 of
 46 (89%) against a 46% baseline, kappa 0.83, and the Asia versus elsewhere split
-was recovered without error. The gap was widest where attribution should have
-been easiest. Among the 14 cases with a close relative in the panel, region was
-correct 14 of 14 and country 2 of 14. Country accuracy stayed flat across a
-584-fold range of genomic resolution, from 7 MLST loci to whole-genome
-recombination-filtered SNPs, while regional accuracy rose from 50% to 82%. The
-same pipeline separated 19 relapses from one reinfection across 20 recurrence
-pairs (1 to 14 versus 1,102 SNPs), so the limit is not the assay. Two causes are
-separable. Seven of 16 exposure countries have no public genome at all, and all
-seven are in Latin America and the Caribbean. Some lineages also span
-continents, and a published US autochthonous cluster differs from a
-Viet Nam-acquired case by one cgMLST locus in 4,221.
+was recovered without error. Among the 14 cases with a close relative in the
+panel, region was correct 14 of 14 and country 2 of 14. Country accuracy stayed
+flat across a 584-fold range of genomic resolution, from 7 MLST loci to
+whole-genome recombination-filtered SNPs, while regional accuracy rose from 50%
+to 82%. The same pipeline separated 19 relapses from one reinfection across 20
+recurrence pairs (1 to 14 versus 1,102 SNPs), so the limit is not the assay.
+Seven of 16 exposure countries have no public genome, all of them in Latin
+America and the Caribbean, and some lineages span continents. A published US
+autochthonous cluster differs from a Viet Nam-acquired case by one cgMLST locus
+in 4,221.
 
-**Conclusions.** Genomic exposure attribution should be reported by geographic
-scale, with region stated and country withheld. Closing the reference gap in the
-Americas is a prerequisite for anything finer.
+**Conclusions.** Report exposure attribution by geographic scale, with region
+stated and country withheld. A laboratory can say a case is consistent with
+acquisition in South Asia. It cannot yet say which country. Closing the
+reference gap in the Americas is a prerequisite for anything finer.
 
 ---
 
-## Version B, structured, ~200 words (if the limit is tighter)
+## Version B, structured, 192 words (if the limit is tighter)
 
-**Background.** Melioidosis increasingly presents without a travel history, and
+**Background.** Melioidosis increasingly presents without a travel history,
+including locally acquired cases in the continental United States, and
 laboratories are asked to name the place of exposure from the genome. No
 published study reports how often that answer is right.
 
