@@ -82,7 +82,37 @@ and 3, carries a patristic of exactly **0**, which sits oddly beside a stated
 floor of 1 SNP and is the clearest case where the two measurements need
 reconciling in the same units.
 
-## 4. One cross-link worth noticing
+## 3a. Both gaps are answered, and it is sequencing status
+
+`Summary_AST_AMRfinderplus_ARDaP_GenomicQC_result_updated260910.xlsx`, sheet
+`Genome_QC`, settles 3.1 and 3.2 in one line each.
+
+| sample | `Run_status` | note |
+|---|---|---|
+| `IP-0272-5` (patient 11, episode 2) | **Not sequenced** | "Not sequenced yet; no data in Summaries_BP_v311" |
+| `IP-0264-2` (patient 12, episode 3) | **Not sequenced** | same |
+
+**Patient 11 is absent because one of its two isolates has no genome.** A
+pairwise distance needs two. `IP-0253-5` itself is fine: `20/20 PASS`, CheckM2
+completeness 99.42%, contamination 2.63%, ST99, mean coverage 37.5x, 305
+contigs. So this is not a QC exclusion and not an analytical decision.
+
+**It is a batch boundary, not selection.** All 58 samples marked "Not sequenced"
+are the contiguous run **`IP-0261` through `IP-0318`**, which is exactly 58
+accessions with no gaps. The collection is sequenced through `IP-0260` and the
+remainder is pending. Nothing was dropped on its merits.
+
+**The recurrence series will grow when that batch lands.** Patient 11 becomes
+analysable, adding one pair and two isolates. Patient 12 goes from two episodes
+to three, so its pairs go from one to three. Totals move from **13 patients, 20
+pairs, 29 isolates** to **14, 23, 32**.
+
+That matters for the abstract only in one way: the submitted text quotes 20
+pairs, which is correct on today's data and should not be changed. If the batch
+is sequenced before March 2027, the talk will need the newer number and the
+relapse range re-checked against it.
+
+## 4. One cross-link, now closed
 
 **`IP-0253` appears in both analyses and is absent from ours.** It is patient 11
 in the recurrence series, the case missing from the pairwise sheet. It is also
@@ -91,8 +121,14 @@ closeout deck, `IE-0019` at 0.000177 and `IE-0022` at 0.000216, the tightest
 pairs in that whole comparison.
 
 So the one recurrence case dropped from the genomic recurrence analysis is the
-same patient carrying the strongest environmental match in the collection. That
-may be coincidence. It is worth one look.
+same patient carrying the strongest environmental match in the collection.
+
+**The look is done and it is coincidence.** Patient 11 fell out because
+`IP-0272-5` sits in the unsequenced `IP-0261` to `IP-0318` batch, which has
+nothing to do with the environmental match. `IP-0253-5` is ST99, consistent with
+the deck listing both `IE-0019` and `IE-0022` as ST99 pairs to it. Worth keeping
+in view when that batch is sequenced, because the patient with the tightest
+environmental match will then also have a relapse pair.
 
 ## 5. What this changes in the abstract
 
