@@ -31,9 +31,9 @@ online form imposes its own, per field. Taken from the form itself.
 | field | cap | this draft (form count) | margin |
 |---|---|---|---|
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
-| Objectives | 500 chars | 414 | 86 |
+| Objectives | 500 chars | 391 | 109 |
 | Methodology | 750 chars | 563 | 187 |
-| Results | 1,250 chars | 1036 | 214 |
+| Results | 1,250 chars | 1042 | 208 |
 | Conclusions | 500 chars | 311 | 189 |
 
 **The form counts characters excluding spaces.** It reported the chosen title as
@@ -124,17 +124,17 @@ better fit and carries the AMD consideration, so it is the one to pick.
 Paste each block into its own box. Counts are given as *form count* (spaces
 excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
-### Objectives — 414 / 500 characters (raw 492)
+### Objectives — 391 / 500 characters (raw 461)
 
-Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Where a patient was exposed is both a clinical and an epidemiologic question, and when travel history is absent the genome is the remaining evidence. Locally acquired cases on the Mississippi Gulf Coast and a presumptive focus in Georgia have made it a domestic question for United States laboratories. No study has reported how often the genome is correct. We measured it at country, regional and sub-national scale.
+Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Exposure origin is both a clinical and an epidemiologic question, and without a travel history it is assigned from the genome. Locally acquired cases in Mississippi and a presumptive focus in Georgia have made it a domestic question for United States laboratories. Its accuracy below continental scale is not well established. We measured it at country, regional and sub-national scale.
 
 ### Methodology — 563 / 750 characters (raw 657)
 
 We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: public assemblies where available, read sets assembled locally where they were not, and 312 in-house isolates absent from public archives. Attribution was scored on a published core-genome multilocus sequence typing scheme of 4,221 loci, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure country in 16 countries, and is reported per estimator, because the estimator is part of the number.
 
-### Results — 1036 / 1250 characters (raw 1236)
+### Results — 1042 / 1250 characters (raw 1245)
 
-Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001, and was the only estimator to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 multistate aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34) and could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation itself reached. The same pipeline separated 19 relapses from one reinfection, 1 to 14 variants against 1,102, so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
+Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001, and was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 multistate aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34) and could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation itself reached. The same pipeline separated 19 relapses from one reinfection, 1 to 14 variants against 1,102, so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
 
 ### Conclusions — 311 / 500 characters (raw 372)
 
@@ -182,6 +182,28 @@ necessary to close but not sufficient.
 from prose in `GROUPING_AND_CDC_2026-08-21.md` §1. `generate_numbers.py` does not
 emit them, so they are the one place in this abstract that breaks the project's
 own cite-do-not-restate rule. See `MAC_VERIFICATION_REQUEST_2026-09-24.md` §4.
+
+**"How often the genome is correct" was a category error, and it overclaimed.**
+A genome is not correct or incorrect. What was measured is how often an
+*estimator* applied to genomic data recovers the documented exposure location,
+so Objectives now names the assignment and reports *its* accuracy.
+
+It also dropped a qualifier that matters. `PUBLICATION_STRATEGY_2026-09-02.md`
+states the gap precisely: no published work reports a misclassification rate, a
+confidence measure or a cross-validated accuracy figure **at any spatial scale
+finer than a two-population continental split from MLST**. Unqualified, the
+sentence claimed nobody had measured anything, while our own Results reports the
+Asia-versus-elsewhere split recovered without error, which is exactly that
+scale. "Below continental scale" restores it.
+
+**Novelty claims are curbed throughout.** Objectives previously said "no
+published study reports the accuracy of that assignment below continental
+scale". That is a priority claim, and an unqualified one invites a reviewer to
+produce a counterexample. It now reads "its accuracy below continental scale is
+not well established", which motivates the work without claiming to be first.
+In Results, "the only estimator to beat its baseline in every stratum" reads as
+absolute and is bounded to "the only one of four tested", which is what the
+specification curve actually shows.
 
 **Left out on purpose.** The recombination operating range and r/m 7.70 are
 load-bearing for the methods paper, not for this audience. The abstention rule
