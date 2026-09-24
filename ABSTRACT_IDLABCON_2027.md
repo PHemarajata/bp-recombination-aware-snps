@@ -31,7 +31,7 @@ online form imposes its own, per field. Taken from the form itself.
 | field | cap | this draft (form count) | margin |
 |---|---|---|---|
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
-| Objectives | 500 chars | 392 | 108 |
+| Objectives | 500 chars | 423 | 77 |
 | Methodology | 750 chars | 638 | 112 |
 | Results | 1,250 chars | 1042 | 208 |
 | Conclusions | 500 chars | 311 | 189 |
@@ -124,9 +124,9 @@ better fit and carries the AMD consideration, so it is the one to pick.
 Paste each block into its own box. Counts are given as *form count* (spaces
 excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
-### Objectives — 392 / 500 characters (raw 462)
+### Objectives — 423 / 500 characters (raw 497)
 
-Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Exposure origin is both a clinical and an epidemiologic question, and without a travel history it is assigned from the genome. Locally acquired cases in Mississippi and a presumptive focus in Georgia have made it a domestic question for United States laboratories. Its accuracy below continental scale is not well established. We measured it at sub-national, country and regional scales.
+Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Exposure origin is both a clinical and an epidemiologic question, and without a travel history it is assigned from the genome. Locally acquired cases in Mississippi and a presumptive focus in Georgia have made that a domestic question for United States laboratories. The accuracy of genomic assignment below continental scale is not well established. We measured that accuracy at sub-national, country and regional scales.
 
 ### Methodology — 638 / 750 characters (raw 744)
 
@@ -195,6 +195,16 @@ finer than a two-population continental split from MLST**. Unqualified, the
 sentence claimed nobody had measured anything, while our own Results reports the
 Asia-versus-elsewhere split recovered without error, which is exactly that
 scale. "Below continental scale" restores it.
+
+**Objectives had four pronouns in a row, and one had no antecedent.** "it is
+assigned", "made it a domestic question", "Its accuracy", "We measured it". The
+third was the broken one: exposure origin does not have an accuracy, an
+assignment does. The noun was there and this file removed it. `cb90db4` wrote
+"the accuracy of **that assignment**" and then, in the same commit while curbing
+the novelty claim, replaced the phrase with "**Its** accuracy", dropping the
+antecedent it had deliberately created two edits earlier. It now reads "the
+accuracy of genomic assignment", which is self-contained and reaches back to
+nothing, and the closing pronoun is named as "that accuracy".
 
 **Novelty claims are curbed throughout.** Objectives previously said "no
 published study reports the accuracy of that assignment below continental
