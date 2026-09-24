@@ -1,12 +1,32 @@
 # ID Lab Con 2027 abstract, draft 2026-09-24
 
-APHL ID Lab Con 2027, Hyatt Regency Atlanta, March 15-18, 2027. The call for
-abstracts is open and **closes October 2, 2026**, confirmed against the APHL
-event page on 2026-09-24. Three submission types (plenary, roundtable, poster)
-and seven tracks. This one fits **Pathogen Genomics**, with **Biosafety and
-Biosecurity** as a plausible second given the Tier 1 select agent framing.
+APHL ID Lab Con 2027, Hyatt Regency Atlanta, March 15-18, 2027. Everything below
+is taken from the official call for abstracts PDF (`idlc27_callforabstracts.pdf`,
+supplied 2026-09-24), not from the event webpage.
 
-The word limit and any required headings are still unconfirmed, see open item 1.
+| | |
+|---|---|
+| **Submission deadline** | **October 2, 2026** |
+| **Accept or reject notice** | November 18, 2026 |
+| **Presentation types** | oral or poster (no plenary abstract, see below) |
+| **Category** | Pathogen Genomics, also considered for the AMD Workshop |
+| **Word limit** | **none stated in the call** |
+| **Contact** | Kelly Wroblewski, MPH, MT(ASCP), `id.conference@aphl.org` |
+
+**Required content**, quoted from the call. Abstracts must accurately and
+briefly describe the problem studied and/or objectives, the methodology,
+significant results including statistical significance where applicable, and
+conclusions and/or implications. Abstracts must report the results of original
+findings. The Background / Methods / Results / Conclusions layout below covers
+all four.
+
+**No word limit appears anywhere in the call.** "Briefly" is the only guidance,
+so the versions below are sized at 328 and 192 words and the online form may
+still impose a cap. Check the form before pasting.
+
+**Presenters pay their own way.** Registration is $750 early through
+February 10, 2027 and $800 late, plus travel from Bangkok, and speakers must
+attend in person. Worth settling before submission rather than after acceptance.
 
 **Scope note.** This abstract covers the *global attribution* work tracked in
 this repository: 2,959 genomes, 85 recombination-aware analysis units, and
@@ -34,24 +54,40 @@ exceed chance, and regional attribution does**
 
 [AUTHORS]. Association of Public Health Laboratories, [AFFILIATION LINE].
 
-## Submission type
+## Submission type and category
 
-**Plenary or oral.** The finding is a single measured result that changes what a
-laboratory reports, which is what that format is for, and a negative result needs
-the speaking time to establish that the instrument works before the absence lands.
-Poster is the fallback if the plenary slots go elsewhere. Roundtable is the wrong
-fit here, because the abstract answers a question rather than opening one.
+**Oral presentation**, with poster as the fallback. The call states that
+abstracts not accepted for oral presentation may be considered for poster, so
+this is one submission and not two. Orals run 15 to 30 minutes, slotted into 60,
+90 or 120-minute sessions, with the length set during review.
+
+There is no plenary or roundtable abstract to submit. Those are **educational
+session proposals**, a separate submission type wanting a session topic,
+objectives, suggested speakers and tentative talk titles. An earlier version of
+this file recommended plenary, which was wrong.
+
+**Category: Pathogen Genomics**, which the call marks *also considered for the
+AMD Workshop*. That workshop is new this year, runs Monday March 15, 2027, and
+takes poster and oral submissions, so this category puts the abstract in front of
+two audiences from one submission. The listed examples for it are metagenomics,
+bioinformatics workflows and regulatory frameworks, and a measured accuracy floor
+for a genomic method sits comfortably among them.
+
+Infectious Disease Outbreaks and Surveillance is the plausible alternate, since
+its examples name molecular epidemiology approaches. Pathogen Genomics is the
+better fit and carries the AMD consideration, so it is the one to pick.
 
 ---
 
-## Version A, structured, 323 words
+## Version A, structured, 328 words
 
 **Background.** *Burkholderia pseudomallei* causes melioidosis across the
 tropics and is a Tier 1 select agent. Locally acquired cases on the Mississippi
 Gulf Coast and a presumptive focus in Georgia have made exposure origin a
 domestic question for US laboratories. When a patient has no travel history,
 clinicians ask the laboratory to name the place of exposure from the genome. No
-published study reports how often that answer is right, at any geographic scale.
+published study reports how often that answer is right. We measured it, at
+country, regional and sub-national scale.
 
 **Methods.** We assembled 2,959 *B. pseudomallei* genomes, 41% of publicly
 archived isolates carrying a recorded country, and partitioned them into
@@ -135,19 +171,24 @@ closing slide for the same reason.
 
 ## Open items before submission
 
-1. **Call for abstracts.** The deadline (October 2, 2026), dates, submission
-   types and tracks are confirmed above. The **word limit and any required
-   headings are not**, and the APHL submission portal is the place to check.
-   Both versions above assume Background, Methods, Results, Conclusions.
-2. **Author list and order.** Not drafted. [AUTHORS] is a placeholder.
-3. **Revalidate every number** against `NUMBERS.tsv` on the current frozen
+1. **Statistical significance.** The call asks for it "where applicable", and
+   the abstract currently reports kappa against a majority baseline with no test
+   and no interval. A binomial test of 10/46 against the 26% baseline is the
+   obvious addition and a reviewer may expect it, but no such figure exists in
+   `RESULTS_DRAFT_2026-08-23.md`, so it must be generated on the frozen basis
+   and written into `NUMBERS.tsv` rather than computed ad hoc for the abstract.
+   Decide before submission whether to add it.
+2. **Word limit.** The call states none. Confirm against the online form before
+   pasting, since the form may cap it independently.
+3. **Author list and order.** Not drafted. [AUTHORS] is a placeholder.
+4. **Revalidate every number** against `NUMBERS.tsv` on the current frozen
    basis. The panel figure in particular: 2,959 is the deduplicated panel and
    2,976 is the count of assemblies considered, and the two are not
    interchangeable.
-4. **"41% of publicly archived isolates with a recorded country"** is the
+5. **"41% of publicly archived isolates with a recorded country"** is the
    careful phrasing. Read as "41% of all public *B. pseudomallei* genomes" it is
    wrong, and the correct figure there is 36.8%.
-5. **Select agent and metadata clearance.** `PUBLICATION_STRATEGY_2026-09-02.md`
+6. **Select agent and metadata clearance.** `PUBLICATION_STRATEGY_2026-09-02.md`
    flags data availability as the highest-risk item across all three papers,
    because the metadata joins accession to location, date and exposure label.
    A conference abstract is lower stakes than a manuscript, but this is an APHL
@@ -161,7 +202,7 @@ closing slide for the same reason.
    the assembly name, and cases documented in the published literature. No
    partner institution has to release unpublished isolates for this abstract to
    go out.
-6. **Relationship to the manuscripts.** This is the attribution work, listed as
+7. **Relationship to the manuscripts.** This is the attribution work, listed as
    Paper 3 in the publication strategy and the least finished of the three. The
    abstract cites calibration work that is still unpublished. That is normal for
    a conference, but the talk needs one slide on why the recombination
