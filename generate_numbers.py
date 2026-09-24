@@ -398,13 +398,93 @@ if per:
         "the floor does not depend on it, but the coverage criterion does not "
         "reproduce quantitatively")
 
+# ------------------------------------------------------ funded isolates -----
+# TUC clip 3 act 7 draws three figures that were registered nowhere and had to
+# be re-derived to review the clip. They reproduce exactly, so they are computed
+# here instead of asserted in prose. SHORTLIST.md has the funded isolates
+# "totaled in clip 4", which should read them from here rather than redefine
+# them.
+#
+# The definition: `IP-` (patient) and `IE-` (environmental) identifiers are this
+# project's own unpublished Nakhon Phanom isolates. They are in no public
+# archive, so the identifier is the only metadata there is -- no join to
+# BioProject or to any source column will find them.
+gate7 = maybe(f"{B}/GATE1_ALIGNMENT_2026-08-21.tsv")
+part7 = maybe(f"{B}/FINAL_BASIS_2026-08-22/FINAL_PARTITION.tsv")
+if gate7 and part7:
+    members = {}
+    for r in part7:
+        members.setdefault(r["unit"], []).append(r["sample_id"])
+
+    def is_ours(sid):
+        return sid.startswith(("IP-", "IE-"))       # as panel.in_house above
+
+    inwin = [r for r in gate7 if r["gate1_alignment"] == "in"]
+    rm_in = [float(r["rm_corrected"]) for r in inwin if r["rm_corrected"]]
+    ours, lose_floor = [], 0
+    for r in inwin:
+        ms = members.get(r["unit"], [])
+        k = sum(1 for s in ms if is_ours(s))
+        if k:
+            ours.append(r)
+            if len(ms) - k < 7:
+                lose_floor += 1
+    rm_ours = [float(r["rm_corrected"]) for r in ours if r["rm_corrected"]]
+    add("funded.in_window_units", len(ours),
+        "GATE1_ALIGNMENT_2026-08-21.tsv + FINAL_BASIS_2026-08-22",
+        f"of {len(inwin)} in-window units, those holding at least one IP-/IE- "
+        "isolate of this project's own sequencing")
+    add("funded.in_window_median_rm", f"{st.median(sorted(rm_ours)):.2f}",
+        "GATE1_ALIGNMENT_2026-08-21.tsv + FINAL_BASIS_2026-08-22",
+        f"against {st.median(sorted(rm_in)):.2f} for all in-window units, which "
+        "is the claim: load-bearing and representative at once. COLLIDES "
+        "NUMERICALLY with rm.floor_sensitivity's floor-755 value 7.74 -- they "
+        "are unrelated, so never show both on one frame")
+    add("funded.units_below_floor_without", lose_floor,
+        "GATE1_ALIGNMENT_2026-08-21.tsv + FINAL_BASIS_2026-08-22",
+        "in-window funded units that fall under the seven-member minimum if "
+        "this project's isolates are removed, so they would not exist as "
+        "measurements at all")
+
 # ------------------------------------------------------------------ write ---
+# This script does not produce every figure in NUMBERS.tsv. On 2026-09-17 the
+# file held 101 figures and this script built 66 of them, so a plain truncating
+# write silently deleted 35 -- including every `controls.*` constant and the six
+# `rm.*` keys carrying the Gate 1 window, its brackets, the in-window IQR and
+# the floor sensitivity. Those are the numbers the TUC clips are built on, and
+# the docstring above tells everyone to run this before quoting anything.
+#
+# So the write MERGES. Computed keys refresh in place, keys this script does not
+# build are kept in their original position, and anything carried rather than
+# recomputed is named on stdout so it stays visible. Do not change this back to
+# a bare "w" without first making the carried figures computable.
+computed = {r["key"]: r for r in ROWS}
+existing = []
+if os.path.exists(OUT):
+    with open(OUT) as fh:
+        existing = list(csv.DictReader(fh, delimiter="\t"))
+
+merged, carried = [], []
+for old in existing:
+    k = old["key"]
+    if k in computed:
+        merged.append(computed.pop(k))
+    else:
+        merged.append(old)
+        carried.append(k)
+merged.extend(computed.values())          # keys new in this run
+
 with open(OUT, "w", newline="") as fh:
     w = csv.DictWriter(fh, fieldnames=["key", "value", "source", "note"],
                        delimiter="\t", lineterminator="\n")
     w.writeheader()
-    w.writerows(ROWS)
-print(f"wrote {OUT}  ({len(ROWS)} figures)")
+    w.writerows(merged)
+print(f"wrote {OUT}  ({len(merged)} figures, {len(ROWS)} recomputed)")
 for r in ROWS:
     flag = "  <-- " + r["note"] if r["note"] else ""
     print(f"  {r['key']:<44}{str(r['value'])[:34]:<36}{flag}")
+if carried:
+    print(f"\n  {len(carried)} figures CARRIED, not recomputed by this script:")
+    for k in carried:
+        print(f"    {k}")
+    print("  Each is quotable only because someone computed it by hand once.")
