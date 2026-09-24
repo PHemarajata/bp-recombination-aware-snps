@@ -20,7 +20,7 @@ online form imposes its own, per field. Taken from the form itself.
 | field | cap | this draft (form count) | margin |
 |---|---|---|---|
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
-| Objectives | 500 chars | 386 | 114 |
+| Objectives | 500 chars | 414 | 86 |
 | Methodology | 750 chars | 583 | 167 |
 | Results | 1,250 chars | 950 | 300 |
 | Conclusions | 500 chars | 268 | 232 |
@@ -104,9 +104,9 @@ better fit and carries the AMD consideration, so it is the one to pick.
 Paste each block into its own box. Counts are given as *form count* (spaces
 excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
-### Objectives — 386 / 500 characters (raw 457)
+### Objectives — 414 / 500 characters (raw 492)
 
-Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Locally acquired cases on the Mississippi Gulf Coast and a presumptive focus in Georgia have made exposure origin a domestic question for United States laboratories. With no travel history, clinicians ask the laboratory to name the place of exposure from the genome. No study has reported how often that answer is correct. We measured it at country, regional and sub-national scale.
+Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Where a patient was exposed is both a clinical and an epidemiologic question, and when travel history is absent the genome is the remaining evidence. Locally acquired cases on the Mississippi Gulf Coast and a presumptive focus in Georgia have made it a domestic question for United States laboratories. No study has reported how often the genome is correct. We measured it at country, regional and sub-national scale.
 
 ### Methodology — 583 / 750 characters (raw 677)
 
