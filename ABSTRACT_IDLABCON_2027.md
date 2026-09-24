@@ -207,3 +207,48 @@ closing slide for the same reason.
    abstract cites calibration work that is still unpublished. That is normal for
    a conference, but the talk needs one slide on why the recombination
    correction is trustworthy.
+
+---
+
+## Corroborating material from the Burk-Genome closeout deck
+
+**Separate project. Do not merge these numbers with the ones above.** The deck
+is `BurkGenome_close_KK260812_final.pptx`, presented by Kornthara (Yuyi) Kawang
+at the first-phase closeout, and it reports the Nakhon Phanom study: 312
+*B. pseudomallei* genomes (259 patient, 53 environmental) set inside a curated
+**2,773**-genome global framework. The abstract above uses a **2,959**-genome
+panel built for a different question. The two frameworks are not the same object
+and a figure from one must never be quoted against the other.
+
+What the deck is useful for is the **talk**, not the abstract.
+
+**It independently corroborates the scale-dependence conclusion.** Slide 25
+reports an association index for how strongly each trait tracks the phylogeny,
+where lower means more structured, all at p < 0.01:
+
+| trait | association index |
+|---|---|
+| geographic region | 0.193 |
+| country | 0.236 |
+| collection decade | 0.581 |
+| isolation source | 0.710 |
+| Thai province | 0.721 |
+
+Region is more structured than country, and province is close to unstructured.
+That is the same ordering the attribution result gives from a different
+collection and a different statistic, and it is worth one slide. It is
+corroboration, not evidence to restate as though it were ours.
+
+**Slide 27 explains the mechanism behind the country failure.** Australasia is a
+genetically isolated reservoir, while mainland Southeast Asia is one continuous
+mixed population crossing national borders. That is precisely why the Asia
+versus elsewhere split comes back without error while country does not, and it
+answers the obvious question from the floor better than any restatement of the
+accuracy table.
+
+**Slide 3 sharpens the Georgia case for the background.** Two men admitted after
+Hurricane Helene in September 2024 with no travel history, matched by CDC to two
+fatal cases in the same county in 1983 and 1989 carrying the same genotype, four
+genomes differing by fewer than 20 SNPs across four decades, and the closest
+relatives worldwide in Vietnam. Brennan *et al.*, *Emerg Infect Dis*
+2025;31(9), which is the same record this repository cites as PMID 40835221.
