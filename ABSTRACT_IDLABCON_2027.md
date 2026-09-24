@@ -33,7 +33,7 @@ online form imposes its own, per field. Taken from the form itself.
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 423 | 77 |
 | Methodology | 750 chars | 638 | 112 |
-| Results | 1,250 chars | 1038 | 212 |
+| Results | 1,250 chars | 1028 | 222 |
 | Conclusions | 500 chars | 380 | 120 |
 
 **The form counts characters excluding spaces.** It reported the chosen title as
@@ -132,9 +132,9 @@ Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Expos
 
 We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing genomic study now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator, because the estimator is part of the number. Recombination detection was calibrated separately, and the SNP distances here use that output.
 
-### Results — 1038 / 1250 characters (raw 1243)
+### Results — 1028 / 1250 characters (raw 1232)
 
-Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001. It was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34). It could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation reached. Across 20 recurrence pairs in that series, 19 relapses differed by 1 to 14 SNPs and one reinfection by 1,102, so resolution is not the limit. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
+Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001. It was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34). It could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation reached. In the ongoing study, 19 relapse pairs differed by 1 to 14 SNPs and one reinfection pair by 1,102, so resolution is not the limit. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
 
 ### Conclusions — 380 / 500 characters (raw 450)
 
@@ -237,12 +237,20 @@ was calibrated separately, and the SNP distances here use that output", which
 signals the workstream, explains where the SNP distances come from, and no
 longer disclaims a result the abstract goes on to give.
 
-**The recurrence pairs are attributed to the in-house series.** Results says
-"in that series", pointing back to Methodology's "312 isolates from an ongoing
-genomic study now being submitted to SRA". Without it a reader takes the
-recurrence work for public data and then cannot find it, and the partners get no
-signal that it is theirs. Two redundancies paid for it: "multistate", since the
-same sentence already names the CDC investigation, and "itself".
+**The recurrence pairs are attributed, and the attribution is front-loaded.**
+An earlier fix wrote "in that series", which failed for the same reason "Its
+accuracy" failed in Objectives: the nearest antecedent was wrong. That phrase
+sat immediately after the CDC sentence, so "that series" read as the
+aromatherapy series rather than the in-house isolates.
+
+The provenance now opens the sentence: "In the ongoing study, 19 relapse pairs
+differed by 1 to 14 SNPs and one reinfection pair by 1,102." A reader knows
+whose data it is before reaching a number, so no back-reference has to survive
+the sentence before it. "The ongoing study" points to Methodology's "an ongoing
+genomic study now being submitted to SRA".
+
+It is also shorter. Front-loading freed 11 characters against the patched
+version, leaving 18 of margin rather than 7.
 
 ⚠ **Not every recurrence isolate is inside the analysed panel.**
 `RESULTS_DRAFT_2026-08-23.md` §R3.1 notes that four of the 20 pairs "required a
