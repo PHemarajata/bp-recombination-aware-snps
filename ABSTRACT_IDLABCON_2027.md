@@ -1,5 +1,14 @@
 # ID Lab Con 2027 abstract, draft 2026-09-24
 
+> ⚠ **DO NOT SUBMIT THE TEXT BELOW AS IT STANDS.** A review on 2026-09-24
+> against the current basis found five claims that are wrong as written, and a
+> structural problem: the text straddles an August attribution analysis scored
+> on cgMLST and a September manuscript that contains neither cgMLST nor any
+> attribution number. See `ABSTRACT_IDLABCON_REVIEW_2026-09-24.md`. The
+> country and region headline figures survive; the resolution-curve sentence,
+> the close-relative stratum sentence, and the estimator and baseline reporting
+> do not.
+
 APHL ID Lab Con 2027, Hyatt Regency Atlanta, March 15-18, 2027. Everything below
 is taken from the official call for abstracts PDF (`idlc27_callforabstracts.pdf`,
 supplied 2026-09-24), not from the event webpage.
