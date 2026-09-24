@@ -33,8 +33,8 @@ online form imposes its own, per field. Taken from the form itself.
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 423 | 77 |
 | Methodology | 750 chars | 638 | 112 |
-| Results | 1,250 chars | 1042 | 208 |
-| Conclusions | 500 chars | 311 | 189 |
+| Results | 1,250 chars | 1041 | 209 |
+| Conclusions | 500 chars | 380 | 120 |
 
 **The form counts characters excluding spaces.** It reported the chosen title as
 75 characters where a raw count gives 89, and the difference is exactly the 14
@@ -132,13 +132,13 @@ Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Expos
 
 We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing genomic study now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator, because the estimator is part of the number. Recombination detection was calibrated on this collection in separate work, not included here.
 
-### Results — 1042 / 1250 characters (raw 1245)
+### Results — 1041 / 1250 characters (raw 1244)
 
-Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001, and was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 multistate aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34) and could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation itself reached. The same pipeline separated 19 relapses from one reinfection, 1 to 14 variants against 1,102, so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
+Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001. It was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 multistate aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34). It could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation itself reached. The same pipeline separated 19 relapses from one reinfection, 1 to 14 variants against 1,102, so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
 
-### Conclusions — 311 / 500 characters (raw 372)
+### Conclusions — 380 / 500 characters (raw 450)
 
-Genomic exposure attribution should be reported by geographic scale. A laboratory can state that a case is consistent with acquisition in South Asia. It cannot yet name the country, and these data do not support doing so. Closing the reference gap in Latin America and the Caribbean is necessary before anything finer, and the India result shows it will not be sufficient.
+Genomic exposure attribution should be reported by geographic scale. A laboratory can state that a case is consistent with acquisition in South Asia. It cannot yet name the country, and these data do not support doing so. Closing the reference gap in Latin America and the Caribbean is necessary before anything finer. More references alone will not be enough, because country-level signal in this collection is not separable from collection history.
 
 Total across the four fields: 2187 form characters, 2588 raw, against a 3,000 character ceiling.
 
@@ -225,6 +225,23 @@ since cgMLST allele calls are not Gubbins-filtered.
 window to be explained, or the number is meaningless, and that version runs 783
 of 750 characters even on the space-excluding count. The clause above is what
 fits.
+
+**The structure result goes in Conclusions, not Results, and carries no
+number.** Results has six raw characters of margin, so nothing fits there
+without cutting something load-bearing. Conclusions had room. The clause reads
+"country-level signal in this collection is not separable from collection
+history", which is `STATE_2026-09-02.md`'s own wording, and it holds across the
+entire 6-to-26 specification range, so it costs nothing to defend.
+
+**No number, deliberately.** Region's association index on the curated framework
+is 0.193 and country's attribution kappa on the validation set is 0.193. Those
+are different quantities on different frameworks and the match is coincidence.
+Quoting either alongside the other invites a reviewer to assume one was copied
+from the other. Qualitative, the collision cannot arise.
+
+**Sentence length.** Results had a 41-word and a 45-word sentence against a
+house limit of about 35. Both are split, the longest is now 27 words, and the
+split cost one character.
 
 **Left out on purpose.** The recombination operating range and r/m 7.70 are
 load-bearing for the methods paper, not for this audience. The abstention rule
