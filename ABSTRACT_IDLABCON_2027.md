@@ -33,8 +33,8 @@ online form imposes its own, per field. Taken from the form itself.
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 414 | 86 |
 | Methodology | 750 chars | 563 | 187 |
-| Results | 1,250 chars | 1003 | 247 |
-| Conclusions | 500 chars | 268 | 232 |
+| Results | 1,250 chars | 1036 | 214 |
+| Conclusions | 500 chars | 311 | 189 |
 
 **The form counts characters excluding spaces.** It reported the chosen title as
 75 characters where a raw count gives 89, and the difference is exactly the 14
@@ -132,13 +132,13 @@ Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Where
 
 We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: public assemblies where available, read sets assembled locally where they were not, and 312 in-house isolates absent from public archives. Attribution was scored on a published core-genome multilocus sequence typing scheme of 4,221 loci, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure country in 16 countries, and is reported per estimator, because the estimator is part of the number.
 
-### Results — 1003 / 1250 characters (raw 1191)
+### Results — 1036 / 1250 characters (raw 1236)
 
-Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only because it scores against 3.0% marginal chance. Against the majority class the classifier fails, and across twelve specifications country accuracy spans 0.000 to 0.261. Sub-national attribution failed outright, at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001, and was the only estimator to beat its baseline in every stratum. Nearest neighbor reached 80.4% overall but failed where a close relative existed. Asia versus elsewhere was recovered without error. The same pipeline separated 19 relapses from one reinfection across 20 recurrence pairs, 1 to 14 variants against 1,102, so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean, and a published United States autochthonous cluster differs from a Vietnam-acquired case by one locus in 4,221.
+Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001, and was the only estimator to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 multistate aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34) and could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation itself reached. The same pipeline separated 19 relapses from one reinfection, 1 to 14 variants against 1,102, so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
 
-### Conclusions — 268 / 500 characters (raw 320)
+### Conclusions — 311 / 500 characters (raw 372)
 
-Genomic exposure attribution should be reported by geographic scale. A laboratory can state that a case is consistent with acquisition in South Asia. It cannot yet name the country, and these data do not support doing so. Closing the reference gap in Latin America and the Caribbean is a prerequisite for anything finer.
+Genomic exposure attribution should be reported by geographic scale. A laboratory can state that a case is consistent with acquisition in South Asia. It cannot yet name the country, and these data do not support doing so. Closing the reference gap in Latin America and the Caribbean is necessary before anything finer, and the India result shows it will not be sufficient.
 
 Total across the four fields: 2187 form characters, 2588 raw, against a 3,000 character ceiling.
 
@@ -167,6 +167,21 @@ every time.
 not have enough reference genomes", which is only half the story and the weaker
 half. With it, the ceiling is a property of the organism as well as of the
 collection.
+
+**The aromatherapy reproduction replaced the one-locus clause, and that is an
+upgrade rather than a trade.** The dropped clause (a US autochthonous cluster one
+cgMLST locus from a Viet Nam-acquired case) argued that the ceiling is a property
+of the organism and not only of our panel. The aromatherapy result argues the
+same thing harder, because **India is not a reference gap**: the panel holds 56
+Indian genomes, and country still cannot be separated from the rest of South
+Asia. That is absence of signal where coverage is good, which is the stronger
+form of the claim and the reason Conclusions now says the reference gap is
+necessary to close but not sufficient.
+
+⚠ **Two p-values here are not in `NUMBERS.tsv`.** 2.8e-34 and 0.351 are quoted
+from prose in `GROUPING_AND_CDC_2026-08-21.md` §1. `generate_numbers.py` does not
+emit them, so they are the one place in this abstract that breaks the project's
+own cite-do-not-restate rule. See `MAC_VERIFICATION_REQUEST_2026-09-24.md` §4.
 
 **Left out on purpose.** The recombination operating range and r/m 7.70 are
 load-bearing for the methods paper, not for this audience. The abstention rule
