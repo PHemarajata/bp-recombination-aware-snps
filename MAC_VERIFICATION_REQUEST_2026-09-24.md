@@ -1,50 +1,28 @@
 # What the cloud session needs from the Mac
 
-> ⚠⚠ **STOP. DO NOT RUN `generate_numbers.py` FROM `main` AS THIS FILE
-> ORIGINALLY INSTRUCTED.** On `main` that script **truncates** `NUMBERS.tsv`:
-> it opens the file with `"w"` and writes only the keys it computes. On
-> 2026-09-17 the file held **101 figures while the script built 66**, so a plain
-> run **silently deleted 35**, including every `controls.*` constant and the six
-> `rm.*` keys carrying the Gate 1 window, its brackets, the in-window IQR and
-> the floor sensitivity.
+> ⚠ **RESOLVED 2026-09-24. `git pull` before you run anything.**
 >
-> The fix exists but **is not on `main`**. It is on
-> `origin/worktree-clip2-review`, which rewrites the write as a merge: computed
-> keys refresh in place, keys the script does not build are kept, and carried
-> figures are named on stdout. Take one of these routes before running anything:
+> `generate_numbers.py` used to **truncate** `NUMBERS.tsv`: it opened the file
+> with `"w"` and wrote only the keys it computes. On 2026-09-17 the file held
+> **101 figures while the script built 66**, so a plain run **silently deleted
+> 35**, including every `controls.*` constant and the six `rm.*` keys carrying
+> the Gate 1 window, its brackets, the in-window IQR and the floor sensitivity.
 >
-> **Route A, safest.** Back up first, then run, then compare:
+> **The merge-write fix is now on `main`** (PR #29, merged 2026-09-24). An
+> earlier version of this file told you to run the truncating script with no
+> backup, and then to take the fix from `origin/worktree-clip2-review`. Neither
+> is needed now, but **a Mac checkout that has not pulled since 2026-09-24 still
+> has the destructive version**. So:
+>
 > ```
 > cd ~/bp-recombination-aware-snps
-> cp NUMBERS.tsv NUMBERS.tsv.bak
-> wc -l NUMBERS.tsv.bak
-> python3 generate_numbers.py
-> wc -l NUMBERS.tsv          # if this dropped, restore from the .bak
+> git pull origin main
+> grep -c 'w.writerows(merged)' generate_numbers.py   # 1 = you have the fix
+> cp NUMBERS.tsv NUMBERS.tsv.bak                      # cheap, do it anyway
 > ```
 >
-> **Route B, better.** Take the merge-write version first, then run:
-> ```
-> git fetch origin worktree-clip2-review
-> git checkout origin/worktree-clip2-review -- generate_numbers.py
-> cp NUMBERS.tsv NUMBERS.tsv.bak
-> python3 generate_numbers.py
-> ```
->
-> I wrote the original instruction without knowing this, and it would have
-> destroyed 35 hand-computed figures. Apologies for the near miss.
-
-
-**2026-09-24.** To close `ABSTRACT_IDLABCON_REVIEW_2026-09-24.md` before the
-October 2 deadline.
-
-**Read this first: most of the corrections do not need the Mac.** Dropping the
-resolution-curve sentence, dropping the bare 14/14 and 2/14 stratum, naming the
-estimator on every accuracy, and giving country both baselines are all fixable
-from documents already in the repository. The Mac run is what makes the
-remaining figures defensible under this project's own rule, which is that
-documents cite `NUMBERS.tsv` rather than restating numbers.
-
----
+> The fixed script names every carried figure on stdout, so you can see which
+> values it did not recompute.
 
 ## 1. Two commands
 
