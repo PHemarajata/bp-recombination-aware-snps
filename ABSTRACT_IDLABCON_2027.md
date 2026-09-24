@@ -1,13 +1,15 @@
 # ID Lab Con 2027 abstract, draft 2026-09-24
 
-> ⚠ **DO NOT SUBMIT THE TEXT BELOW AS IT STANDS.** A review on 2026-09-24
-> against the current basis found five claims that are wrong as written, and a
-> structural problem: the text straddles an August attribution analysis scored
-> on cgMLST and a September manuscript that contains neither cgMLST nor any
-> attribution number. See `ABSTRACT_IDLABCON_REVIEW_2026-09-24.md`. The
-> country and region headline figures survive; the resolution-curve sentence,
-> the close-relative stratum sentence, and the estimator and baseline reporting
-> do not.
+> ⚠ **CORRECTED 2026-09-24, NOT YET VERIFIED AGAINST `NUMBERS.tsv`.** The
+> review in `ABSTRACT_IDLABCON_REVIEW_2026-09-24.md` found five claims wrong as
+> written. Methodology and Results are rebuilt on
+> `ATTRIBUTION_SPECIFICATION_CURVE_2026-09-02.md`: the resolution-curve sentence
+> and the bare 14/14 stratum are gone, every accuracy now names its estimator,
+> and country carries both baselines. The 85-unit partition is no longer
+> mentioned, because this abstract reports no partition-based result.
+> **Before submitting**, run the two commands in
+> `MAC_VERIFICATION_REQUEST_2026-09-24.md` and check these figures against
+> `NUMBERS.tsv`.
 
 APHL ID Lab Con 2027, Hyatt Regency Atlanta, March 15-18, 2027. Everything below
 is taken from the official call for abstracts PDF (`idlc27_callforabstracts.pdf`,
@@ -30,8 +32,8 @@ online form imposes its own, per field. Taken from the form itself.
 |---|---|---|---|
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 414 | 86 |
-| Methodology | 750 chars | 641 | 109 |
-| Results | 1,250 chars | 950 | 300 |
+| Methodology | 750 chars | 563 | 187 |
+| Results | 1,250 chars | 1003 | 247 |
 | Conclusions | 500 chars | 268 | 232 |
 
 **The form counts characters excluding spaces.** It reported the chosen title as
@@ -126,13 +128,13 @@ excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
 Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Where a patient was exposed is both a clinical and an epidemiologic question, and when travel history is absent the genome is the remaining evidence. Locally acquired cases on the Mississippi Gulf Coast and a presumptive focus in Georgia have made it a domestic question for United States laboratories. No study has reported how often the genome is correct. We measured it at country, regional and sub-national scale.
 
-### Methodology — 641 / 750 characters (raw 746)
+### Methodology — 563 / 750 characters (raw 657)
 
-We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: public assemblies where available, read sets assembled locally where they were not, and 312 in-house isolates absent from public archives. These were partitioned into 85 recombination-aware analysis units, and attribution was scored on core-genome multilocus sequence typing (4,221 loci), so the result does not depend on the partition. Accuracy was measured against 46 cases from 45 individuals with documented exposure country in 16 countries. The holdout removed same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Estimators were nearest neighbor and modal label among the 20 closest.
+We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: public assemblies where available, read sets assembled locally where they were not, and 312 in-house isolates absent from public archives. Attribution was scored on a published core-genome multilocus sequence typing scheme of 4,221 loci, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure country in 16 countries, and is reported per estimator, because the estimator is part of the number.
 
-### Results — 950 / 1250 characters (raw 1134)
+### Results — 1003 / 1250 characters (raw 1191)
 
-Country attribution did not exceed chance: 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority baseline, kappa 0.19, exact binomial p = 0.80. The interval contains the baseline. Sub-national attribution failed outright, at 0 of 5. Regional attribution reached 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, kappa 0.83, p < 0.001, and the Asia versus elsewhere split was recovered without error. Among the 14 cases with a close relative in the panel, region was correct 14 of 14 and country 2 of 14. Country accuracy stayed flat across a 584-fold range of genomic resolution, from 7 loci to whole-genome recombination-filtered variants, while regional accuracy rose from 50% to 82%. The same pipeline separated 19 relapses from one reinfection across 20 recurrence pairs (1 to 14 versus 1,102 variants), so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean, and some lineages span continents: a published United States autochthonous cluster differs from a Vietnam-acquired case by one locus in 4,221.
+Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only because it scores against 3.0% marginal chance. Against the majority class the classifier fails, and across twelve specifications country accuracy spans 0.000 to 0.261. Sub-national attribution failed outright, at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001, and was the only estimator to beat its baseline in every stratum. Nearest neighbor reached 80.4% overall but failed where a close relative existed. Asia versus elsewhere was recovered without error. The same pipeline separated 19 relapses from one reinfection across 20 recurrence pairs, 1 to 14 variants against 1,102, so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean, and a published United States autochthonous cluster differs from a Vietnam-acquired case by one locus in 4,221.
 
 ### Conclusions — 268 / 500 characters (raw 320)
 
