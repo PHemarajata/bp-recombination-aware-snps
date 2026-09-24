@@ -1,7 +1,18 @@
 # ID Lab Con 2027 abstract, draft 2026-09-24
 
-APHL ID Lab Con 2027, Hyatt Regency Atlanta. Call for abstracts details are not
-confirmed in this file, see the open items at the bottom.
+APHL ID Lab Con 2027, Hyatt Regency Atlanta, March 15-18, 2027. The call for
+abstracts is open and **closes October 2, 2026**, confirmed against the APHL
+event page on 2026-09-24. Three submission types (plenary, roundtable, poster)
+and seven tracks. This one fits **Pathogen Genomics**, with **Biosafety and
+Biosecurity** as a plausible second given the Tier 1 select agent framing.
+
+The word limit and any required headings are still unconfirmed, see open item 1.
+
+**Scope note.** This abstract covers the *global attribution* work tracked in
+this repository: 2,959 genomes, 85 recombination-aware analysis units, and
+accuracy measured against 46 documented-exposure cases. It is **not** the
+Nakhon Phanom paired human and residential isolate study. That dataset does not
+appear anywhere in this repository, and the two should not be conflated.
 
 Source of every number: `ABSTRACT_DRAFT_2026-08-23.md`, which draws from
 `NUMBERS.tsv` on the frozen basis `FINAL_BASIS_2026-08-22/`. `NUMBERS.tsv` is
@@ -115,9 +126,10 @@ closing slide for the same reason.
 
 ## Open items before submission
 
-1. **Call for abstracts.** Word limit, structured headings, submission deadline,
-   and whether oral and poster are separate tracks. None of that is confirmed
-   here. Both versions above assume Background, Methods, Results, Conclusions.
+1. **Call for abstracts.** The deadline (October 2, 2026), dates, submission
+   types and tracks are confirmed above. The **word limit and any required
+   headings are not**, and the APHL submission portal is the place to check.
+   Both versions above assume Background, Methods, Results, Conclusions.
 2. **Author list and order.** Not drafted. [AUTHORS] is a placeholder.
 3. **Revalidate every number** against `NUMBERS.tsv` on the current frozen
    basis. The panel figure in particular: 2,959 is the deduplicated panel and
@@ -131,6 +143,15 @@ closing slide for the same reason.
    because the metadata joins accession to location, date and exposure label.
    A conference abstract is lower stakes than a manuscript, but this is an APHL
    meeting and internal clearance should happen before submission, not after.
+
+   The lift here is lighter than for a partner-isolate abstract, and that is
+   the main practical argument for this submission over the Nakhon Phanom one
+   with eight days left. Per `METHODS_DRAFT_2026-08-19.md` §2.12.11a.2, the 48
+   exposure-labelled genomes (46 scorable) are CDC submissions carrying an
+   explicit `ex <country>` label, older assemblies with the exposure country in
+   the assembly name, and cases documented in the published literature. No
+   partner institution has to release unpublished isolates for this abstract to
+   go out.
 6. **Relationship to the manuscripts.** This is the attribution work, listed as
    Paper 3 in the publication strategy and the least finished of the three. The
    abstract cites calibration work that is still unpublished. That is normal for
