@@ -21,7 +21,7 @@ findings. The Background / Methods / Results / Conclusions layout below covers
 all four.
 
 **No word limit appears anywhere in the call.** "Briefly" is the only guidance,
-so the versions below are sized at 328 and 192 words and the online form may
+so the versions below are sized at 346 and 205 words and the online form may
 still impose a cap. Check the form before pasting.
 
 **Presenters pay their own way.** Registration is $750 early through
@@ -79,7 +79,7 @@ better fit and carries the AMD consideration, so it is the one to pick.
 
 ---
 
-## Version A, structured, 328 words
+## Version A, structured, 346 words
 
 **Background.** *Burkholderia pseudomallei* causes melioidosis across the
 tropics and is a Tier 1 select agent. Locally acquired cases on the Mississippi
@@ -95,10 +95,11 @@ recombination-aware analysis units. Accuracy was measured against 46 cases from
 45 individuals with independently documented exposure, under a holdout removing
 both same-country reference genomes and same-source outbreak isolates.
 
-**Results.** Country attribution did not exceed chance, at 10 of 46 (22%)
-against a 26% majority baseline, kappa 0.19. Regional attribution reached 41 of
-46 (89%) against a 46% baseline, kappa 0.83, and the Asia versus elsewhere split
-was recovered without error. Among the 14 cases with a close relative in the
+**Results.** Country attribution did not exceed chance, at 10 of 46 (22%, 95% CI
+11 to 36) against a 26% majority baseline, kappa 0.19, exact binomial p = 0.80.
+Regional attribution reached 41 of 46 (89%, 95% CI 76 to 96) against a 46%
+baseline, kappa 0.83, p < 0.001, and the Asia versus elsewhere split was
+recovered without error. Among the 14 cases with a close relative in the
 panel, region was correct 14 of 14 and country 2 of 14. Country accuracy stayed
 flat across a 584-fold range of genomic resolution, from 7 MLST loci to
 whole-genome recombination-filtered SNPs, while regional accuracy rose from 50%
@@ -116,7 +117,7 @@ reference gap in the Americas is a prerequisite for anything finer.
 
 ---
 
-## Version B, structured, 192 words (if the limit is tighter)
+## Version B, structured, 205 words (if the limit is tighter)
 
 **Background.** Melioidosis increasingly presents without a travel history,
 including locally acquired cases in the continental United States, and
@@ -127,9 +128,10 @@ published study reports how often that answer is right.
 attribution against 46 cases from 45 individuals with documented exposure, under
 a holdout removing same-country and same-source reference isolates.
 
-**Results.** Country attribution did not exceed chance, at 10 of 46 (22%)
-against a 26% baseline, kappa 0.19. Regional attribution reached 89% (kappa
-0.83), and the Asia versus elsewhere split was recovered without error. Among
+**Results.** Country attribution did not exceed chance, at 10 of 46 (22%, 95% CI
+11 to 36) against a 26% baseline, kappa 0.19, exact binomial p = 0.80. Regional
+attribution reached 89% (kappa 0.83, p < 0.001), and the Asia versus elsewhere
+split was recovered without error. Among
 the 14 cases with a close relative available, region was correct 14 of 14 and
 country 2 of 14. Country accuracy was flat across a 584-fold range of genomic
 resolution, which points to absent signal rather than insufficient resolution.
@@ -171,13 +173,31 @@ closing slide for the same reason.
 
 ## Open items before submission
 
-1. **Statistical significance.** The call asks for it "where applicable", and
-   the abstract currently reports kappa against a majority baseline with no test
-   and no interval. A binomial test of 10/46 against the 26% baseline is the
-   obvious addition and a reviewer may expect it, but no such figure exists in
-   `RESULTS_DRAFT_2026-08-23.md`, so it must be generated on the frozen basis
-   and written into `NUMBERS.tsv` rather than computed ad hoc for the abstract.
-   Decide before submission whether to add it.
+1. **Statistical significance. Computed, but not yet in `NUMBERS.tsv`.**
+   `attribution_significance_bp.py` generates it, and the abstract now carries
+   the result. Run these two on the Mac and append the rows, so the figures come
+   from the generator like every other number:
+
+   ```
+   python3 attribution_significance_bp.py --correct 10 --n 46 \
+       --baseline-correct 12 --label attribution.country.nearest_neighbour --tsv
+   python3 attribution_significance_bp.py --correct 41 --n 46 \
+       --baseline-correct 21 --label attribution.region.modal_k20 --tsv
+   ```
+
+   The inputs are counts already frozen in `RESULTS_DRAFT_2026-08-23.md`
+   (10/46 and 41/46, with majority classes 12 and 21 of 46, which give the
+   published 26.1% and 45.7% baselines), and the arithmetic needs no basis
+   files, so the value does not depend on where it runs. What the Mac run adds
+   is the audit trail.
+
+   **The interval reads wider than the design strictly justifies**, and the
+   script prints why: the baseline is estimated from the same 46 cases, and the
+   trials are not independent, since the set is 46 genomes from 45 individuals
+   with outbreak groups held out together. A label-permutation test over the
+   per-genome assignments would be the better instrument and needs the holdout
+   output rather than these counts. Worth doing before the manuscript, not
+   before October 2.
 2. **Word limit.** The call states none. Confirm against the online form before
    pasting, since the form may cap it independently.
 3. **Author list and order.** Not drafted. [AUTHORS] is a placeholder.
