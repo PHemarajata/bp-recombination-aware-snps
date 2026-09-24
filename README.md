@@ -52,7 +52,9 @@ when reading these results.
   calibration, diagnostics, orchestration and monitoring
 - `*.md` — methods drafts, handoffs, calibration and investigation records
 
-Start with `METHODS_DRAFT_2026-08-19.md`.
+**Start with `INDEX.md`**, which says what is authoritative for each question
+and which documents look current but are superseded. `STATE_2026-09-02.md` is
+the canonical snapshot behind it.
 
 ## Working conventions
 
