@@ -33,7 +33,7 @@ online form imposes its own, per field. Taken from the form itself.
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 423 | 77 |
 | Methodology | 750 chars | 638 | 112 |
-| Results | 1,250 chars | 1041 | 209 |
+| Results | 1,250 chars | 1042 | 208 |
 | Conclusions | 500 chars | 380 | 120 |
 
 **The form counts characters excluding spaces.** It reported the chosen title as
@@ -132,9 +132,9 @@ Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Expos
 
 We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing genomic study now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator, because the estimator is part of the number. Recombination detection was calibrated on this collection in separate work, not included here.
 
-### Results — 1041 / 1250 characters (raw 1244)
+### Results — 1042 / 1250 characters (raw 1246)
 
-Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001. It was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 multistate aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34). It could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation itself reached. The same pipeline separated 19 relapses from one reinfection, 1 to 14 variants against 1,102, so the limit is not the assay. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
+Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001. It was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 multistate aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34). It could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation itself reached. Across 20 recurrence pairs, 19 relapses differed by 1 to 14 SNPs and one reinfection by 1,102, so resolution is not the limit. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
 
 ### Conclusions — 380 / 500 characters (raw 450)
 
@@ -151,6 +151,21 @@ Total across the four fields: 2187 form characters, 2588 raw, against a 3,000 ch
 
 **45 individuals, not just 46 cases.** Two isolates come from one patient. It
 costs four words and answers the question before it is asked.
+
+**The recurrence clause is measured on recombination-filtered SNPs, not
+cgMLST.** `RESULTS_DRAFT_2026-08-23.md` §R3.1: for 16 of the 20 pairs the
+distances "are the production per-unit Gubbins output itself". The attribution
+is scored on cgMLST alleles. So "the same pipeline" overstated the link and is
+gone. The defensible claim is the one the source's own heading makes, that a
+finer distinction resolves on the same genomes, so the country failure is not a
+resolution problem. "Separated" is also gone, because nothing was separated.
+The distances simply differ, and the sentence now says so.
+
+⚠ **These 20 pairs are Nakhon Phanom isolates.** §R3.1 opens "thirteen patients
+in the Nakhon Phanom collection". **This corrects what open item 6 previously
+said.** That item argued the clearance conversation was light because the
+abstract reported no isolate-level result from the 312 in-house isolates. It
+does: this clause is one. The partner conversation is heavier than stated.
 
 **The recurrence clause earns its space.** The first objection to any negative
 result is that a better method would have worked. The relapse and reinfection
