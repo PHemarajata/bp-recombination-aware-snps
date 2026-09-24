@@ -130,7 +130,7 @@ Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Expos
 
 ### Methodology — 638 / 750 characters (raw 744)
 
-We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing genomic study now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator, because the estimator is part of the number. Recombination detection was calibrated on this collection in separate work, not included here.
+We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing genomic study now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator, because the estimator is part of the number. Recombination detection was calibrated separately, and the SNP distances here use that output.
 
 ### Results — 1042 / 1250 characters (raw 1246)
 
@@ -229,6 +229,26 @@ not well established", which motivates the work without claiming to be first.
 In Results, "the only estimator to beat its baseline in every stratum" reads as
 absolute and is bounded to "the only one of four tested", which is what the
 specification curve actually shows.
+
+**The recombination clause contradicted Results and is fixed.** It said the
+calibration was "not included here", then Results reported recurrence distances
+that are the production Gubbins output. It now reads "Recombination detection
+was calibrated separately, and the SNP distances here use that output", which
+signals the workstream, explains where the SNP distances come from, and no
+longer disclaims a result the abstract goes on to give.
+
+⚠ **The recurrence data is ours, not the closeout deck's.**
+`RESULTS_DRAFT_2026-08-23.md` §R3.1 states that for 16 of the 20 pairs the
+distances "are the production per-unit Gubbins output itself". The deck
+(`BurkGenome_close_KK260812_final.pptx`) does not mention relapse, reinfection
+or recurrence anywhere. Our pipeline, their isolates.
+
+⚠ **The deck's own tree may not be recombination-filtered.** Its appendix says
+"whether recombination was filtered before tree inference is not yet confirmed",
+and warns that if it was not, the deep relationships and the sequence-type
+non-monophyly result need caution. So the two analyses are not two
+recombination-aware pipelines to reconcile. Only one of them is confirmed
+recombination-aware, and it is this one.
 
 **The recombination work gets one clause, and no number.** "Recombination
 detection was calibrated on this collection in separate work, not included
