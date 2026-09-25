@@ -32,7 +32,7 @@ online form imposes its own, per field. Taken from the form itself.
 |---|---|---|---|
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 423 | 77 |
-| Methodology | 750 chars | 722 | 28 |
+| Methodology | 750 chars | 744 | 6 |
 | Results | 1,250 chars | 1033 | 217 |
 | Conclusions | 500 chars | 380 | 120 |
 
@@ -41,14 +41,19 @@ online form imposes its own, per field. Taken from the form itself.
 inter-word spaces. The *word* count does include every word. Both counts are
 given below.
 
-⚠ **Methodology no longer fits under the with-spaces reading.** It is 722 of 750
-on the form's own count and **839 raw**. The other three fields still fit under
-either convention. This is safe only because the space-excluding behaviour is
-measured rather than assumed: the form reported the title at 75 against a raw
-89, and 89 minus 75 is exactly the title's 14 spaces. **Paste Methodology into
-the form early and read the counter before committing to the rest.** If the
-counter disagrees, the provenance clause added on 2026-09-25 is the first thing
-to shorten.
+⚠ **Methodology no longer fits under the with-spaces reading, and its margin is
+now 6 characters.** It is 744 of 750 on the form's own count and **861 raw**.
+The other three fields still fit under either convention and keep margins of 77,
+217 and 120. This is safe only because the space-excluding behaviour is measured
+rather than assumed: the form reported the title at 75 against a raw 89, and 89
+minus 75 is exactly the title's 14 spaces. **Paste Methodology into the form
+first and read the counter before committing to anything else.**
+
+If the counter disagrees, or if 6 characters proves too thin, delete
+`Laboratory` from the sequencing site. That takes Methodology to 734 and leaves
+the program's name otherwise intact. It reads slightly worse, because a
+collaboration is not somewhere you sequence at, which is why it is the reserve
+rather than the default.
 
 **The title must contain no abbreviations.** The chosen one has none. Keep it
 that way if you edit it.
@@ -147,9 +152,9 @@ excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
 Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Exposure origin is both a clinical and an epidemiologic question, and without a travel history it is assigned from the genome. Locally acquired cases in Mississippi and a presumptive focus in Georgia have made that a domestic question for United States laboratories. The accuracy of genomic assignment below continental scale is not well established. We measured that accuracy at sub-national, country and regional scales.
 
-### Methodology — 722 / 750 characters (raw 839)
+### Methodology — 744 / 750 characters (raw 861)
 
-We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing study in Nakhon Phanom, Thailand, where patient and environmental isolates are collected with matched epidemiologic data and sequenced at [PROGRAM NAME], now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator. Recombination detection was calibrated separately, and the SNP distances here use that output.
+We compiled 2,959 B. pseudomallei genomes, 41% of the country-labeled public record: mostly public assemblies, assembled locally where none existed, and 312 isolates from an ongoing study in Nakhon Phanom, Thailand, where patient and environmental isolates are collected with matched epidemiologic data and sequenced at the Thailand Ministry of Public Health-U.S. CDC Collaboration (TUC) Laboratory, now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries. Recombination detection was calibrated separately and supplies the SNP distances here.
 
 ### Results — 1033 / 1250 characters (raw 1238)
 
@@ -159,7 +164,7 @@ Country attribution did not exceed chance. Nearest neighbor, the best country es
 
 Genomic exposure attribution should be reported by geographic scale. A laboratory can state that a case is consistent with acquisition in South Asia. It cannot yet name the country, and these data do not support doing so. Closing the reference gap in Latin America and the Caribbean is necessary before anything finer. More references alone will not be enough, because country-level signal in this collection is not separable from collection history.
 
-Total across the four fields: 2558 form characters, 3024 raw. The caps are
+Total across the four fields: 2580 form characters, 3046 raw. The caps are
 per field and there is no combined ceiling, so the total is informational only.
 
 ---
@@ -176,19 +181,33 @@ provenance a partner-facing reader needs, and it is also what makes the
 recurrence figures in Results mean anything, since matched epidemiologic data is
 the reason those pairs can be called relapse rather than reinfection at all.
 
-The clause runs about 120 characters and Methodology had 112 of margin, so
-something had to go. The trade was "because the estimator is part of the
-number", which stated a convention and then defended it. Results names an
-estimator beside every accuracy it reports, so the convention is demonstrated
-where it applies instead of asserted where it does not. If that clause is ever
-wanted back, the honest candidate to shorten is the provenance, and dropping
-"with matched epidemiologic data" would be the wrong economy.
+**The sequencing site is named in full, and the per-estimator clause paid for
+it.** The site is the Thailand Ministry of Public Health-U.S. CDC Collaboration
+(TUC) Laboratory, written out because an abbreviation alone will not carry to an
+APHL audience. That name costs 76 characters and Methodology did not have them.
 
-⚠ **`[PROGRAM NAME]` is a placeholder and must be filled before submission.**
-The sequencing site needs its official program name written out, because an
-abbreviation alone will not carry to an APHL audience and the title rule against
-abbreviations signals how this committee reads. Decide separately whether to put
-the short form in parentheses after it for the partners who use it daily.
+This was measured rather than guessed. With the full name in place, keeping "and
+is reported per estimator" leaves the field **15 characters over cap even after
+every other economy available**, so the clause was not optional to lose. It
+stated a convention that Results already demonstrates, since every accuracy
+there names its estimator, so what is gone is the announcement and not the
+practice. An earlier version had already dropped the tail of it, "because the
+estimator is part of the number", which argued for the convention on top of
+stating it.
+
+Two small economies came with it. "With local assembly where none existed"
+became "assembled locally where none existed", worth 3. The recombination
+sentence became "Recombination detection was calibrated separately and supplies
+the SNP distances here", worth 6 and slightly more direct than "and the SNP
+distances here use that output".
+
+**If Methodology ever has to shrink again, cut `Laboratory` and not the
+provenance.** Dropping "with matched epidemiologic data" would be the wrong
+economy, because that metadata is exactly what lets Results call the pairs
+relapse rather than reinfection.
+
+**`country-labelled` is now `country-labeled`.** American spelling, and it was
+the only British form left in the four fields.
 
 **Baselines stay in, every time.** "22%" on its own reads as partial success.
 "22% against a 26% baseline" is the finding. The same holds for 89% against 46%.
@@ -285,9 +304,11 @@ specification curve actually shows.
 **The recombination clause contradicted Results and is fixed.** It said the
 calibration was "not included here", then Results reported recurrence distances
 that are the production Gubbins output. It now reads "Recombination detection
-was calibrated separately, and the SNP distances here use that output", which
-signals the workstream, explains where the SNP distances come from, and no
-longer disclaims a result the abstract goes on to give.
+was calibrated separately and supplies the SNP distances here", which signals
+the workstream, explains where the SNP distances come from, and no longer
+disclaims a result the abstract goes on to give. The wording tightened again on
+2026-09-25, from "and the SNP distances here use that output", to buy 6
+characters for the sequencing site's full name.
 
 **The recurrence pairs are attributed, and the attribution is front-loaded.**
 An earlier fix wrote "in that series", which failed for the same reason "Its
