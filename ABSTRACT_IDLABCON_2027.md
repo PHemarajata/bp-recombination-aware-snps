@@ -32,14 +32,23 @@ online form imposes its own, per field. Taken from the form itself.
 |---|---|---|---|
 | Submission title | 10-200 chars, 1-75 words | 75 chars, 15 words | 125 |
 | Objectives | 500 chars | 423 | 77 |
-| Methodology | 750 chars | 638 | 112 |
-| Results | 1,250 chars | 1028 | 222 |
+| Methodology | 750 chars | 722 | 28 |
+| Results | 1,250 chars | 1033 | 217 |
 | Conclusions | 500 chars | 380 | 120 |
 
 **The form counts characters excluding spaces.** It reported the chosen title as
 75 characters where a raw count gives 89, and the difference is exactly the 14
-inter-word spaces. Both counts are given below, so the drafts fit either way.
-The *word* count does include every word.
+inter-word spaces. The *word* count does include every word. Both counts are
+given below.
+
+⚠ **Methodology no longer fits under the with-spaces reading.** It is 722 of 750
+on the form's own count and **839 raw**. The other three fields still fit under
+either convention. This is safe only because the space-excluding behaviour is
+measured rather than assumed: the form reported the title at 75 against a raw
+89, and 89 minus 75 is exactly the title's 14 spaces. **Paste Methodology into
+the form early and read the counter before committing to the rest.** If the
+counter disagrees, the provenance clause added on 2026-09-25 is the first thing
+to shorten.
 
 **The title must contain no abbreviations.** The chosen one has none. Keep it
 that way if you edit it.
@@ -67,6 +76,16 @@ here, but the *isolates* are: **312 in-house Nakhon Phanom genomes (259 `IP-`,
 §4, `SUBMISSION_TODO.md` B2). They are unpublished and undeposited, all
 carrying `bioproject = unknown` or blank. This changes the clearance position,
 see open item 6.
+
+⚠ **As of 2026-09-25 the abstract names Nakhon Phanom in plain text.**
+Methodology now states where the 312 isolates come from, how they are collected
+and where they are sequenced, and Results credits "the Nakhon Phanom series" by
+name. The scope note above still holds, in that the paired human and residential
+analysis is not what this abstract reports. But the site is no longer implicit,
+and an unpublished partner collection is now identified in a document that goes
+to a program committee. **Open item 6 is heavier than it was, not lighter.**
+Clearance should be read as covering the named site and the recurrence figures,
+not only the aggregate counts.
 
 Source of every number: `ABSTRACT_DRAFT_2026-08-23.md`, which draws from
 `NUMBERS.tsv` on the frozen basis `FINAL_BASIS_2026-08-22/`. `NUMBERS.tsv` is
@@ -128,23 +147,48 @@ excluded, which is what the box reports) and *raw*, so the fit holds either way.
 
 Burkholderia pseudomallei causes melioidosis and is a Tier 1 select agent. Exposure origin is both a clinical and an epidemiologic question, and without a travel history it is assigned from the genome. Locally acquired cases in Mississippi and a presumptive focus in Georgia have made that a domestic question for United States laboratories. The accuracy of genomic assignment below continental scale is not well established. We measured that accuracy at sub-national, country and regional scales.
 
-### Methodology — 638 / 750 characters (raw 744)
+### Methodology — 722 / 750 characters (raw 839)
 
-We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing genomic study now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator, because the estimator is part of the number. Recombination detection was calibrated separately, and the SNP distances here use that output.
+We compiled 2,959 B. pseudomallei genomes, 41% of the country-labelled public record: mostly public assemblies, with local assembly where none existed, and 312 isolates from an ongoing study in Nakhon Phanom, Thailand, where patient and environmental isolates are collected with matched epidemiologic data and sequenced at [PROGRAM NAME], now being submitted to SRA. Attribution was scored on a published 4,221-locus core-genome multilocus sequence typing scheme, under a holdout removing same-country references and same-source outbreak isolates, so no case was scored against its own epidemiological neighbors. Accuracy was measured against 46 cases from 45 individuals with documented exposure in 16 countries, and is reported per estimator. Recombination detection was calibrated separately, and the SNP distances here use that output.
 
-### Results — 1028 / 1250 characters (raw 1232)
+### Results — 1033 / 1250 characters (raw 1238)
 
-Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001. It was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p = 2.8e-34). It could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation reached. In the ongoing study, 19 relapse pairs differed by 1 to 14 SNPs and one reinfection pair by 1,102, so resolution is not the limit. For 7 of 16 exposure countries no public genome exists, all in Latin America and the Caribbean.
+Country attribution did not exceed chance. Nearest neighbor, the best country estimator, scored 10 of 46 (21.7%, 95% confidence interval 10.9 to 36.4) against a 26.1% majority-class baseline, exact binomial p = 0.80. Kappa reads 0.19 only against 3.0% marginal chance. Across twelve specifications country accuracy spans 0.000 to 0.261, and sub-national failed outright at 0 of 5. Region behaved differently. The modal label among the 20 closest genomes scored 41 of 46 (89.1%, 95% confidence interval 76.4 to 96.4) against a 45.7% baseline, p < 0.001. It was the only one of four tested to beat its baseline in every stratum. Nearest neighbor reached 80.4% but failed where a close relative existed. Asia versus elsewhere was recovered without error. Applied to the 2021 aromatherapy outbreak with those genomes held out, the method placed the strain in South Asia (p < 0.001). It could not separate India from the rest of South Asia (p = 0.351), reproducing the boundary the CDC investigation reached. In the Nakhon Phanom series, 19 relapse pairs differed by 1 to 14 SNPs and one reinfection pair by 1,102, so resolution is not the limit. For 7 of 16 exposure countries, no public genome exists, all in Latin America and the Caribbean.
 
 ### Conclusions — 380 / 500 characters (raw 450)
 
 Genomic exposure attribution should be reported by geographic scale. A laboratory can state that a case is consistent with acquisition in South Asia. It cannot yet name the country, and these data do not support doing so. Closing the reference gap in Latin America and the Caribbean is necessary before anything finer. More references alone will not be enough, because country-level signal in this collection is not separable from collection history.
 
-Total across the four fields: 2187 form characters, 2588 raw, against a 3,000 character ceiling.
+Total across the four fields: 2558 form characters, 3024 raw. The caps are
+per field and there is no combined ceiling, so the total is informational only.
 
 ---
 
 ## Why these numbers and not others
+
+**The in-house isolates are now sourced to Nakhon Phanom, and it cost the one
+clause that was arguing rather than describing.** Methodology used to say "312
+isolates from an ongoing genomic study now being submitted to SRA", which told a
+reader that data existed somewhere and nothing else. It now says the study is in
+Nakhon Phanom, Thailand, that patient and environmental isolates are collected
+there with matched epidemiologic data, and where they are sequenced. That is the
+provenance a partner-facing reader needs, and it is also what makes the
+recurrence figures in Results mean anything, since matched epidemiologic data is
+the reason those pairs can be called relapse rather than reinfection at all.
+
+The clause runs about 120 characters and Methodology had 112 of margin, so
+something had to go. The trade was "because the estimator is part of the
+number", which stated a convention and then defended it. Results names an
+estimator beside every accuracy it reports, so the convention is demonstrated
+where it applies instead of asserted where it does not. If that clause is ever
+wanted back, the honest candidate to shorten is the provenance, and dropping
+"with matched epidemiologic data" would be the wrong economy.
+
+⚠ **`[PROGRAM NAME]` is a placeholder and must be filled before submission.**
+The sequencing site needs its official program name written out, because an
+abbreviation alone will not carry to an APHL audience and the title rule against
+abbreviations signals how this committee reads. Decide separately whether to put
+the short form in parentheses after it for the partners who use it daily.
 
 **Baselines stay in, every time.** "22%" on its own reads as partial success.
 "22% against a 26% baseline" is the finding. The same holds for 89% against 46%.
@@ -193,10 +237,18 @@ Asia. That is absence of signal where coverage is good, which is the stronger
 form of the claim and the reason Conclusions now says the reference gap is
 necessary to close but not sufficient.
 
-⚠ **Two p-values here are not in `NUMBERS.tsv`.** 2.8e-34 and 0.351 are quoted
-from prose in `GROUPING_AND_CDC_2026-08-21.md` §1. `generate_numbers.py` does not
-emit them, so they are the one place in this abstract that breaks the project's
-own cite-do-not-restate rule. See `MAC_VERIFICATION_REQUEST_2026-09-24.md` §4.
+⚠ **Both aromatherapy p-values come from prose, not from `NUMBERS.tsv`.**
+`GROUPING_AND_CDC_2026-08-21.md` §1 states them as 2.8e-34 and 0.351.
+`generate_numbers.py` does not emit either, so they are the one place in this
+abstract that breaks the project's own cite-do-not-restate rule. See
+`MAC_VERIFICATION_REQUEST_2026-09-24.md` §4.
+
+**The South Asia value now reads `p < 0.001` rather than 2.8e-34.** Scientific
+notation at that magnitude claims a precision the abstract has no room to
+justify, and it stops the eye for the wrong reason. The threshold form matches
+how the region headline is already reported in the same field. The underlying
+figure is unchanged and still needs a source file, so this is a presentation
+change and not a retreat from the claim.
 
 **"How often the genome is correct" was a category error, and it overclaimed.**
 A genome is not correct or incorrect. What was measured is how often an
@@ -243,14 +295,15 @@ accuracy" failed in Objectives: the nearest antecedent was wrong. That phrase
 sat immediately after the CDC sentence, so "that series" read as the
 aromatherapy series rather than the in-house isolates.
 
-The provenance now opens the sentence: "In the ongoing study, 19 relapse pairs
-differed by 1 to 14 SNPs and one reinfection pair by 1,102." A reader knows
-whose data it is before reaching a number, so no back-reference has to survive
-the sentence before it. "The ongoing study" points to Methodology's "an ongoing
-genomic study now being submitted to SRA".
+The provenance now opens the sentence: "In the Nakhon Phanom series, 19 relapse
+pairs differed by 1 to 14 SNPs and one reinfection pair by 1,102." A reader
+knows whose data it is before reaching a number, so no back-reference has to
+survive the sentence before it.
 
-It is also shorter. Front-loading freed 11 characters against the patched
-version, leaving 18 of margin rather than 7.
+**Updated 2026-09-25.** That sentence first read "In the ongoing study", which
+pointed correctly at Methodology but named nothing. It now names the site, and
+Methodology names the site too, so the two ends of the reference match on a
+proper noun rather than on a description a reader has to hold in memory.
 
 ⚠ **Not every recurrence isolate is inside the analysed panel.**
 `RESULTS_DRAFT_2026-08-23.md` §R3.1 notes that four of the 20 pairs "required a
