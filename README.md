@@ -19,6 +19,10 @@ scoring, and the orchestration and monitoring used to drive the runs. The
 Nextflow workflow that performs variant calling and recombination inference is a
 separate repository, `wf-assembly-snps-mod`, described below.
 
+> **New here?** [**OVERVIEW.md**](OVERVIEW.md) is an illustrated walkthrough of
+> the method in four parts and what it found, with the pipeline diagram. Start
+> there for the narrative, and read on here for the technical detail.
+
 ## No isolate-level data in this repository, by design
 
 **No assemblies, alignments, trees, metadata tables, cluster memberships or
@@ -190,6 +194,11 @@ attribution ladder), `attribution_significance_bp.py` (exact binomial test and
 confidence interval, with a `--selftest`), `resolution_curve_bp.py` (the
 resolution curve), and `context_snps_bp.py` with `context_report_bp.py` (the
 recurrence series).
+
+The root holds 104 Python scripts. [**SCRIPTS.md**](SCRIPTS.md) groups them by
+role (panel, partition, reference, calibration, attribution, controls, figures,
+and the rest) so the list is navigable, and explains why they all sit at the top
+level.
 
 ## Where to start reading
 
