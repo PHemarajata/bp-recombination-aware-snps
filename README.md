@@ -111,33 +111,31 @@ workflow runs the per-unit SNP and recombination analysis, and the results come
 back here for attribution scoring and diagnostics.
 
 ```mermaid
-flowchart TD
-    subgraph REPO1["this repository, build the analysis basis"]
-        A["Genome panel<br/>assemble, QC, dedup on BioSample<br/>2,976 considered → 2,959 analysed"]
-        B["Partition<br/>PopPUNK strains → fastbaps sub-clusters<br/>analysis units at level 1, retained at n ≥ 7<br/>→ 85 units / 2,340 genomes (frozen basis)"]
-        C["Per-unit reference<br/>constrained medoid, Mash sketch 50,000<br/>assembly completeness as a hard gate"]
-        D["Operating-range calibration<br/>mean pairwise core SNPs per unit<br/>window 700 to 4,700, floor bracketed 588 to 755"]
-        A --> B --> C --> D
+%%{init: {"theme":"base","themeVariables":{
+  "fontFamily":"Libre Franklin, Franklin Gothic, Arial, sans-serif",
+  "primaryColor":"#E2E9EC","primaryTextColor":"#404040","primaryBorderColor":"#006E79",
+  "lineColor":"#006E79","clusterBkg":"#FFFFFF","clusterBorder":"#A3CCCC"}}}%%
+flowchart TB
+    subgraph P["1 · Build the basis (this repo)"]
+        direction LR
+        P1["<b>Genome panel</b><br/>2,959 genomes, 43 countries"] --> P2["<b>Partition</b><br/>PopPUNK + fastbaps<br/>85 analysis units"] --> P3["<b>Per-unit reference</b><br/>Mash medoid, sketch 50k"] --> P4["<b>Operating range</b><br/>700–4,700 core SNPs"]
     end
-
-    subgraph WF["wf-assembly-snps-mod (Nextflow, curated mode), per unit and replicon"]
-        E["Snippy<br/>each genome vs the unit reference"]
-        F["snippy-core<br/>whole-genome alignment, invariant sites kept"]
-        G["Gubbins 3.4.3<br/>recombination detection and removal<br/>RAxML tree builder, 5 iterations, min-snps 3"]
-        H["IQ-TREE<br/>per-unit ML tree on filtered sites"]
-        E --> F --> G --> H
+    subgraph W["2 · Per clonal unit (wf-assembly-snps-mod)"]
+        direction LR
+        W1["<b>Snippy</b><br/>map to unit reference"] --> W2["<b>snippy-core</b><br/>invariant sites kept"] --> W3["<b>Gubbins</b><br/>recombination off, per replicon"] --> W4["<b>IQ-TREE</b><br/>per-unit ML tree"]
     end
-
-    subgraph REPO2["this repository, measure and attribute"]
-        I["r/m and Gate 1<br/>classify in-window vs detection failure<br/>headline r/m = 7.70 (n = 47)"]
-        J["Attribution scoring<br/>nearest-neighbour and modal-k20 estimators<br/>leave-group-out / leave-outbreak-out holdout"]
-        K["Significance and controls<br/>exact binomial test, BioProject control<br/>specification curve across 12 settings"]
-        I --> J --> K
+    subgraph M["3 · Measure and attribute (this repo)"]
+        direction LR
+        M1["<b>r/m + Gate 1</b><br/>headline r/m 7.70"] --> M2["<b>Attribution</b><br/>nearest-neighbour, modal-k20"] --> M3["<b>Significance</b><br/>binomial test, BioProject control"]
     end
+    P ==>|"curated partition + references"| W ==>|"alignments, trees"| M ==> R(["<b>Region yes, country no</b>"])
 
-    D -->|"curated partition +<br/>per-unit references"| E
-    H -->|"per-unit alignments,<br/>trees, r/m inputs"| I
-    K --> L["Result: region yes, country no<br/>report by geographic scale"]
+    classDef repo fill:#E2E9EC,stroke:#006E79,stroke-width:1px,color:#404040;
+    classDef wf fill:#F3D1D2,stroke:#862226,stroke-width:1px,color:#404040;
+    classDef out fill:#006E79,stroke:#005057,stroke-width:1.5px,color:#FFFFFF;
+    class P1,P2,P3,P4,M1,M2,M3 repo;
+    class W1,W2,W3,W4 wf;
+    class R out;
 ```
 
 The partition feeds the workflow as two files, `curated_L1v4c_clusters.final.tsv`
