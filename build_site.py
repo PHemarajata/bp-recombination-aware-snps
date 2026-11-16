@@ -103,12 +103,22 @@ pre code { background:none; padding:0; }
 .diagram { background:var(--surface); border:1px solid var(--line); border-radius:12px;
   padding:22px; margin:22px 0; overflow-x:auto; text-align:center; }
 .diagram img, .diagram svg { max-width:100%; height:auto; }
-/* The diagram is a <pre class="mermaid"> that the browser renders to SVG. Strip
-   the code-block chrome so it does not sit in a second box, and hide the raw
-   source until mermaid has processed it. */
-.diagram pre.mermaid { background:none; border:0; padding:0; margin:0;
-  overflow:visible; text-align:center; line-height:1; }
-.diagram pre.mermaid:not([data-processed="true"]) { visibility:hidden; }
+/* The diagram is a <div class="mermaid"> the browser renders to SVG. A <div>,
+   not a <pre>, so the label spans inherit the page sans font (Libre Franklin)
+   rather than the monospace a <pre> would force, which is what kept the node
+   text matching its measured box width instead of clipping. The sans font is
+   set explicitly too, so the SVG is drawn in the same font mermaid measured
+   with. Hide the raw source until mermaid has processed it. */
+.diagram .mermaid { font-family:var(--sans); text-align:center; line-height:1.4; }
+.diagram .mermaid:not([data-processed="true"]) { visibility:hidden; }
+/* mermaid draws each label in an SVG <foreignObject> sized to the width it
+   measured; the rendered text can be a hair wider and the foreignObject clips
+   it. Let the label containers overflow instead of clipping those last glyphs. */
+.diagram .mermaid foreignObject { overflow:visible; }
+.diagram .mermaid foreignObject > div { overflow:visible !important; width:max-content !important;
+  max-width:none !important; }
+.diagram .mermaid .nodeLabel, .diagram .mermaid .edgeLabel, .diagram .mermaid .cluster-label {
+  overflow:visible; white-space:nowrap; }
 table { border-collapse:collapse; width:100%; margin:20px 0; font-size:15.5px; display:block;
   overflow-x:auto; }
 th,td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line);
@@ -133,8 +143,11 @@ def main() -> None:
     html_body = markdown.markdown(body_md, extensions=["tables", "fenced_code", "sane_lists"])
 
     if mermaid is not None:
-        fig = (f'<div class="diagram"><pre class="mermaid">'
-               f'{markdown.util.code_escape(mermaid)}</pre></div>')
+        # A <div>, not a <pre>: a <pre> carries the UA monospace font, which the
+        # foreignObject label spans inherit for drawing while mermaid measured the
+        # boxes with its sans measuring node, so every label overflowed and clipped.
+        fig = (f'<div class="diagram"><div class="mermaid">'
+               f'{markdown.util.code_escape(mermaid)}</div></div>')
         html_body = html_body.replace("<p>\x00MERMAID\x00</p>", fig).replace("\x00MERMAID\x00", fig)
         scripts = MERMAID_SCRIPT
     else:
