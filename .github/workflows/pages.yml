@@ -1,0 +1,62 @@
+name: pages
+
+# Build the OVERVIEW.md page into an APHL-themed static site and publish it to
+# GitHub Pages. No HTML or image file is tracked in the repository: build_site.py
+# produces the themed page at build time and it is uploaded as the Pages
+# artifact. Enable Pages once under Settings -> Pages -> Source: GitHub Actions.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - OVERVIEW.md
+      - build_site.py
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: install build dependencies
+        run: |
+          python3 -m pip install --quiet "markdown>=3.5"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq chromium-browser || sudo apt-get install -y -qq chromium
+      - name: build the site
+        env:
+          # Point puppeteer (used by mermaid-cli) at the apt-installed Chromium.
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+        run: |
+          printf '{"args":["--no-sandbox","--disable-gpu"]}' > puppeteer-config.json
+          python3 build_site.py OVERVIEW.md _site/index.html
+          test -s _site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
