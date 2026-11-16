@@ -2,10 +2,12 @@
 """Build the GitHub Pages site from OVERVIEW.md into an APHL-themed page.
 
 Run by the `pages` workflow, never committed output. It reads OVERVIEW.md,
-renders the Mermaid diagram to a PNG (so the diagram does not reflow when the
-browser substitutes Libre Franklin for the metrics mermaid measured with), and
-wraps the converted Markdown in an APHL brand shell (teal palette, Franklin
-Gothic via the Libre Franklin web fallback, an "APHL" wordmark, no logo).
+embeds the Mermaid diagram so the browser renders it client-side (the same way
+GitHub renders the block in the README). The viewer's browser measures and draws
+with the one font it has loaded, and the script below waits for Libre Franklin
+before rendering, so the node text does not clip. The converted Markdown is
+wrapped in an APHL brand shell (teal palette, Franklin Gothic via the Libre
+Franklin web fallback, an "APHL" wordmark, no logo).
 
 No HTML or image file is tracked in the repository. The themed page is produced
 here at build time and uploaded as the Pages artifact. The only tracked files
@@ -14,12 +16,9 @@ are this script and the workflow YAML, both inside the code allowlist.
 Usage:
     python3 build_site.py OVERVIEW.md _site/index.html
 """
-import base64
 import pathlib
 import re
-import subprocess
 import sys
-import tempfile
 
 import markdown
 
@@ -27,25 +26,22 @@ TEAL = "#00A0AF"
 TEAL_MED = "#006E79"
 TEAL_DARK = "#005057"
 
-
-def render_mermaid_png(block: str) -> str | None:
-    """Render a mermaid code block to a base64 PNG data URI, or None on failure."""
-    with tempfile.TemporaryDirectory() as d:
-        mmd = pathlib.Path(d) / "diagram.mmd"
-        png = pathlib.Path(d) / "diagram.png"
-        mmd.write_text(block, encoding="utf-8")
-        cmd = ["npx", "-y", "@mermaid-js/mermaid-cli@11",
-               "-i", str(mmd), "-o", str(png), "-b", "transparent", "-w", "1920"]
-        # In CI, puppeteer's Chromium needs --no-sandbox; the workflow writes this file.
-        if pathlib.Path("puppeteer-config.json").exists():
-            cmd += ["-p", "puppeteer-config.json"]
-        try:
-            subprocess.run(cmd, check=True, capture_output=True, timeout=300)
-        except Exception as exc:  # noqa: BLE001
-            print(f"mermaid render failed, falling back to client-side: {exc}", file=sys.stderr)
-            return None
-        data = base64.b64encode(png.read_bytes()).decode()
-        return f"data:image/png;base64,{data}"
+# Render the diagram in the viewer's browser, once Libre Franklin has loaded, so
+# the measuring font and the drawing font are the same and node text does not
+# clip (the failure the pre-rendered PNG showed in CI).
+MERMAID_SCRIPT = """<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
+mermaid.initialize({startOnLoad:false});
+const run = () => mermaid.run({querySelector:".mermaid"});
+if (document.fonts && document.fonts.load) {
+  Promise.all([
+    document.fonts.load('400 1em "Libre Franklin"'),
+    document.fonts.load('700 1em "Libre Franklin"')
+  ]).then(run).catch(run);
+} else {
+  run();
+}
+</script>"""
 
 
 def split_mermaid(md_text: str):
@@ -107,6 +103,12 @@ pre code { background:none; padding:0; }
 .diagram { background:var(--surface); border:1px solid var(--line); border-radius:12px;
   padding:22px; margin:22px 0; overflow-x:auto; text-align:center; }
 .diagram img, .diagram svg { max-width:100%; height:auto; }
+/* The diagram is a <pre class="mermaid"> that the browser renders to SVG. Strip
+   the code-block chrome so it does not sit in a second box, and hide the raw
+   source until mermaid has processed it. */
+.diagram pre.mermaid { background:none; border:0; padding:0; margin:0;
+  overflow:visible; text-align:center; line-height:1; }
+.diagram pre.mermaid:not([data-processed="true"]) { visibility:hidden; }
 table { border-collapse:collapse; width:100%; margin:20px 0; font-size:15.5px; display:block;
   overflow-x:auto; }
 th,td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line);
@@ -131,17 +133,10 @@ def main() -> None:
     html_body = markdown.markdown(body_md, extensions=["tables", "fenced_code", "sane_lists"])
 
     if mermaid is not None:
-        png = render_mermaid_png(mermaid)
-        if png:
-            fig = (f'<div class="diagram"><img alt="Pipeline diagram" '
-                   f'src="{png}" style="width:100%;max-width:820px"></div>')
-            scripts = ""
-        else:
-            fig = f'<div class="diagram"><pre class="mermaid">{markdown.util.code_escape(mermaid)}</pre></div>'
-            scripts = ('<script type="module">import mermaid from '
-                       '"https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";'
-                       'mermaid.initialize({startOnLoad:true});</script>')
+        fig = (f'<div class="diagram"><pre class="mermaid">'
+               f'{markdown.util.code_escape(mermaid)}</pre></div>')
         html_body = html_body.replace("<p>\x00MERMAID\x00</p>", fig).replace("\x00MERMAID\x00", fig)
+        scripts = MERMAID_SCRIPT
     else:
         scripts = ""
 
