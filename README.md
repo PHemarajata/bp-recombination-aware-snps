@@ -19,6 +19,10 @@ scoring, and the orchestration and monitoring used to drive the runs. The
 Nextflow workflow that performs variant calling and recombination inference is a
 separate repository, `wf-assembly-snps-mod`, described below.
 
+> **New here?** [**OVERVIEW.md**](OVERVIEW.md) is an illustrated walkthrough of
+> the method in four parts and what it found, with the pipeline diagram. Start
+> there for the narrative, and read on here for the technical detail.
+
 ## No isolate-level data in this repository, by design
 
 **No assemblies, alignments, trees, metadata tables, cluster memberships or
