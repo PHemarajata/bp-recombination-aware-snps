@@ -21,8 +21,9 @@ navigability fix; the tree stays as it is.
 | 4 | `HANDOFF_2026-09-04_EVENING.md` | the latest manuscript-side handoff |
 | 5 | `HANDOFF_VIRTUAL_MANUSCRIPT_2026-09-08.md` | the latest video-side handoff |
 
-`README.md` still says to start with `METHODS_DRAFT_2026-08-19.md`. That is a
-138 KB methods document and a poor entry point. Start with `STATE`.
+`README.md` points here, to `INDEX.md`, for where to start reading. From here,
+read `STATE_2026-09-02.md` first (row 1 above). `METHODS_DRAFT_2026-08-19.md` is
+a 138 KB methods document, not an entry point.
 
 ---
 
