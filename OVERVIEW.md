@@ -15,7 +15,7 @@ This work measures how accurately a genome places where a patient was exposed, a
 Three stages run in this repository (panel, partition, calibration). The Nextflow workflow `wf-assembly-snps-mod` calls variants and removes recombination per clonal unit. The results come back here for attribution scoring and diagnostics.
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{
+%%{init: {"theme":"base","flowchart":{"padding":16,"nodeSpacing":45,"rankSpacing":48,"useMaxWidth":true},"themeVariables":{
   "fontFamily":"Libre Franklin, Franklin Gothic, Arial, sans-serif",
   "primaryColor":"#E2E9EC","primaryTextColor":"#404040","primaryBorderColor":"#006E79",
   "lineColor":"#006E79","clusterBkg":"#FFFFFF","clusterBorder":"#A3CCCC"}}}%%
