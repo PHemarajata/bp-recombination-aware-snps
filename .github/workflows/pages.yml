@@ -31,20 +31,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
       - name: install build dependencies
-        run: |
-          python3 -m pip install --quiet "markdown>=3.5"
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq chromium-browser || sudo apt-get install -y -qq chromium
+        run: python3 -m pip install --quiet "markdown>=3.5"
       - name: build the site
-        env:
-          # Point puppeteer (used by mermaid-cli) at the apt-installed Chromium.
-          PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
         run: |
-          printf '{"args":["--no-sandbox","--disable-gpu"]}' > puppeteer-config.json
           python3 build_site.py OVERVIEW.md _site/index.html
           test -s _site/index.html
       - uses: actions/upload-pages-artifact@v3
