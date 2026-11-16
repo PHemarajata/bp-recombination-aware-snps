@@ -95,9 +95,10 @@ abstract. Check document dates against `STATE` before quoting.
 
 **`generate_numbers.py` used to truncate `NUMBERS.tsv`.** It opened the file with
 `"w"` and wrote only the keys it computed, deleting 35 hand-computed figures on a
-file of 101. Fixed on this branch; the fix had sat unmerged on
-`origin/worktree-clip2-review` since 2026-09-17 while `main` kept the destructive
-version.
+file of 101. **Fixed on `main` 2026-09-24** in PR #29. The fix had sat unmerged
+on `origin/worktree-clip2-review` since 2026-09-17 while `main` kept the
+destructive version, so **any checkout not pulled since then still destroys
+those figures**.
 
 **No `.tsv` is in this repository.** `.gitignore` carries a blanket `*.tsv` and
 the `no-data-tracked` CI job enforces it. `NUMBERS.tsv` and every other data file
