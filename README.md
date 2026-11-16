@@ -195,6 +195,11 @@ confidence interval, with a `--selftest`), `resolution_curve_bp.py` (the
 resolution curve), and `context_snps_bp.py` with `context_report_bp.py` (the
 recurrence series).
 
+The root holds 104 Python scripts. [**SCRIPTS.md**](SCRIPTS.md) groups them by
+role (panel, partition, reference, calibration, attribution, controls, figures,
+and the rest) so the list is navigable, and explains why they all sit at the top
+level.
+
 ## Where to start reading
 
 **Start with `INDEX.md`**, which says what is authoritative for each question and
